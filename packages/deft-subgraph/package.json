@@ -1,0 +1,16 @@
+{
+  "name": "deft",
+  "license": "UNLICENSED",
+  "scripts": {
+    "codegen": "graph codegen",
+    "build": "graph build",
+    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ deft/deft",
+    "create-local": "graph create --node http://localhost:8020/ deft/deft",
+    "remove-local": "graph remove --node http://localhost:8020/ deft/deft",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 deft/deft"
+  },
+  "dependencies": {
+    "@graphprotocol/graph-cli": "0.20.0",
+    "@graphprotocol/graph-ts": "0.20.0"
+  }
+}

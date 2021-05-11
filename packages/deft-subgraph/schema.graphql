@@ -1,0 +1,20 @@
+type User @entity {
+  id: ID!
+  reward: BigInt!
+  referrer: User
+  referrals: [User!]! @derivedFrom(field: "referrer")
+}
+
+type BotTransaction @entity {
+  id: ID!
+  from: Bytes!
+  to: Bytes!
+  taxedAmount: BigInt!
+  transferAmount: BigInt!
+  timestamp: BigInt!
+}
+
+type Multiplier @entity {
+  id: ID!
+  value: BigInt!
+}

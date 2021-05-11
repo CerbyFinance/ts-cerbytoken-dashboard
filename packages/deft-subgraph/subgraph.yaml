@@ -1,0 +1,32 @@
+specVersion: 0.0.2
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: NoBotsTech
+    network: kovan
+    source:
+      address: "0xF46a787A09b45EaC2e523fcc12b40023aFe0892a"
+      abi: NoBotsTech
+      startBlock: 24780748
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Approval
+      abis:
+        - name: NoBotsTech
+          file: ./abis/NoBotsTech.json
+      eventHandlers:
+        - event: MultiplierUpdated(uint256)
+          handler: handleMultiplierUpdated
+        - event: BotTransactionDetected(address,address,uint256,uint256)
+          handler: handleBotTransactionDetected
+        - event: ReferrerRewardUpdated(address,uint256)
+          handler: handleReferrerRewardUpdated
+        - event: ReferralRegistered(address,address)
+          handler: handleReferralRegistered
+        - event: ReferrerReplaced(address,address,address)
+          handler: handleReferrerReplaced
+      file: ./src/mapping.ts
