@@ -3,6 +3,8 @@ type User @entity {
   reward: BigInt!
   referrer: User
   referrals: [User!]! @derivedFrom(field: "referrer")
+  referralsCount: BigInt!
+  createdAt: BigInt!
 }
 
 type BotTransaction @entity {

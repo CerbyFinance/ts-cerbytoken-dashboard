@@ -76,6 +76,24 @@ export class User extends Entity {
   set referrals(value: Array<string>) {
     this.set("referrals", Value.fromStringArray(value));
   }
+
+  get referralsCount(): BigInt {
+    let value = this.get("referralsCount");
+    return value.toBigInt();
+  }
+
+  set referralsCount(value: BigInt) {
+    this.set("referralsCount", Value.fromBigInt(value));
+  }
+
+  get createdAt(): BigInt {
+    let value = this.get("createdAt");
+    return value.toBigInt();
+  }
+
+  set createdAt(value: BigInt) {
+    this.set("createdAt", Value.fromBigInt(value));
+  }
 }
 
 export class BotTransaction extends Entity {
