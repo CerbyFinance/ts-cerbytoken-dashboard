@@ -2,7 +2,7 @@ import { useWeb3React } from "@web3-react/core";
 import "rc-dialog/assets/index.css";
 import { useEffect } from "react";
 import { injected } from "./connectors";
-import { useEagerConnect, useInactiveListener } from "./shared/hooks";
+import { useEagerConnect, useInactiveListener } from "./hooks";
 
 export default function Web3ReactManager({
   children,

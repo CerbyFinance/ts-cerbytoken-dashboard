@@ -61,5 +61,20 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@graphql-codegen/cli": "^1.21.3",
+    "@graphql-codegen/introspection": "^1.18.1",
+    "@graphql-codegen/typescript": "^1.21.1",
+    "@graphql-codegen/typescript-operations": "^1.17.15",
+    "@graphql-codegen/typescript-react-apollo": "^2.2.3",
+    "@graphql-codegen/typescript-resolvers": "^1.19.0",
+    "@typechain/ethers-v5": "^6.0.5",
+    "typechain": "^4.0.3",
+    "@types/rc-tooltip": "^3.7.3",
+    "@types/react-input-autosize": "^2.2.0",
+    "@types/react-router-dom": "^5.1.7",
+    "@types/styled-components": "^5.1.9",
+    "@types/testing-library__jest-dom": "^5.9.5"
   }
 }

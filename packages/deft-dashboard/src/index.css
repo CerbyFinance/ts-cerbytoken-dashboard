@@ -1,13 +1,77 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@font-face {
+  font-family: "Manrope";
+  font-weight: 400;
+  src: url(./fonts/regular.otf) format("truetype");
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+@font-face {
+  font-family: "Manrope";
+  font-weight: 500;
+  src: url(./fonts/medium.otf) format("truetype");
+}
+
+@font-face {
+  font-family: "Manrope";
+  font-weight: 600;
+  src: url(./fonts/semibold.otf) format("truetype");
+}
+
+@font-face {
+  font-family: "Manrope";
+  font-weight: 700;
+  src: url(./fonts/bold.otf) format("truetype");
+}
+
+body {
+  margin: 0;
+  font-family: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+    "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  background: #faf9fa;
+  line-height: 1;
+}
+
+* {
+  transition: all 0.1s;
+}
+
+input,
+textarea {
+  font-family: "Manrope", sans-serif;
+}
+
+.rc-tooltip-hidden {
+  display: none;
+}
+.rc-tooltip {
+  position: absolute;
+  z-index: 1600;
+}
+
+span {
+  letter-spacing: 0.0168em;
+}
+
+.dialog-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rc-dialog-content {
+  position: relative;
+  background-color: transparent;
+  border: none;
+  border-radius: 0px;
+}
+
+@media (min-width: 768px) {
+  .rc-dialog {
+    width: auto;
+    margin: 0px;
+    /* margin: 30px auto; */
+  }
 }
