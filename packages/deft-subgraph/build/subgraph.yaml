@@ -6,9 +6,9 @@ dataSources:
     name: NoBotsTech
     network: kovan
     source:
-      address: "0xF46a787A09b45EaC2e523fcc12b40023aFe0892a"
+      address: "0x1071cc38570f632a7C49f0f4B90F367Ba5612816"
       abi: NoBotsTech
-      startBlock: 24780748
+      startBlock: 24783063
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4

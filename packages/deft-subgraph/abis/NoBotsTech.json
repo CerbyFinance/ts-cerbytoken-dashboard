@@ -36,6 +36,99 @@
     "type": "event"
   },
   {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "taxAmount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "accountBalance",
+        "type": "uint256"
+      }
+    ],
+    "name": "chargeCustomTax",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "addr",
+        "type": "address"
+      }
+    ],
+    "name": "clearReferrerRewards",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address[]",
+        "name": "referrals",
+        "type": "address[]"
+      }
+    ],
+    "name": "fillTestReferralTemporaryBalances",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "role",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "grantRole",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "bytes32",
+            "name": "role",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "address",
+            "name": "addr",
+            "type": "address"
+          }
+        ],
+        "internalType": "struct NoBotsTech.RoleAccess[]",
+        "name": "roles",
+        "type": "tuple[]"
+      }
+    ],
+    "name": "grantRolesBulk",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "anonymous": false,
     "inputs": [
       {
@@ -47,6 +140,103 @@
     ],
     "name": "MultiplierUpdated",
     "type": "event"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bool",
+        "name": "isMint",
+        "type": "bool"
+      },
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "desiredAmountToMintOrBurn",
+        "type": "uint256"
+      }
+    ],
+    "name": "prepareHumanAddressMintOrBurnRewardsAmounts",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "sender",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "recipient",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "transferAmount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "senderBalance",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "recipientBalance",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct TaxAmountsInput",
+        "name": "taxAmountsInput",
+        "type": "tuple"
+      }
+    ],
+    "name": "prepareTaxAmounts",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "senderBalance",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "recipientBalance",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "burnAndRewardAmount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "recipientGetsAmount",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct TaxAmountsOutput",
+        "name": "taxAmountsOutput",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
     "anonymous": false,
@@ -98,7 +288,7 @@
       {
         "indexed": false,
         "internalType": "address",
-        "name": "referral",
+        "name": "referrer",
         "type": "address"
       },
       {
@@ -110,6 +300,60 @@
     ],
     "name": "ReferrerRewardUpdated",
     "type": "event"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "referral",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "referrer",
+        "type": "address"
+      }
+    ],
+    "name": "registerReferral",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "role",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "renounceRole",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "role",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "revokeRole",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
     "anonymous": false,
@@ -187,68 +431,98 @@
     "type": "event"
   },
   {
-    "inputs": [],
-    "name": "ROLE_ADMIN",
-    "outputs": [
+    "inputs": [
       {
-        "internalType": "bytes32",
-        "name": "",
-        "type": "bytes32"
+        "internalType": "address",
+        "name": "addr",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "newCustomTaxPercent",
+        "type": "uint256"
       }
     ],
-    "stateMutability": "view",
+    "name": "updateCustomTaxForAddress",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "ROLE_CUSTOM_TAX",
-    "outputs": [
+    "inputs": [
       {
-        "internalType": "bytes32",
-        "name": "",
-        "type": "bytes32"
+        "internalType": "uint256",
+        "name": "_howManyBlocksAgoReceived",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_howManyBlocksAgoSent",
+        "type": "uint256"
       }
     ],
-    "stateMutability": "view",
+    "name": "updateHowManyBlocksAgo",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "ROLE_EXCLUDE_FROM_BALANCE",
-    "outputs": [
+    "inputs": [
       {
-        "internalType": "bytes32",
-        "name": "",
-        "type": "bytes32"
+        "internalType": "uint256",
+        "name": "_secondsBetweenUpdates",
+        "type": "uint256"
       }
     ],
-    "stateMutability": "view",
+    "name": "updateReCachePeriod",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "ROLE_PARENT",
-    "outputs": [
+    "inputs": [
       {
-        "internalType": "bytes32",
-        "name": "",
-        "type": "bytes32"
+        "internalType": "address[]",
+        "name": "referrals",
+        "type": "address[]"
       }
     ],
-    "stateMutability": "view",
+    "name": "updateReferrersRewards",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "ROLE_WHITELIST",
-    "outputs": [
+    "inputs": [
       {
-        "internalType": "bytes32",
-        "name": "",
-        "type": "bytes32"
+        "internalType": "uint256",
+        "name": "_refTaxPercent",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_botTaxPercent",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_humanTaxPercent",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_firstLevelRefPercent",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_secondLevelRefPercent",
+        "type": "uint256"
       }
     ],
-    "stateMutability": "view",
+    "name": "updateTaxPercent",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -288,43 +562,6 @@
       }
     ],
     "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "taxAmount",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "accountBalance",
-        "type": "uint256"
-      }
-    ],
-    "name": "chargeCustomTax",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "addr",
-        "type": "address"
-      }
-    ],
-    "name": "clearReferrerRewards",
-    "outputs": [],
-    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -620,49 +857,6 @@
         "type": "address"
       }
     ],
-    "name": "grantRole",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "components": [
-          {
-            "internalType": "bytes32",
-            "name": "role",
-            "type": "bytes32"
-          },
-          {
-            "internalType": "address",
-            "name": "addr",
-            "type": "address"
-          }
-        ],
-        "internalType": "struct NoBotsTech.RoleAccess[]",
-        "name": "roles",
-        "type": "tuple[]"
-      }
-    ],
-    "name": "grantRolesBulk",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bytes32",
-        "name": "role",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "address",
-        "name": "account",
-        "type": "address"
-      }
-    ],
     "name": "hasRole",
     "outputs": [
       {
@@ -727,118 +921,8 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "bool",
-        "name": "isMint",
-        "type": "bool"
-      },
-      {
-        "internalType": "address",
-        "name": "account",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "desiredAmountToMintOrBurn",
-        "type": "uint256"
-      }
-    ],
-    "name": "prepareHumanAddressMintOrBurnRewardsAmounts",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "components": [
-          {
-            "internalType": "address",
-            "name": "sender",
-            "type": "address"
-          },
-          {
-            "internalType": "address",
-            "name": "recipient",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "transferAmount",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "senderBalance",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "recipientBalance",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct TaxAmountsInput",
-        "name": "taxAmountsInput",
-        "type": "tuple"
-      }
-    ],
-    "name": "prepareTaxAmounts",
-    "outputs": [
-      {
-        "components": [
-          {
-            "internalType": "uint256",
-            "name": "senderBalance",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "recipientBalance",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "burnAndRewardAmount",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "recipientGetsAmount",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct TaxAmountsOutput",
-        "name": "taxAmountsOutput",
-        "type": "tuple"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
     "inputs": [],
     "name": "realTotalSupply",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "refTaxPercent",
     "outputs": [
       {
         "internalType": "uint256",
@@ -888,57 +972,16 @@
     "type": "function"
   },
   {
-    "inputs": [
+    "inputs": [],
+    "name": "refTaxPercent",
+    "outputs": [
       {
-        "internalType": "address",
-        "name": "referral",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "referrer",
-        "type": "address"
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
       }
     ],
-    "name": "registerReferral",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bytes32",
-        "name": "role",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "address",
-        "name": "account",
-        "type": "address"
-      }
-    ],
-    "name": "renounceRole",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bytes32",
-        "name": "role",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "address",
-        "name": "account",
-        "type": "address"
-      }
-    ],
-    "name": "revokeRole",
-    "outputs": [],
-    "stateMutability": "nonpayable",
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -949,6 +992,71 @@
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "ROLE_ADMIN",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "ROLE_CUSTOM_TAX",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "ROLE_EXCLUDE_FROM_BALANCE",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "ROLE_PARENT",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "ROLE_WHITELIST",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
       }
     ],
     "stateMutability": "view",
@@ -1016,101 +1124,6 @@
       }
     ],
     "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "addr",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "newCustomTaxPercent",
-        "type": "uint256"
-      }
-    ],
-    "name": "updateCustomTaxForAddress",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_howManyBlocksAgoReceived",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_howManyBlocksAgoSent",
-        "type": "uint256"
-      }
-    ],
-    "name": "updateHowManyBlocksAgo",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_secondsBetweenUpdates",
-        "type": "uint256"
-      }
-    ],
-    "name": "updateReCachePeriod",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address[]",
-        "name": "referrals",
-        "type": "address[]"
-      }
-    ],
-    "name": "updateReferrersRewards",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_refTaxPercent",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_botTaxPercent",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_humanTaxPercent",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_firstLevelRefPercent",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_secondLevelRefPercent",
-        "type": "uint256"
-      }
-    ],
-    "name": "updateTaxPercent",
-    "outputs": [],
-    "stateMutability": "nonpayable",
     "type": "function"
   }
 ]

@@ -58,7 +58,7 @@ export function handleReferrerRewardUpdated(
   let blockTs = event.block.timestamp;
 
   let amount = event.params.amount;
-  let referrer = event.params.referral.toHexString();
+  let referrer = event.params.referrer.toHexString();
 
   let _referrer = getOrCreateUser(referrer, blockTs);
 

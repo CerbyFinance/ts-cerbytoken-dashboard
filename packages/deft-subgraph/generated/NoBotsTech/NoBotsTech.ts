@@ -119,7 +119,7 @@ export class ReferrerRewardUpdated__Params {
     this._event = event;
   }
 
-  get referral(): Address {
+  get referrer(): Address {
     return this._event.parameters[0].value.toAddress();
   }
 
@@ -206,16 +206,6 @@ export class RoleRevoked__Params {
   }
 }
 
-export class NoBotsTech__getTemporaryReferralRealAmountsBulkResultValue0Struct extends ethereum.Tuple {
-  get addr(): Address {
-    return this[0].toAddress();
-  }
-
-  get realBalance(): BigInt {
-    return this[1].toBigInt();
-  }
-}
-
 export class NoBotsTech__prepareTaxAmountsResultTaxAmountsOutputStruct extends ethereum.Tuple {
   get senderBalance(): BigInt {
     return this[0].toBigInt();
@@ -256,104 +246,121 @@ export class NoBotsTech__prepareTaxAmountsInputTaxAmountsInputStruct extends eth
   }
 }
 
+export class NoBotsTech__getTemporaryReferralRealAmountsBulkResultValue0Struct extends ethereum.Tuple {
+  get addr(): Address {
+    return this[0].toAddress();
+  }
+
+  get realBalance(): BigInt {
+    return this[1].toBigInt();
+  }
+}
+
 export class NoBotsTech extends ethereum.SmartContract {
   static bind(address: Address): NoBotsTech {
     return new NoBotsTech("NoBotsTech", address);
   }
 
-  ROLE_ADMIN(): Bytes {
-    let result = super.call("ROLE_ADMIN", "ROLE_ADMIN():(bytes32)", []);
-
-    return result[0].toBytes();
-  }
-
-  try_ROLE_ADMIN(): ethereum.CallResult<Bytes> {
-    let result = super.tryCall("ROLE_ADMIN", "ROLE_ADMIN():(bytes32)", []);
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBytes());
-  }
-
-  ROLE_CUSTOM_TAX(): Bytes {
+  chargeCustomTax(taxAmount: BigInt, accountBalance: BigInt): BigInt {
     let result = super.call(
-      "ROLE_CUSTOM_TAX",
-      "ROLE_CUSTOM_TAX():(bytes32)",
-      []
+      "chargeCustomTax",
+      "chargeCustomTax(uint256,uint256):(uint256)",
+      [
+        ethereum.Value.fromUnsignedBigInt(taxAmount),
+        ethereum.Value.fromUnsignedBigInt(accountBalance)
+      ]
     );
 
-    return result[0].toBytes();
+    return result[0].toBigInt();
   }
 
-  try_ROLE_CUSTOM_TAX(): ethereum.CallResult<Bytes> {
+  try_chargeCustomTax(
+    taxAmount: BigInt,
+    accountBalance: BigInt
+  ): ethereum.CallResult<BigInt> {
     let result = super.tryCall(
-      "ROLE_CUSTOM_TAX",
-      "ROLE_CUSTOM_TAX():(bytes32)",
-      []
+      "chargeCustomTax",
+      "chargeCustomTax(uint256,uint256):(uint256)",
+      [
+        ethereum.Value.fromUnsignedBigInt(taxAmount),
+        ethereum.Value.fromUnsignedBigInt(accountBalance)
+      ]
     );
     if (result.reverted) {
       return new ethereum.CallResult();
     }
     let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBytes());
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
-  ROLE_EXCLUDE_FROM_BALANCE(): Bytes {
+  prepareHumanAddressMintOrBurnRewardsAmounts(
+    isMint: boolean,
+    account: Address,
+    desiredAmountToMintOrBurn: BigInt
+  ): BigInt {
     let result = super.call(
-      "ROLE_EXCLUDE_FROM_BALANCE",
-      "ROLE_EXCLUDE_FROM_BALANCE():(bytes32)",
-      []
+      "prepareHumanAddressMintOrBurnRewardsAmounts",
+      "prepareHumanAddressMintOrBurnRewardsAmounts(bool,address,uint256):(uint256)",
+      [
+        ethereum.Value.fromBoolean(isMint),
+        ethereum.Value.fromAddress(account),
+        ethereum.Value.fromUnsignedBigInt(desiredAmountToMintOrBurn)
+      ]
     );
 
-    return result[0].toBytes();
+    return result[0].toBigInt();
   }
 
-  try_ROLE_EXCLUDE_FROM_BALANCE(): ethereum.CallResult<Bytes> {
+  try_prepareHumanAddressMintOrBurnRewardsAmounts(
+    isMint: boolean,
+    account: Address,
+    desiredAmountToMintOrBurn: BigInt
+  ): ethereum.CallResult<BigInt> {
     let result = super.tryCall(
-      "ROLE_EXCLUDE_FROM_BALANCE",
-      "ROLE_EXCLUDE_FROM_BALANCE():(bytes32)",
-      []
+      "prepareHumanAddressMintOrBurnRewardsAmounts",
+      "prepareHumanAddressMintOrBurnRewardsAmounts(bool,address,uint256):(uint256)",
+      [
+        ethereum.Value.fromBoolean(isMint),
+        ethereum.Value.fromAddress(account),
+        ethereum.Value.fromUnsignedBigInt(desiredAmountToMintOrBurn)
+      ]
     );
     if (result.reverted) {
       return new ethereum.CallResult();
     }
     let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBytes());
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
-  ROLE_PARENT(): Bytes {
-    let result = super.call("ROLE_PARENT", "ROLE_PARENT():(bytes32)", []);
+  prepareTaxAmounts(
+    taxAmountsInput: NoBotsTech__prepareTaxAmountsInputTaxAmountsInputStruct
+  ): NoBotsTech__prepareTaxAmountsResultTaxAmountsOutputStruct {
+    let result = super.call(
+      "prepareTaxAmounts",
+      "prepareTaxAmounts((address,address,uint256,uint256,uint256)):((uint256,uint256,uint256,uint256))",
+      [ethereum.Value.fromTuple(taxAmountsInput)]
+    );
 
-    return result[0].toBytes();
+    return result[0].toTuple() as NoBotsTech__prepareTaxAmountsResultTaxAmountsOutputStruct;
   }
 
-  try_ROLE_PARENT(): ethereum.CallResult<Bytes> {
-    let result = super.tryCall("ROLE_PARENT", "ROLE_PARENT():(bytes32)", []);
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBytes());
-  }
-
-  ROLE_WHITELIST(): Bytes {
-    let result = super.call("ROLE_WHITELIST", "ROLE_WHITELIST():(bytes32)", []);
-
-    return result[0].toBytes();
-  }
-
-  try_ROLE_WHITELIST(): ethereum.CallResult<Bytes> {
+  try_prepareTaxAmounts(
+    taxAmountsInput: NoBotsTech__prepareTaxAmountsInputTaxAmountsInputStruct
+  ): ethereum.CallResult<
+    NoBotsTech__prepareTaxAmountsResultTaxAmountsOutputStruct
+  > {
     let result = super.tryCall(
-      "ROLE_WHITELIST",
-      "ROLE_WHITELIST():(bytes32)",
-      []
+      "prepareTaxAmounts",
+      "prepareTaxAmounts((address,address,uint256,uint256,uint256)):((uint256,uint256,uint256,uint256))",
+      [ethereum.Value.fromTuple(taxAmountsInput)]
     );
     if (result.reverted) {
       return new ethereum.CallResult();
     }
     let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBytes());
+    return ethereum.CallResult.fromValue(
+      value[0].toTuple() as NoBotsTech__prepareTaxAmountsResultTaxAmountsOutputStruct
+    );
   }
 
   batchBurnAndReward(): BigInt {
@@ -413,38 +420,6 @@ export class NoBotsTech extends ethereum.SmartContract {
       "cachedMultiplier",
       "cachedMultiplier():(uint256)",
       []
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBigInt());
-  }
-
-  chargeCustomTax(taxAmount: BigInt, accountBalance: BigInt): BigInt {
-    let result = super.call(
-      "chargeCustomTax",
-      "chargeCustomTax(uint256,uint256):(uint256)",
-      [
-        ethereum.Value.fromUnsignedBigInt(taxAmount),
-        ethereum.Value.fromUnsignedBigInt(accountBalance)
-      ]
-    );
-
-    return result[0].toBigInt();
-  }
-
-  try_chargeCustomTax(
-    taxAmount: BigInt,
-    accountBalance: BigInt
-  ): ethereum.CallResult<BigInt> {
-    let result = super.tryCall(
-      "chargeCustomTax",
-      "chargeCustomTax(uint256,uint256):(uint256)",
-      [
-        ethereum.Value.fromUnsignedBigInt(taxAmount),
-        ethereum.Value.fromUnsignedBigInt(accountBalance)
-      ]
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -934,76 +909,6 @@ export class NoBotsTech extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
-  prepareHumanAddressMintOrBurnRewardsAmounts(
-    isMint: boolean,
-    account: Address,
-    desiredAmountToMintOrBurn: BigInt
-  ): BigInt {
-    let result = super.call(
-      "prepareHumanAddressMintOrBurnRewardsAmounts",
-      "prepareHumanAddressMintOrBurnRewardsAmounts(bool,address,uint256):(uint256)",
-      [
-        ethereum.Value.fromBoolean(isMint),
-        ethereum.Value.fromAddress(account),
-        ethereum.Value.fromUnsignedBigInt(desiredAmountToMintOrBurn)
-      ]
-    );
-
-    return result[0].toBigInt();
-  }
-
-  try_prepareHumanAddressMintOrBurnRewardsAmounts(
-    isMint: boolean,
-    account: Address,
-    desiredAmountToMintOrBurn: BigInt
-  ): ethereum.CallResult<BigInt> {
-    let result = super.tryCall(
-      "prepareHumanAddressMintOrBurnRewardsAmounts",
-      "prepareHumanAddressMintOrBurnRewardsAmounts(bool,address,uint256):(uint256)",
-      [
-        ethereum.Value.fromBoolean(isMint),
-        ethereum.Value.fromAddress(account),
-        ethereum.Value.fromUnsignedBigInt(desiredAmountToMintOrBurn)
-      ]
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBigInt());
-  }
-
-  prepareTaxAmounts(
-    taxAmountsInput: NoBotsTech__prepareTaxAmountsInputTaxAmountsInputStruct
-  ): NoBotsTech__prepareTaxAmountsResultTaxAmountsOutputStruct {
-    let result = super.call(
-      "prepareTaxAmounts",
-      "prepareTaxAmounts((address,address,uint256,uint256,uint256)):((uint256,uint256,uint256,uint256))",
-      [ethereum.Value.fromTuple(taxAmountsInput)]
-    );
-
-    return result[0].toTuple() as NoBotsTech__prepareTaxAmountsResultTaxAmountsOutputStruct;
-  }
-
-  try_prepareTaxAmounts(
-    taxAmountsInput: NoBotsTech__prepareTaxAmountsInputTaxAmountsInputStruct
-  ): ethereum.CallResult<
-    NoBotsTech__prepareTaxAmountsResultTaxAmountsOutputStruct
-  > {
-    let result = super.tryCall(
-      "prepareTaxAmounts",
-      "prepareTaxAmounts((address,address,uint256,uint256,uint256)):((uint256,uint256,uint256,uint256))",
-      [ethereum.Value.fromTuple(taxAmountsInput)]
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(
-      value[0].toTuple() as NoBotsTech__prepareTaxAmountsResultTaxAmountsOutputStruct
-    );
-  }
-
   realTotalSupply(): BigInt {
     let result = super.call(
       "realTotalSupply",
@@ -1018,25 +923,6 @@ export class NoBotsTech extends ethereum.SmartContract {
     let result = super.tryCall(
       "realTotalSupply",
       "realTotalSupply():(uint256)",
-      []
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBigInt());
-  }
-
-  refTaxPercent(): BigInt {
-    let result = super.call("refTaxPercent", "refTaxPercent():(uint256)", []);
-
-    return result[0].toBigInt();
-  }
-
-  try_refTaxPercent(): ethereum.CallResult<BigInt> {
-    let result = super.tryCall(
-      "refTaxPercent",
-      "refTaxPercent():(uint256)",
       []
     );
     if (result.reverted) {
@@ -1092,6 +978,25 @@ export class NoBotsTech extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
+  refTaxPercent(): BigInt {
+    let result = super.call("refTaxPercent", "refTaxPercent():(uint256)", []);
+
+    return result[0].toBigInt();
+  }
+
+  try_refTaxPercent(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "refTaxPercent",
+      "refTaxPercent():(uint256)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
   rewardsBalance(): BigInt {
     let result = super.call("rewardsBalance", "rewardsBalance():(uint256)", []);
 
@@ -1109,6 +1014,101 @@ export class NoBotsTech extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  ROLE_ADMIN(): Bytes {
+    let result = super.call("ROLE_ADMIN", "ROLE_ADMIN():(bytes32)", []);
+
+    return result[0].toBytes();
+  }
+
+  try_ROLE_ADMIN(): ethereum.CallResult<Bytes> {
+    let result = super.tryCall("ROLE_ADMIN", "ROLE_ADMIN():(bytes32)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBytes());
+  }
+
+  ROLE_CUSTOM_TAX(): Bytes {
+    let result = super.call(
+      "ROLE_CUSTOM_TAX",
+      "ROLE_CUSTOM_TAX():(bytes32)",
+      []
+    );
+
+    return result[0].toBytes();
+  }
+
+  try_ROLE_CUSTOM_TAX(): ethereum.CallResult<Bytes> {
+    let result = super.tryCall(
+      "ROLE_CUSTOM_TAX",
+      "ROLE_CUSTOM_TAX():(bytes32)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBytes());
+  }
+
+  ROLE_EXCLUDE_FROM_BALANCE(): Bytes {
+    let result = super.call(
+      "ROLE_EXCLUDE_FROM_BALANCE",
+      "ROLE_EXCLUDE_FROM_BALANCE():(bytes32)",
+      []
+    );
+
+    return result[0].toBytes();
+  }
+
+  try_ROLE_EXCLUDE_FROM_BALANCE(): ethereum.CallResult<Bytes> {
+    let result = super.tryCall(
+      "ROLE_EXCLUDE_FROM_BALANCE",
+      "ROLE_EXCLUDE_FROM_BALANCE():(bytes32)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBytes());
+  }
+
+  ROLE_PARENT(): Bytes {
+    let result = super.call("ROLE_PARENT", "ROLE_PARENT():(bytes32)", []);
+
+    return result[0].toBytes();
+  }
+
+  try_ROLE_PARENT(): ethereum.CallResult<Bytes> {
+    let result = super.tryCall("ROLE_PARENT", "ROLE_PARENT():(bytes32)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBytes());
+  }
+
+  ROLE_WHITELIST(): Bytes {
+    let result = super.call("ROLE_WHITELIST", "ROLE_WHITELIST():(bytes32)", []);
+
+    return result[0].toBytes();
+  }
+
+  try_ROLE_WHITELIST(): ethereum.CallResult<Bytes> {
+    let result = super.tryCall(
+      "ROLE_WHITELIST",
+      "ROLE_WHITELIST():(bytes32)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBytes());
   }
 
   secondLevelRefPercent(): BigInt {
@@ -1296,6 +1296,36 @@ export class ClearReferrerRewardsCall__Outputs {
   _call: ClearReferrerRewardsCall;
 
   constructor(call: ClearReferrerRewardsCall) {
+    this._call = call;
+  }
+}
+
+export class FillTestReferralTemporaryBalancesCall extends ethereum.Call {
+  get inputs(): FillTestReferralTemporaryBalancesCall__Inputs {
+    return new FillTestReferralTemporaryBalancesCall__Inputs(this);
+  }
+
+  get outputs(): FillTestReferralTemporaryBalancesCall__Outputs {
+    return new FillTestReferralTemporaryBalancesCall__Outputs(this);
+  }
+}
+
+export class FillTestReferralTemporaryBalancesCall__Inputs {
+  _call: FillTestReferralTemporaryBalancesCall;
+
+  constructor(call: FillTestReferralTemporaryBalancesCall) {
+    this._call = call;
+  }
+
+  get referrals(): Array<Address> {
+    return this._call.inputValues[0].value.toAddressArray();
+  }
+}
+
+export class FillTestReferralTemporaryBalancesCall__Outputs {
+  _call: FillTestReferralTemporaryBalancesCall;
+
+  constructor(call: FillTestReferralTemporaryBalancesCall) {
     this._call = call;
   }
 }
