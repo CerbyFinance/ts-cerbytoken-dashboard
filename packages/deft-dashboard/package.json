@@ -28,6 +28,7 @@
     "rc-dialog": "^8.5.2",
     "rc-tooltip": "^4.2.1",
     "react": "^17.0.1",
+    "react-copy-to-clipboard": "^5.0.3",
     "react-dom": "^17.0.1",
     "react-input-autosize": "^3.0.0",
     "react-router-dom": "^5.2.0",
@@ -40,7 +41,7 @@
   "scripts": {
     "codegen": "graphql-codegen --config codegen.yml",
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "GENERATE_SOURCEMAP=false react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -70,11 +71,12 @@
     "@graphql-codegen/typescript-react-apollo": "^2.2.3",
     "@graphql-codegen/typescript-resolvers": "^1.19.0",
     "@typechain/ethers-v5": "^6.0.5",
-    "typechain": "^4.0.3",
     "@types/rc-tooltip": "^3.7.3",
+    "@types/react-copy-to-clipboard": "^5.0.0",
     "@types/react-input-autosize": "^2.2.0",
     "@types/react-router-dom": "^5.1.7",
     "@types/styled-components": "^5.1.9",
-    "@types/testing-library__jest-dom": "^5.9.5"
+    "@types/testing-library__jest-dom": "^5.9.5",
+    "typechain": "^4.0.3"
   }
 }
