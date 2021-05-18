@@ -16,17 +16,14 @@ export function getProviderOrSigner(
   return account ? getSigner(library, account) : library;
 }
 
-const DEFT_KOVAN = "0x50f646bAE2A2C51Ac199C75117a86c5A150c72FB";
+const DEFT = "0xdC8b2dE41B9D99271Dd40BfCaB90CC3077632f3E";
 
 export function useDeftContract() {
   const { account, library, connector } = useWeb3React();
 
   const providerOrSigner = getProviderOrSigner(library, account);
 
-  const res = DefiFactoryTokenContract__factory.connect(
-    DEFT_KOVAN,
-    providerOrSigner,
-  );
+  const res = DefiFactoryTokenContract__factory.connect(DEFT, providerOrSigner);
 
   return res;
 }
