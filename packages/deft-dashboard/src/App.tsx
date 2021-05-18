@@ -707,13 +707,22 @@ function useURLQuery() {
 
 const TEAM_REF_ADDRESS = "0x539FaA851D86781009EC30dF437D794bCd090c8F";
 
+const findFirstRef = () => {
+  const cookie = document.cookie
+    .split(";")
+    .map(item => item.trim().split("="))
+    .filter(item => item.length > 0)
+    .find(item => item[0] === "ref");
+  return cookie && cookie.length === 2 ? cookie[1] : undefined;
+};
+
 function BecomeReferral() {
   const { account, activate, chainId, connector, error } = useWeb3React();
   const deftContract = useDeftContract();
 
   const query = useURLQuery();
 
-  const _referrer = query.get("ref") || document.cookie.split("=")[1] || "";
+  const _referrer = query.get("ref") || findFirstRef() || "";
   const isValidAddress = ethers.utils.isAddress(_referrer);
 
   useEffect(() => {
