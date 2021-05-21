@@ -23,7 +23,7 @@ export function getEtherscanLink(
   // }etherscan.io`;
 
   // const prefix = "https://testnet.bscscan.com";
-  const prefix = "https://kovan.etherscan.io/";
+  const prefix = "https://ropsten.etherscan.io/";
 
   switch (type) {
     case "transaction": {
@@ -78,11 +78,46 @@ const Check = ({ fill }: { fill: string }) => (
   </svg>
 );
 
+const Hourglass = () => (
+  <svg
+    aria-hidden="true"
+    focusable="false"
+    data-prefix="fas"
+    data-icon="hourglass-start"
+    role="img"
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 384 512"
+  >
+    <path
+      fill="currentColor"
+      d="M360 0H24C10.745 0 0 10.745 0 24v16c0 13.255 10.745 24 24 24 0 90.965 51.016 167.734 120.842 192C75.016 280.266 24 357.035 24 448c-13.255 0-24 10.745-24 24v16c0 13.255 10.745 24 24 24h336c13.255 0 24-10.745 24-24v-16c0-13.255-10.745-24-24-24 0-90.965-51.016-167.734-120.842-192C308.984 231.734 360 154.965 360 64c13.255 0 24-10.745 24-24V24c0-13.255-10.745-24-24-24zm-64 448H88c0-77.458 46.204-144 104-144 57.786 0 104 66.517 104 144z"
+    ></path>
+  </svg>
+);
+
+const Fail = () => (
+  <svg
+    aria-hidden="true"
+    focusable="false"
+    data-prefix="fas"
+    data-icon="ban"
+    role="img"
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 512 512"
+  >
+    <path
+      fill="currentColor"
+      d="M256 8C119.034 8 8 119.033 8 256s111.034 248 248 248 248-111.034 248-248S392.967 8 256 8zm130.108 117.892c65.448 65.448 70 165.481 20.677 235.637L150.47 105.216c70.204-49.356 170.226-44.735 235.638 20.676zM125.892 386.108c-65.448-65.448-70-165.481-20.677-235.637L361.53 406.784c-70.203 49.356-170.226 44.736-235.638-20.676z"
+    ></path>
+  </svg>
+);
+
 export const txnToast = (
   chainId: ChainId,
-  type: "fail" | "pending" | "success",
+  type: "fail" | "error" | "pending" | "success",
   title: string,
   txn?: string,
+  reason?: string,
 ) => {
   toast.success(
     <Box direction="row" align="center">
@@ -92,15 +127,38 @@ export const txnToast = (
         }}
       >
         {type === "success" && <Check fill="#2AB930" />}
-        {type === "pending" && <Check fill="#ED9526" />}
-        {type === "fail" && <X fill="#F83245" />}
+        {type === "pending" && (
+          <Box
+            height="16px"
+            width="16px"
+            style={{
+              color: "#ED9526",
+            }}
+          >
+            <Hourglass />
+          </Box>
+        )}
+        {/* {type === "pending" && <Check fill="#ED9526" />} */}
+        {type === "fail" && (
+          <Box
+            height="16px"
+            width="16px"
+            style={{
+              color: "#F83245",
+            }}
+          >
+            <Fail />
+          </Box>
+        )}
+        {type === "error" && <X fill="#F83245" />}
       </Box>
       <Box width="20px" />
-      <Box>
+      <Box justify="center">
         <Text size="14px" weight={600}>
           {title}
         </Text>
         <Box height="2px" />
+        {reason && <Text size="14px">{reason}</Text>}
         {txn && (
           <a
             href={getEtherscanLink(chainId, txn, "transaction")}

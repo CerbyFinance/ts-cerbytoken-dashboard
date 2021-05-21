@@ -6,6 +6,7 @@ import dayjs from "dayjs";
 import isToday from "dayjs/plugin/isToday";
 import isYesterday from "dayjs/plugin/isYesterday";
 import relativeTime from "dayjs/plugin/relativeTime";
+import { serializeError } from "eth-rpc-errors";
 import { ethers } from "ethers";
 import { Box, Grommet, Text } from "grommet";
 import "rc-dialog/assets/index.css";
@@ -20,7 +21,9 @@ import {
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 import styled from "styled-components";
+import useMedia from "use-media";
 import { CheckBox } from "./CheckBox";
+import { readableErrors } from "./contractErrors";
 import {
   useMultiplierQuery,
   UserReferrals2lvlDocument,
@@ -50,7 +53,8 @@ dayjs.extend(isToday);
 
 const oneE18 = BigNumber.from("1000000000000000000");
 // const DEPLOYED_CHAIN = 97;
-const DEPLOYED_CHAIN = 42;
+// const DEPLOYED_CHAIN = 42;
+const DEPLOYED_CHAIN = 3;
 
 const BoxHoveredScale = styled(Box)`
   cursor: pointer;
@@ -762,18 +766,33 @@ function BecomeReferral() {
       setLoader(true);
       const result = await deftContract.registerReferral(referrer);
 
-      txnToast(1, "pending", "Transaction Sent", result.hash);
+      txnToast(1, "pending", "Transaction Pending", result.hash);
 
       const result2 = await result.wait();
 
+      let i = 3;
       // todo: maybe just update it locally ?
-      await nobotsClient.query({
-        query: UserReferrals2lvlDocument,
-        variables: {
-          address: account.toLowerCase(),
-        },
-        fetchPolicy: "network-only",
-      });
+      while (true) {
+        const resultQuery = await nobotsClient.query({
+          query: UserReferrals2lvlDocument,
+          variables: {
+            address: account.toLowerCase(),
+          },
+          fetchPolicy: "network-only",
+        });
+
+        if (resultQuery?.data?.user) {
+          break;
+        }
+
+        i--;
+
+        if (i === 0) {
+          break;
+        }
+
+        await new Promise(r => setTimeout(r, 300));
+      }
 
       setLoader(false);
 
@@ -785,22 +804,43 @@ function BecomeReferral() {
           result2.transactionHash,
         );
       } else {
-        txnToast(1, "fail", "Transaction Failed", result2.transactionHash);
+        txnToast(1, "fail", "Transaction Canceled", result2.transactionHash);
       }
 
       console.log(result2.status); // 1 = 0k, 0 = failure
     } catch (error) {
       setLoader(false);
 
-      // transaction failed
+      const serializedError = serializeError(error);
+      const originalErrorMessage = (serializedError.data as any)?.originalError
+        ?.error?.message;
 
-      txnToast(1, "fail", "Transaction Failed");
+      if (originalErrorMessage && originalErrorMessage.includes("!")) {
+        const message = originalErrorMessage.split("!")[1];
 
-      // if 4001 === user denied
-      // TODO: show thorough error
+        // @ts-ignore
+        const readableError = readableErrors[message] || "Unknown error";
+        txnToast(1, "error", "Transaction Error", undefined, readableError);
+      } else {
+        txnToast(1, "fail", "Transaction Canceled");
+      }
+
       // console.log(error);
     }
   };
+
+  // useEffect(() => {
+  //   txnToast(1, "pending", "Transaction Pending", "a");
+  //   txnToast(1, "success", "Transaction Successful", "a");
+  //   txnToast(1, "fail", "Transaction Canceled");
+  //   txnToast(
+  //     1,
+  //     "error",
+  //     "Transaction Error",
+  //     undefined,
+  //     "Self referring is forbidden",
+  //   );
+  // }, []);
 
   return (
     <Box
@@ -1024,11 +1064,27 @@ function BecomeReferral() {
 
 function getLibrary(provider: any): Web3Provider {
   const library = new Web3Provider(provider);
+  //   const library = new ethers.providers.JsonRpcProvider('')
+
   library.pollingInterval = 12000;
   return library;
 }
 
 function App() {
+  const isMobileOrTablet = useMedia({ maxWidth: "1200px" });
+
+  if (isMobileOrTablet) {
+    return (
+      <Box align="center" justify="center" height="100vh" pad="50px">
+        <Text>
+          Please use desktop PC or laptop chrome to access referral dashboard.
+          Currently it does not support mobile devices. Mobile version is in
+          progress now.
+        </Text>
+      </Box>
+    );
+  }
+
   return (
     <Web3ReactProvider getLibrary={getLibrary}>
       <Web3ReactManager>

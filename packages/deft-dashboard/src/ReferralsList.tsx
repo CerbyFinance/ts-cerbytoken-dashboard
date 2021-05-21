@@ -1,9 +1,11 @@
 import { useWeb3React } from "@web3-react/core";
 import dayjs from "dayjs";
+import { serializeError } from "eth-rpc-errors";
 import { Box, BoxProps, Text } from "grommet";
 import React, { CSSProperties, useState } from "react";
 import styled from "styled-components";
 import { CheckBox } from "./CheckBox";
+import { readableErrors } from "./contractErrors";
 import { HoveredElement } from "./shared/hooks";
 import { useDeftContract } from "./shared/useContract";
 import { txnToast } from "./toaster";
@@ -301,14 +303,26 @@ export const ReferralsList = ({
           result2.transactionHash,
         );
       } else {
-        txnToast(1, "fail", "Transaction Failed", result2.transactionHash);
+        txnToast(1, "fail", "Transaction Canceled", result2.transactionHash);
       }
 
       console.log(result2.status); // 1 = 0k, 0 = failure
     } catch (error) {
       setLoader(false);
 
-      txnToast(1, "fail", "Transaction Failed");
+      const serializedError = serializeError(error);
+      const originalErrorMessage = (serializedError.data as any)?.originalError
+        ?.error?.message;
+
+      if (originalErrorMessage && originalErrorMessage.includes("!")) {
+        const message = originalErrorMessage.split("!")[1];
+
+        // @ts-ignore
+        const readableError = readableErrors[message] || "Unknown error";
+        txnToast(1, "error", "Transaction Error", undefined, readableError);
+      } else {
+        txnToast(1, "fail", "Transaction Canceled");
+      }
     }
   };
 
