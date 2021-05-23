@@ -16,13 +16,10 @@ dataSources:
       entities:
         - Token
         - Swap
-        - Global
       abis:
         - name: UniswapPair
           file: ./abis/UniswapPair.json
       eventHandlers:
-        - event: Transfer(indexed address,indexed address,uint256)
-          handler: handleTransfer
         - event: Sync(uint112,uint112)
           handler: handleSync
         - event: Swap(indexed address,uint256,uint256,uint256,uint256,indexed address)
