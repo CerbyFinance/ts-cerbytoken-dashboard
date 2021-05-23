@@ -6,9 +6,9 @@ dataSources:
     name: NoBotsTech
     network: ropsten
     source:
-      address: "0x5397B1c28806eA959Eee2DF485B947013bA002F1"
+      address: "0x11D27c98b8bf595C31D5B2Ce1dc5A86629A60aFf"
       abi: NoBotsTech
-      startBlock: 10284538
+      startBlock: 10289665
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -37,9 +37,9 @@ dataSources:
     name: DefiFactoryToken
     network: ropsten
     source:
-      address: "0xa395f7ca2d937d2f53EE6d143b304B47d9099215"
+      address: "0xc808eA882a29c28d978Deecbd8352B9062fCCce7"
       abi: DefiFactoryToken
-      startBlock: 10284538
+      startBlock: 10289665
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
