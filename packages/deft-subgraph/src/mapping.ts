@@ -28,12 +28,17 @@ export function handleBotTransactionDetected(
   let taxedAmount = event.params.taxedAmount;
   let transferAmount = event.params.transferAmount;
 
-  let botTransaction = new BotTransaction(`${ts}-${from}-${to}`);
+  let botTransaction = new BotTransaction(
+    ts.toString() + "-" + from.toHexString() + "-" + to.toHexString(),
+  );
   botTransaction.timestamp = ts;
   botTransaction.from = from;
   botTransaction.to = to;
   botTransaction.taxedAmount = taxedAmount;
   botTransaction.transferAmount = transferAmount;
+  botTransaction.txHash = event.transaction.hash;
+  botTransaction.gasPrice = event.transaction.gasPrice;
+  botTransaction.gasUsed = event.transaction.gasUsed;
   botTransaction.save();
 }
 

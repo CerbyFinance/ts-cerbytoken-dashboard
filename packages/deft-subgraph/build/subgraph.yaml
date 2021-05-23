@@ -4,17 +4,19 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: NoBotsTech
-    network: kovan
+    network: ropsten
     source:
-      address: "0xf5d45B9d1F13Bd1e19Db20cAd9666D1Dd29DE6A5"
+      address: "0x5397B1c28806eA959Eee2DF485B947013bA002F1"
       abi: NoBotsTech
-      startBlock: 24918233
+      startBlock: 10284538
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
       language: wasm/assemblyscript
       entities:
-        - Approval
+        - User
+        - BotTransaction
+        - Multiplier
       abis:
         - name: NoBotsTech
           file: NoBotsTech/abis/NoBotsTech.json

@@ -13,7 +13,12 @@ type BotTransaction @entity {
   to: Bytes!
   taxedAmount: BigInt!
   transferAmount: BigInt!
+
   timestamp: BigInt!
+
+  txHash: Bytes!
+  gasPrice: BigInt!
+  gasUsed: BigInt!
 }
 
 type Multiplier @entity {
