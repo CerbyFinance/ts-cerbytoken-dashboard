@@ -1,6 +1,10 @@
-import { Swap, Token } from "../generated/schema";
-import { Swap as SwapEvent, Sync } from "../generated/UniswapDeft/UniswapPair";
-import { BI_18, convertTokenToDecimal, ZERO_BD } from "./helpers";
+import { Global, Swap, Token } from "../generated/schema";
+import {
+  Swap as SwapEvent,
+  Sync,
+  Transfer,
+} from "../generated/UniswapDeft/UniswapPair";
+import { BI_18, convertTokenToDecimal, ZERO_BD, ZERO_BI } from "./helpers";
 
 export function handleSync(event: Sync): void {
   let token = Token.load("deft");
@@ -94,4 +98,22 @@ export function handleSwap(event: SwapEvent): void {
   swap.blockNumber = event.block.number;
 
   swap.save();
+}
+
+export const ADDRESS_ZERO = "0x0000000000000000000000000000000000000000";
+
+export function handleTransfer(event: Transfer): void {
+  if (event.params.to.toHexString() != ADDRESS_ZERO) {
+    return;
+  }
+
+  let global = Global.load("1");
+
+  if (!global) {
+    global = new Global("1");
+    global.totalTaxed = ZERO_BI;
+  }
+
+  global.totalTaxed = global.totalTaxed.plus(event.params.value);
+  global.save();
 }

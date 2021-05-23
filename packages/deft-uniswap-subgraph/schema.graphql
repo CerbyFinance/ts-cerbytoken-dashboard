@@ -27,3 +27,8 @@ type Token @entity {
   id: ID!
   price: BigDecimal!
 }
+
+type Global @entity {
+  id: ID!
+  totalTaxed: BigInt!
+}

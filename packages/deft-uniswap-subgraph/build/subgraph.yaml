@@ -15,10 +15,14 @@ dataSources:
       language: wasm/assemblyscript
       entities:
         - Token
+        - Swap
+        - Global
       abis:
         - name: UniswapPair
           file: UniswapDeft/abis/UniswapPair.json
       eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
         - event: Sync(uint112,uint112)
           handler: handleSync
         - event: Swap(indexed address,uint256,uint256,uint256,uint256,indexed address)
@@ -37,7 +41,6 @@ dataSources:
       language: wasm/assemblyscript
       entities:
         - Token
-        - Swap
       abis:
         - name: UniswapPair
           file: UniswapUsdt/abis/UniswapPair.json
