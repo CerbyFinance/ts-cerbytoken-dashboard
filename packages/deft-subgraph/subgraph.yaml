@@ -17,6 +17,7 @@ dataSources:
         - User
         - BotTransaction
         - Multiplier
+        - Global
       abis:
         - name: NoBotsTech
           file: ./abis/NoBotsTech.json

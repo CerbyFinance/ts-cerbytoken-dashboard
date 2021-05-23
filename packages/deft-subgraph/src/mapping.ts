@@ -6,7 +6,7 @@ import {
   ReferrerReplaced,
   ReferrerRewardUpdated,
 } from "../generated/NoBotsTech/NoBotsTech";
-import { BotTransaction, Multiplier, User } from "../generated/schema";
+import { BotTransaction, Global, Multiplier, User } from "../generated/schema";
 import { ONE_BI, ZERO_BI } from "./helpers";
 
 export function handleMultiplierUpdated(event: MultiplierUpdated): void {
@@ -21,6 +21,16 @@ export function handleMultiplierUpdated(event: MultiplierUpdated): void {
 export function handleBotTransactionDetected(
   event: BotTransactionDetected,
 ): void {
+  let global = Global.load("1");
+
+  if (!global) {
+    global = new Global("1");
+    global.botTaxed = ZERO_BI;
+  }
+
+  global.botTaxed = global.botTaxed.plus(event.params.taxedAmount);
+  global.save();
+
   let ts = event.block.timestamp;
 
   let from = event.params.from;
