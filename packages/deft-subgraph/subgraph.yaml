@@ -33,3 +33,23 @@ dataSources:
         - event: ReferrerReplaced(address,address,address)
           handler: handleReferrerReplaced
       file: ./src/mapping.ts
+  - kind: ethereum/contract
+    name: DefiFactoryToken
+    network: ropsten
+    source:
+      address: "0xa395f7ca2d937d2f53EE6d143b304B47d9099215"
+      abi: DefiFactoryToken
+      startBlock: 10284538
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Global
+      abis:
+        - name: DefiFactoryToken
+          file: ./abis/DefiFactoryToken.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleDefiFactoryTransfer
+      file: ./src/mapping.ts

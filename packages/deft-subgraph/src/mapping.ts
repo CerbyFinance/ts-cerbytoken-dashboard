@@ -1,4 +1,5 @@
 import { BigInt } from "@graphprotocol/graph-ts";
+import { Transfer } from "../generated/DefiFactoryToken/DefiFactoryToken";
 import {
   BotTransactionDetected,
   MultiplierUpdated,
@@ -26,9 +27,12 @@ export function handleBotTransactionDetected(
   if (!global) {
     global = new Global("1");
     global.botTaxed = ZERO_BI;
+    global.userTaxed = ZERO_BI;
+    global.totalTaxed = ZERO_BI;
   }
 
   global.botTaxed = global.botTaxed.plus(event.params.taxedAmount);
+  global.userTaxed = global.totalTaxed.minus(global.botTaxed);
   global.save();
 
   let ts = event.block.timestamp;
@@ -116,4 +120,19 @@ export function handleReferrerReplaced(event: ReferrerReplaced): void {
   _referral.save();
   _referrerFrom.save();
   _referrerTo.save();
+}
+
+export function handleDefiFactoryTransfer(event: Transfer): void {
+  let global = Global.load("1");
+
+  if (!global) {
+    global = new Global("1");
+    global.botTaxed = ZERO_BI;
+    global.userTaxed = ZERO_BI;
+    global.totalTaxed = ZERO_BI;
+  }
+
+  global.totalTaxed = global.totalTaxed.plus(event.params.value);
+  global.userTaxed = global.totalTaxed.minus(global.botTaxed);
+  global.save();
 }

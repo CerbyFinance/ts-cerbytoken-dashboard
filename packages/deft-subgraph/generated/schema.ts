@@ -277,4 +277,22 @@ export class Global extends Entity {
   set botTaxed(value: BigInt) {
     this.set("botTaxed", Value.fromBigInt(value));
   }
+
+  get userTaxed(): BigInt {
+    let value = this.get("userTaxed");
+    return value.toBigInt();
+  }
+
+  set userTaxed(value: BigInt) {
+    this.set("userTaxed", Value.fromBigInt(value));
+  }
+
+  get totalTaxed(): BigInt {
+    let value = this.get("totalTaxed");
+    return value.toBigInt();
+  }
+
+  set totalTaxed(value: BigInt) {
+    this.set("totalTaxed", Value.fromBigInt(value));
+  }
 }

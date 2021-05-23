@@ -29,4 +29,6 @@ type Multiplier @entity {
 type Global @entity {
   id: ID!
   botTaxed: BigInt!
+  userTaxed: BigInt!
+  totalTaxed: BigInt!
 }
