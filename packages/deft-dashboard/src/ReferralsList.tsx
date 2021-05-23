@@ -441,7 +441,7 @@ export const ReferralsList = ({
         style={{
           boxShadow: "0px 4px 8px rgba(97, 97, 97, 0.14)",
           width: "712px",
-          minWidth: "712px",
+          minWidth: "512px",
         }}
         background="white"
         round="4px"

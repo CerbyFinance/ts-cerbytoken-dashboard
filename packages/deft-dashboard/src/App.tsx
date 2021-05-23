@@ -457,7 +457,7 @@ function ReferrerRewards() {
       style={{
         // margin: "0 auto",
         width: "100%",
-        padding: "50px 0px",
+        padding: "50px 10px",
       }}
     >
       <LeftMenu />
@@ -469,7 +469,7 @@ function ReferrerRewards() {
           // width: "1238px",
 
           width: "976px",
-          minWidth: "976px",
+          minWidth: "776px",
         }}
       >
         <Box width="100%">
@@ -626,6 +626,11 @@ function ReferrerRewards() {
                   />
                 )}
               </Box>
+              <Box
+                style={{
+                  minWidth: "15px",
+                }}
+              />
               <Box
                 margin={{
                   left: "auto",
@@ -850,7 +855,7 @@ function BecomeReferral() {
       style={{
         // margin: "0 auto",
         width: "100%",
-        padding: "50px 0px",
+        padding: "50px 10px",
       }}
     >
       <LeftMenu />
@@ -862,7 +867,7 @@ function BecomeReferral() {
           // width: "1238px",
 
           width: "976px",
-          minWidth: "976px",
+          minWidth: "776px",
         }}
       >
         <Box width="100%">
@@ -1071,7 +1076,7 @@ function getLibrary(provider: any): Web3Provider {
 }
 
 function App() {
-  const isMobileOrTablet = useMedia({ maxWidth: "1200px" });
+  const isMobileOrTablet = useMedia({ maxWidth: "1066px" });
 
   if (isMobileOrTablet) {
     return (
