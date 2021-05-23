@@ -6,7 +6,7 @@ dataSources:
     name: UniswapDeft
     network: ropsten
     source:
-      address: "0x0b367ed12a5788682d7f819feeeff2f7efd89755"
+      address: "0x8a0e6dde678762df98346515f5939648635d275e"
       abi: UniswapPair
       startBlock: 10284546
     mapping:
@@ -29,7 +29,7 @@ dataSources:
     name: UniswapUsdt
     network: ropsten
     source:
-      address: "0x230c4c6de893f369920a94bd354589ea1a8bcafd"
+      address: "0x8B0b5BE6D17bEB4ff7bE612d6B873b6F83F1D86A"
       abi: UniswapPair
       startBlock: 10277151
     mapping:
