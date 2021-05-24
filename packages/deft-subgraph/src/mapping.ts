@@ -43,7 +43,11 @@ export function handleBotTransactionDetected(
   let transferAmount = event.params.transferAmount;
 
   let botTransaction = new BotTransaction(
-    ts.toString() + "-" + from.toHexString() + "-" + to.toHexString(),
+    event.block.hash.toHexString() +
+      "-" +
+      event.transaction.hash.toHexString() +
+      "-" +
+      event.logIndex.toHexString(),
   );
   botTransaction.timestamp = ts;
   botTransaction.from = from;
@@ -122,7 +126,13 @@ export function handleReferrerReplaced(event: ReferrerReplaced): void {
   _referrerTo.save();
 }
 
+const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
+
 export function handleDefiFactoryTransfer(event: Transfer): void {
+  if (event.params.to.toHexString() != ZERO_ADDRESS) {
+    return;
+  }
+
   let global = Global.load("1");
 
   if (!global) {
