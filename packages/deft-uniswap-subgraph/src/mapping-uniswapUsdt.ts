@@ -15,12 +15,10 @@ export function handleSync(event: Sync): void {
   let wethReserve = ZERO_BD;
   let usdtReserve = ZERO_BD;
 
-  usdtReserve = convertTokenToDecimal(event.params.reserve0, BI_6);
-  wethReserve = convertTokenToDecimal(event.params.reserve1, BI_18);
+  wethReserve = convertTokenToDecimal(event.params.reserve0, BI_18);
+  usdtReserve = convertTokenToDecimal(event.params.reserve1, BI_6);
 
-  // usd in weth
-  wethReserve.div(usdtReserve);
-
+  // usd in eth
   if (usdtReserve > ZERO_BD) {
     usdInEth.price = wethReserve.div(usdtReserve);
   } else {

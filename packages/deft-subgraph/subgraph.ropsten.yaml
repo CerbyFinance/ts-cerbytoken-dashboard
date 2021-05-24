@@ -1,14 +1,14 @@
 specVersion: 0.0.2
 schema:
-  file: schema.graphql
+  file: ./schema.graphql
 dataSources:
   - kind: ethereum/contract
     name: NoBotsTech
-    network: mainnet
+    network: ropsten
     source:
-      address: "0xDEF1Fa09538Ddd4CFe983d550D917Cd39D6ffE28"
+      address: "0x11D27c98b8bf595C31D5B2Ce1dc5A86629A60aFf"
       abi: NoBotsTech
-      startBlock: 12494428
+      startBlock: 10289665
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -20,7 +20,7 @@ dataSources:
         - Global
       abis:
         - name: NoBotsTech
-          file: NoBotsTech/abis/NoBotsTech.json
+          file: ./abis/NoBotsTech.json
       eventHandlers:
         - event: MultiplierUpdated(uint256)
           handler: handleMultiplierUpdated
@@ -32,14 +32,14 @@ dataSources:
           handler: handleReferralRegistered
         - event: ReferrerReplaced(address,address,address)
           handler: handleReferrerReplaced
-      file: NoBotsTech/NoBotsTech.wasm
+      file: ./src/mapping.ts
   - kind: ethereum/contract
     name: DefiFactoryToken
-    network: mainnet
+    network: ropsten
     source:
-      address: "0xdef1fac7Bf08f173D286BbBDcBeeADe695129840"
+      address: "0xc808eA882a29c28d978Deecbd8352B9062fCCce7"
       abi: DefiFactoryToken
-      startBlock: 12494175
+      startBlock: 10289665
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -48,8 +48,8 @@ dataSources:
         - Global
       abis:
         - name: DefiFactoryToken
-          file: DefiFactoryToken/abis/DefiFactoryToken.json
+          file: ./abis/DefiFactoryToken.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleDefiFactoryTransfer
-      file: NoBotsTech/NoBotsTech.wasm
+      file: ./src/mapping.ts

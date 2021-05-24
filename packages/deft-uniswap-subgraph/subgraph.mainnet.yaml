@@ -1,6 +1,6 @@
 specVersion: 0.0.2
 schema:
-  file: schema.graphql
+  file: ./schema.graphql
 dataSources:
   - kind: ethereum/contract
     name: UniswapDeft
@@ -18,13 +18,13 @@ dataSources:
         - Swap
       abis:
         - name: UniswapPair
-          file: UniswapDeft/abis/UniswapPair.json
+          file: ./abis/UniswapPair.json
       eventHandlers:
         - event: Sync(uint112,uint112)
           handler: handleSync
         - event: Swap(indexed address,uint256,uint256,uint256,uint256,indexed address)
           handler: handleSwap
-      file: UniswapDeft/UniswapDeft.wasm
+      file: ./src/mapping-uniswapDeft.ts
   - kind: ethereum/contract
     name: UniswapUsdt
     network: mainnet
@@ -40,8 +40,8 @@ dataSources:
         - Token
       abis:
         - name: UniswapPair
-          file: UniswapUsdt/abis/UniswapPair.json
+          file: ./abis/UniswapPair.json
       eventHandlers:
         - event: Sync(uint112,uint112)
           handler: handleSync
-      file: UniswapUsdt/UniswapUsdt.wasm
+      file: ./src/mapping-uniswapUsdt.ts

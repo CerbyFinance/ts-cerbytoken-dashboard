@@ -13,28 +13,30 @@ export function handleSync(event: Sync): void {
     ethInDeft = new Token("ethInDeft");
   }
 
-  let reserve0 = convertTokenToDecimal(event.params.reserve0, BI_18);
-  let reserve1 = convertTokenToDecimal(event.params.reserve1, BI_18);
+  let wethReserve = convertTokenToDecimal(event.params.reserve0, BI_18);
+  let deftReserve = convertTokenToDecimal(event.params.reserve1, BI_18);
 
-  if (reserve0 > ZERO_BD) {
-    deftInEth.price = reserve1.div(reserve0);
-  } else {
-    deftInEth.price = ZERO_BD;
-  }
-
-  if (reserve1 > ZERO_BD) {
-    ethInDeft.price = reserve0.div(reserve1);
+  // eth in deft
+  if (wethReserve > ZERO_BD) {
+    ethInDeft.price = deftReserve.div(wethReserve);
   } else {
     ethInDeft.price = ZERO_BD;
   }
 
-  let usdInEth = Token.load("usdInEth");
+  // deft in eth
+  if (deftReserve > ZERO_BD) {
+    deftInEth.price = wethReserve.div(deftReserve);
+  } else {
+    deftInEth.price = ZERO_BD;
+  }
+
+  let ethInUsd = Token.load("ethInUsd");
 
   let deftInUsd = Token.load("deftInUsd");
 
   if (deftInUsd === null) {
     deftInUsd = new Token("deftInUsd");
-    deftInUsd.price = deftInEth.price.times(usdInEth.price);
+    deftInUsd.price = deftInEth.price.times(ethInUsd.price);
   }
 
   deftInEth.save();
