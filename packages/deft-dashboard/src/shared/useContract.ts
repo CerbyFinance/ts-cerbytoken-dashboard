@@ -16,7 +16,7 @@ export function getProviderOrSigner(
   return account ? getSigner(library, account) : library;
 }
 
-const DEFT = "0x1f1f530b0E57CeB7a24c5782eB8c105326241752";
+const DEFT = "0xdef1fac7Bf08f173D286BbBDcBeeADe695129840";
 
 export function useDeftContract() {
   const { account, library, connector } = useWeb3React();

@@ -23,7 +23,8 @@ export function getEtherscanLink(
   // }etherscan.io`;
 
   // const prefix = "https://testnet.bscscan.com";
-  const prefix = "https://ropsten.etherscan.io/";
+  // const prefix = "https://ropsten.etherscan.io/";
+  const prefix = "https://etherscan.io/";
 
   switch (type) {
     case "transaction": {

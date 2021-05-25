@@ -1,8 +1,9 @@
 import { useWeb3React } from "@web3-react/core";
 import dayjs from "dayjs";
 import { serializeError } from "eth-rpc-errors";
+import { ethers } from "ethers";
 import { Box, BoxProps, Text } from "grommet";
-import React, { CSSProperties, useState } from "react";
+import React, { CSSProperties, useEffect, useState } from "react";
 import styled from "styled-components";
 import { CheckBox } from "./CheckBox";
 import { readableErrors } from "./contractErrors";
@@ -266,6 +267,27 @@ export const ReferralsList = ({
   const [activeRows, setActiveRows] = useState<string[]>([]);
   const [loader, setLoader] = useState(false);
 
+  const [available, setAvailable] = useState<number>(0);
+
+  const deftAvailable = async (account: string) => {
+    try {
+      const available = await deftContract.getCachedReferrerRewards(account!);
+
+      setAvailable(Number(ethers.utils.formatEther(available)));
+      console.log({
+        available: ethers.utils.formatEther(available),
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (account) {
+      deftAvailable(account);
+    }
+  }, [account]);
+
   const deftContract = useDeftContract();
 
   const collectRewards = async (referrals: string[], account: string) => {
@@ -280,6 +302,7 @@ export const ReferralsList = ({
       // todo: maybe just  update it locally ?
       // todo: refetch just those who collected
 
+      await deftAvailable(account);
       await zeroAmounts(referrals, account);
       // todo: can just compute them from rewards
       setActiveRows([]);
@@ -899,7 +922,7 @@ export const ReferralsList = ({
       </Box>
 
       <Box height="16px" />
-      {activeRows.length > 0 && (
+      {(activeRows.length > 0 || available > 0) && (
         <Box
           width="100%"
           height="60px"
@@ -920,26 +943,40 @@ export const ReferralsList = ({
               left: "auto",
             }}
           />
+
           <Box>
-            <Text
-              color="#2AB930"
-              weight={700}
-              size="14px"
-              style={{
-                lineHeight: "142%",
-              }}
-            >
-              {activeSum.toFixed(2)} Total DEFT
-            </Text>
+            <Box direction="row" align="end">
+              <Text
+                color="#2AB930"
+                weight={700}
+                size="14px"
+                style={{
+                  lineHeight: "142%",
+                }}
+              >
+                {(activeSum + available).toFixed(2)}
+              </Text>
+              <Box width="4px" />
+              <Text
+                color="#2AB930"
+                weight={700}
+                size="12px"
+                style={{
+                  lineHeight: "142%",
+                }}
+              >
+                Total DEFT
+              </Text>
+            </Box>
             <Text
               color="#3E3E3E"
               weight={400}
-              size="14px"
+              size="13px"
               style={{
                 lineHeight: "142%",
               }}
             >
-              Selected to Collect
+              Available and Selected
             </Text>
           </Box>
           <Box width="40px"></Box>

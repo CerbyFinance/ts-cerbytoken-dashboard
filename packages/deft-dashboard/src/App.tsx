@@ -54,7 +54,8 @@ dayjs.extend(isToday);
 const oneE18 = BigNumber.from("1000000000000000000");
 // const DEPLOYED_CHAIN = 97;
 // const DEPLOYED_CHAIN = 42;
-const DEPLOYED_CHAIN = 3;
+const DEPLOYED_CHAIN = 1;
+// const DEPLOYED_CHAIN = 42;
 
 const BoxHoveredScale = styled(Box)`
   cursor: pointer;
@@ -714,7 +715,7 @@ function useURLQuery() {
   return new URLSearchParams(useLocation().search);
 }
 
-const TEAM_REF_ADDRESS = "0x539FaA851D86781009EC30dF437D794bCd090c8F";
+const TEAM_REF_ADDRESS = "0xC427a912E0B19f082840A0045E430dE5b8cB1f65";
 
 const findFirstRef = () => {
   const cookie = document.cookie
