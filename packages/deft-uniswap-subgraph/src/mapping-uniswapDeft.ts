@@ -36,8 +36,9 @@ export function handleSync(event: Sync): void {
 
   if (deftInUsd === null) {
     deftInUsd = new Token("deftInUsd");
-    deftInUsd.price = deftInEth.price.times(ethInUsd.price);
   }
+
+  deftInUsd.price = deftInEth.price.times(ethInUsd.price);
 
   deftInEth.save();
   ethInDeft.save();
