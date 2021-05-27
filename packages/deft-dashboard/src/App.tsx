@@ -556,6 +556,12 @@ function ReferrerRewards() {
                       </Text>
                     </Box>
                   )
+                ) : error?.name === "UnsupportedChainIdError" ? (
+                  <Box pad="4px 8px" round="6px" background="#F83245">
+                    <Text size="16px" weight={600}>
+                      Wrong Network
+                    </Text>
+                  </Box>
                 ) : (
                   <HoveredElement
                     render={binder => {
