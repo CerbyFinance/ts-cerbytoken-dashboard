@@ -556,7 +556,7 @@ function ReferrerRewards() {
                       </Text>
                     </Box>
                   )
-                ) : error?.name === "UnsupportedChainIdError" ? (
+                ) : error?.message.includes("Unsupported chain id") ? (
                   <Box pad="4px 8px" round="6px" background="#F83245">
                     <Text size="16px" weight={600}>
                       Wrong Network
