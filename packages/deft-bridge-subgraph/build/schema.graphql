@@ -1,0 +1,33 @@
+enum TransferStatus {
+  Burned
+  Approved
+  Executed
+}
+
+type BridgeTransfer @entity {
+  id: ID!
+
+  status: TransferStatus!
+
+  sender: Bytes!
+  txBurnHash: Bytes!
+  txMintHash: Bytes!
+
+  amountBurn: BigDecimal!
+  amountMint: BigDecimal!
+
+  mintFee: BigDecimal!
+
+  transactionFee: BigDecimal!
+
+  logIndex: BigInt!
+  blockNumber: BigInt!
+  timestamp: BigInt!
+}
+
+type Global @entity {
+  id: ID!
+  approved: BigInt!
+  executed: BigInt!
+  chargedMintFee: BigInt!
+}
