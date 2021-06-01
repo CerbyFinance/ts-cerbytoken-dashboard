@@ -18,6 +18,10 @@ type Proof @entity {
   id: ID!
 
   type: ProofType!
+  nonce: BigInt
+
+  src: BigInt
+  dest: BigInt
 
   sender: Bytes!
 

@@ -16,7 +16,7 @@ import {
 function getOrCreateBridgeTransfer(id: string): BridgeTransfer | null {
   let transfer = BridgeTransfer.load(id);
 
-  if (transfer === null) {
+  if (transfer == null) {
     transfer = new BridgeTransfer(id);
     transfer.status = "Created";
     transfer.save();
@@ -28,7 +28,7 @@ function getOrCreateBridgeTransfer(id: string): BridgeTransfer | null {
 function getOrCreateGlobal(): Global | null {
   let global = Global.load("1");
 
-  if (global === null) {
+  if (global == null) {
     global = new Global("1");
     global.mintedCount = ZERO_BI;
     global.mintedAmount = ZERO_BD;
@@ -61,6 +61,9 @@ export function handleProofOfBurn(event: ProofOfBurn): void {
   global.burnedAmount = global.burnedAmount.plus(burnedAmount);
 
   let proof = new Proof(proofHash);
+  proof.src = event.params.sourceChain;
+  proof.dest = event.params.destinationChain;
+  proof.nonce = event.params.currentNonce;
   proof.type = "Burn";
   proof.sender = event.transaction.from;
   proof.amount = burnedAmount;
@@ -94,6 +97,7 @@ export function handleProofOfMint(event: ProofOfMint): void {
   global.chargedFee = global.chargedFee.plus(chargedFee);
 
   let proof = new Proof(proofHash);
+  proof.nonce = null; // find from burn
   proof.type = "Mint";
   proof.sender = event.transaction.from;
   proof.amount = convertTokenToDecimal(event.params.finalAmount, BI_18);
@@ -124,6 +128,8 @@ export function handleApprovedTransaction(event: ApprovedTransaction): void {
 
 let ZERO = "0x0";
 let ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
+// prettier-ignore
+let ZERO_ADDRESS_2 = "0x0000000000000000000000000000000000000000000000000000000000000000";
 
 export function handleBulkApprovedTransaction(
   event: BulkApprovedTransactions,
@@ -134,7 +140,11 @@ export function handleBulkApprovedTransaction(
   for (let i = 0; i < transactionHashes.length; i++) {
     let proofHash = transactionHashes[i].toHexString();
 
-    if (proofHash === ZERO || proofHash === ZERO_ADDRESS) {
+    if (
+      proofHash == ZERO ||
+      proofHash == ZERO_ADDRESS ||
+      proofHash == ZERO_ADDRESS_2
+    ) {
       continue;
     }
 

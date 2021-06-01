@@ -51,6 +51,57 @@ export class Proof extends Entity {
     this.set("type", Value.fromString(value));
   }
 
+  get nonce(): BigInt | null {
+    let value = this.get("nonce");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set nonce(value: BigInt | null) {
+    if (value === null) {
+      this.unset("nonce");
+    } else {
+      this.set("nonce", Value.fromBigInt(value as BigInt));
+    }
+  }
+
+  get src(): BigInt | null {
+    let value = this.get("src");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set src(value: BigInt | null) {
+    if (value === null) {
+      this.unset("src");
+    } else {
+      this.set("src", Value.fromBigInt(value as BigInt));
+    }
+  }
+
+  get dest(): BigInt | null {
+    let value = this.get("dest");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set dest(value: BigInt | null) {
+    if (value === null) {
+      this.unset("dest");
+    } else {
+      this.set("dest", Value.fromBigInt(value as BigInt));
+    }
+  }
+
   get sender(): Bytes {
     let value = this.get("sender");
     return value.toBytes();
