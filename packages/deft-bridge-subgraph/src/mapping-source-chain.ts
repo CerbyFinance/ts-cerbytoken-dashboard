@@ -38,6 +38,7 @@ function getOrCreateGlobal(): Global | null {
 
     global.approvedCount = ZERO_BI;
     global.chargedFee = ZERO_BD;
+    global.recentApprovedProof = "";
     global.save();
   }
 
@@ -59,7 +60,7 @@ export function handleProofOfBurn(event: ProofOfBurn): void {
   global.burnedCount = global.burnedCount.plus(ONE_BI);
   global.burnedAmount = global.burnedAmount.plus(burnedAmount);
 
-  let proof = new Proof("burn-" + proofHash);
+  let proof = new Proof(proofHash);
   proof.type = "Burn";
   proof.sender = event.transaction.from;
   proof.amount = burnedAmount;
@@ -92,7 +93,7 @@ export function handleProofOfMint(event: ProofOfMint): void {
   global.mintedAmount = global.mintedAmount.plus(mintedAmount);
   global.chargedFee = global.chargedFee.plus(chargedFee);
 
-  let proof = new Proof("mint-" + proofHash);
+  let proof = new Proof(proofHash);
   proof.type = "Mint";
   proof.sender = event.transaction.from;
   proof.amount = convertTokenToDecimal(event.params.finalAmount, BI_18);
@@ -128,15 +129,17 @@ export function handleBulkApprovedTransaction(
   event: BulkApprovedTransactions,
 ): void {
   let global = getOrCreateGlobal();
+  let transactionHashes = event.params.transactionHashes;
 
-  for (let i = 0; i < event.params.transactionHashes.length; i++) {
-    let proofHash = event.params.transactionHashes[i].toHexString();
+  for (let i = 0; i < transactionHashes.length; i++) {
+    let proofHash = transactionHashes[i].toHexString();
 
     if (proofHash === ZERO || proofHash === ZERO_ADDRESS) {
       continue;
     }
 
     global.approvedCount = global.approvedCount.plus(ONE_BI);
+    global.recentApprovedProof = proofHash;
 
     let bridgeTransfer = getOrCreateBridgeTransfer(proofHash);
     bridgeTransfer.status = "Approved";

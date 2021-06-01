@@ -247,4 +247,13 @@ export class Global extends Entity {
   set chargedFee(value: BigDecimal) {
     this.set("chargedFee", Value.fromBigDecimal(value));
   }
+
+  get recentApprovedProof(): string {
+    let value = this.get("recentApprovedProof");
+    return value.toString();
+  }
+
+  set recentApprovedProof(value: string) {
+    this.set("recentApprovedProof", Value.fromString(value));
+  }
 }

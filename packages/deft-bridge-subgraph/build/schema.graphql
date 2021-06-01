@@ -1,33 +1,74 @@
+# scalar Bytes
+# scalar BigDecimal
+# scalar BigInt
+
 enum TransferStatus {
+  Created
   Burned
   Approved
   Executed
 }
 
-type BridgeTransfer @entity {
+enum ProofType {
+  Mint
+  Burn
+}
+
+type Proof @entity {
   id: ID!
 
-  status: TransferStatus!
+  type: ProofType!
 
   sender: Bytes!
-  txBurnHash: Bytes!
-  txMintHash: Bytes!
 
-  amountBurn: BigDecimal!
-  amountMint: BigDecimal!
+  amount: BigDecimal!
+  fee: BigDecimal!
 
-  mintFee: BigDecimal!
-
-  transactionFee: BigDecimal!
+  txFee: BigDecimal!
+  txHash: Bytes!
 
   logIndex: BigInt!
   blockNumber: BigInt!
   timestamp: BigInt!
 }
 
+type BridgeTransfer @entity {
+  id: ID!
+  status: TransferStatus!
+}
+
+# type BridgeTransfer @entity {
+#   id: ID!
+
+#   status: TransferStatus!
+
+#   sender: Bytes!
+#   txBurnHash: Bytes!
+#   txMintHash: Bytes!
+
+#   amountBurn: BigDecimal!
+#   amountMint: BigDecimal!
+
+#   mintFee: BigDecimal!
+
+#   transactionFee: BigDecimal!
+
+#   logIndex: BigInt!
+#   blockNumber: BigInt!
+#   timestamp: BigInt!
+# }
+
 type Global @entity {
   id: ID!
-  approved: BigInt!
-  executed: BigInt!
-  chargedMintFee: BigInt!
+  approvedCount: BigInt!
+
+  mintedCount: BigInt!
+  mintedAmount: BigDecimal!
+
+  burnedCount: BigInt!
+  burnedAmount: BigDecimal!
+
+  chargedFee: BigDecimal!
+
+  recentApprovedProof: String!
 }

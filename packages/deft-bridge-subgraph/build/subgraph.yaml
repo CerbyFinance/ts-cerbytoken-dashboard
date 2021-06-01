@@ -6,9 +6,9 @@ dataSources:
     name: SourceChain
     network: kovan
     source:
-      address: "0x8a0e6dde678762df98346515f5939648635d275e"
+      address: "0x0000000000000000000000000000000000000000"
       abi: MintableBurnableToken
-      startBlock: 1
+      startBlock: 25191452
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -29,30 +29,3 @@ dataSources:
         - event: BulkApprovedTransactions(bytes32[])
           handler: handleBulkApprovedTransaction
       file: SourceChain/SourceChain.wasm
-  - kind: ethereum/contract
-    name: DestChain
-    network: ropsten
-    source:
-      address: "0x0d4a11d5EEaaC28EC3F61d100daF4d40471f1852"
-      abi: MintableBurnableToken
-      startBlock: 1
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.4
-      language: wasm/assemblyscript
-      entities:
-        - BridgeTransfer
-        - Global
-      abis:
-        - name: MintableBurnableToken
-          file: DestChain/abis/MintableBurnableToken.json
-      eventHandlers:
-        - event: ProofOfBurn(address,uint256,uint256,uint256,uint256,bytes32)
-          handler: handleProofOfBurn
-        - event: ProofOfMint(address,uint256,uint256,bytes32)
-          handler: handleProofOfMint
-        - event: ApprovedTransaction(bytes32)
-          handler: handleApprovedTransaction
-        - event: BulkApprovedTransactions(bytes32[])
-          handler: handleBulkApprovedTransaction
-      file: DestChain/DestChain.wasm

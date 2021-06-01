@@ -1,3 +1,7 @@
+# scalar Bytes
+# scalar BigDecimal
+# scalar BigInt
+
 enum TransferStatus {
   Created
   Burned
@@ -65,4 +69,6 @@ type Global @entity {
   burnedAmount: BigDecimal!
 
   chargedFee: BigDecimal!
+
+  recentApprovedProof: String!
 }
