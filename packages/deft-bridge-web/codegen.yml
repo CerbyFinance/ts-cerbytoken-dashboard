@@ -1,0 +1,18 @@
+overwrite: true
+schema:
+  - http://localhost:8000/subgraphs/name/deft/deft-bridge-ropsten
+documents: "src/graphql/**/*.ts"
+generates:
+  src/graphql/types.tsx:
+    plugins:
+      - "typescript"
+      - "typescript-resolvers"
+      - "typescript-operations"
+      - "typescript-react-apollo"
+    config:
+      withHOC: false
+      withHooks: true
+      withComponent: false
+      scalars:
+        BigDecimal: number
+        BigInt: number

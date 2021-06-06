@@ -1,0 +1,473 @@
+directive @entity on OBJECT
+
+directive @derivedFrom(field: String) on FIELD_DEFINITION
+
+directive @subgraphId(id: String) on OBJECT
+
+type _Block_ {
+  """The hash of the block"""
+  hash: Bytes
+
+  """The block number"""
+  number: Int!
+}
+
+"""The type for the top-level _meta field"""
+type _Meta_ {
+  """
+  Information about a specific subgraph block. The hash of the block
+  will be null if the _meta field has a block constraint that asks for
+  a block number. It will be filled if the _meta field has no block constraint
+  and therefore asks for the latest  block
+  
+  """
+  block: _Block_!
+
+  """The deployment ID"""
+  deployment: String!
+
+  """If `true`, the subgraph encountered indexing errors at some past block"""
+  hasIndexingErrors: Boolean!
+}
+
+enum _SubgraphErrorPolicy_ {
+  """Data will be returned even if the subgraph has indexing errors"""
+  allow
+
+  """
+  If the subgraph has indexing errors, data will be omitted. The default.
+  """
+  deny
+}
+
+scalar BigDecimal
+
+scalar BigInt
+
+input Block_height {
+  hash: Bytes
+  number: Int
+}
+
+type BridgeTransfer {
+  id: ID!
+  status: TransferStatus!
+}
+
+input BridgeTransfer_filter {
+  id: ID
+  id_not: ID
+  id_gt: ID
+  id_lt: ID
+  id_gte: ID
+  id_lte: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  status: TransferStatus
+  status_not: TransferStatus
+}
+
+enum BridgeTransfer_orderBy {
+  id
+  status
+}
+
+scalar Bytes
+
+type Global {
+  id: ID!
+  approvedCount: BigInt!
+  mintedCount: BigInt!
+  mintedAmount: BigDecimal!
+  burnedCount: BigInt!
+  burnedAmount: BigDecimal!
+  chargedFee: BigDecimal!
+  recentApprovedProof: String!
+}
+
+input Global_filter {
+  id: ID
+  id_not: ID
+  id_gt: ID
+  id_lt: ID
+  id_gte: ID
+  id_lte: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  approvedCount: BigInt
+  approvedCount_not: BigInt
+  approvedCount_gt: BigInt
+  approvedCount_lt: BigInt
+  approvedCount_gte: BigInt
+  approvedCount_lte: BigInt
+  approvedCount_in: [BigInt!]
+  approvedCount_not_in: [BigInt!]
+  mintedCount: BigInt
+  mintedCount_not: BigInt
+  mintedCount_gt: BigInt
+  mintedCount_lt: BigInt
+  mintedCount_gte: BigInt
+  mintedCount_lte: BigInt
+  mintedCount_in: [BigInt!]
+  mintedCount_not_in: [BigInt!]
+  mintedAmount: BigDecimal
+  mintedAmount_not: BigDecimal
+  mintedAmount_gt: BigDecimal
+  mintedAmount_lt: BigDecimal
+  mintedAmount_gte: BigDecimal
+  mintedAmount_lte: BigDecimal
+  mintedAmount_in: [BigDecimal!]
+  mintedAmount_not_in: [BigDecimal!]
+  burnedCount: BigInt
+  burnedCount_not: BigInt
+  burnedCount_gt: BigInt
+  burnedCount_lt: BigInt
+  burnedCount_gte: BigInt
+  burnedCount_lte: BigInt
+  burnedCount_in: [BigInt!]
+  burnedCount_not_in: [BigInt!]
+  burnedAmount: BigDecimal
+  burnedAmount_not: BigDecimal
+  burnedAmount_gt: BigDecimal
+  burnedAmount_lt: BigDecimal
+  burnedAmount_gte: BigDecimal
+  burnedAmount_lte: BigDecimal
+  burnedAmount_in: [BigDecimal!]
+  burnedAmount_not_in: [BigDecimal!]
+  chargedFee: BigDecimal
+  chargedFee_not: BigDecimal
+  chargedFee_gt: BigDecimal
+  chargedFee_lt: BigDecimal
+  chargedFee_gte: BigDecimal
+  chargedFee_lte: BigDecimal
+  chargedFee_in: [BigDecimal!]
+  chargedFee_not_in: [BigDecimal!]
+  recentApprovedProof: String
+  recentApprovedProof_not: String
+  recentApprovedProof_gt: String
+  recentApprovedProof_lt: String
+  recentApprovedProof_gte: String
+  recentApprovedProof_lte: String
+  recentApprovedProof_in: [String!]
+  recentApprovedProof_not_in: [String!]
+  recentApprovedProof_contains: String
+  recentApprovedProof_not_contains: String
+  recentApprovedProof_starts_with: String
+  recentApprovedProof_not_starts_with: String
+  recentApprovedProof_ends_with: String
+  recentApprovedProof_not_ends_with: String
+}
+
+enum Global_orderBy {
+  id
+  approvedCount
+  mintedCount
+  mintedAmount
+  burnedCount
+  burnedAmount
+  chargedFee
+  recentApprovedProof
+}
+
+enum OrderDirection {
+  asc
+  desc
+}
+
+type Proof {
+  id: ID!
+  type: ProofType!
+  nonce: BigInt
+  src: BigInt
+  dest: BigInt
+  sender: Bytes!
+  amount: BigDecimal!
+  fee: BigDecimal!
+  txFee: BigDecimal!
+  txHash: Bytes!
+  logIndex: BigInt!
+  blockNumber: BigInt!
+  timestamp: BigInt!
+}
+
+input Proof_filter {
+  id: ID
+  id_not: ID
+  id_gt: ID
+  id_lt: ID
+  id_gte: ID
+  id_lte: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  type: ProofType
+  type_not: ProofType
+  nonce: BigInt
+  nonce_not: BigInt
+  nonce_gt: BigInt
+  nonce_lt: BigInt
+  nonce_gte: BigInt
+  nonce_lte: BigInt
+  nonce_in: [BigInt!]
+  nonce_not_in: [BigInt!]
+  src: BigInt
+  src_not: BigInt
+  src_gt: BigInt
+  src_lt: BigInt
+  src_gte: BigInt
+  src_lte: BigInt
+  src_in: [BigInt!]
+  src_not_in: [BigInt!]
+  dest: BigInt
+  dest_not: BigInt
+  dest_gt: BigInt
+  dest_lt: BigInt
+  dest_gte: BigInt
+  dest_lte: BigInt
+  dest_in: [BigInt!]
+  dest_not_in: [BigInt!]
+  sender: Bytes
+  sender_not: Bytes
+  sender_in: [Bytes!]
+  sender_not_in: [Bytes!]
+  sender_contains: Bytes
+  sender_not_contains: Bytes
+  amount: BigDecimal
+  amount_not: BigDecimal
+  amount_gt: BigDecimal
+  amount_lt: BigDecimal
+  amount_gte: BigDecimal
+  amount_lte: BigDecimal
+  amount_in: [BigDecimal!]
+  amount_not_in: [BigDecimal!]
+  fee: BigDecimal
+  fee_not: BigDecimal
+  fee_gt: BigDecimal
+  fee_lt: BigDecimal
+  fee_gte: BigDecimal
+  fee_lte: BigDecimal
+  fee_in: [BigDecimal!]
+  fee_not_in: [BigDecimal!]
+  txFee: BigDecimal
+  txFee_not: BigDecimal
+  txFee_gt: BigDecimal
+  txFee_lt: BigDecimal
+  txFee_gte: BigDecimal
+  txFee_lte: BigDecimal
+  txFee_in: [BigDecimal!]
+  txFee_not_in: [BigDecimal!]
+  txHash: Bytes
+  txHash_not: Bytes
+  txHash_in: [Bytes!]
+  txHash_not_in: [Bytes!]
+  txHash_contains: Bytes
+  txHash_not_contains: Bytes
+  logIndex: BigInt
+  logIndex_not: BigInt
+  logIndex_gt: BigInt
+  logIndex_lt: BigInt
+  logIndex_gte: BigInt
+  logIndex_lte: BigInt
+  logIndex_in: [BigInt!]
+  logIndex_not_in: [BigInt!]
+  blockNumber: BigInt
+  blockNumber_not: BigInt
+  blockNumber_gt: BigInt
+  blockNumber_lt: BigInt
+  blockNumber_gte: BigInt
+  blockNumber_lte: BigInt
+  blockNumber_in: [BigInt!]
+  blockNumber_not_in: [BigInt!]
+  timestamp: BigInt
+  timestamp_not: BigInt
+  timestamp_gt: BigInt
+  timestamp_lt: BigInt
+  timestamp_gte: BigInt
+  timestamp_lte: BigInt
+  timestamp_in: [BigInt!]
+  timestamp_not_in: [BigInt!]
+}
+
+enum Proof_orderBy {
+  id
+  type
+  nonce
+  src
+  dest
+  sender
+  amount
+  fee
+  txFee
+  txHash
+  logIndex
+  blockNumber
+  timestamp
+}
+
+enum ProofType {
+  Mint
+  Burn
+}
+
+type Query {
+  proof(
+    id: ID!
+
+    """
+    The block at which the query should be executed. Can either be an `{ number:
+    Int }` containing the block number or a `{ hash: Bytes }` value containing a
+    block hash. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+  ): Proof
+  proofs(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Proof_orderBy
+    orderDirection: OrderDirection
+    where: Proof_filter
+
+    """
+    The block at which the query should be executed. Can either be an `{ number:
+    Int }` containing the block number or a `{ hash: Bytes }` value containing a
+    block hash. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+  ): [Proof!]!
+  bridgeTransfer(
+    id: ID!
+
+    """
+    The block at which the query should be executed. Can either be an `{ number:
+    Int }` containing the block number or a `{ hash: Bytes }` value containing a
+    block hash. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+  ): BridgeTransfer
+  bridgeTransfers(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: BridgeTransfer_orderBy
+    orderDirection: OrderDirection
+    where: BridgeTransfer_filter
+
+    """
+    The block at which the query should be executed. Can either be an `{ number:
+    Int }` containing the block number or a `{ hash: Bytes }` value containing a
+    block hash. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+  ): [BridgeTransfer!]!
+  global(
+    id: ID!
+
+    """
+    The block at which the query should be executed. Can either be an `{ number:
+    Int }` containing the block number or a `{ hash: Bytes }` value containing a
+    block hash. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+  ): Global
+  globals(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Global_orderBy
+    orderDirection: OrderDirection
+    where: Global_filter
+
+    """
+    The block at which the query should be executed. Can either be an `{ number:
+    Int }` containing the block number or a `{ hash: Bytes }` value containing a
+    block hash. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+  ): [Global!]!
+
+  """Access to subgraph metadata"""
+  _meta(block: Block_height): _Meta_
+}
+
+type Subscription {
+  proof(
+    id: ID!
+
+    """
+    The block at which the query should be executed. Can either be an `{ number:
+    Int }` containing the block number or a `{ hash: Bytes }` value containing a
+    block hash. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+  ): Proof
+  proofs(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Proof_orderBy
+    orderDirection: OrderDirection
+    where: Proof_filter
+
+    """
+    The block at which the query should be executed. Can either be an `{ number:
+    Int }` containing the block number or a `{ hash: Bytes }` value containing a
+    block hash. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+  ): [Proof!]!
+  bridgeTransfer(
+    id: ID!
+
+    """
+    The block at which the query should be executed. Can either be an `{ number:
+    Int }` containing the block number or a `{ hash: Bytes }` value containing a
+    block hash. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+  ): BridgeTransfer
+  bridgeTransfers(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: BridgeTransfer_orderBy
+    orderDirection: OrderDirection
+    where: BridgeTransfer_filter
+
+    """
+    The block at which the query should be executed. Can either be an `{ number:
+    Int }` containing the block number or a `{ hash: Bytes }` value containing a
+    block hash. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+  ): [BridgeTransfer!]!
+  global(
+    id: ID!
+
+    """
+    The block at which the query should be executed. Can either be an `{ number:
+    Int }` containing the block number or a `{ hash: Bytes }` value containing a
+    block hash. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+  ): Global
+  globals(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Global_orderBy
+    orderDirection: OrderDirection
+    where: Global_filter
+
+    """
+    The block at which the query should be executed. Can either be an `{ number:
+    Int }` containing the block number or a `{ hash: Bytes }` value containing a
+    block hash. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+  ): [Global!]!
+
+  """Access to subgraph metadata"""
+  _meta(block: Block_height): _Meta_
+}
+
+enum TransferStatus {
+  Created
+  Burned
+  Approved
+  Executed
+}
+
