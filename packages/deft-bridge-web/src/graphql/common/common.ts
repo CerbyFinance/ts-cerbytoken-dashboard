@@ -1,51 +1,31 @@
 import gql from "graphql-tag";
 
-export const inflationBucketQuery = gql`
-  query InflationBucketQuery {
-    inflationBuckets(orderBy: idx, orderDirection: asc) {
+export const myLastProofQuery = gql`
+  query MyLastProofQuery($sender: Bytes!, $proofType: ProofType!) {
+    proofs(
+      where: { sender: $sender, type: $proofType }
+      orderBy: nonce
+      orderDirection: desc
+      first: 1
+    ) {
       id
-      idx
-      inflations
+      type
+      src
+      dest
+      nonce
+      sender
+      amount
+      fee
+      txFee
     }
   }
 `;
 
-export const stakesQuery = gql`
-  query StakesQuery($address: String!) {
-    stakes(
-      where: { staker: $address }
-      orderBy: startedAt
-      orderDirection: desc
-    ) {
+export const bridgeTransferQuery = gql`
+  query BridgeTransfer($id: ID!) {
+    bridgeTransfer(id: $id) {
       id
-      staker {
-        id
-      }
-      referrer {
-        id
-      }
-      amountWise
-      shares
-      cmShares
-      currentShares
-      daiEquivalent
-      reward
-      penalty
-      scrapedWise
-      sharesPenalized
-      referrerSharesPenalized
-      scrapeCount
-      startDay
-      closeDay
-      lockDays
-      lastScrapeDay
-      startedAt
-      completedAt
-      canceledAt
-      timestamp
-      blockNumber
-      gasPrice
-      gasUsed
+      status
     }
   }
 `;

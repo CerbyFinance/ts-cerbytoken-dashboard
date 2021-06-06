@@ -1,8 +1,16 @@
+import { Web3Provider } from "@ethersproject/providers";
+import { useWeb3React, Web3ReactProvider } from "@web3-react/core";
 import { Box, Grommet, Text } from "grommet";
-import React from "react";
+import React, { CSSProperties, useState } from "react";
 import AutosizeInput from "react-input-autosize";
 import styled from "styled-components";
+import { Chains } from "./chains";
+import { Hint } from "./components/Hint";
+import { injected } from "./connectors";
 import { QuestionIcon } from "./Icons";
+import { HoveredElement } from "./shared/hooks";
+import { dynamicTemplate } from "./shared/utils";
+import Web3ReactManager from "./shared/Web3Manager";
 
 const Input = styled(AutosizeInput)`
   input {
@@ -154,7 +162,63 @@ const CheckLg = () => (
   </svg>
 );
 
+const processes = ["transfer", "validation", "receive"] as const;
+
+type Process = typeof processes[number];
+
+const stepToProcess = {
+  1: "transfer",
+  2: "validation",
+  3: "receive",
+} as {
+  [key: number]: Process;
+};
+
+type ProcessStatus = "none" | "loading" | "error" | "success";
+
+const processesTextStatuses = {
+  transfer: {
+    none: "transfer ${amount} DEFT from <b>${src}</b> to <b>${dest}</b>",
+    loading: "transfering ${amount} DEFT from <b>${src}</b> to <b>${dest}</b>",
+    error: "",
+    success: "transfered ${amount} DEFT from <b>${src}</b> to <b>${dest}</b>",
+  },
+  validation: {
+    none: "ensure correctness of transfer",
+    loading: "ensuring correctness of transfer",
+    error: "",
+    success: "transfer is correct",
+  },
+  receive: {
+    none: "receive ${amount} DEFT on <b>${dest}</b>",
+    loading: "receiving ${amount} DEFT on <b>${dest}</b>",
+    error: "",
+    success: "you received ${amount} DEFT on <b>${dest}</b>",
+  },
+} as {
+  [key in Process]: {
+    [key in ProcessStatus]: string;
+  };
+};
+
 const BridgeWidgetProcess = () => {
+  const { account, activate, chainId, connector, error } = useWeb3React();
+
+  const [step, setStep] = useState(1);
+  const [processesStatus, setProcessesStatus] = useState({
+    transfer: "success",
+    validation: "loading",
+    receive: "none",
+  } as {
+    [key in Process]: ProcessStatus;
+  });
+
+  const amount = Number(10551765646).toFixed(2);
+  const src = "ETH";
+  const dest = "BSC";
+
+  // TODO: compute fee
+
   return (
     <Box
       style={{
@@ -168,20 +232,189 @@ const BridgeWidgetProcess = () => {
       pad="30px 22px 20px"
     >
       <Box justify="center">
-        <Box height="51px" direction="row" align="center">
+        {[1, 2, 3].map(step => {
+          const processId = stepToProcess[step];
+          const processTextStatuses = processesTextStatuses[processId];
+          const processStatus = processesStatus[processId];
+          const processText = processTextStatuses[processStatus];
+
+          const dynamicText = dynamicTemplate(processText, {
+            amount,
+            src,
+            dest,
+          });
+
+          const dynamicParts = dynamicText.split(/(<b>.+?<\/b>)/gi) as (
+            | string
+            | JSX.Element
+          )[];
+
+          for (var i = 1; i < dynamicParts.length; i += 2) {
+            dynamicParts[i] = (
+              <strong key={i}>
+                {(dynamicParts[i] as string).replace(/<[^>]*>/g, "")}
+              </strong>
+            );
+          }
+
+          return (
+            <React.Fragment>
+              <Box height="51px" direction="row" align="center">
+                {processStatus === "none" && (
+                  <Box
+                    height="36px"
+                    width="36px"
+                    round="50%"
+                    background="white"
+                    margin={{
+                      left: "10px",
+                      right: "14px",
+                    }}
+                    align="center"
+                    justify="center"
+                    style={{
+                      border: "2px solid #E0E0E0",
+                    }}
+                  >
+                    <Text
+                      size="16px"
+                      weight={700}
+                      style={{
+                        lineHeight: "150%",
+                      }}
+                      color="#414141"
+                    >
+                      {step}
+                    </Text>
+                  </Box>
+                )}
+                {processStatus === "success" && (
+                  <Box
+                    height="36px"
+                    width="36px"
+                    round="50%"
+                    background="#D3F5D5"
+                    margin={{
+                      left: "10px",
+                      right: "14px",
+                    }}
+                    align="center"
+                    justify="center"
+                  >
+                    <CheckLg></CheckLg>
+                  </Box>
+                )}
+                {processStatus === "loading" && (
+                  <Box
+                    style={{
+                      position: "relative",
+                    }}
+                    align="center"
+                    justify="center"
+                    margin={{
+                      left: "10px",
+                      right: "14px",
+                    }}
+                  >
+                    <Box
+                      height="36px"
+                      width="36px"
+                      round="50%"
+                      background="#FBE5C9"
+                      align="center"
+                      justify="center"
+                    >
+                      <Text
+                        size="16px"
+                        weight={700}
+                        style={{
+                          lineHeight: "150%",
+                        }}
+                        color="#414141"
+                      >
+                        {step}
+                      </Text>
+                    </Box>
+                    <div
+                      className="loader"
+                      style={{
+                        position: "absolute",
+                        borderTopColor: "#FFBA63",
+                        width: "36px",
+                        height: "36px",
+                        borderWidth: "4px",
+                        left: "-4px",
+                      }}
+                    ></div>
+                  </Box>
+                )}
+
+                <Box>
+                  <Text
+                    weight={700}
+                    color="#414141"
+                    style={{
+                      lineHeight: "150%",
+                      textTransform: "capitalize",
+                    }}
+                    size="16px"
+                  >
+                    {processId}
+                  </Text>
+                  <Text
+                    size="14px"
+                    color="#818181"
+                    style={{
+                      lineHeight: "150%",
+                    }}
+                  >
+                    {dynamicParts}
+                  </Text>
+                </Box>
+              </Box>
+              {/*  */}
+              {processId !== "receive" && (
+                <Box height="32px" pad="4px 0px 0px 26px">
+                  <Box
+                    height="26px"
+                    width="4px"
+                    round="2px"
+                    background="#E0E0E0"
+                  ></Box>
+                </Box>
+              )}
+            </React.Fragment>
+          );
+        })}
+
+        {/*  */}
+        {/* <Box height="51px" direction="row" align="center">
           <Box
             height="36px"
             width="36px"
             round="50%"
-            background="#D3F5D5"
+            // background="#D3F5D5"
+            background="white"
             margin={{
               left: "10px",
               right: "14px",
             }}
             align="center"
             justify="center"
+            style={{
+              border: "2px solid #E0E0E0",
+            }}
           >
-            <CheckLg></CheckLg>
+            <Text
+              size="16px"
+              weight={700}
+              style={{
+                lineHeight: "150%",
+              }}
+              color="#414141"
+            >
+              2
+            </Text>
           </Box>
           <Box>
             <Text
@@ -205,13 +438,13 @@ const BridgeWidgetProcess = () => {
               <strong>BSC</strong>
             </Text>
           </Box>
-        </Box>
+        </Box> */}
         {/*  */}
-        <Box height="32px" pad="4px 0px 0px 26px">
+        {/* <Box height="32px" pad="4px 0px 0px 26px">
           <Box height="26px" width="4px" round="2px" background="#E0E0E0"></Box>
-        </Box>
+        </Box> */}
         {/*  */}
-        <Box height="51px" direction="row" align="center">
+        {/* <Box height="51px" direction="row" align="center">
           <Box
             height="36px"
             width="36px"
@@ -248,50 +481,7 @@ const BridgeWidgetProcess = () => {
               <strong>BSC</strong>
             </Text>
           </Box>
-        </Box>
-        {/*  */}
-        <Box height="32px" pad="4px 0px 0px 26px">
-          <Box height="26px" width="4px" round="2px" background="#E0E0E0"></Box>
-        </Box>
-        {/*  */}
-        <Box height="51px" direction="row" align="center">
-          <Box
-            height="36px"
-            width="36px"
-            round="50%"
-            background="#D3F5D5"
-            margin={{
-              left: "10px",
-              right: "14px",
-            }}
-            align="center"
-            justify="center"
-          >
-            <CheckLg></CheckLg>
-          </Box>
-          <Box>
-            <Text
-              weight={700}
-              color="#414141"
-              style={{
-                lineHeight: "150%",
-              }}
-              size="16px"
-            >
-              Transfer
-            </Text>
-            <Text
-              size="14px"
-              color="#818181"
-              style={{
-                lineHeight: "150%",
-              }}
-            >
-              transfered 10 DEFT from <strong>ETH</strong> to{" "}
-              <strong>BSC</strong>
-            </Text>
-          </Box>
-        </Box>
+        </Box> */}
       </Box>
       <Box height="21px" />
       <Box
@@ -320,17 +510,156 @@ const BridgeWidgetProcess = () => {
   );
 };
 
+// TODO: precompute once
+
+const chainToId = {
+  ethereumMain: 1,
+  binanceMain: 56,
+
+  ropsten: 3,
+  kovan: 42,
+  binanceTest: 97,
+} as {
+  [key: string]: Chains;
+};
+
+const chainIdToShort = {
+  1: "ETH",
+  56: "BSC",
+
+  3: "ETH (ROP)",
+  42: "ETH (KOV)",
+  97: "BSC (TEST)",
+} as {
+  [key in Chains]: string;
+};
+
+const pathToFee = [
+  {
+    path: [42, 3],
+    fee: 0.05,
+  },
+  {
+    path: [3, 42],
+    fee: 0.01,
+  },
+];
+
+const chainIdToIcon = {
+  1: <EthereumLogo />,
+  56: <BinanceLogo />,
+
+  3: <EthereumLogo />,
+  42: <EthereumLogo />,
+  97: <BinanceLogo />,
+} as {
+  [key in Chains]: JSX.Element;
+};
+
+function _isFinite(value: any): boolean {
+  return typeof value == "number" && isFinite(value);
+}
+
 const BridgeWidget = () => {
-  const [inputValue, setValue] = React.useState("");
-  const [isPopular, setPopular] = React.useState(true);
+  const { account, activate, chainId, connector, error } = useWeb3React();
+
+  const [transferAmount, setTransferAmount] = useState("");
+  const [isPopular, setPopular] = useState(true);
+
+  const [balance, setBalance] = useState(0.123);
+
+  const [loader, setLoader] = useState(false);
+  const [path, setPath] = useState([3, 42] as [Chains, Chains]);
+
+  const feePath = pathToFee.find(
+    item => item.path[0] == path[0] && item.path[1] == path[1],
+  );
+
+  const fee = feePath?.fee || 0.01;
+  const computedFee = Number(transferAmount) * fee;
+
+  const setMax = () => {
+    setTransferAmount(balance.toString());
+  };
+
+  const transfer = () => {
+    setLoader(true);
+  };
+
+  const changeDirection = () => {
+    // @ts-ignore
+    setPath(path.slice().reverse());
+  };
 
   const changeHandler = (evt: any) => {
-    setValue(evt.target.value);
+    setTransferAmount(evt.target.value);
   };
 
   console.log({
-    inputValue,
+    transferAmount,
   });
+
+  const connected = account ? true : false;
+
+  const connectedToRightChain = account && path[0] === chainId;
+  const unsupportedNetwork = error?.message.includes("Unsupported chain id");
+
+  const amountEntered = Number(transferAmount) > 0;
+  const sufficientBalance = Number(transferAmount) <= Number(balance);
+
+  let actionButton = {} as {
+    text: string;
+    onClick: () => void;
+    style?: CSSProperties;
+  };
+
+  if (connected) {
+    if (connectedToRightChain) {
+      if (amountEntered) {
+        if (sufficientBalance) {
+          actionButton = {
+            text: "Transfer",
+            onClick: () => {
+              transfer();
+            },
+          };
+        } else {
+          actionButton = {
+            text: "Insufficient balance",
+            onClick: () => {},
+            style: {
+              opacity: 0.4,
+              transform: undefined,
+            },
+          };
+        }
+      } else {
+        actionButton = {
+          text: "Enter an amount",
+          onClick: () => {},
+          style: {
+            opacity: 0.4,
+            transform: undefined,
+          },
+        };
+      }
+    } else {
+      actionButton = {
+        text: "Switch to " + chainIdToShort[path[0]],
+        onClick: () => {},
+      };
+    }
+  } else if (unsupportedNetwork) {
+    actionButton = {
+      text: "Switch to " + chainIdToShort[path[0]],
+      onClick: () => {},
+    };
+  } else {
+    actionButton = {
+      text: "Connect",
+      onClick: () => activate(injected),
+    };
+  }
 
   return (
     <Box
@@ -404,7 +733,7 @@ const BridgeWidget = () => {
               lineHeight: "132%",
             }}
           >
-            12,312.00 DEFT
+            {balance.toFixed(3)} DEFT
           </Text>
         </Box>
         <Box height="6px" />
@@ -413,11 +742,18 @@ const BridgeWidget = () => {
             // injectStyles={false}
             minWidth={30}
             placeholder="0.0"
-            value={inputValue}
+            value={transferAmount}
             onChange={changeHandler}
-            // style={{
-            //   width: `${inputWidth}px`,
-            // }}
+            onKeyPress={e => {
+              console.log(e.key);
+              if (
+                _isFinite(Number(e.key)) ||
+                (e.key === "." && !transferAmount.includes("."))
+              ) {
+              } else {
+                e.preventDefault();
+              }
+            }}
           />
           <Box>
             <Text size="18px" weight={400} color="#414141">
@@ -436,6 +772,7 @@ const BridgeWidget = () => {
             align="center"
             justify="center"
             pad={"3px 11px"}
+            onClick={() => setMax()}
           >
             <Text weight={500} color="#E1125E" size="14px">
               MAX
@@ -453,6 +790,7 @@ const BridgeWidget = () => {
           round="8px"
           style={{
             border: "1px solid #E3E3E3",
+            cursor: "pointer",
           }}
           justify="between"
           direction="row"
@@ -469,11 +807,10 @@ const BridgeWidget = () => {
             </Text>
             <Box height="2px"></Box>
             <Text weight={600} size="15px" color="#414141">
-              ETH
+              {chainIdToShort[path[0]]}
             </Text>
           </Box>
-
-          <EthereumLogo />
+          {chainIdToIcon[path[0]]}
         </Box>
         <Box
           height="40px"
@@ -482,7 +819,9 @@ const BridgeWidget = () => {
           justify="center"
           style={{
             cursor: "pointer",
+            userSelect: "none",
           }}
+          onClick={() => changeDirection()}
         >
           <Direction />
         </Box>
@@ -493,6 +832,7 @@ const BridgeWidget = () => {
           round="8px"
           style={{
             border: "1px solid #E3E3E3",
+            cursor: "pointer",
           }}
           justify="between"
           direction="row"
@@ -509,11 +849,11 @@ const BridgeWidget = () => {
             </Text>
             <Box height="2px"></Box>
             <Text weight={600} size="15px" color="#414141">
-              BSC
+              {chainIdToShort[path[1]]}
             </Text>
           </Box>
 
-          <BinanceLogo />
+          {chainIdToIcon[path[1]]}
         </Box>
       </Box>
 
@@ -529,7 +869,23 @@ const BridgeWidget = () => {
             Bridge Fee
           </Text>
           <Box margin={{ left: "6px" }}>
-            <QuestionIcon />
+            <Hint
+              description={
+                <Text
+                  size="13px"
+                  style={{
+                    lineHeight: "22px",
+                  }}
+                  textAlign="center"
+                >
+                  {fee}% fee
+                </Text>
+              }
+            >
+              <Box>
+                <QuestionIcon />
+              </Box>
+            </Hint>
           </Box>
           <Box
             margin={{
@@ -537,70 +893,109 @@ const BridgeWidget = () => {
             }}
           ></Box>
           <Text size="14px" color="#414141" weight={700}>
-            77 DEFT
+            {computedFee.toFixed(2)} DEFT
           </Text>
         </Box>
       </Box>
-      <Box
-        width="100%"
-        height="48px"
-        round="8px"
-        background="#2B86FF"
-        align="center"
-        justify="center"
-        style={{
-          cursor: "pointer",
-          boxShadow:
-            "0px 2px 4px rgba(15, 86, 179, 0.18), 0px 4px 8px rgba(15, 86, 179, 0.18)",
+      <HoveredElement
+        render={binder => {
+          return (
+            <Box
+              {...binder.bind}
+              width="100%"
+              height="48px"
+              round="8px"
+              background={binder.hovered ? "#4d9aff" : "#2B86FF"}
+              // background={
+              //   binder.hovered ? actionButton.bgHover : actionButton.bg
+              // }
+              align="center"
+              justify="center"
+              style={{
+                ...(binder.hovered
+                  ? {
+                      transform: "scale(1.01)",
+                    }
+                  : {}),
+                ...actionButton.style,
+
+                cursor: "pointer",
+                boxShadow:
+                  "0px 1px 2px rgba(97, 97, 97, 0.2), 0px 2px 4px rgba(97, 97, 97, 0.2)",
+                ...(loader
+                  ? {
+                      pointerEvents: "none",
+                    }
+                  : {}),
+              }}
+              pad="0px 16px"
+              onClick={() => actionButton.onClick}
+            >
+              {loader && <div className="loader"></div>}
+
+              {!loader && (
+                <Text
+                  size="16px"
+                  color="white"
+                  style={{
+                    letterSpacing: "0.05em",
+                  }}
+                  weight={600}
+                >
+                  {actionButton.text}
+                </Text>
+              )}
+            </Box>
+          );
         }}
-      >
-        <Text
-          size="16px"
-          color="white"
-          style={{
-            letterSpacing: "0.05em",
-          }}
-          weight={600}
-        >
-          Transfer
-        </Text>
-      </Box>
+      />
     </Box>
   );
 };
 
+function getLibrary(provider: any): Web3Provider {
+  const library = new Web3Provider(provider);
+  //   const library = new ethers.providers.JsonRpcProvider('')
+
+  library.pollingInterval = 12000;
+  return library;
+}
+
 function App() {
   return (
-    <Grommet
-      theme={{
-        global: {
-          focus: {
-            outline: undefined,
-            border: {
-              color: "all",
+    <Web3ReactProvider getLibrary={getLibrary}>
+      <Web3ReactManager>
+        <Grommet
+          theme={{
+            global: {
+              focus: {
+                outline: undefined,
+                border: {
+                  color: "all",
+                },
+                shadow: undefined,
+              },
             },
-            shadow: undefined,
-          },
-        },
-      }}
-    >
-      {" "}
-      <Box
-        direction="row"
-        justify="center"
-        align="center"
-        style={{
-          // margin: "0 auto",
-          width: "100%",
-          // TODO: for iphone pad-top 60px
-          padding: "160px 10px",
-        }}
-      >
-        <BridgeWidget />
-        <Box width="30px" />
-        <BridgeWidgetProcess />
-      </Box>
-    </Grommet>
+          }}
+        >
+          <Box
+            direction="row"
+            justify="center"
+            align="center"
+            style={{
+              // margin: "0 auto",
+              width: "100%",
+              // TODO: for iphone pad-top 60px
+              padding: "160px 10px",
+            }}
+          >
+            <BridgeWidget />
+            <Box width="30px" />
+            <BridgeWidgetProcess />
+          </Box>
+        </Grommet>
+      </Web3ReactManager>
+    </Web3ReactProvider>
   );
 }
 
