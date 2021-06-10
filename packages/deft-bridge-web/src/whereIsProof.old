@@ -1,0 +1,52 @@
+import { useEffect } from "react";
+
+// TODO: move to main
+useEffect(() => {
+  const guessWhereIsProof = async (account: string) => {
+    // TODO: supported chains only
+    const result = await Promise.all(
+      [3, 42].map(async chainId => {
+        const chain = idToChain[chainId as Chains];
+        const client = clientByChain[chain];
+
+        return getLastProof(client, account);
+      }),
+    );
+
+    const burnProof = result.find(item => item);
+
+    if (burnProof) {
+      const srcChainid = burnProof.src!;
+      const destChainId = burnProof.dest!;
+
+      setPath([srcChainid, destChainId] as [Chains, Chains]);
+      setCurrentProofId(burnProof.id);
+      setNonce(burnProof.nonce!);
+      setTransferAmount(burnProof.amount);
+
+      const destClient = clientByChain[destChainId];
+
+      const bridgeTransfer = await getBridgeTransfer(destClient, burnProof.id);
+
+      // TODO: if minted, return back to bridge input
+
+      const mintProof = await getProof(
+        destClient,
+        burnProof.id,
+        ProofType.Mint,
+      );
+
+      // get info about all statuses
+      setProcessesStatus(old => ({
+        transfer: "success",
+        validation: bridgeTransfer ? "success" : "loading",
+        receive: mintProof ? "success" : bridgeTransfer ? "loading" : "none",
+      }));
+    }
+  };
+
+  if (0 === 1 + 1) {
+    console.log("guess...");
+    guessWhereIsProof(account!).catch(e => e);
+  }
+}, [account, destClient]);
