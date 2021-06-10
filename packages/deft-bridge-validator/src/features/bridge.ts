@@ -16,29 +16,30 @@ const makeRemoteUrl = (chain: string) =>
 
 const { PRIVATE_KEY } = process.env;
 
-const chains = ["ropsten", "kovan"];
+// const chains = ["ropsten", "kovan"];
+const chains = ["kovan", "binance-test"];
 
 const nodeUrlByChain = {
   ropsten: "https://ropsten.infura.io/v3/6af3a6f4302246e8bbd4e69b5bfc9e33", // 3
   kovan: "https://kovan.infura.io/v3/6af3a6f4302246e8bbd4e69b5bfc9e33", // 42
-  bscTest: "https://data-seed-prebsc-1-s1.binance.org:8545/", // 97
+  ["binance-test"]: "https://data-seed-prebsc-1-s1.binance.org:8545/", // 97
 };
 
 const contractByChain = {
-  ropsten: "0xa60cDF00Ad674D792F9840cAAC5dea0D6e852C02",
-  kovan: "0x4A45D0f6bFCF9911ed5331e6960F4Ab4Fc13be71",
-  bscTest: "0x0000000000000000000000000000000000000000",
+  ropsten: "0xBBECB9CCb15Cb55A20933861D04a1BC0Fe37c559",
+  kovan: "0xBBECB9CCb15Cb55A20933861D04a1BC0Fe37c559",
+  ["binance-test"]: "0xBBECB9CCb15Cb55A20933861D04a1BC0Fe37c559",
 };
 
 const chainToId = {
   ropsten: 3,
   kovan: 42,
-  bscTest: 97,
+  ["binance-test"]: 97,
 };
 
 const allowedPaths = [
-  ["kovan", "ropsten"],
-  ["ropsten", "kovan"],
+  ["kovan", "binance-test"],
+  ["binance-test", "kovan"],
 ] as [string, string][];
 
 const applyMnemonicToWeb3 = (web3: Web3) => {
@@ -158,7 +159,7 @@ const approver = async ([srcChain, destChain]: [string, string]) => {
   const from = source.web3.eth.accounts.wallet[0].address;
   const destChainId = chainToId[destChain] as number;
 
-  const path = srcChain + "-" + destChain;
+  const path = srcChain.replace("-", "_") + "-" + destChain.replace("-", "_");
 
   const log = (input: string) => {
     console.log(`(${path}) `, new Date().toLocaleString(), " ", input);
