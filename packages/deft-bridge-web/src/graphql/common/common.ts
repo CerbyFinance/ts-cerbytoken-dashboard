@@ -10,6 +10,14 @@ export const metaBlockNumberQuery = gql`
   }
 `;
 
+export const globalQuery = gql`
+  query Global {
+    global(id: 1) {
+      currentFee
+    }
+  }
+`;
+
 export const proofByTxHashQuery = gql`
   query ProofByTxHash($txHash: Bytes!) {
     proofs(

@@ -16,6 +16,7 @@ export const scalarTypePolicies = {
       burnedCount: numberTypePolicy,
       burnedAmount: numberTypePolicy,
       chargedFee: numberTypePolicy,
+      currentFee: numberTypePolicy,
     },
   },
   Proof: {

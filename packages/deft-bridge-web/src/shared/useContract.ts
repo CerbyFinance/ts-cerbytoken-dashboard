@@ -19,8 +19,8 @@ export function getProviderOrSigner(
   return account ? getSigner(library, account) : library;
 }
 
-const BRIDGE_CONTRACT = "0xCb968455065Eaef95c8FA072F5217a54eC0CE235";
-const TOKEN_CONTRACT = "0x3fe9E28bdb214389Dd17Db0DD319c09c67886dfa";
+const BRIDGE_CONTRACT = "0xBBECB9CCb15Cb55A20933861D04a1BC0Fe37c559";
+const TOKEN_CONTRACT = "0x45bb6DF6bc5202bf3B108270326EAE40B1cc570F";
 
 export function useBridgeContract() {
   const { account, library, connector } = useWeb3React();

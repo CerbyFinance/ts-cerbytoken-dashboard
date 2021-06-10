@@ -57,6 +57,7 @@ export enum BridgeTransfer_OrderBy {
 export type Global = {
   __typename?: 'Global';
   id: Scalars['ID'];
+  currentFee: Scalars['BigDecimal'];
   approvedCount: Scalars['BigInt'];
   mintedCount: Scalars['BigInt'];
   mintedAmount: Scalars['BigDecimal'];
@@ -75,6 +76,14 @@ export type Global_Filter = {
   id_lte?: Maybe<Scalars['ID']>;
   id_in?: Maybe<Array<Scalars['ID']>>;
   id_not_in?: Maybe<Array<Scalars['ID']>>;
+  currentFee?: Maybe<Scalars['BigDecimal']>;
+  currentFee_not?: Maybe<Scalars['BigDecimal']>;
+  currentFee_gt?: Maybe<Scalars['BigDecimal']>;
+  currentFee_lt?: Maybe<Scalars['BigDecimal']>;
+  currentFee_gte?: Maybe<Scalars['BigDecimal']>;
+  currentFee_lte?: Maybe<Scalars['BigDecimal']>;
+  currentFee_in?: Maybe<Array<Scalars['BigDecimal']>>;
+  currentFee_not_in?: Maybe<Array<Scalars['BigDecimal']>>;
   approvedCount?: Maybe<Scalars['BigInt']>;
   approvedCount_not?: Maybe<Scalars['BigInt']>;
   approvedCount_gt?: Maybe<Scalars['BigInt']>;
@@ -141,6 +150,7 @@ export type Global_Filter = {
 
 export enum Global_OrderBy {
   Id = 'id',
+  CurrentFee = 'currentFee',
   ApprovedCount = 'approvedCount',
   MintedCount = 'mintedCount',
   MintedAmount = 'mintedAmount',
@@ -617,6 +627,7 @@ export interface BytesScalarConfig extends GraphQLScalarTypeConfig<ResolversType
 
 export type GlobalResolvers<ContextType = any, ParentType extends ResolversParentTypes['Global'] = ResolversParentTypes['Global']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  currentFee?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
   approvedCount?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   mintedCount?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   mintedAmount?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
@@ -722,6 +733,17 @@ export type MetaBlockNumberQuery = (
   )> }
 );
 
+export type GlobalQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GlobalQuery = (
+  { __typename?: 'Query' }
+  & { global?: Maybe<(
+    { __typename?: 'Global' }
+    & Pick<Global, 'currentFee'>
+  )> }
+);
+
 export type ProofByTxHashQueryVariables = Exact<{
   txHash: Scalars['Bytes'];
 }>;
@@ -813,6 +835,40 @@ export function useMetaBlockNumberLazyQuery(baseOptions?: Apollo.LazyQueryHookOp
 export type MetaBlockNumberQueryHookResult = ReturnType<typeof useMetaBlockNumberQuery>;
 export type MetaBlockNumberLazyQueryHookResult = ReturnType<typeof useMetaBlockNumberLazyQuery>;
 export type MetaBlockNumberQueryResult = Apollo.QueryResult<MetaBlockNumberQuery, MetaBlockNumberQueryVariables>;
+export const GlobalDocument = gql`
+    query Global {
+  global(id: 1) {
+    currentFee
+  }
+}
+    `;
+
+/**
+ * __useGlobalQuery__
+ *
+ * To run a query within a React component, call `useGlobalQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGlobalQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGlobalQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGlobalQuery(baseOptions?: Apollo.QueryHookOptions<GlobalQuery, GlobalQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GlobalQuery, GlobalQueryVariables>(GlobalDocument, options);
+      }
+export function useGlobalLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GlobalQuery, GlobalQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GlobalQuery, GlobalQueryVariables>(GlobalDocument, options);
+        }
+export type GlobalQueryHookResult = ReturnType<typeof useGlobalQuery>;
+export type GlobalLazyQueryHookResult = ReturnType<typeof useGlobalLazyQuery>;
+export type GlobalQueryResult = Apollo.QueryResult<GlobalQuery, GlobalQueryVariables>;
 export const ProofByTxHashDocument = gql`
     query ProofByTxHash($txHash: Bytes!) {
   proofs(where: {txHash: $txHash}, orderBy: nonce, orderDirection: desc, first: 1) {

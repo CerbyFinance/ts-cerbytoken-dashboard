@@ -43,6 +43,7 @@ import {
   ProofByTxHashQuery,
   ProofByTxHashQueryVariables,
   ProofType,
+  useGlobalQuery,
 } from "./graphql/types";
 import {
   BinanceLogo,
@@ -221,11 +222,14 @@ const BridgeWidgetProcess = () => {
   // const [currentProofId, setCurrentProofId] = useState<string>("");
   // const [path, setPath] = useState([0, 0] as unknown as [Chains, Chains]);
 
-  const feePath = pathToFee.find(
-    item => item.path[0] == path[0] && item.path[1] == path[1],
-  );
+  const srcClient = clientByChain[idToChain[path[0]]] || noopApollo;
+  const destClient = clientByChain[idToChain[path[1]]] || noopApollo;
 
-  const fee = feePath?.fee || 0.01;
+  const { data } = useGlobalQuery({
+    client: destClient,
+  });
+  const fee = data?.global?.currentFee || 0;
+
   const receiveAmount = transferAmount
     ? transferAmount - transferAmount * fee
     : undefined;
@@ -237,9 +241,6 @@ const BridgeWidgetProcess = () => {
   } as {
     [key in Process]: ProcessStatus;
   });
-
-  const srcClient = clientByChain[idToChain[path[0]]] || noopApollo;
-  const destClient = clientByChain[idToChain[path[1]]] || noopApollo;
 
   useEffect(() => {
     const fire = async (client: ApolloClient<NormalizedCacheObject>) => {
@@ -759,17 +760,6 @@ const chainIdToShort = {
   [key in Chains]: string;
 };
 
-const pathToFee = [
-  {
-    path: [42, 3],
-    fee: 0.05,
-  },
-  {
-    path: [3, 42],
-    fee: 0.01,
-  },
-];
-
 const chainIdToIcon = {
   1: <EthereumLogo />,
   56: <BinanceLogo />,
@@ -830,14 +820,7 @@ const BridgeWidget = () => {
   const [isPopular, setPopular] = useState(true);
 
   const [loader, setLoader] = useState(false);
-  const [path, setPath] = useState([3, 42] as [Chains, Chains]);
-
-  const feePath = pathToFee.find(
-    item => item.path[0] == path[0] && item.path[1] == path[1],
-  );
-
-  const fee = feePath?.fee || 0.01;
-  const computedFee = Number(transferAmount) * fee;
+  const [path, setPath] = useState([42, 97] as [Chains, Chains]);
 
   const setMax = () => {
     setTransferAmount(balance.toString());
@@ -858,6 +841,11 @@ const BridgeWidget = () => {
 
   const srcClient = clientByChain[idToChain[path[0]]] || noopApollo;
   const destClient = clientByChain[idToChain[path[1]]] || noopApollo;
+
+  const { data } = useGlobalQuery({ client: destClient });
+  const fee = data?.global?.currentFee || 0;
+
+  const computedFee = Number(transferAmount) * fee;
 
   const [graphBlockNumber, setGraphBlockNumber] = useState<number>(0);
 
@@ -900,10 +888,6 @@ const BridgeWidget = () => {
   ) => {
     try {
       setLoader(true);
-
-      console.log({
-        am: ethers.utils.parseEther(amount).toString(),
-      });
 
       const result = await bridgeContract.burnAndCreateProof(
         ethers.utils.parseEther(amount),
@@ -1126,7 +1110,7 @@ const BridgeWidget = () => {
               lineHeight: "132%",
             }}
           >
-            {balance} DEFT
+            {balance.toFixed(0)} DEFT
           </Text>
         </Box>
         <Box height="6px" />
@@ -1271,7 +1255,7 @@ const BridgeWidget = () => {
                   }}
                   textAlign="center"
                 >
-                  {fee}% fee
+                  {fee * 100}% fee
                 </Text>
               }
             >
@@ -1286,7 +1270,7 @@ const BridgeWidget = () => {
             }}
           ></Box>
           <Text size="14px" color="#414141" weight={700}>
-            {computedFee.toFixed(2)} DEFT
+            {computedFee.toFixed(0)} DEFT
           </Text>
         </Box>
       </Box>
@@ -1424,7 +1408,7 @@ export const AccountBalance = ({
         align="center"
       >
         <Text size="15px" color="#414141" weight={600}>
-          {balance} DEFT
+          {balance.toFixed(0)} DEFT
         </Text>
         <Box
           background="white"

@@ -1,6 +1,6 @@
 overwrite: true
 schema:
-  - http://localhost:8000/subgraphs/name/deft/deft-bridge-ropsten
+  - http://localhost:8000/subgraphs/name/deft/deft-bridge-kovan
 documents: "src/graphql/**/*.ts"
 generates:
   src/graphql/types.tsx:
