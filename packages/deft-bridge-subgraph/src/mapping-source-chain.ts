@@ -34,7 +34,7 @@ function getOrCreateGlobal(): Global | null {
     global = new Global("1");
     global.mintedCount = ZERO_BI;
     global.mintedAmount = ZERO_BD;
-    global.currentFee = BigDecimal.fromString("0.01");
+    global.currentFee = BigDecimal.fromString("0");
 
     global.burnedCount = ZERO_BI;
     global.burnedAmount = ZERO_BD;
