@@ -46,6 +46,42 @@ export class BulkApprovedTransactions__Params {
   }
 }
 
+export class FeeUpdated extends ethereum.Event {
+  get params(): FeeUpdated__Params {
+    return new FeeUpdated__Params(this);
+  }
+}
+
+export class FeeUpdated__Params {
+  _event: FeeUpdated;
+
+  constructor(event: FeeUpdated) {
+    this._event = event;
+  }
+
+  get feeAmount(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
+  }
+}
+
+export class MinimumAmountToBurnUpdated extends ethereum.Event {
+  get params(): MinimumAmountToBurnUpdated__Params {
+    return new MinimumAmountToBurnUpdated__Params(this);
+  }
+}
+
+export class MinimumAmountToBurnUpdated__Params {
+  _event: MinimumAmountToBurnUpdated;
+
+  constructor(event: MinimumAmountToBurnUpdated) {
+    this._event = event;
+  }
+
+  get newMinAmountToBurn(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
+  }
+}
+
 export class ProofOfBurn extends ethereum.Event {
   get params(): ProofOfBurn__Params {
     return new ProofOfBurn__Params(this);
@@ -231,48 +267,27 @@ export class CrossChainBridge extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBytes());
   }
 
-  ROLE_BENEFICIARY(): Bytes {
+  beneficiaryAddress(): Address {
     let result = super.call(
-      "ROLE_BENEFICIARY",
-      "ROLE_BENEFICIARY():(bytes32)",
+      "beneficiaryAddress",
+      "beneficiaryAddress():(address)",
       []
     );
 
-    return result[0].toBytes();
+    return result[0].toAddress();
   }
 
-  try_ROLE_BENEFICIARY(): ethereum.CallResult<Bytes> {
+  try_beneficiaryAddress(): ethereum.CallResult<Address> {
     let result = super.tryCall(
-      "ROLE_BENEFICIARY",
-      "ROLE_BENEFICIARY():(bytes32)",
+      "beneficiaryAddress",
+      "beneficiaryAddress():(address)",
       []
     );
     if (result.reverted) {
       return new ethereum.CallResult();
     }
     let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBytes());
-  }
-
-  chainIdToFee(param0: BigInt): BigInt {
-    let result = super.call("chainIdToFee", "chainIdToFee(uint256):(uint256)", [
-      ethereum.Value.fromUnsignedBigInt(param0)
-    ]);
-
-    return result[0].toBigInt();
-  }
-
-  try_chainIdToFee(param0: BigInt): ethereum.CallResult<BigInt> {
-    let result = super.tryCall(
-      "chainIdToFee",
-      "chainIdToFee(uint256):(uint256)",
-      [ethereum.Value.fromUnsignedBigInt(param0)]
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBigInt());
+    return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
   currentNonce(): BigInt {
@@ -283,6 +298,21 @@ export class CrossChainBridge extends ethereum.SmartContract {
 
   try_currentNonce(): ethereum.CallResult<BigInt> {
     let result = super.tryCall("currentNonce", "currentNonce():(uint256)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  feePercent(): BigInt {
+    let result = super.call("feePercent", "feePercent():(uint256)", []);
+
+    return result[0].toBigInt();
+  }
+
+  try_feePercent(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall("feePercent", "feePercent():(uint256)", []);
     if (result.reverted) {
       return new ethereum.CallResult();
     }
@@ -407,6 +437,29 @@ export class CrossChainBridge extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBoolean());
   }
 
+  mainTokenContract(): Address {
+    let result = super.call(
+      "mainTokenContract",
+      "mainTokenContract():(address)",
+      []
+    );
+
+    return result[0].toAddress();
+  }
+
+  try_mainTokenContract(): ethereum.CallResult<Address> {
+    let result = super.tryCall(
+      "mainTokenContract",
+      "mainTokenContract():(address)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+
   minAmountToBurn(): BigInt {
     let result = super.call(
       "minAmountToBurn",
@@ -499,6 +552,40 @@ export class ConstructorCall__Outputs {
   _call: ConstructorCall;
 
   constructor(call: ConstructorCall) {
+    this._call = call;
+  }
+}
+
+export class AllowChainCall extends ethereum.Call {
+  get inputs(): AllowChainCall__Inputs {
+    return new AllowChainCall__Inputs(this);
+  }
+
+  get outputs(): AllowChainCall__Outputs {
+    return new AllowChainCall__Outputs(this);
+  }
+}
+
+export class AllowChainCall__Inputs {
+  _call: AllowChainCall;
+
+  constructor(call: AllowChainCall) {
+    this._call = call;
+  }
+
+  get chainId(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
+
+  get isAllowed(): boolean {
+    return this._call.inputValues[1].value.toBoolean();
+  }
+}
+
+export class AllowChainCall__Outputs {
+  _call: AllowChainCall;
+
+  constructor(call: AllowChainCall) {
     this._call = call;
   }
 }
@@ -598,6 +685,48 @@ export class GrantRoleCall__Outputs {
 
   constructor(call: GrantRoleCall) {
     this._call = call;
+  }
+}
+
+export class GrantRolesBulkCall extends ethereum.Call {
+  get inputs(): GrantRolesBulkCall__Inputs {
+    return new GrantRolesBulkCall__Inputs(this);
+  }
+
+  get outputs(): GrantRolesBulkCall__Outputs {
+    return new GrantRolesBulkCall__Outputs(this);
+  }
+}
+
+export class GrantRolesBulkCall__Inputs {
+  _call: GrantRolesBulkCall;
+
+  constructor(call: GrantRolesBulkCall) {
+    this._call = call;
+  }
+
+  get roles(): Array<GrantRolesBulkCallRolesStruct> {
+    return this._call.inputValues[0].value.toTupleArray<
+      GrantRolesBulkCallRolesStruct
+    >();
+  }
+}
+
+export class GrantRolesBulkCall__Outputs {
+  _call: GrantRolesBulkCall;
+
+  constructor(call: GrantRolesBulkCall) {
+    this._call = call;
+  }
+}
+
+export class GrantRolesBulkCallRolesStruct extends ethereum.Tuple {
+  get role(): Bytes {
+    return this[0].toBytes();
+  }
+
+  get addr(): Address {
+    return this[1].toAddress();
   }
 }
 
@@ -747,74 +876,92 @@ export class RevokeRoleCall__Outputs {
   }
 }
 
-export class UpdateChainsCall extends ethereum.Call {
-  get inputs(): UpdateChainsCall__Inputs {
-    return new UpdateChainsCall__Inputs(this);
+export class UpdateFeeCall extends ethereum.Call {
+  get inputs(): UpdateFeeCall__Inputs {
+    return new UpdateFeeCall__Inputs(this);
   }
 
-  get outputs(): UpdateChainsCall__Outputs {
-    return new UpdateChainsCall__Outputs(this);
+  get outputs(): UpdateFeeCall__Outputs {
+    return new UpdateFeeCall__Outputs(this);
   }
 }
 
-export class UpdateChainsCall__Inputs {
-  _call: UpdateChainsCall;
+export class UpdateFeeCall__Inputs {
+  _call: UpdateFeeCall;
 
-  constructor(call: UpdateChainsCall) {
+  constructor(call: UpdateFeeCall) {
     this._call = call;
   }
 
-  get chainId(): BigInt {
+  get newFeePercent(): BigInt {
     return this._call.inputValues[0].value.toBigInt();
   }
-
-  get chainFee(): BigInt {
-    return this._call.inputValues[1].value.toBigInt();
-  }
-
-  get isAllowed(): boolean {
-    return this._call.inputValues[2].value.toBoolean();
-  }
 }
 
-export class UpdateChainsCall__Outputs {
-  _call: UpdateChainsCall;
+export class UpdateFeeCall__Outputs {
+  _call: UpdateFeeCall;
 
-  constructor(call: UpdateChainsCall) {
+  constructor(call: UpdateFeeCall) {
     this._call = call;
   }
 }
 
-export class UpdateSettingsCall extends ethereum.Call {
-  get inputs(): UpdateSettingsCall__Inputs {
-    return new UpdateSettingsCall__Inputs(this);
+export class UpdateMainTokenContractCall extends ethereum.Call {
+  get inputs(): UpdateMainTokenContractCall__Inputs {
+    return new UpdateMainTokenContractCall__Inputs(this);
   }
 
-  get outputs(): UpdateSettingsCall__Outputs {
-    return new UpdateSettingsCall__Outputs(this);
+  get outputs(): UpdateMainTokenContractCall__Outputs {
+    return new UpdateMainTokenContractCall__Outputs(this);
   }
 }
 
-export class UpdateSettingsCall__Inputs {
-  _call: UpdateSettingsCall;
+export class UpdateMainTokenContractCall__Inputs {
+  _call: UpdateMainTokenContractCall;
 
-  constructor(call: UpdateSettingsCall) {
+  constructor(call: UpdateMainTokenContractCall) {
+    this._call = call;
+  }
+
+  get newMainTokenContract(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+}
+
+export class UpdateMainTokenContractCall__Outputs {
+  _call: UpdateMainTokenContractCall;
+
+  constructor(call: UpdateMainTokenContractCall) {
+    this._call = call;
+  }
+}
+
+export class UpdateMinimumAmountToBurnCall extends ethereum.Call {
+  get inputs(): UpdateMinimumAmountToBurnCall__Inputs {
+    return new UpdateMinimumAmountToBurnCall__Inputs(this);
+  }
+
+  get outputs(): UpdateMinimumAmountToBurnCall__Outputs {
+    return new UpdateMinimumAmountToBurnCall__Outputs(this);
+  }
+}
+
+export class UpdateMinimumAmountToBurnCall__Inputs {
+  _call: UpdateMinimumAmountToBurnCall;
+
+  constructor(call: UpdateMinimumAmountToBurnCall) {
     this._call = call;
   }
 
   get newMinAmountToBurn(): BigInt {
     return this._call.inputValues[0].value.toBigInt();
   }
-
-  get newDefiFactoryContract(): Address {
-    return this._call.inputValues[1].value.toAddress();
-  }
 }
 
-export class UpdateSettingsCall__Outputs {
-  _call: UpdateSettingsCall;
+export class UpdateMinimumAmountToBurnCall__Outputs {
+  _call: UpdateMinimumAmountToBurnCall;
 
-  constructor(call: UpdateSettingsCall) {
+  constructor(call: UpdateMinimumAmountToBurnCall) {
     this._call = call;
   }
 }

@@ -6,9 +6,9 @@ dataSources:
     name: SourceChain
     network: kovan
     source:
-      address: "0x4A45D0f6bFCF9911ed5331e6960F4Ab4Fc13be71"
+      address: "0xBBECB9CCb15Cb55A20933861D04a1BC0Fe37c559"
       abi: CrossChainBridge
-      startBlock: 25196298
+      startBlock: 25391060
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -28,4 +28,6 @@ dataSources:
           handler: handleApprovedTransaction
         - event: BulkApprovedTransactions(bytes32[])
           handler: handleBulkApprovedTransaction
+        - event: FeeUpdated(uint256)
+          handler: handleFeeUpdated
       file: ./src/mapping-source-chain.ts

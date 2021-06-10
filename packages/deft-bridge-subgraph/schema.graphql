@@ -64,6 +64,7 @@ type BridgeTransfer @entity {
 
 type Global @entity {
   id: ID!
+  currentFee: BigDecimal!
   approvedCount: BigInt!
 
   mintedCount: BigInt!

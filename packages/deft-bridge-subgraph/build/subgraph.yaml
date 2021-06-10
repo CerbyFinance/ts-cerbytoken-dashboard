@@ -4,11 +4,11 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: SourceChain
-    network: ropsten
+    network: binance-test
     source:
-      address: "0xa60cDF00Ad674D792F9840cAAC5dea0D6e852C02"
+      address: "0xBBECB9CCb15Cb55A20933861D04a1BC0Fe37c559"
       abi: CrossChainBridge
-      startBlock: 10351802
+      startBlock: 9617294
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -28,4 +28,6 @@ dataSources:
           handler: handleApprovedTransaction
         - event: BulkApprovedTransactions(bytes32[])
           handler: handleBulkApprovedTransaction
+        - event: FeeUpdated(uint256)
+          handler: handleFeeUpdated
       file: SourceChain/SourceChain.wasm

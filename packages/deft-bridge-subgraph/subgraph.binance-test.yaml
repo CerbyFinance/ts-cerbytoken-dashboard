@@ -4,11 +4,11 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: SourceChain
-    network: ropsten
+    network: binance-test
     source:
-      address: "0xCb968455065Eaef95c8FA072F5217a54eC0CE235"
+      address: "0xBBECB9CCb15Cb55A20933861D04a1BC0Fe37c559"
       abi: CrossChainBridge
-      startBlock: 10369100
+      startBlock: 9617294
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4

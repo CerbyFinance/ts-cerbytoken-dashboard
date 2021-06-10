@@ -245,6 +245,15 @@ export class Global extends Entity {
     this.set("id", Value.fromString(value));
   }
 
+  get currentFee(): BigDecimal {
+    let value = this.get("currentFee");
+    return value.toBigDecimal();
+  }
+
+  set currentFee(value: BigDecimal) {
+    this.set("currentFee", Value.fromBigDecimal(value));
+  }
+
   get approvedCount(): BigInt {
     let value = this.get("approvedCount");
     return value.toBigInt();

@@ -1,10 +1,12 @@
+import { BigDecimal } from "@graphprotocol/graph-ts";
 import { BridgeTransfer, Global, Proof } from "../generated/schema";
 import {
   ApprovedTransaction,
   BulkApprovedTransactions,
+  FeeUpdated,
   ProofOfBurn,
   ProofOfMint,
-} from "../generated/SourceChain/MintableBurnableToken";
+} from "../generated/SourceChain/CrossChainBridge";
 import {
   BI_18,
   convertTokenToDecimal,
@@ -32,6 +34,7 @@ function getOrCreateGlobal(): Global | null {
     global = new Global("1");
     global.mintedCount = ZERO_BI;
     global.mintedAmount = ZERO_BD;
+    global.currentFee = BigDecimal.fromString("0.01");
 
     global.burnedCount = ZERO_BI;
     global.burnedAmount = ZERO_BD;
@@ -43,6 +46,14 @@ function getOrCreateGlobal(): Global | null {
   }
 
   return global;
+}
+
+export function handleFeeUpdated(event: FeeUpdated): void {
+  let global = getOrCreateGlobal();
+  global.currentFee = event.params.feeAmount
+    .toBigDecimal()
+    .div(BigDecimal.fromString("1000000"));
+  global.save();
 }
 
 export function handleProofOfBurn(event: ProofOfBurn): void {

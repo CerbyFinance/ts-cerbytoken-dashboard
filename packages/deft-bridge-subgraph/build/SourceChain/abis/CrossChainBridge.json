@@ -35,6 +35,32 @@
     "inputs": [
       {
         "indexed": false,
+        "internalType": "uint256",
+        "name": "feeAmount",
+        "type": "uint256"
+      }
+    ],
+    "name": "FeeUpdated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "newMinAmountToBurn",
+        "type": "uint256"
+      }
+    ],
+    "name": "MinimumAmountToBurnUpdated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
         "internalType": "address",
         "name": "addr",
         "type": "address"
@@ -206,13 +232,31 @@
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "chainId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "isAllowed",
+        "type": "bool"
+      }
+    ],
+    "name": "allowChain",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "inputs": [],
-    "name": "ROLE_BENEFICIARY",
+    "name": "beneficiaryAddress",
     "outputs": [
       {
-        "internalType": "bytes32",
+        "internalType": "address",
         "name": "",
-        "type": "bytes32"
+        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -250,14 +294,8 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "chainIdToFee",
+    "inputs": [],
+    "name": "currentNonce",
     "outputs": [
       {
         "internalType": "uint256",
@@ -270,7 +308,7 @@
   },
   {
     "inputs": [],
-    "name": "currentNonce",
+    "name": "feePercent",
     "outputs": [
       {
         "internalType": "uint256",
@@ -364,6 +402,31 @@
   {
     "inputs": [
       {
+        "components": [
+          {
+            "internalType": "bytes32",
+            "name": "role",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "address",
+            "name": "addr",
+            "type": "address"
+          }
+        ],
+        "internalType": "struct RoleAccess[]",
+        "name": "roles",
+        "type": "tuple[]"
+      }
+    ],
+    "name": "grantRolesBulk",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "bytes32",
         "name": "role",
         "type": "bytes32"
@@ -399,6 +462,19 @@
         "internalType": "bool",
         "name": "",
         "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "mainTokenContract",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -543,21 +619,24 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "chainId",
+        "name": "newFeePercent",
         "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "chainFee",
-        "type": "uint256"
-      },
-      {
-        "internalType": "bool",
-        "name": "isAllowed",
-        "type": "bool"
       }
     ],
-    "name": "updateChains",
+    "name": "updateFee",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "newMainTokenContract",
+        "type": "address"
+      }
+    ],
+    "name": "updateMainTokenContract",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -568,14 +647,9 @@
         "internalType": "uint256",
         "name": "newMinAmountToBurn",
         "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "newDefiFactoryContract",
-        "type": "address"
       }
     ],
-    "name": "updateSettings",
+    "name": "updateMinimumAmountToBurn",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
