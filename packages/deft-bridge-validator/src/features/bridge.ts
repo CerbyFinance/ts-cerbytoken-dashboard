@@ -12,7 +12,7 @@ const MIN_PROOFS_TO_APPROVE = 1;
 const ESTIMATE_MULT = 1.2;
 
 const makeRemoteUrl = (chain: string) =>
-  `http://localhost:8000/subgraphs/name/deft/deft-bridge-${chain}`;
+  `http://172.17.0.1:8000/subgraphs/name/deft/deft-bridge-${chain}`;
 
 const { PRIVATE_KEY } = process.env;
 
