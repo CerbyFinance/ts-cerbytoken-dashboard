@@ -4,7 +4,13 @@ import { useWeb3React, Web3ReactProvider } from "@web3-react/core";
 import { serializeError } from "eth-rpc-errors";
 import { ethers } from "ethers";
 import { Box, Grommet, Text } from "grommet";
-import React, { CSSProperties, useEffect, useState } from "react";
+import React, {
+  createContext,
+  CSSProperties,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import AutosizeInput from "react-input-autosize";
 import {
   BrowserRouter as Router,
@@ -15,6 +21,7 @@ import {
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 import styled from "styled-components";
+import useMedia from "use-media";
 import { Chains } from "./chains";
 import { Hint } from "./components/Hint";
 import { injected } from "./connectors";
@@ -43,7 +50,9 @@ import {
   Direction,
   EthereumLogo,
   QuestionIcon,
+  TelegramIcon,
 } from "./Icons";
+import { Logo } from "./logo";
 import { clientByChain, noopApollo } from "./shared/client";
 import { HoveredElement } from "./shared/hooks";
 import { useBridgeContract, useTokenContract } from "./shared/useContract";
@@ -207,6 +216,8 @@ const BridgeWidgetProcess = () => {
   const [loader, setLoader] = useState(false);
   const [nonce, setNonce] = useState<number>(0);
 
+  const { balance, refetchBalance } = useContext(GlobalContext);
+
   // const [currentProofId, setCurrentProofId] = useState<string>("");
   // const [path, setPath] = useState([0, 0] as unknown as [Chains, Chains]);
 
@@ -256,7 +267,7 @@ const BridgeWidgetProcess = () => {
         setProcessesStatus(old => ({
           transfer: "success",
           validation: bridgeTransfer ? "success" : "loading",
-          receive: mintProof ? "success" : bridgeTransfer ? "loading" : "none",
+          receive: mintProof ? "success" : "none",
         }));
       }
     };
@@ -323,9 +334,9 @@ const BridgeWidgetProcess = () => {
   const connectedToRightChain = account && path[1] === chainId;
   const unsupportedNetwork = error?.message.includes("Unsupported chain id");
 
-  // TODO: refetch balance
   // TODO: show actual error in ui
   const receive = async (
+    account: string,
     srcNonce: number,
     srcChainId: Chains,
     destChainId: Chains,
@@ -345,6 +356,8 @@ const BridgeWidgetProcess = () => {
       });
 
       const result2 = await result.wait();
+
+      await refetchBalance(account);
 
       // TODO: update it locally ?
       let i = 3;
@@ -422,7 +435,7 @@ const BridgeWidgetProcess = () => {
   };
 
   const inactive = {
-    opacity: 0.7,
+    opacity: 0.6,
     transform: undefined,
   };
 
@@ -441,7 +454,7 @@ const BridgeWidgetProcess = () => {
         } else {
           actionButton = {
             text: "Receive",
-            onClick: () => receive(nonce, path[0], path[1]),
+            onClick: () => receive(account!, nonce, path[0], path[1]),
           };
         }
       } else {
@@ -455,20 +468,25 @@ const BridgeWidgetProcess = () => {
       actionButton = {
         text: "Switch to " + dest,
         onClick: () => {},
-        style: inactive,
+        style: {
+          background: "#F83245",
+          boxShadow: "none",
+        },
       };
     }
   } else if (unsupportedNetwork) {
     actionButton = {
       text: "Switch to " + dest,
       onClick: () => {},
-      style: inactive,
+      style: {
+        background: "#F83245",
+        boxShadow: "none",
+      },
     };
   } else {
     actionButton = {
       text: "Connect",
       onClick: () => activate(injected),
-      style: inactive,
     };
   }
 
@@ -662,11 +680,12 @@ const BridgeWidgetProcess = () => {
                       transform: "scale(1.01)",
                     }
                   : {}),
-                ...actionButton.style,
 
                 cursor: "pointer",
                 boxShadow:
                   "0px 2px 4px rgba(31, 139, 36, 0.18), 0px 4px 8px rgba(31, 139, 36, 0.18)",
+                ...actionButton.style,
+
                 ...(loader
                   ? {
                       pointerEvents: "none",
@@ -689,6 +708,9 @@ const BridgeWidgetProcess = () => {
                   color={binder.hovered ? "white" : "#2AB930"}
                   style={{
                     letterSpacing: "0.05em",
+                    ...(actionButton.text.includes("Switch")
+                      ? { color: "white" }
+                      : {}),
                   }}
                   weight={600}
                 >
@@ -802,64 +824,10 @@ const BridgeWidget = () => {
 
   const history = useHistory();
 
-  // TODO: move to main
-  // useEffect(() => {
-  //   const guessWhereIsProof = async (account: string) => {
-  //     // TODO: supported chains only
-  //     const result = await Promise.all(
-  //       [3, 42].map(async chainId => {
-  //         const chain = idToChain[chainId as Chains];
-  //         const client = clientByChain[chain];
-
-  //         return getLastProof(client, account);
-  //       }),
-  //     );
-
-  //     const burnProof = result.find(item => item);
-
-  //     if (burnProof) {
-  //       const srcChainid = burnProof.src!;
-  //       const destChainId = burnProof.dest!;
-
-  //       setPath([srcChainid, destChainId] as [Chains, Chains]);
-  //       setCurrentProofId(burnProof.id);
-  //       setNonce(burnProof.nonce!);
-  //       setTransferAmount(burnProof.amount);
-
-  //       const destClient = clientByChain[destChainId];
-
-  //       const bridgeTransfer = await getBridgeTransfer(
-  //         destClient,
-  //         burnProof.id,
-  //       );
-
-  //       // TODO: if minted, return back to bridge input
-
-  //       const mintProof = await getProof(
-  //         destClient,
-  //         burnProof.id,
-  //         ProofType.Mint,
-  //       );
-
-  //       // get info about all statuses
-  //       setProcessesStatus(old => ({
-  //         transfer: "success",
-  //         validation: bridgeTransfer ? "success" : "loading",
-  //         receive: mintProof ? "success" : bridgeTransfer ? "loading" : "none",
-  //       }));
-  //     }
-  //   };
-
-  //   if (0 === 1 + 1) {
-  //     console.log("guess...");
-  //     guessWhereIsProof(account!).catch(e => e);
-  //   }
-  // }, [account, destClient]);
+  const { balance, refetchBalance } = useContext(GlobalContext);
 
   const [transferAmount, setTransferAmount] = useState("");
   const [isPopular, setPopular] = useState(true);
-
-  const [balance, setBalance] = useState(0);
 
   const [loader, setLoader] = useState(false);
   const [path, setPath] = useState([3, 42] as [Chains, Chains]);
@@ -923,26 +891,6 @@ const BridgeWidget = () => {
 
   const src = chainIdToShort[path[0]] || "...";
   const dest = chainIdToShort[path[1]] || "...";
-
-  const refetchBalance = async (account: string) => {
-    try {
-      const balance = await tokenContract.balanceOf(account);
-
-      setBalance(Number(ethers.utils.formatEther(balance)));
-      console.log({
-        balance: ethers.utils.formatEther(balance),
-      });
-    } catch (error) {
-      setBalance(0);
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    if (account) {
-      refetchBalance(account);
-    }
-  }, [account, chainId]);
 
   const transfer = async (
     client: ApolloClient<NormalizedCacheObject>,
@@ -1042,6 +990,11 @@ const BridgeWidget = () => {
     style?: CSSProperties;
   };
 
+  const inactive = {
+    opacity: 0.6,
+    transform: undefined,
+  };
+
   if (connected) {
     if (connectedToRightChain) {
       if (amountEntered) {
@@ -1057,20 +1010,14 @@ const BridgeWidget = () => {
             actionButton = {
               text: "Out of sync",
               onClick: () => {},
-              style: {
-                opacity: 0.4,
-                transform: undefined,
-              },
+              style: inactive,
             };
           }
         } else {
           actionButton = {
             text: "Insufficient balance",
             onClick: () => {},
-            style: {
-              opacity: 0.4,
-              transform: undefined,
-            },
+            style: inactive,
           };
         }
       } else {
@@ -1087,12 +1034,18 @@ const BridgeWidget = () => {
       actionButton = {
         text: "Switch to " + src,
         onClick: () => {},
+        style: {
+          background: "#F83245",
+        },
       };
     }
   } else if (unsupportedNetwork) {
     actionButton = {
       text: "Switch to " + src,
       onClick: () => {},
+      style: {
+        background: "#F83245",
+      },
     };
   } else {
     actionButton = {
@@ -1401,6 +1354,179 @@ function getLibrary(provider: any): Web3Provider {
   return library;
 }
 
+const BoxHoveredScale = styled(Box)`
+  cursor: pointer;
+  &:hover {
+    transform: scale(1.1);
+  }
+`;
+
+const GlobalContext = createContext({
+  balance: 0,
+  setBalance: (balance: number) => {},
+  refetchBalance: async (account: string) => {},
+});
+
+const GlobalState = ({ children }: { children: React.ReactNode }) => {
+  const { account, chainId } = useWeb3React();
+
+  const [balance, setBalance] = useState(0);
+  const tokenContract = useTokenContract();
+
+  const refetchBalance = async (account: string) => {
+    try {
+      const balance = await tokenContract.balanceOf(account);
+
+      setBalance(Number(ethers.utils.formatEther(balance)));
+      console.log({
+        balance: ethers.utils.formatEther(balance),
+      });
+    } catch (error) {
+      setBalance(0);
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (account) {
+      refetchBalance(account);
+    }
+  }, [account, chainId]);
+
+  return (
+    <GlobalContext.Provider
+      value={{
+        balance,
+        setBalance,
+        refetchBalance,
+      }}
+    >
+      {children}
+    </GlobalContext.Provider>
+  );
+};
+
+export const AccountBalance = ({
+  account,
+  balance,
+}: {
+  account: string;
+  balance: number;
+}) => {
+  return (
+    <React.Fragment>
+      <Box width="12px"></Box>
+      <Box
+        pad={"3px 3px 3px 10px"}
+        background="#ebebeb"
+        round="8px"
+        direction="row"
+        align="center"
+      >
+        <Text size="15px" color="#414141" weight={600}>
+          {balance} DEFT
+        </Text>
+        <Box
+          background="white"
+          pad="3px 8px"
+          round="6px"
+          margin={{ left: "10px" }}
+        >
+          <Text size="14px" weight={600} color="#414141">
+            {account
+              ? account.slice(0, 6) +
+                "..." +
+                account.slice(account.length - 4, account.length)
+              : "..."}
+          </Text>
+        </Box>
+      </Box>
+      <Box width="12px"></Box>
+      <BoxHoveredScale
+        height="24px"
+        width="24px"
+        style={{
+          color: "#25a3e2",
+        }}
+        onClick={() => window.open("https://t.me/DefiFactory", "_blank")}
+      >
+        <TelegramIcon />
+      </BoxHoveredScale>
+    </React.Fragment>
+  );
+};
+
+export const Top = () => {
+  const { account, activate, chainId, library, connector, error } =
+    useWeb3React();
+
+  const chain = idToChain[chainId as Chains] || "";
+  const tokenContract = useTokenContract();
+
+  const history = useHistory();
+
+  const { balance } = useContext(GlobalContext);
+
+  const isMobileOrTablet = useMedia({ maxWidth: "500px" });
+
+  return (
+    <Box
+      direction="row"
+      align="center"
+      height="75px"
+      pad="16px"
+      margin={{
+        bottom: "85px",
+      }}
+    >
+      <Box
+        style={{
+          cursor: "pointer",
+        }}
+        onClick={() => history.push("/")}
+      >
+        <Logo />
+      </Box>
+      <Box
+        margin={{
+          left: "auto",
+        }}
+      ></Box>
+      <Text size="15px" color="#414141" weight={600}>
+        {chain}
+      </Text>
+      {!isMobileOrTablet && (
+        <AccountBalance account={account!} balance={balance} />
+      )}
+    </Box>
+  );
+};
+
+export const Bottom = () => {
+  const { account } = useWeb3React();
+  const { balance } = useContext(GlobalContext);
+
+  const isMobileOrTablet = useMedia({ maxWidth: "500px" });
+
+  if (!isMobileOrTablet) {
+    return null;
+  }
+
+  return (
+    <Box
+      direction="row"
+      align="center"
+      height="75px"
+      pad="16px"
+      margin={{
+        bottom: "85px",
+      }}
+    >
+      <AccountBalance account={account!} balance={balance} />
+    </Box>
+  );
+};
+
 function App() {
   return (
     <Web3ReactProvider getLibrary={getLibrary}>
@@ -1418,28 +1544,31 @@ function App() {
             },
           }}
         >
-          <Router>
-            <ToastContainer position={"bottom-left"} />
-
-            <Box
-              direction="row"
-              justify="center"
-              align="center"
-              style={{
-                // margin: "0 auto",
-                width: "100%",
-                // TODO: for iphone pad-top 60px
-                padding: "160px 10px",
-              }}
-            >
-              <Route exact path="/" component={BridgeWidget} />
-              <Route
-                exact
-                path="/p/:src/:dest/:id"
-                component={BridgeWidgetProcess}
-              />
-            </Box>
-          </Router>
+          <GlobalState>
+            <Router>
+              <ToastContainer position={"bottom-left"} />
+              <Top />
+              <Box
+                direction="column"
+                // justify="center"
+                align="center"
+                style={{
+                  // margin: "0 auto",
+                  width: "100%",
+                  // TODO: for iphone pad-top 60px
+                  padding: "0px 10px",
+                }}
+              >
+                <Route exact path="/" component={BridgeWidget} />
+                <Route
+                  exact
+                  path="/p/:src/:dest/:id"
+                  component={BridgeWidgetProcess}
+                />
+              </Box>
+              <Bottom />
+            </Router>
+          </GlobalState>
         </Grommet>
       </Web3ReactManager>
     </Web3ReactProvider>
