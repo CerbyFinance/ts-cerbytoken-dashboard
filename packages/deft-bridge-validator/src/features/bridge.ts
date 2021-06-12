@@ -26,9 +26,9 @@ const nodeUrlByChain = {
 };
 
 const contractByChain = {
-  ropsten: "0xBBECB9CCb15Cb55A20933861D04a1BC0Fe37c559",
-  kovan: "0xBBECB9CCb15Cb55A20933861D04a1BC0Fe37c559",
-  ["binance-test"]: "0xBBECB9CCb15Cb55A20933861D04a1BC0Fe37c559",
+  ropsten: "0x9fd0a5B42C7E536d9AFaF42707C80f195612601c",
+  kovan: "0x9fd0a5B42C7E536d9AFaF42707C80f195612601c",
+  ["binance-test"]: "0x9fd0a5B42C7E536d9AFaF42707C80f195612601c",
 };
 
 const chainToId = {
