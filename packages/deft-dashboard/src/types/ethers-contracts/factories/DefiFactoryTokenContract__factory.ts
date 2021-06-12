@@ -76,6 +76,25 @@ const _abi = [
       {
         indexed: false,
         internalType: "address",
+        name: "sender",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
+    ],
+    name: "BurnedByBridge",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "address",
         name: "recipient",
         type: "address",
       },
@@ -106,6 +125,25 @@ const _abi = [
       },
     ],
     name: "MintHumanAddress",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "address",
+        name: "recipient",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
+    ],
+    name: "MintedByBridge",
     type: "event",
   },
   {
@@ -255,7 +293,7 @@ const _abi = [
           },
           {
             internalType: "bool",
-            name: "isAllowedToSend",
+            name: "isModerator",
             type: "bool",
           },
           {
@@ -325,19 +363,6 @@ const _abi = [
   },
   {
     inputs: [],
-    name: "ROLE_ALLOWED_TO_SEND_WHILE_PAUSED",
-    outputs: [
-      {
-        internalType: "bytes32",
-        name: "",
-        type: "bytes32",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
     name: "ROLE_BURNER",
     outputs: [
       {
@@ -352,6 +377,19 @@ const _abi = [
   {
     inputs: [],
     name: "ROLE_MINTER",
+    outputs: [
+      {
+        internalType: "bytes32",
+        name: "",
+        type: "bytes32",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "ROLE_MODERATOR",
     outputs: [
       {
         internalType: "bytes32",
@@ -453,6 +491,24 @@ const _abi = [
       },
     ],
     stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "from",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "desiredAmountToBurn",
+        type: "uint256",
+      },
+    ],
+    name: "burnByBridge",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
   {
@@ -762,6 +818,31 @@ const _abi = [
   {
     inputs: [
       {
+        components: [
+          {
+            internalType: "bytes32",
+            name: "role",
+            type: "bytes32",
+          },
+          {
+            internalType: "address",
+            name: "addr",
+            type: "address",
+          },
+        ],
+        internalType: "struct RoleAccess[]",
+        name: "roles",
+        type: "tuple[]",
+      },
+    ],
+    name: "grantRolesBulk",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
         internalType: "bytes32",
         name: "role",
         type: "bytes32",
@@ -833,8 +914,55 @@ const _abi = [
         type: "uint256",
       },
     ],
+    name: "mintByBridge",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "to",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "desiredAmountToMint",
+        type: "uint256",
+      },
+    ],
     name: "mintHumanAddress",
     outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "sender",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "recipient",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
+    ],
+    name: "moderatorTransferFromWhilePaused",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
     stateMutability: "nonpayable",
     type: "function",
   },
@@ -929,31 +1057,6 @@ const _abi = [
       },
     ],
     name: "registerReferral",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        components: [
-          {
-            internalType: "address",
-            name: "referral",
-            type: "address",
-          },
-          {
-            internalType: "address",
-            name: "referrer",
-            type: "address",
-          },
-        ],
-        internalType: "struct DefiFactoryToken.Referrals[]",
-        name: "referrals",
-        type: "tuple[]",
-      },
-    ],
-    name: "registerReferralsBulk",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -1179,7 +1282,7 @@ const _abi = [
           },
           {
             internalType: "bool",
-            name: "isAllowedToSend",
+            name: "isModerator",
             type: "bool",
           },
           {

@@ -23,14 +23,15 @@ interface DefiFactoryTokenContractInterface extends ethers.utils.Interface {
   functions: {
     "DOMAIN_SEPARATOR()": FunctionFragment;
     "ROLE_ADMIN()": FunctionFragment;
-    "ROLE_ALLOWED_TO_SEND_WHILE_PAUSED()": FunctionFragment;
     "ROLE_BURNER()": FunctionFragment;
     "ROLE_MINTER()": FunctionFragment;
+    "ROLE_MODERATOR()": FunctionFragment;
     "ROLE_TAXER()": FunctionFragment;
     "ROLE_TRANSFERER()": FunctionFragment;
     "allowance(address,address)": FunctionFragment;
     "approve(address,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
+    "burnByBridge(address,uint256)": FunctionFragment;
     "burnHumanAddress(address,uint256)": FunctionFragment;
     "chargeCustomTax(address,uint256)": FunctionFragment;
     "claimReferrerRewards(address[])": FunctionFragment;
@@ -47,16 +48,18 @@ interface DefiFactoryTokenContractInterface extends ethers.utils.Interface {
     "getUtilsContractAtPos(uint256)": FunctionFragment;
     "getUtilsContractsCount()": FunctionFragment;
     "grantRole(bytes32,address)": FunctionFragment;
+    "grantRolesBulk(tuple[])": FunctionFragment;
     "hasRole(bytes32,address)": FunctionFragment;
     "increaseAllowance(address,uint256)": FunctionFragment;
     "isPaused()": FunctionFragment;
+    "mintByBridge(address,uint256)": FunctionFragment;
     "mintHumanAddress(address,uint256)": FunctionFragment;
+    "moderatorTransferFromWhilePaused(address,address,uint256)": FunctionFragment;
     "name()": FunctionFragment;
     "nonces(address)": FunctionFragment;
     "pauseContract()": FunctionFragment;
     "permit(address,address,uint256,uint256,uint8,bytes32,bytes32)": FunctionFragment;
     "registerReferral(address)": FunctionFragment;
-    "registerReferralsBulk(tuple[])": FunctionFragment;
     "renounceRole(bytes32,address)": FunctionFragment;
     "resumeContract()": FunctionFragment;
     "revokeRole(bytes32,address)": FunctionFragment;
@@ -80,15 +83,15 @@ interface DefiFactoryTokenContractInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "ROLE_ALLOWED_TO_SEND_WHILE_PAUSED",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
     functionFragment: "ROLE_BURNER",
     values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "ROLE_MINTER",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "ROLE_MODERATOR",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -108,6 +111,10 @@ interface DefiFactoryTokenContractInterface extends ethers.utils.Interface {
     values: [string, BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "balanceOf", values: [string]): string;
+  encodeFunctionData(
+    functionFragment: "burnByBridge",
+    values: [string, BigNumberish]
+  ): string;
   encodeFunctionData(
     functionFragment: "burnHumanAddress",
     values: [string, BigNumberish]
@@ -170,6 +177,10 @@ interface DefiFactoryTokenContractInterface extends ethers.utils.Interface {
     values: [BytesLike, string]
   ): string;
   encodeFunctionData(
+    functionFragment: "grantRolesBulk",
+    values: [{ role: BytesLike; addr: string }[]]
+  ): string;
+  encodeFunctionData(
     functionFragment: "hasRole",
     values: [BytesLike, string]
   ): string;
@@ -179,8 +190,16 @@ interface DefiFactoryTokenContractInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "isPaused", values?: undefined): string;
   encodeFunctionData(
+    functionFragment: "mintByBridge",
+    values: [string, BigNumberish]
+  ): string;
+  encodeFunctionData(
     functionFragment: "mintHumanAddress",
     values: [string, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "moderatorTransferFromWhilePaused",
+    values: [string, string, BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
   encodeFunctionData(functionFragment: "nonces", values: [string]): string;
@@ -203,10 +222,6 @@ interface DefiFactoryTokenContractInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "registerReferral",
     values: [string]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "registerReferralsBulk",
-    values: [{ referral: string; referrer: string }[]]
   ): string;
   encodeFunctionData(
     functionFragment: "renounceRole",
@@ -256,7 +271,7 @@ interface DefiFactoryTokenContractInterface extends ethers.utils.Interface {
         isMinter: boolean;
         isBurner: boolean;
         isTransferer: boolean;
-        isAllowedToSend: boolean;
+        isModerator: boolean;
         isTaxer: boolean;
         addr: string;
       }[]
@@ -269,15 +284,15 @@ interface DefiFactoryTokenContractInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "ROLE_ADMIN", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "ROLE_ALLOWED_TO_SEND_WHILE_PAUSED",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
     functionFragment: "ROLE_BURNER",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "ROLE_MINTER",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "ROLE_MODERATOR",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "ROLE_TAXER", data: BytesLike): Result;
@@ -288,6 +303,10 @@ interface DefiFactoryTokenContractInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "allowance", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "burnByBridge",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "burnHumanAddress",
     data: BytesLike
@@ -343,6 +362,10 @@ interface DefiFactoryTokenContractInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "grantRole", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "grantRolesBulk",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "hasRole", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "increaseAllowance",
@@ -350,7 +373,15 @@ interface DefiFactoryTokenContractInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "isPaused", data: BytesLike): Result;
   decodeFunctionResult(
+    functionFragment: "mintByBridge",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "mintHumanAddress",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "moderatorTransferFromWhilePaused",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
@@ -362,10 +393,6 @@ interface DefiFactoryTokenContractInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "permit", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "registerReferral",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "registerReferralsBulk",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -411,8 +438,10 @@ interface DefiFactoryTokenContractInterface extends ethers.utils.Interface {
   events: {
     "Approval(address,address,uint256)": EventFragment;
     "BurnHumanAddress(address,uint256)": EventFragment;
+    "BurnedByBridge(address,uint256)": EventFragment;
     "ClaimedReferralRewards(address,uint256)": EventFragment;
     "MintHumanAddress(address,uint256)": EventFragment;
+    "MintedByBridge(address,uint256)": EventFragment;
     "RoleAdminChanged(bytes32,bytes32,bytes32)": EventFragment;
     "RoleGranted(bytes32,address,address)": EventFragment;
     "RoleRevoked(bytes32,address,address)": EventFragment;
@@ -424,8 +453,10 @@ interface DefiFactoryTokenContractInterface extends ethers.utils.Interface {
 
   getEvent(nameOrSignatureOrTopic: "Approval"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "BurnHumanAddress"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "BurnedByBridge"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ClaimedReferralRewards"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "MintHumanAddress"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "MintedByBridge"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "RoleAdminChanged"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "RoleGranted"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "RoleRevoked"): EventFragment;
@@ -487,14 +518,6 @@ export class DefiFactoryTokenContract extends Contract {
 
     "ROLE_ADMIN()"(overrides?: CallOverrides): Promise<[string]>;
 
-    ROLE_ALLOWED_TO_SEND_WHILE_PAUSED(
-      overrides?: CallOverrides
-    ): Promise<[string]>;
-
-    "ROLE_ALLOWED_TO_SEND_WHILE_PAUSED()"(
-      overrides?: CallOverrides
-    ): Promise<[string]>;
-
     ROLE_BURNER(overrides?: CallOverrides): Promise<[string]>;
 
     "ROLE_BURNER()"(overrides?: CallOverrides): Promise<[string]>;
@@ -502,6 +525,10 @@ export class DefiFactoryTokenContract extends Contract {
     ROLE_MINTER(overrides?: CallOverrides): Promise<[string]>;
 
     "ROLE_MINTER()"(overrides?: CallOverrides): Promise<[string]>;
+
+    ROLE_MODERATOR(overrides?: CallOverrides): Promise<[string]>;
+
+    "ROLE_MODERATOR()"(overrides?: CallOverrides): Promise<[string]>;
 
     ROLE_TAXER(overrides?: CallOverrides): Promise<[string]>;
 
@@ -541,6 +568,18 @@ export class DefiFactoryTokenContract extends Contract {
       account: string,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
+
+    burnByBridge(
+      from: string,
+      desiredAmountToBurn: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    "burnByBridge(address,uint256)"(
+      from: string,
+      desiredAmountToBurn: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
 
     burnHumanAddress(
       from: string,
@@ -697,6 +736,16 @@ export class DefiFactoryTokenContract extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    grantRolesBulk(
+      roles: { role: BytesLike; addr: string }[],
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    "grantRolesBulk(tuple[])"(
+      roles: { role: BytesLike; addr: string }[],
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     hasRole(
       role: BytesLike,
       account: string,
@@ -725,6 +774,18 @@ export class DefiFactoryTokenContract extends Contract {
 
     "isPaused()"(overrides?: CallOverrides): Promise<[boolean]>;
 
+    mintByBridge(
+      to: string,
+      desiredAmountToMint: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    "mintByBridge(address,uint256)"(
+      to: string,
+      desiredAmountToMint: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     mintHumanAddress(
       to: string,
       desiredAmountToMint: BigNumberish,
@@ -734,6 +795,20 @@ export class DefiFactoryTokenContract extends Contract {
     "mintHumanAddress(address,uint256)"(
       to: string,
       desiredAmountToMint: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    moderatorTransferFromWhilePaused(
+      sender: string,
+      recipient: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    "moderatorTransferFromWhilePaused(address,address,uint256)"(
+      sender: string,
+      recipient: string,
+      amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -785,16 +860,6 @@ export class DefiFactoryTokenContract extends Contract {
 
     "registerReferral(address)"(
       referrer: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    registerReferralsBulk(
-      referrals: { referral: string; referrer: string }[],
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    "registerReferralsBulk(tuple[])"(
-      referrals: { referral: string; referrer: string }[],
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -917,7 +982,7 @@ export class DefiFactoryTokenContract extends Contract {
         isMinter: boolean;
         isBurner: boolean;
         isTransferer: boolean;
-        isAllowedToSend: boolean;
+        isModerator: boolean;
         isTaxer: boolean;
         addr: string;
       }[],
@@ -929,7 +994,7 @@ export class DefiFactoryTokenContract extends Contract {
         isMinter: boolean;
         isBurner: boolean;
         isTransferer: boolean;
-        isAllowedToSend: boolean;
+        isModerator: boolean;
         isTaxer: boolean;
         addr: string;
       }[],
@@ -945,12 +1010,6 @@ export class DefiFactoryTokenContract extends Contract {
 
   "ROLE_ADMIN()"(overrides?: CallOverrides): Promise<string>;
 
-  ROLE_ALLOWED_TO_SEND_WHILE_PAUSED(overrides?: CallOverrides): Promise<string>;
-
-  "ROLE_ALLOWED_TO_SEND_WHILE_PAUSED()"(
-    overrides?: CallOverrides
-  ): Promise<string>;
-
   ROLE_BURNER(overrides?: CallOverrides): Promise<string>;
 
   "ROLE_BURNER()"(overrides?: CallOverrides): Promise<string>;
@@ -958,6 +1017,10 @@ export class DefiFactoryTokenContract extends Contract {
   ROLE_MINTER(overrides?: CallOverrides): Promise<string>;
 
   "ROLE_MINTER()"(overrides?: CallOverrides): Promise<string>;
+
+  ROLE_MODERATOR(overrides?: CallOverrides): Promise<string>;
+
+  "ROLE_MODERATOR()"(overrides?: CallOverrides): Promise<string>;
 
   ROLE_TAXER(overrides?: CallOverrides): Promise<string>;
 
@@ -997,6 +1060,18 @@ export class DefiFactoryTokenContract extends Contract {
     account: string,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
+
+  burnByBridge(
+    from: string,
+    desiredAmountToBurn: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  "burnByBridge(address,uint256)"(
+    from: string,
+    desiredAmountToBurn: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
   burnHumanAddress(
     from: string,
@@ -1153,6 +1228,16 @@ export class DefiFactoryTokenContract extends Contract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  grantRolesBulk(
+    roles: { role: BytesLike; addr: string }[],
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  "grantRolesBulk(tuple[])"(
+    roles: { role: BytesLike; addr: string }[],
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   hasRole(
     role: BytesLike,
     account: string,
@@ -1181,6 +1266,18 @@ export class DefiFactoryTokenContract extends Contract {
 
   "isPaused()"(overrides?: CallOverrides): Promise<boolean>;
 
+  mintByBridge(
+    to: string,
+    desiredAmountToMint: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  "mintByBridge(address,uint256)"(
+    to: string,
+    desiredAmountToMint: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   mintHumanAddress(
     to: string,
     desiredAmountToMint: BigNumberish,
@@ -1190,6 +1287,20 @@ export class DefiFactoryTokenContract extends Contract {
   "mintHumanAddress(address,uint256)"(
     to: string,
     desiredAmountToMint: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  moderatorTransferFromWhilePaused(
+    sender: string,
+    recipient: string,
+    amount: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  "moderatorTransferFromWhilePaused(address,address,uint256)"(
+    sender: string,
+    recipient: string,
+    amount: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -1241,16 +1352,6 @@ export class DefiFactoryTokenContract extends Contract {
 
   "registerReferral(address)"(
     referrer: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  registerReferralsBulk(
-    referrals: { referral: string; referrer: string }[],
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  "registerReferralsBulk(tuple[])"(
-    referrals: { referral: string; referrer: string }[],
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -1373,7 +1474,7 @@ export class DefiFactoryTokenContract extends Contract {
       isMinter: boolean;
       isBurner: boolean;
       isTransferer: boolean;
-      isAllowedToSend: boolean;
+      isModerator: boolean;
       isTaxer: boolean;
       addr: string;
     }[],
@@ -1385,7 +1486,7 @@ export class DefiFactoryTokenContract extends Contract {
       isMinter: boolean;
       isBurner: boolean;
       isTransferer: boolean;
-      isAllowedToSend: boolean;
+      isModerator: boolean;
       isTaxer: boolean;
       addr: string;
     }[],
@@ -1401,14 +1502,6 @@ export class DefiFactoryTokenContract extends Contract {
 
     "ROLE_ADMIN()"(overrides?: CallOverrides): Promise<string>;
 
-    ROLE_ALLOWED_TO_SEND_WHILE_PAUSED(
-      overrides?: CallOverrides
-    ): Promise<string>;
-
-    "ROLE_ALLOWED_TO_SEND_WHILE_PAUSED()"(
-      overrides?: CallOverrides
-    ): Promise<string>;
-
     ROLE_BURNER(overrides?: CallOverrides): Promise<string>;
 
     "ROLE_BURNER()"(overrides?: CallOverrides): Promise<string>;
@@ -1416,6 +1509,10 @@ export class DefiFactoryTokenContract extends Contract {
     ROLE_MINTER(overrides?: CallOverrides): Promise<string>;
 
     "ROLE_MINTER()"(overrides?: CallOverrides): Promise<string>;
+
+    ROLE_MODERATOR(overrides?: CallOverrides): Promise<string>;
+
+    "ROLE_MODERATOR()"(overrides?: CallOverrides): Promise<string>;
 
     ROLE_TAXER(overrides?: CallOverrides): Promise<string>;
 
@@ -1455,6 +1552,18 @@ export class DefiFactoryTokenContract extends Contract {
       account: string,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    burnByBridge(
+      from: string,
+      desiredAmountToBurn: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    "burnByBridge(address,uint256)"(
+      from: string,
+      desiredAmountToBurn: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     burnHumanAddress(
       from: string,
@@ -1611,6 +1720,16 @@ export class DefiFactoryTokenContract extends Contract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    grantRolesBulk(
+      roles: { role: BytesLike; addr: string }[],
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    "grantRolesBulk(tuple[])"(
+      roles: { role: BytesLike; addr: string }[],
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     hasRole(
       role: BytesLike,
       account: string,
@@ -1639,6 +1758,18 @@ export class DefiFactoryTokenContract extends Contract {
 
     "isPaused()"(overrides?: CallOverrides): Promise<boolean>;
 
+    mintByBridge(
+      to: string,
+      desiredAmountToMint: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    "mintByBridge(address,uint256)"(
+      to: string,
+      desiredAmountToMint: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     mintHumanAddress(
       to: string,
       desiredAmountToMint: BigNumberish,
@@ -1650,6 +1781,20 @@ export class DefiFactoryTokenContract extends Contract {
       desiredAmountToMint: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    moderatorTransferFromWhilePaused(
+      sender: string,
+      recipient: string,
+      amount: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
+
+    "moderatorTransferFromWhilePaused(address,address,uint256)"(
+      sender: string,
+      recipient: string,
+      amount: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
 
     name(overrides?: CallOverrides): Promise<string>;
 
@@ -1695,16 +1840,6 @@ export class DefiFactoryTokenContract extends Contract {
 
     "registerReferral(address)"(
       referrer: string,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    registerReferralsBulk(
-      referrals: { referral: string; referrer: string }[],
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    "registerReferralsBulk(tuple[])"(
-      referrals: { referral: string; referrer: string }[],
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -1823,7 +1958,7 @@ export class DefiFactoryTokenContract extends Contract {
         isMinter: boolean;
         isBurner: boolean;
         isTransferer: boolean;
-        isAllowedToSend: boolean;
+        isModerator: boolean;
         isTaxer: boolean;
         addr: string;
       }[],
@@ -1835,7 +1970,7 @@ export class DefiFactoryTokenContract extends Contract {
         isMinter: boolean;
         isBurner: boolean;
         isTransferer: boolean;
-        isAllowedToSend: boolean;
+        isModerator: boolean;
         isTaxer: boolean;
         addr: string;
       }[],
@@ -1861,6 +1996,14 @@ export class DefiFactoryTokenContract extends Contract {
       { sender: string; amount: BigNumber }
     >;
 
+    BurnedByBridge(
+      sender: null,
+      amount: null
+    ): TypedEventFilter<
+      [string, BigNumber],
+      { sender: string; amount: BigNumber }
+    >;
+
     ClaimedReferralRewards(
       recipient: null,
       amount: null
@@ -1870,6 +2013,14 @@ export class DefiFactoryTokenContract extends Contract {
     >;
 
     MintHumanAddress(
+      recipient: null,
+      amount: null
+    ): TypedEventFilter<
+      [string, BigNumber],
+      { recipient: string; amount: BigNumber }
+    >;
+
+    MintedByBridge(
       recipient: null,
       amount: null
     ): TypedEventFilter<
@@ -1930,7 +2081,7 @@ export class DefiFactoryTokenContract extends Contract {
           isMinter: boolean;
           isBurner: boolean;
           isTransferer: boolean;
-          isAllowedToSend: boolean;
+          isModerator: boolean;
           isTaxer: boolean;
           addr: string;
         })[]
@@ -1947,7 +2098,7 @@ export class DefiFactoryTokenContract extends Contract {
           isMinter: boolean;
           isBurner: boolean;
           isTransferer: boolean;
-          isAllowedToSend: boolean;
+          isModerator: boolean;
           isTaxer: boolean;
           addr: string;
         })[];
@@ -1972,14 +2123,6 @@ export class DefiFactoryTokenContract extends Contract {
 
     "ROLE_ADMIN()"(overrides?: CallOverrides): Promise<BigNumber>;
 
-    ROLE_ALLOWED_TO_SEND_WHILE_PAUSED(
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    "ROLE_ALLOWED_TO_SEND_WHILE_PAUSED()"(
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
     ROLE_BURNER(overrides?: CallOverrides): Promise<BigNumber>;
 
     "ROLE_BURNER()"(overrides?: CallOverrides): Promise<BigNumber>;
@@ -1987,6 +2130,10 @@ export class DefiFactoryTokenContract extends Contract {
     ROLE_MINTER(overrides?: CallOverrides): Promise<BigNumber>;
 
     "ROLE_MINTER()"(overrides?: CallOverrides): Promise<BigNumber>;
+
+    ROLE_MODERATOR(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "ROLE_MODERATOR()"(overrides?: CallOverrides): Promise<BigNumber>;
 
     ROLE_TAXER(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -2025,6 +2172,18 @@ export class DefiFactoryTokenContract extends Contract {
     "balanceOf(address)"(
       account: string,
       overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    burnByBridge(
+      from: string,
+      desiredAmountToBurn: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    "burnByBridge(address,uint256)"(
+      from: string,
+      desiredAmountToBurn: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     burnHumanAddress(
@@ -2181,6 +2340,16 @@ export class DefiFactoryTokenContract extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    grantRolesBulk(
+      roles: { role: BytesLike; addr: string }[],
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    "grantRolesBulk(tuple[])"(
+      roles: { role: BytesLike; addr: string }[],
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     hasRole(
       role: BytesLike,
       account: string,
@@ -2209,6 +2378,18 @@ export class DefiFactoryTokenContract extends Contract {
 
     "isPaused()"(overrides?: CallOverrides): Promise<BigNumber>;
 
+    mintByBridge(
+      to: string,
+      desiredAmountToMint: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    "mintByBridge(address,uint256)"(
+      to: string,
+      desiredAmountToMint: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     mintHumanAddress(
       to: string,
       desiredAmountToMint: BigNumberish,
@@ -2218,6 +2399,20 @@ export class DefiFactoryTokenContract extends Contract {
     "mintHumanAddress(address,uint256)"(
       to: string,
       desiredAmountToMint: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    moderatorTransferFromWhilePaused(
+      sender: string,
+      recipient: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    "moderatorTransferFromWhilePaused(address,address,uint256)"(
+      sender: string,
+      recipient: string,
+      amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -2269,16 +2464,6 @@ export class DefiFactoryTokenContract extends Contract {
 
     "registerReferral(address)"(
       referrer: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    registerReferralsBulk(
-      referrals: { referral: string; referrer: string }[],
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    "registerReferralsBulk(tuple[])"(
-      referrals: { referral: string; referrer: string }[],
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -2401,7 +2586,7 @@ export class DefiFactoryTokenContract extends Contract {
         isMinter: boolean;
         isBurner: boolean;
         isTransferer: boolean;
-        isAllowedToSend: boolean;
+        isModerator: boolean;
         isTaxer: boolean;
         addr: string;
       }[],
@@ -2413,7 +2598,7 @@ export class DefiFactoryTokenContract extends Contract {
         isMinter: boolean;
         isBurner: boolean;
         isTransferer: boolean;
-        isAllowedToSend: boolean;
+        isModerator: boolean;
         isTaxer: boolean;
         addr: string;
       }[],
@@ -2432,14 +2617,6 @@ export class DefiFactoryTokenContract extends Contract {
 
     "ROLE_ADMIN()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    ROLE_ALLOWED_TO_SEND_WHILE_PAUSED(
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    "ROLE_ALLOWED_TO_SEND_WHILE_PAUSED()"(
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
     ROLE_BURNER(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     "ROLE_BURNER()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
@@ -2447,6 +2624,12 @@ export class DefiFactoryTokenContract extends Contract {
     ROLE_MINTER(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     "ROLE_MINTER()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    ROLE_MODERATOR(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    "ROLE_MODERATOR()"(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     ROLE_TAXER(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
@@ -2490,6 +2673,18 @@ export class DefiFactoryTokenContract extends Contract {
     "balanceOf(address)"(
       account: string,
       overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    burnByBridge(
+      from: string,
+      desiredAmountToBurn: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    "burnByBridge(address,uint256)"(
+      from: string,
+      desiredAmountToBurn: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     burnHumanAddress(
@@ -2650,6 +2845,16 @@ export class DefiFactoryTokenContract extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
+    grantRolesBulk(
+      roles: { role: BytesLike; addr: string }[],
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    "grantRolesBulk(tuple[])"(
+      roles: { role: BytesLike; addr: string }[],
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
     hasRole(
       role: BytesLike,
       account: string,
@@ -2678,6 +2883,18 @@ export class DefiFactoryTokenContract extends Contract {
 
     "isPaused()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    mintByBridge(
+      to: string,
+      desiredAmountToMint: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    "mintByBridge(address,uint256)"(
+      to: string,
+      desiredAmountToMint: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
     mintHumanAddress(
       to: string,
       desiredAmountToMint: BigNumberish,
@@ -2687,6 +2904,20 @@ export class DefiFactoryTokenContract extends Contract {
     "mintHumanAddress(address,uint256)"(
       to: string,
       desiredAmountToMint: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    moderatorTransferFromWhilePaused(
+      sender: string,
+      recipient: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    "moderatorTransferFromWhilePaused(address,address,uint256)"(
+      sender: string,
+      recipient: string,
+      amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -2741,16 +2972,6 @@ export class DefiFactoryTokenContract extends Contract {
 
     "registerReferral(address)"(
       referrer: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    registerReferralsBulk(
-      referrals: { referral: string; referrer: string }[],
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    "registerReferralsBulk(tuple[])"(
-      referrals: { referral: string; referrer: string }[],
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -2873,7 +3094,7 @@ export class DefiFactoryTokenContract extends Contract {
         isMinter: boolean;
         isBurner: boolean;
         isTransferer: boolean;
-        isAllowedToSend: boolean;
+        isModerator: boolean;
         isTaxer: boolean;
         addr: string;
       }[],
@@ -2885,7 +3106,7 @@ export class DefiFactoryTokenContract extends Contract {
         isMinter: boolean;
         isBurner: boolean;
         isTransferer: boolean;
-        isAllowedToSend: boolean;
+        isModerator: boolean;
         isTaxer: boolean;
         addr: string;
       }[],

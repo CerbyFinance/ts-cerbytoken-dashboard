@@ -79,6 +79,6 @@
     "@types/react-router-dom": "^5.1.7",
     "@types/styled-components": "^5.1.9",
     "@types/testing-library__jest-dom": "^5.9.5",
-    "typechain": "^4.0.3"
+    "typechain": "^5.0.0"
   }
 }

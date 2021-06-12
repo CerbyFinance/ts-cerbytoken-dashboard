@@ -6,11 +6,10 @@ import dayjs from "dayjs";
 import isToday from "dayjs/plugin/isToday";
 import isYesterday from "dayjs/plugin/isYesterday";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { serializeError } from "eth-rpc-errors";
 import { ethers } from "ethers";
 import { Box, Grommet, Text } from "grommet";
 import "rc-dialog/assets/index.css";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   BrowserRouter as Router,
   Route,
@@ -22,15 +21,9 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 import styled from "styled-components";
 import useMedia from "use-media";
-import { CheckBox } from "./CheckBox";
-import { readableErrors } from "./contractErrors";
 import {
-  useMultiplierQuery,
-  UserReferrals2lvlDocument,
-  useUserReferrals2lvlQuery,
-} from "./graphql/types";
-import {
-  BecomeReferralIcon,
+  CheckIcon,
+  ExchangeIcon,
   LinkIcon,
   ReferralsIcon,
   TelegramIcon,
@@ -38,23 +31,21 @@ import {
   YoutubeIcon,
 } from "./icons";
 import { Logo } from "./logo";
-import { ReferralsList } from "./ReferralsList";
 import { nobotsClient } from "./shared/client";
 import { injected } from "./shared/connectors";
 import { HoveredElement } from "./shared/hooks";
-import { ModalsContext, ModalsCreatedApp, ModalsState } from "./shared/modals";
-import { useDeftContract } from "./shared/useContract";
+import { ModalsCreatedApp, ModalsState } from "./shared/modals";
+import { useNobotsContract, useTokenContract } from "./shared/useContract";
 import Web3ReactManager from "./shared/Web3Manager";
-import { txnToast } from "./toaster";
 
 dayjs.extend(relativeTime);
 dayjs.extend(isYesterday);
 dayjs.extend(isToday);
 
 const oneE18 = BigNumber.from("1000000000000000000");
-// const DEPLOYED_CHAIN = 97;
+const DEPLOYED_CHAIN = 97;
 // const DEPLOYED_CHAIN = 42;
-const DEPLOYED_CHAIN = 1;
+// const DEPLOYED_CHAIN = 1;
 // const DEPLOYED_CHAIN = 42;
 
 const BoxHoveredScale = styled(Box)`
@@ -65,11 +56,7 @@ const BoxHoveredScale = styled(Box)`
 `;
 
 function LeftMenu() {
-  const isBecome = useRouteMatch({
-    path: "/become-referral",
-    exact: true,
-  });
-  const isReferrals = useRouteMatch({
+  const isStats = useRouteMatch({
     path: "/",
     exact: true,
   });
@@ -123,13 +110,16 @@ function LeftMenu() {
         onClick={() => history.push("/")}
       >
         <Box
-          height="40px"
-          width="40px"
+          // height="40px"
+          // width="40px"
           align="center"
           justify="center"
-          margin={{ right: "16px" }}
+          margin={{
+            left: "8px",
+            right: "16px",
+          }}
           style={
-            isReferrals
+            isStats
               ? {
                   color: "#1672EC",
                 }
@@ -143,7 +133,7 @@ function LeftMenu() {
           size="15px"
           style={{
             lineHeight: "150%",
-            ...(isReferrals
+            ...(isStats
               ? {
                   color: "#1672EC",
                   fontWeight: 600,
@@ -151,49 +141,35 @@ function LeftMenu() {
               : { color: "#414141" }),
           }}
         >
-          Referrals
+          Tax Cycle
         </Text>
       </Box>
       <Box
         height="40px"
         direction="row"
         align="center"
-        onClick={() => history.push("/become-referral/")}
+        onClick={() => window.open("https://bridge.defifactory.fi/", "_blank")}
       >
         <Box
-          height="40px"
-          width="40px"
+          height="20px"
+          width="20px"
           align="center"
           justify="center"
-          margin={{ right: "16px" }}
-          style={
-            isBecome
-              ? {
-                  color: "#1672EC",
-                }
-              : {}
-          }
+          margin={{ left: "10px", right: "16px" }}
         >
-          <BecomeReferralIcon />
+          <ExchangeIcon />
         </Box>
         <Text
           weight={500}
           size="15px"
-          color="#414141"
           style={{
             lineHeight: "150%",
-            ...(isBecome
-              ? {
-                  color: "#1672EC",
-                  fontWeight: 600,
-                }
-              : { color: "#414141" }),
+            color: "#414141",
           }}
         >
-          Become referral
+          Cross-Chain Bridge
         </Text>
       </Box>
-
       <Box height="28px" justify="center">
         <Box height="1px" background="#E0E0E0"></Box>
       </Box>
@@ -253,106 +229,23 @@ function LeftMenu() {
   );
 }
 
-function ReferrerRewards() {
+function useURLQuery() {
+  return new URLSearchParams(useLocation().search);
+}
+
+const procMap = [15, 8, 3, 0];
+
+function TaxCycle() {
   const { account, activate, chainId, connector, error } = useWeb3React();
-
-  console.log({
-    account,
-    chainId,
-  });
-  const {
-    data: data1,
-    loading: loading1,
-    error: error1,
-  } = useUserReferrals2lvlQuery({
-    variables: {
-      address: account?.toLowerCase() || "",
-    },
-  });
-
-  console.log({
-    data1,
-    loading1,
-    error1,
-  });
-
-  const userReferrals = data1?.user?.referrals || [];
-
-  const flattenRef1 = userReferrals.map(ref1 => {
-    return {
-      id: ref1.id,
-      lvl: 1 as 1 | 2,
-      createdAt: ref1.createdAt,
-      referralsCount: ref1.referralsCount,
-      reward: undefined,
-      referrer: {
-        id: ref1.referrer?.id,
-        referralsCount: ref1.referrer?.referralsCount,
-      },
-    };
-  });
-
-  const flattenRef2 = userReferrals.flatMap(ref1 => {
-    return ref1.referrals.map(ref2 => {
-      return {
-        id: ref2.id,
-        lvl: 2 as 1 | 2,
-        createdAt: ref2.createdAt,
-        referralsCount: ref2.referralsCount,
-        reward: undefined,
-        referrer: {
-          id: ref2.referrer?.id,
-          referralsCount: ref2.referrer?.referralsCount,
-        },
-      };
-    });
-  });
-
-  const referrals = [...flattenRef1, ...flattenRef2];
-  const lvl1ReferralsCount = flattenRef1.length;
-  const lvl2ReferralsCount = flattenRef2.length;
-  const youReferredBy = data1?.user?.referrer?.id;
-
-  console.log({
-    referrals,
-  });
-
-  console.log({
-    youReferredBy,
-  });
-
-  const deftContract = useDeftContract();
+  const tokenContract = useTokenContract();
+  const nobotContract = useNobotsContract();
 
   const [myBalance, setMyBalance] = useState<number | undefined>();
-  const [mult, setMult] = useState<BigNumber | undefined>();
-  const [withReward, setWithReward] = useState<boolean>(false);
-
-  const handleSetWithReward = () => {
-    setWithReward(!withReward);
-  };
-
-  const { showRefAddressModal } = useContext(ModalsContext);
-
-  const {
-    data: data2,
-    loading: loading2,
-    error: error2,
-  } = useMultiplierQuery();
-
-  useEffect(() => {
-    if (data2 && data2.multiplier?.value) {
-      setMult(BigNumber.from(data2.multiplier?.value));
-    }
-  }, [data2]);
 
   const refetchBalance = async (account: string) => {
     try {
-      const balance = await deftContract.balanceOf(account!);
-
+      const balance = await tokenContract.balanceOf(account!);
       setMyBalance(Number(ethers.utils.formatEther(balance)));
-      console.log({
-        balance: ethers.utils.formatEther(balance),
-      });
     } catch (error) {
       console.log(error);
     }
@@ -364,91 +257,61 @@ function ReferrerRewards() {
     }
   }, [account]);
 
-  const [mapRealAmounts, setMapRealAmounts] = useState<{
-    [account: string]: {
-      [wallet: string]: number;
-    };
-  }>({});
-
-  const zeroAmounts = async (walletsToZero: string[], account: string) => {
-    await refetchBalance(account);
-
-    setMapRealAmounts(prev => ({
-      ...prev,
-      [account]: {
-        ...prev[account],
-        ...Object.fromEntries(walletsToZero.map(wallet => [wallet, 0])),
-      },
-    }));
-  };
-
-  console.log({
-    mapRealAmounts,
-  });
+  const [progress, setProgress] = useState(0);
+  const [cycleTax, setCycleTax] = useState(0);
+  const [daysLeft, setDaysLeft] = useState(0);
 
   useEffect(() => {
-    const fire = async (mult: BigNumber) => {
-      const referralsIds = referrals.map(item => item.id);
-      const lvls = referrals.map(item => item.lvl);
+    const fire = async (account: string) => {
+      const res = await nobotContract.getWalletCurrentCycle(account);
 
       console.log({
-        referralsIds,
-        account,
+        cycleTax: res.currentCycleTax.toString(),
+        howMuch: res.howMuchTimeLeftTillEndOfCycleThree.toString(),
       });
-      try {
-        const result = await deftContract.getTemporaryReferralRealAmountsBulk(
-          referralsIds,
-        );
 
-        const realAmounts = Object.fromEntries(
-          lvls.map((lvl, i) => {
-            const item = result[i];
-            const referralId = referralsIds[i];
-            const lvlDiv = BigNumber.from(
-              lvl === 1 ? 100 : lvl === 2 ? 400 : 1,
-            );
+      const howMuch = Number(res.howMuchTimeLeftTillEndOfCycleThree);
+      const cycleTax = Number(res.currentCycleTax);
 
-            return [
-              referralId,
-              Number(
-                ethers.utils.formatEther(
-                  item.realBalance.mul(mult).div(oneE18).div(lvlDiv),
-                ),
-              ),
-            ];
-          }),
-        );
+      const progress = (360 * 86400 - howMuch) / (360 * 86400);
+      setCycleTax((cycleTax / 1e6) * 100);
+      setProgress(progress * 100);
+      setDaysLeft(Math.floor(howMuch / 86400));
 
-        setMapRealAmounts(prev => ({
-          ...prev,
-          [account!]: realAmounts,
-        }));
-      } catch (error) {
-        console.log(error);
-      }
+      console.log({
+        progress,
+      });
     };
 
-    if (referrals.length > 0 && mult) {
-      fire(mult);
+    if (account) {
+      fire(account);
     }
-  }, [userReferrals, mult]);
+  }, [account]);
 
-  const realAmounts = mapRealAmounts[account!] || [];
+  const query = useURLQuery();
 
-  const referralsWithAmounts = referrals.flatMap((referral, i) => {
-    const reward = realAmounts[referral.id];
+  let cycleN = 0;
 
-    const ok = (reward && withReward && reward > 0) || !withReward;
+  // 4705b5f55e92a0c32d225cc912afd3678af26568a18c4d89be1f5966b33de6b5
 
-    return ok
-      ? {
-          ...referral,
-          reward,
-        }
-      : [];
+  if (progress >= 0) {
+    cycleN = 1;
+  }
+  if (progress >= 33.33) {
+    cycleN = 2;
+  }
+  if (progress >= 66.66) {
+    cycleN = 3;
+    if (progress === 100) {
+      cycleN = 4;
+    }
+  }
+
+  console.log({
+    chainId,
+    progress,
+    daysLeft,
   });
-
-  // isActive ?
 
   return (
     <Box
@@ -484,56 +347,13 @@ function ReferrerRewards() {
                   lineHeight: "130%",
                 }}
               >
-                Referrals Network
+                Tax Cycle
               </Text>
               <Text size="16px" weight={400} color="#818181">
-                Build your 2-level empire
+                How many days left until third cycle
               </Text>
             </Box>
 
-            <Box
-              margin={{
-                left: "45px",
-              }}
-            >
-              <HoveredElement
-                render={binder => {
-                  return (
-                    <Box
-                      {...binder.bind}
-                      height="36px"
-                      round="8px"
-                      background={binder.hovered ? "#d1e0f5" : "#E8F1FE"}
-                      align="center"
-                      justify="center"
-                      style={{
-                        minWidth: "132px",
-                        cursor: "pointer",
-                        boxShadow:
-                          "0px 1px 2px rgba(97, 97, 97, 0.2), 0px 2px 4px rgba(97, 97, 97, 0.2)",
-                      }}
-                      pad="0px 16px"
-                      onClick={() =>
-                        showRefAddressModal({
-                          address: account!,
-                        })
-                      }
-                    >
-                      <Text
-                        size="14px"
-                        color={binder.hovered ? "#1672EC" : "#1672EC"}
-                        style={{
-                          letterSpacing: "0.05em",
-                        }}
-                        weight={600}
-                      >
-                        Get your ref link
-                      </Text>
-                    </Box>
-                  );
-                }}
-              />
-            </Box>
             <Box
               margin={{
                 left: "auto",
@@ -610,463 +430,238 @@ function ReferrerRewards() {
               </>
             </Box>
           </Box>
-          {loading1 ? (
-            <Box>
-              <Text size="16px" color="#818181">
-                Loading...
-              </Text>
-            </Box>
-          ) : (
+
+          <Box align="center">
+            <Text size="24px" color="#414141" textAlign="center" weight={700}>
+              {/* {progress.toFixed(0)}% */}
+              {daysLeft}
+            </Text>
+            <Text
+              size="16px"
+              style={{
+                lineHeight: "100%",
+              }}
+              color="#414141"
+            >
+              days left
+            </Text>
+            <Box height="16px"></Box>
             <Box direction="row">
-              <Box>
-                {referralsWithAmounts.length === 0 && (
-                  <Box>
-                    <Text size="16px" color="#818181">
-                      You don't have referrals
-                    </Text>
-                  </Box>
-                )}
-                {referralsWithAmounts.length > 0 && (
-                  <ReferralsList
-                    items={referralsWithAmounts}
-                    zeroAmounts={zeroAmounts}
-                  />
-                )}
-              </Box>
-              <Box
-                style={{
-                  minWidth: "15px",
-                }}
-              />
-              <Box
-                margin={{
-                  left: "auto",
-                }}
-                alignSelf="start"
-              >
-                <Box
-                  round="4px"
-                  width="234px"
-                  style={{
-                    boxShadow: "0px 4px 8px rgba(97, 97, 97, 0.14)",
-                    background: "white",
-                  }}
-                  pad="16px 20px"
-                >
-                  <Box>
-                    <Text size="14px" color="#616161" weight={600}>
-                      1 lvl referrals count
-                    </Text>
-                    <Box height="4px" />
-                    <Text color="#2AB930" size="24px" weight={500}>
-                      {lvl1ReferralsCount}
-                    </Text>
-                    <Box height="4px" />
-                  </Box>
-                  <Box background="#E0E0E0" height="1px" />
-                  <Box>
-                    <Box height="8px" />
-                    <Text size="14px" color="#616161" weight={600}>
-                      2 lvl referrals count
-                    </Text>
-                    <Box height="4px" />
-                    <Text color="#1672EC" size="24px" weight={500}>
-                      {lvl2ReferralsCount}
-                    </Text>
-                    <Box height="4px" />
-                  </Box>
-                  <Box background="#E0E0E0" height="1px" />
-                  <Box>
-                    <Box height="8px" />
-                    <Text size="14px" color="#616161" weight={600}>
-                      You were reffered by
-                    </Text>
-                    <Box height="4px" />
-                    <Text color="#414141" size="24px" weight={500}>
-                      {youReferredBy ? youReferredBy.slice(0, 11) + "..." : "-"}
-                    </Text>
-                  </Box>
-                </Box>
-                {/*  */}
-                <Box height="16px" />
-                <Box
-                  direction="row"
-                  align="center"
-                  // justify="center"
-                  pad={{
-                    left: "16px",
-                  }}
-                  style={{
-                    cursor: "pointer",
-                    userSelect: "none",
-                  }}
-                  onClick={() => handleSetWithReward()}
-                >
-                  <CheckBox active={withReward} onClick={() => {}} />
-                  <Box width="10px" />
-                  <Text size="13px" color="#3E3E3E">
-                    {`referrals with reward`}
-                  </Text>
-                </Box>
-              </Box>
-            </Box>
-          )}
-        </Box>
-      </Box>
-    </Box>
-  );
-}
-
-function useURLQuery() {
-  return new URLSearchParams(useLocation().search);
-}
-
-const TEAM_REF_ADDRESS = "0xC427a912E0B19f082840A0045E430dE5b8cB1f65";
-
-const findFirstRef = () => {
-  const cookie = document.cookie
-    .split(";")
-    .map(item => item.trim().split("="))
-    .filter(item => item.length > 0)
-    .find(item => item[0] === "ref");
-  return cookie && cookie.length === 2 ? cookie[1] : undefined;
-};
-
-function BecomeReferral() {
-  const { account, activate, chainId, connector, error } = useWeb3React();
-  const deftContract = useDeftContract();
-
-  const query = useURLQuery();
-
-  const _referrer = query.get("ref") || findFirstRef() || "";
-  const isValidAddress = ethers.utils.isAddress(_referrer);
-
-  useEffect(() => {
-    if (isValidAddress) {
-      document.cookie = `ref=${_referrer}`;
-    }
-  }, [_referrer]);
-
-  const referrer = isValidAddress ? _referrer : TEAM_REF_ADDRESS;
-
-  const [loader, setLoader] = useState(false);
-
-  const {
-    data: data1,
-    loading: loading1,
-    error: error1,
-  } = useUserReferrals2lvlQuery({
-    variables: {
-      address: account?.toLowerCase() || "",
-    },
-    skip: !account,
-  });
-
-  const isMe = ethers.utils.isAddress(account || "");
-
-  const hasReferrer = ethers.utils.isAddress(data1?.user?.referrer?.id || "");
-  const hasReferrerAddress = data1?.user?.referrer?.id || "";
-
-  console.log({
-    hasReferrer,
-    isMe,
-    loading1,
-  });
-
-  const becomeReferral = async (referrer: string, account: string) => {
-    try {
-      setLoader(true);
-      const result = await deftContract.registerReferral(referrer);
-
-      txnToast(1, "pending", "Transaction Pending", result.hash);
-
-      const result2 = await result.wait();
-
-      let i = 3;
-      // todo: maybe just update it locally ?
-      while (true) {
-        const resultQuery = await nobotsClient.query({
-          query: UserReferrals2lvlDocument,
-          variables: {
-            address: account.toLowerCase(),
-          },
-          fetchPolicy: "network-only",
-        });
-
-        if (resultQuery?.data?.user) {
-          break;
-        }
-
-        i--;
-
-        if (i === 0) {
-          break;
-        }
-
-        await new Promise(r => setTimeout(r, 300));
-      }
-
-      setLoader(false);
-
-      if (result2.status === 1) {
-        txnToast(
-          1,
-          "success",
-          "Transaction Successful",
-          result2.transactionHash,
-        );
-      } else {
-        txnToast(1, "fail", "Transaction Canceled", result2.transactionHash);
-      }
-
-      console.log(result2.status); // 1 = 0k, 0 = failure
-    } catch (error) {
-      setLoader(false);
-
-      const serializedError = serializeError(error);
-      const originalErrorMessage = (serializedError.data as any)?.originalError
-        ?.error?.message;
-
-      if (originalErrorMessage && originalErrorMessage.includes("!")) {
-        const message = originalErrorMessage.split("!")[1];
-
-        // @ts-ignore
-        const readableError = readableErrors[message] || "Unknown error";
-        txnToast(1, "error", "Transaction Error", undefined, readableError);
-      } else {
-        txnToast(1, "fail", "Transaction Canceled");
-      }
-
-      // console.log(error);
-    }
-  };
-
-  // useEffect(() => {
-  //   txnToast(1, "pending", "Transaction Pending", "a");
-  //   txnToast(1, "success", "Transaction Successful", "a");
-  //   txnToast(1, "fail", "Transaction Canceled");
-  //   txnToast(
-  //     1,
-  //     "error",
-  //     "Transaction Error",
-  //     undefined,
-  //     "Self referring is forbidden",
-  //   );
-  // }, []);
-
-  return (
-    <Box
-      direction="row"
-      justify="center"
-      // align="center"
-      style={{
-        // margin: "0 auto",
-        width: "100%",
-        padding: "50px 10px",
-      }}
-    >
-      <LeftMenu />
-      <Box
-        // justify="center"
-        // align="center"
-        style={{
-          // padding: "50px 0px",
-          // width: "1238px",
-
-          width: "976px",
-          minWidth: "776px",
-        }}
-      >
-        <Box width="100%">
-          <Box margin={{ bottom: "30px" }} direction="row" align="center">
-            <Box>
-              <Text
-                size="22px"
-                weight={800}
-                color="#414141"
-                style={{
-                  lineHeight: "130%",
-                }}
-              >
-                Become Referral
+              <Text size="16px" color="#818181" textAlign="center">
+                Cycle: <strong>{cycleN === 4 ? "finish" : cycleN}</strong>
               </Text>
-
-              {hasReferrer ? (
-                <Text size="16px" weight={400} color="#818181">
-                  You were referred by{" "}
-                  <Text size="14px" weight={600} color="#414141">
-                    {hasReferrerAddress.slice(0, 8) +
-                      "..." +
-                      hasReferrerAddress.slice(
-                        hasReferrerAddress.length - 6,
-                        hasReferrerAddress.length,
-                      )}
-                  </Text>
-                </Text>
-              ) : !hasReferrer && isMe && !loading1 ? (
-                <Text size="16px" weight={400} color="#818181">
-                  You'll become referral for{" "}
-                  <Text size="14px" weight={600} color="#414141">
-                    {referrer.slice(0, 8) +
-                      "..." +
-                      referrer.slice(referrer.length - 6, referrer.length)}
-                  </Text>
-                </Text>
-              ) : (
-                <Text size="16px" weight={400} color="#818181">
-                  ...
-                </Text>
-              )}
+              <Box width="22px" align="center" justify="center">
+                <Box
+                  round="50%"
+                  width="4px"
+                  height="4px"
+                  background="#dbdbdb"
+                ></Box>
+              </Box>
+              <Text size="16px" color="#818181" textAlign="center">
+                Tax: <strong>{cycleTax.toFixed(2)}%</strong>
+              </Text>
             </Box>
-
+            <Box height="22px" />
             <Box
-              margin={{
-                left: "auto",
+              height="16px"
+              width="600px"
+              round="6px"
+              background="#dddddd"
+              style={{
+                position: "relative",
               }}
             >
-              {account ? (
-                DEPLOYED_CHAIN === chainId ? (
-                  <Text size="14px" weight={600} color="#414141">
-                    {account.slice(0, 8) +
-                      "..." +
-                      account.slice(account.length - 6, account.length)}
-                  </Text>
-                ) : (
-                  <Box pad="4px 8px" round="6px" background="#F83245">
-                    <Text size="16px" weight={600}>
-                      Wrong Network
-                    </Text>
-                  </Box>
-                )
-              ) : (
-                <HoveredElement
-                  render={binder => {
-                    return (
+              <Box
+                height="16px"
+                width={progress + "%"}
+                round="6px"
+                background="#44d6ad"
+              ></Box>
+              {[0, 33.33, 66.66, 100].map((proc, i) => {
+                if (progress >= proc) {
+                  return (
+                    <React.Fragment>
                       <Box
-                        {...binder.bind}
-                        height="40px"
-                        round="8px"
-                        background={binder.hovered ? "#bcdaf7" : "#CDE6FE"}
+                        height="30px"
+                        width="30px"
+                        background="#44d6ad"
                         align="center"
                         justify="center"
                         style={{
-                          minWidth: "132px",
-                          cursor: "pointer",
-                          boxShadow:
-                            "0px 1px 2px rgba(97, 97, 97, 0.2), 0px 2px 4px rgba(97, 97, 97, 0.2)",
+                          position: "absolute",
+                          content: "",
+                          left: `calc(${proc}% - 12px)`,
+                          bottom: "-6px",
+                          boxShadow: "1px 2px 5px #c2d1cd",
                         }}
-                        pad="0px 16px"
-                        onClick={() => {
-                          activate(injected);
+                        round="50%"
+                      >
+                        <Box height="14px">
+                          <CheckIcon fill="white" />
+                        </Box>
+                      </Box>
+                      <Box
+                        style={{
+                          position: "absolute",
+                          content: "",
+                          left: `calc(${proc}% - 5px)`,
+                          bottom: "-35px",
                         }}
                       >
-                        <Text
-                          size="16px"
-                          color={binder.hovered ? "#070F31" : "#070F31"}
-                          style={{
-                            letterSpacing: "0.05em",
-                          }}
-                          weight={600}
-                        >
-                          Connect
+                        <Text size="15px" weight={700} color="#414141">
+                          {procMap[i]}%
                         </Text>
                       </Box>
-                    );
-                  }}
-                />
-              )}
-            </Box>
-          </Box>
-          <Box align="center">
-            <Text
-              size="16px"
-              color="#818181"
-              style={{
-                width: "700px",
-                // textIndent: "40px",
-              }}
-              textAlign="center"
-            >
-              {hasReferrer ? (
-                <>
-                  You were referred by
-                  <br />
-                  <b>{hasReferrerAddress}</b> address.
-                  <br />
-                  Your current tax: 5%
-                  <br />
-                  Enjoy referral tax discount!
-                </>
-              ) : !hasReferrer && isMe && !loading1 ? (
-                <>
-                  Your current tax: 10%
-                  <br />
-                  Becoming a referral gives you 50% reduced tax (5% instead of
-                  10% tax).
-                  <br />
-                  <br />
-                  To become a referral of
-                  <br />
-                  <b>{referrer}</b> <br />
-                  you will have to submit transaction on-chain using the button
-                  below.
-                </>
-              ) : (
-                <>...</>
-              )}
-            </Text>
-            <Box height={"26px"} />
-            {!hasReferrer && isMe && !loading1 && (
-              <HoveredElement
-                render={binder => {
-                  return (
-                    <Box
-                      {...binder.bind}
-                      height="36px"
-                      round="8px"
-                      background={binder.hovered ? "#d1e0f5" : "#E8F1FE"}
-                      align="center"
-                      justify="center"
-                      style={{
-                        minWidth: "132px",
-                        cursor: "pointer",
-                        boxShadow:
-                          "0px 1px 2px rgba(97, 97, 97, 0.2), 0px 2px 4px rgba(97, 97, 97, 0.2)",
-                        ...(loader
-                          ? {
-                              pointerEvents: "none",
-                            }
-                          : {}),
-                      }}
-                      pad="0px 16px"
-                      onClick={() => becomeReferral(referrer, account || "")}
-                    >
-                      {loader && (
-                        <div
-                          className="loader"
-                          style={{
-                            borderTop: "4px solid #26436a",
-                          }}
-                        ></div>
-                      )}
-
-                      {!loader && (
-                        <Text
-                          size="14px"
-                          color={binder.hovered ? "#1672EC" : "#1672EC"}
-                          style={{
-                            letterSpacing: "0.05em",
-                          }}
-                          weight={600}
-                        >
-                          Become referral
-                        </Text>
-                      )}
-                    </Box>
+                    </React.Fragment>
                   );
+                }
+                return (
+                  <React.Fragment>
+                    <Box
+                      height="30px"
+                      width="30px"
+                      background="#dddddd"
+                      style={{
+                        position: "absolute",
+                        content: "",
+                        left: `calc(${proc}% - 12px)`,
+                        bottom: "-6px",
+                        border: "6px solid white",
+                        boxShadow: "1px 2px 5px #c2d1cd",
+                      }}
+                      round="50%"
+                    ></Box>
+                    <Box
+                      style={{
+                        position: "absolute",
+                        content: "",
+                        left: `calc(${proc}% - 5px)`,
+                        bottom: "-35px",
+                      }}
+                    >
+                      <Text size="15px" weight={700} color="#414141">
+                        {procMap[i]}%
+                      </Text>
+                    </Box>
+                  </React.Fragment>
+                );
+              })}
+            </Box>
+            <Box height={"48px"} />
+            <Text
+              size="15px"
+              style={{
+                width: "600px",
+              }}
+              color="#414141"
+            >
+              <span
+                style={{
+                  textIndent: "30px",
+                  marginBottom: "10px",
+                  display: "inline-block",
                 }}
-              />
-            )}
+              >
+                There are 3 cycles of taxes starting from the time you buy:{" "}
+              </span>
+              <Box direction="row" margin={{ bottom: "4px" }}>
+                <Box
+                  style={{
+                    display: "inline-flex",
+                  }}
+                  margin={{ left: "10px", right: "16px" }}
+                  alignSelf="center"
+                  // align="center"
+                  // justify="center"
+                >
+                  <Box
+                    background="#44d6ad"
+                    width="6px"
+                    height="6px"
+                    round={"50%"}
+                  ></Box>
+                </Box>
+                Cycle 1 (4 months)
+              </Box>
+              <span
+                style={{
+                  textIndent: "30px",
+                  marginBottom: "10px",
+                  display: "inline-block",
+                }}
+              >
+                This starts when you buy with a tax of 15% reducing linearly to
+                8%
+              </span>
+              <br />
+              <Box direction="row" margin={{ bottom: "4px" }}>
+                <Box
+                  style={{
+                    display: "inline-flex",
+                  }}
+                  margin={{ left: "10px", right: "16px" }}
+                  alignSelf="center"
+                  // align="center"
+                  // justify="center"
+                >
+                  <Box
+                    background="#44d6ad"
+                    width="6px"
+                    height="6px"
+                    round={"50%"}
+                  ></Box>
+                </Box>
+                Cycle 2 (4 months)
+              </Box>
+              <span
+                style={{
+                  textIndent: "30px",
+                  marginBottom: "10px",
+                  display: "inline-block",
+                }}
+              >
+                Tax reduces linearly from 8 % to 3%
+              </span>
+              <br></br>
+              <Box direction="row" margin={{ bottom: "4px" }}>
+                <Box
+                  style={{
+                    display: "inline-flex",
+                  }}
+                  margin={{ left: "10px", right: "16px" }}
+                  alignSelf="center"
+                  // align="center"
+                  // justify="center"
+                >
+                  <Box
+                    background="#44d6ad"
+                    width="6px"
+                    height="6px"
+                    round={"50%"}
+                  ></Box>
+                </Box>
+                Cycle 3 (4 months)
+              </Box>
+              <span
+                style={{
+                  textIndent: "30px",
+                  marginBottom: "10px",
+                  display: "inline-block",
+                }}
+              >
+                Tax reduces linearly from 3% to 0%
+              </span>
+              <br></br>
+            </Text>
+            <Box height="8px"></Box>
+            <Box pad="8px 14px" background="#fff2da" round="12px" width="600px">
+              <Text size="14px" textAlign="center">
+                This tax system is designed to protect the community/investors
+                from pump and dump schemes and also to eliminate taxes for long
+                term investors
+              </Text>
+            </Box>
           </Box>
         </Box>
       </Box>
@@ -1118,15 +713,7 @@ function App() {
               <ModalsState>
                 <ModalsCreatedApp />
                 <ToastContainer position={"bottom-left"} />
-
-                <Route exact path="/" component={ReferrerRewards} />
-                <Route
-                  exact
-                  path="/become-referral"
-                  component={BecomeReferral}
-                />
-                {/* <Route exact path="/hello" ={HelloApp} />
-                <Route exact path="/modals" component={ModalsAppDemo} /> */}
+                <Route exact path="/" component={TaxCycle} />
               </ModalsState>
             </ApolloProvider>
           </Router>
