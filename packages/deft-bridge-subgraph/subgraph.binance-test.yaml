@@ -6,7 +6,7 @@ dataSources:
     name: SourceChain
     network: binance-test
     source:
-      address: "0xBBECB9CCb15Cb55A20933861D04a1BC0Fe37c559"
+      address: "0x9fd0a5B42C7E536d9AFaF42707C80f195612601c"
       abi: CrossChainBridge
       startBlock: 9617294
     mapping:
