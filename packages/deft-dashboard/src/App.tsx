@@ -32,7 +32,7 @@ import {
 } from "./icons";
 import { Logo } from "./logo";
 import { nobotsClient } from "./shared/client";
-import { injected } from "./shared/connectors";
+import { injected, supportedChainIds } from "./shared/connectors";
 import { HoveredElement } from "./shared/hooks";
 import { ModalsCreatedApp, ModalsState } from "./shared/modals";
 import { useNobotsContract, useTokenContract } from "./shared/useContract";
@@ -43,7 +43,7 @@ dayjs.extend(isYesterday);
 dayjs.extend(isToday);
 
 const oneE18 = BigNumber.from("1000000000000000000");
-const DEPLOYED_CHAIN = 97;
+// const DEPLOYED_CHAINS = 97;
 // const DEPLOYED_CHAIN = 42;
 // const DEPLOYED_CHAIN = 1;
 // const DEPLOYED_CHAIN = 42;
@@ -286,7 +286,7 @@ function TaxCycle() {
     if (account) {
       fire(account);
     }
-  }, [account]);
+  }, [account, chainId]);
 
   const query = useURLQuery();
 
@@ -363,7 +363,7 @@ function TaxCycle() {
             >
               <>
                 {account ? (
-                  DEPLOYED_CHAIN === chainId ? (
+                  supportedChainIds.includes(chainId!) ? (
                     <Text size="14px" weight={600} color="#414141">
                       {account.slice(0, 8) +
                         "..." +
