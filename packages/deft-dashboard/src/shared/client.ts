@@ -1,5 +1,6 @@
 import { ApolloClient, from, HttpLink, InMemoryCache } from "@apollo/client";
 
+// TODO: for each chain
 export const nobotsClient = new ApolloClient({
   link: from([
     // new RetryLink(),

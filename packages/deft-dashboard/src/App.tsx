@@ -28,6 +28,7 @@ import {
   ReferralsIcon,
   TelegramIcon,
   TwitterIcon,
+  UniswapBuyIcon,
   YoutubeIcon,
 } from "./icons";
 import { Logo } from "./logo";
@@ -168,6 +169,50 @@ function LeftMenu() {
           }}
         >
           Cross-Chain Bridge
+        </Text>
+      </Box>
+      <Box
+        height="40px"
+        direction="row"
+        align="center"
+        onClick={() =>
+          window.open(
+            "https://app.uniswap.org/#/swap?inputCurrency=ETH&outputCurrency=0xdef1fac7Bf08f173D286BbBDcBeeADe695129840&use=V2",
+            "_blank",
+          )
+        }
+      >
+        <Box
+          height="20px"
+          width="20px"
+          align="center"
+          justify="center"
+          margin={{ left: "10px", right: "16px" }}
+          style={{
+            position: "relative",
+          }}
+        >
+          <Box
+            style={{
+              position: "absolute",
+              left: "-6px",
+              top: "-6px",
+            }}
+            width="30px"
+            height="30px"
+          >
+            <UniswapBuyIcon />
+          </Box>
+        </Box>
+        <Text
+          weight={500}
+          size="15px"
+          style={{
+            lineHeight: "150%",
+            color: "#414141",
+          }}
+        >
+          Uniswap Buy
         </Text>
       </Box>
       <Box height="28px" justify="center">

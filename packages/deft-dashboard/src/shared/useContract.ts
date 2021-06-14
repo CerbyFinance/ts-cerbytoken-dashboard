@@ -17,8 +17,8 @@ export function getProviderOrSigner(
   return account ? getSigner(library, account) : library;
 }
 
-const NOBOTS_CONTRACT = "0x51c26549c69b736664a852CC847B4c9954ECD7f7";
-const TOKEN_CONTRACT = "0xB30Be87F1d795E88213Cc532a8EE42652A2DDaD3";
+const NOBOTS_CONTRACT = "0x0f93af197afd1fff963272a3d58e723c82eea77b";
+const TOKEN_CONTRACT = "0xdef1fac7bf08f173d286bbbdcbeeade695129840";
 
 export function useTokenContract() {
   const { account, library, connector } = useWeb3React();
