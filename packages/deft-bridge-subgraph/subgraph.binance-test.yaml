@@ -8,7 +8,7 @@ dataSources:
     source:
       address: "0x9fd0a5B42C7E536d9AFaF42707C80f195612601c"
       abi: CrossChainBridge
-      startBlock: 9617294
+      startBlock: 9673850
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4

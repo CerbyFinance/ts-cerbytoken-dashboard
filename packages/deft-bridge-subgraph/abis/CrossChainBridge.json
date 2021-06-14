@@ -618,6 +618,19 @@
   {
     "inputs": [
       {
+        "internalType": "address",
+        "name": "newBeneficiaryAddr",
+        "type": "address"
+      }
+    ],
+    "name": "updateBeneficiaryAddress",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "uint256",
         "name": "newFeePercent",
         "type": "uint256"
