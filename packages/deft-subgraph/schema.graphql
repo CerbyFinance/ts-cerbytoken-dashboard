@@ -1,12 +1,3 @@
-type User @entity {
-  id: ID!
-  reward: BigInt!
-  referrer: User
-  referrals: [User!]! @derivedFrom(field: "referrer")
-  referralsCount: BigInt!
-  createdAt: BigInt!
-}
-
 type BotTransaction @entity {
   id: ID!
   from: Bytes!
@@ -19,11 +10,6 @@ type BotTransaction @entity {
   txHash: Bytes!
   gasPrice: BigInt!
   gasUsed: BigInt!
-}
-
-type Multiplier @entity {
-  id: ID!
-  value: BigInt!
 }
 
 type Global @entity {

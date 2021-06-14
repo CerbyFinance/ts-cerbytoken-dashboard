@@ -6,32 +6,22 @@ dataSources:
     name: NoBotsTech
     network: mainnet
     source:
-      address: "0xDEF1Fa09538Ddd4CFe983d550D917Cd39D6ffE28"
+      address: "0x0f93aF197AFD1Fff963272A3D58E723c82EEA77b"
       abi: NoBotsTech
-      startBlock: 12494428
+      startBlock: 12626729
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
       language: wasm/assemblyscript
       entities:
-        - User
         - BotTransaction
-        - Multiplier
         - Global
       abis:
         - name: NoBotsTech
           file: ./abis/NoBotsTech.json
       eventHandlers:
-        - event: MultiplierUpdated(uint256)
-          handler: handleMultiplierUpdated
         - event: BotTransactionDetected(address,address,uint256,uint256)
           handler: handleBotTransactionDetected
-        - event: ReferrerRewardUpdated(address,uint256)
-          handler: handleReferrerRewardUpdated
-        - event: ReferralRegistered(address,address)
-          handler: handleReferralRegistered
-        - event: ReferrerReplaced(address,address,address)
-          handler: handleReferrerReplaced
       file: ./src/mapping.ts
   - kind: ethereum/contract
     name: DefiFactoryToken
@@ -39,7 +29,7 @@ dataSources:
     source:
       address: "0xdef1fac7Bf08f173D286BbBDcBeeADe695129840"
       abi: DefiFactoryToken
-      startBlock: 12494175
+      startBlock: 12626729
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -52,4 +42,6 @@ dataSources:
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleDefiFactoryTransfer
+        - event: BurnedByBridge(address,uint256)
+          handler: handleBurnedByBridge
       file: ./src/mapping.ts

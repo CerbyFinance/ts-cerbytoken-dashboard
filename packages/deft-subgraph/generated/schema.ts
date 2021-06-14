@@ -12,90 +12,6 @@ import {
   BigDecimal
 } from "@graphprotocol/graph-ts";
 
-export class User extends Entity {
-  constructor(id: string) {
-    super();
-    this.set("id", Value.fromString(id));
-  }
-
-  save(): void {
-    let id = this.get("id");
-    assert(id !== null, "Cannot save User entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save User entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("User", id.toString(), this);
-  }
-
-  static load(id: string): User | null {
-    return store.get("User", id) as User | null;
-  }
-
-  get id(): string {
-    let value = this.get("id");
-    return value.toString();
-  }
-
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
-  }
-
-  get reward(): BigInt {
-    let value = this.get("reward");
-    return value.toBigInt();
-  }
-
-  set reward(value: BigInt) {
-    this.set("reward", Value.fromBigInt(value));
-  }
-
-  get referrer(): string | null {
-    let value = this.get("referrer");
-    if (value === null || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toString();
-    }
-  }
-
-  set referrer(value: string | null) {
-    if (value === null) {
-      this.unset("referrer");
-    } else {
-      this.set("referrer", Value.fromString(value as string));
-    }
-  }
-
-  get referrals(): Array<string> {
-    let value = this.get("referrals");
-    return value.toStringArray();
-  }
-
-  set referrals(value: Array<string>) {
-    this.set("referrals", Value.fromStringArray(value));
-  }
-
-  get referralsCount(): BigInt {
-    let value = this.get("referralsCount");
-    return value.toBigInt();
-  }
-
-  set referralsCount(value: BigInt) {
-    this.set("referralsCount", Value.fromBigInt(value));
-  }
-
-  get createdAt(): BigInt {
-    let value = this.get("createdAt");
-    return value.toBigInt();
-  }
-
-  set createdAt(value: BigInt) {
-    this.set("createdAt", Value.fromBigInt(value));
-  }
-}
-
 export class BotTransaction extends Entity {
   constructor(id: string) {
     super();
@@ -196,46 +112,6 @@ export class BotTransaction extends Entity {
 
   set gasUsed(value: BigInt) {
     this.set("gasUsed", Value.fromBigInt(value));
-  }
-}
-
-export class Multiplier extends Entity {
-  constructor(id: string) {
-    super();
-    this.set("id", Value.fromString(id));
-  }
-
-  save(): void {
-    let id = this.get("id");
-    assert(id !== null, "Cannot save Multiplier entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save Multiplier entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("Multiplier", id.toString(), this);
-  }
-
-  static load(id: string): Multiplier | null {
-    return store.get("Multiplier", id) as Multiplier | null;
-  }
-
-  get id(): string {
-    let value = this.get("id");
-    return value.toString();
-  }
-
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
-  }
-
-  get value(): BigInt {
-    let value = this.get("value");
-    return value.toBigInt();
-  }
-
-  set value(value: BigInt) {
-    this.set("value", Value.fromBigInt(value));
   }
 }
 

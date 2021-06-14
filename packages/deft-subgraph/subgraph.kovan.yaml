@@ -1,6 +1,6 @@
 specVersion: 0.0.2
 schema:
-  file: schema.graphql
+  file: ./schema.graphql
 dataSources:
   - kind: ethereum/contract
     name: NoBotsTech
@@ -20,7 +20,7 @@ dataSources:
         - Global
       abis:
         - name: NoBotsTech
-          file: NoBotsTech/abis/NoBotsTech.json
+          file: ./abis/NoBotsTech.json
       eventHandlers:
         - event: MultiplierUpdated(uint256)
           handler: handleMultiplierUpdated
@@ -32,7 +32,7 @@ dataSources:
           handler: handleReferralRegistered
         - event: ReferrerReplaced(address,address,address)
           handler: handleReferrerReplaced
-      file: NoBotsTech/NoBotsTech.wasm
+      file: ./src/mapping.ts
   - kind: ethereum/contract
     name: DefiFactoryToken
     network: kovan
@@ -48,8 +48,8 @@ dataSources:
         - Global
       abis:
         - name: DefiFactoryToken
-          file: DefiFactoryToken/abis/DefiFactoryToken.json
+          file: ./abis/DefiFactoryToken.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleDefiFactoryTransfer
-      file: NoBotsTech/NoBotsTech.wasm
+      file: ./src/mapping.ts
