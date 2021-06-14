@@ -9,11 +9,12 @@ import { ZERO_BI } from "./helpers";
 function getOrCreateGlobal(): Global | null {
   let global = Global.load("1");
 
-  if (!global) {
+  if (global == null) {
     global = new Global("1");
     global.botTaxed = ZERO_BI;
     global.userTaxed = ZERO_BI;
     global.totalTaxed = ZERO_BI;
+    global.save();
   }
 
   return global;
