@@ -1,13 +1,13 @@
 specVersion: 0.0.2
 schema:
-  file: ./schema.graphql
+  file: ./schema-binance.graphql
 dataSources:
   - kind: ethereum/contract
-    name: UniswapDeft
+    name: PancakeswapDeft
     network: binance
     source:
       address: "0x077324B361272dde2D757f8Ec6Eb59daAe794519"
-      abi: UniswapPair
+      abi: PancakeswapPair
       startBlock: 8284849
     mapping:
       kind: ethereum/events
@@ -17,20 +17,20 @@ dataSources:
         - Token
         - Swap
       abis:
-        - name: UniswapPair
-          file: ./abis/UniswapPair.json
+        - name: PancakeswapPair
+          file: ./abis/PancakeswapPair.json
       eventHandlers:
         - event: Sync(uint112,uint112)
           handler: handleSync
         - event: Swap(indexed address,uint256,uint256,uint256,uint256,indexed address)
           handler: handleSwap
-      file: ./src/mapping-uniswapDeft.ts
+      file: ./src/mapping-pancakeswapDeft.ts
   - kind: ethereum/contract
-    name: UniswapUsdt
+    name: PancakeswapUsdt
     network: binance
     source:
-      address: "0xe9e7cea3dedca5984780bafc599bd69add087d56"
-      abi: UniswapPair
+      address: "0x58F876857a02D6762E0101bb5C46A8c1ED44Dc16"
+      abi: PancakeswapPair
       startBlock: 8284849
     mapping:
       kind: ethereum/events
@@ -39,9 +39,9 @@ dataSources:
       entities:
         - Token
       abis:
-        - name: UniswapPair
-          file: ./abis/UniswapPair.json
+        - name: PancakeswapPair
+          file: ./abis/PancakeswapPair.json
       eventHandlers:
         - event: Sync(uint112,uint112)
           handler: handleSync
-      file: ./src/mapping-uniswapUsdt.ts
+      file: ./src/mapping-pancakeswapUsdt.ts

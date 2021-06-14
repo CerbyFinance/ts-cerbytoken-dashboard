@@ -4,11 +4,11 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: UniswapDeft
-    network: mainnet
+    network: binance
     source:
-      address: "0xFa6687922BF40FF51Bcd45F9FD339215a4869D82"
+      address: "0x077324B361272dde2D757f8Ec6Eb59daAe794519"
       abi: UniswapPair
-      startBlock: 12495000
+      startBlock: 8284849
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -27,11 +27,11 @@ dataSources:
       file: UniswapDeft/UniswapDeft.wasm
   - kind: ethereum/contract
     name: UniswapUsdt
-    network: mainnet
+    network: binance
     source:
-      address: "0x0d4a11d5EEaaC28EC3F61d100daF4d40471f1852"
+      address: "0x58F876857a02D6762E0101bb5C46A8c1ED44Dc16"
       abi: UniswapPair
-      startBlock: 12495000
+      startBlock: 8284849
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4

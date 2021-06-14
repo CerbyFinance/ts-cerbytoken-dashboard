@@ -96,13 +96,13 @@ export class Swap extends Entity {
     this.set("to", Value.fromBytes(value));
   }
 
-  get deftInEth(): BigDecimal {
-    let value = this.get("deftInEth");
+  get deftInBnb(): BigDecimal {
+    let value = this.get("deftInBnb");
     return value.toBigDecimal();
   }
 
-  set deftInEth(value: BigDecimal) {
-    this.set("deftInEth", Value.fromBigDecimal(value));
+  set deftInBnb(value: BigDecimal) {
+    this.set("deftInBnb", Value.fromBigDecimal(value));
   }
 
   get deftInUsd(): BigDecimal {
@@ -123,13 +123,13 @@ export class Swap extends Entity {
     this.set("amountDeft", Value.fromBigDecimal(value));
   }
 
-  get amountDeftInEth(): BigDecimal {
-    let value = this.get("amountDeftInEth");
+  get amountDeftInBnb(): BigDecimal {
+    let value = this.get("amountDeftInBnb");
     return value.toBigDecimal();
   }
 
-  set amountDeftInEth(value: BigDecimal) {
-    this.set("amountDeftInEth", Value.fromBigDecimal(value));
+  set amountDeftInBnb(value: BigDecimal) {
+    this.set("amountDeftInBnb", Value.fromBigDecimal(value));
   }
 
   get amountDeftInUsd(): BigDecimal {
@@ -141,13 +141,13 @@ export class Swap extends Entity {
     this.set("amountDeftInUsd", Value.fromBigDecimal(value));
   }
 
-  get transactionFeeInEth(): BigDecimal {
-    let value = this.get("transactionFeeInEth");
+  get transactionFeeInBnb(): BigDecimal {
+    let value = this.get("transactionFeeInBnb");
     return value.toBigDecimal();
   }
 
-  set transactionFeeInEth(value: BigDecimal) {
-    this.set("transactionFeeInEth", Value.fromBigDecimal(value));
+  set transactionFeeInBnb(value: BigDecimal) {
+    this.set("transactionFeeInBnb", Value.fromBigDecimal(value));
   }
 
   get transactionFeeInUsd(): BigDecimal {
@@ -215,45 +215,5 @@ export class Token extends Entity {
 
   set price(value: BigDecimal) {
     this.set("price", Value.fromBigDecimal(value));
-  }
-}
-
-export class Global extends Entity {
-  constructor(id: string) {
-    super();
-    this.set("id", Value.fromString(id));
-  }
-
-  save(): void {
-    let id = this.get("id");
-    assert(id !== null, "Cannot save Global entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save Global entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("Global", id.toString(), this);
-  }
-
-  static load(id: string): Global | null {
-    return store.get("Global", id) as Global | null;
-  }
-
-  get id(): string {
-    let value = this.get("id");
-    return value.toString();
-  }
-
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
-  }
-
-  get totalTaxed(): BigInt {
-    let value = this.get("totalTaxed");
-    return value.toBigInt();
-  }
-
-  set totalTaxed(value: BigInt) {
-    this.set("totalTaxed", Value.fromBigInt(value));
   }
 }
