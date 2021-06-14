@@ -14,32 +14,43 @@ const ESTIMATE_MULT = 1.2;
 const makeRemoteUrl = (chain: string) =>
   `http://172.17.0.1:8000/subgraphs/name/deft/deft-bridge-${chain}`;
 
+// const makeRemoteUrl = (chain: string) =>
+//   `http://localhost:8000/subgraphs/name/deft/deft-bridge-${chain}`;
+
 const { PRIVATE_KEY } = process.env;
 
-// const chains = ["ropsten", "kovan"];
-const chains = ["kovan", "binance-test"];
+// const chains = ["kovan", "binance-test"];
+const chains = ["binance", "ethereum"];
 
 const nodeUrlByChain = {
+  ethereum: "https://secret:X4gDeGtfQy2M@eth-node.wisetoken.me", // 1
+  binance: "https://secret:X4gDeGtfQy2M@bsc-node.valar-solutions.com", // 56
   ropsten: "https://ropsten.infura.io/v3/6af3a6f4302246e8bbd4e69b5bfc9e33", // 3
   kovan: "https://kovan.infura.io/v3/6af3a6f4302246e8bbd4e69b5bfc9e33", // 42
   ["binance-test"]: "https://data-seed-prebsc-1-s1.binance.org:8545/", // 97
 };
 
 const contractByChain = {
+  ethereum: "0xc89302c356A100A01bd235295b62eeA4D19CB6A5",
+  binance: "0xc89302c356A100A01bd235295b62eeA4D19CB6A5",
   ropsten: "0x9fd0a5B42C7E536d9AFaF42707C80f195612601c",
   kovan: "0x9fd0a5B42C7E536d9AFaF42707C80f195612601c",
   ["binance-test"]: "0x9fd0a5B42C7E536d9AFaF42707C80f195612601c",
 };
 
 const chainToId = {
+  ethereum: 1,
+  binance: 56,
   ropsten: 3,
   kovan: 42,
   ["binance-test"]: 97,
 };
 
 const allowedPaths = [
-  ["kovan", "binance-test"],
-  ["binance-test", "kovan"],
+  ["binance", "ethereum"],
+  ["ethereum", "binance"],
+  // ["kovan", "binance-test"],
+  // ["binance-test", "kovan"],
 ] as [string, string][];
 
 const applyMnemonicToWeb3 = (web3: Web3) => {
@@ -81,6 +92,42 @@ const sdkAndWeb3ByChain = Object.fromEntries(
     ];
   }),
 );
+
+const approveOne = async (
+  contract: CrossChainBridge,
+  web3: Web3,
+  from: string,
+  proofHash: string,
+) => {
+  const preparedMethod = contract.methods.markTransactionAsApproved(proofHash);
+
+  const estimatedGas = await preparedMethod.estimateGas({
+    from,
+  });
+
+  const gasPrice = await web3.eth.getGasPrice();
+
+  if (Number(gasPrice) > 50000000000) {
+    return new Error("too high gwei");
+  }
+
+  const callGas = Math.floor(estimatedGas * ESTIMATE_MULT);
+
+  const result = preparedMethod.send({
+    from,
+    gas: callGas,
+    gasPrice: Number(gasPrice) + 1,
+  });
+
+  const transactionHash = await new Promise<string>(resolve => {
+    result.once("transactionHash", hash => resolve(hash));
+  });
+
+  return {
+    transactionHash,
+    pendingTx: result,
+  };
+};
 
 const approveMany = async (
   contract: CrossChainBridge,
@@ -203,12 +250,26 @@ const approver = async ([srcChain, destChain]: [string, string]) => {
       const maxProofsBlock = Math.max(...proofsBlocks);
 
       const proofsHashes = proofs.map(item => item.id);
-      const { pendingTx, transactionHash } = await approveMany(
+      const approveRes = await approveOne(
         dest.contract,
         dest.web3,
         from,
-        proofsHashes,
+        proofsHashes[0],
       );
+
+      if (approveRes instanceof Error) {
+        log(approveRes.message);
+        continue;
+      }
+
+      const { pendingTx, transactionHash } = approveRes;
+
+      // const { pendingTx, transactionHash } = await approveMany(
+      //   dest.contract,
+      //   dest.web3,
+      //   from,
+      //   proofsHashes,
+      // );
 
       const detailedTransation = [
         path,
