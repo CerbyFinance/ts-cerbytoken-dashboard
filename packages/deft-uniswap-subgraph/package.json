@@ -5,6 +5,9 @@
     "codegen": "graph codegen",
     "build": "graph build",
     "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ deft/deft-uniswap-v2",
+    "deploy-remote-binance": "graph deploy --node http://server.wisetoken.me:8020/ --ipfs http://server.wisetoken.me:5001/ deft/deft-pancakeswap-v2 ./subgraph.binance.yaml",
+    "create-remote-binance": "graph create --node http://server.wisetoken.me:8020/ deft/deft-pancakeswap-v2",
+    "remove-remote-binance": "graph remove --node http://server.wisetoken.me:8020/ deft/deft-pancakeswap-v2",
     "deploy-remote-mainnet": "graph deploy --node http://server.wisetoken.me:8020/ --ipfs http://server.wisetoken.me:5001/ deft/deft-uniswap-v2 ./subgraph.mainnet.yaml",
     "create-remote-mainnet": "graph create --node http://server.wisetoken.me:8020/ deft/deft-uniswap-v2",
     "remove-remote-mainnet": "graph remove --node http://server.wisetoken.me:8020/ deft/deft-uniswap-v2",
@@ -18,5 +21,6 @@
   "dependencies": {
     "@graphprotocol/graph-cli": "0.20.0",
     "@graphprotocol/graph-ts": "0.20.0"
-  }
+  },
+  "devDependencies": {}
 }
