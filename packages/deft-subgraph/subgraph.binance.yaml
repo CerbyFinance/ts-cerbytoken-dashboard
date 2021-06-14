@@ -4,7 +4,7 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: NoBotsTech
-    network: binance
+    network: mainnet
     source:
       address: "0x0f93aF197AFD1Fff963272A3D58E723c82EEA77b"
       abi: NoBotsTech
@@ -25,7 +25,7 @@ dataSources:
       file: ./src/mapping.ts
   - kind: ethereum/contract
     name: DefiFactoryToken
-    network: binance
+    network: mainnet
     source:
       address: "0xdef1fac7Bf08f173D286BbBDcBeeADe695129840"
       abi: DefiFactoryToken
