@@ -4,11 +4,11 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: NoBotsTech
-    network: mainnet
+    network: binance
     source:
       address: "0x0f93aF197AFD1Fff963272A3D58E723c82EEA77b"
       abi: NoBotsTech
-      startBlock: 12626729
+      startBlock: 8284849
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -25,11 +25,11 @@ dataSources:
       file: ./src/mapping.ts
   - kind: ethereum/contract
     name: DefiFactoryToken
-    network: mainnet
+    network: binance
     source:
       address: "0xdef1fac7Bf08f173D286BbBDcBeeADe695129840"
       abi: DefiFactoryToken
-      startBlock: 12626729
+      startBlock: 8284849
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
