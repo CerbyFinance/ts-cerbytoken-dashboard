@@ -9,11 +9,13 @@ export const noopApollo = new ApolloClient({
 });
 
 export const clientByChain = Object.fromEntries(
-  ["ropsten", "kovan", "binance-test"].map(chain => {
+  ["ethereum", "binance"].map(chain => {
     const client = new ApolloClient({
       link: new HttpLink({
+        uri: `/subgraphs/name/deft/deft-bridge-${chain}`,
+
         // uri: `http://localhost:8000/subgraphs/name/deft/deft-bridge-${chain}`,
-        uri: `https://deft-bridge-graph.loca.lt/subgraphs/name/deft/deft-bridge-${chain}`,
+        // uri: `https://deft-bridge-graph.loca.lt/subgraphs/name/deft/deft-bridge-${chain}`,
       }),
       cache: new InMemoryCache({
         typePolicies: scalarTypePolicies,

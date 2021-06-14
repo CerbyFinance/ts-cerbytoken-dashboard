@@ -728,20 +728,20 @@ const BridgeWidgetProcess = () => {
 
 // TODO: precompute once
 
-const chainToId = {
-  ["ethereum-main"]: 1,
-  ["binance-main"]: 56,
+// const chainToId = {
+//   ["ethereum"]: 1,
+//   ["binance"]: 56,
 
-  ropsten: 3,
-  kovan: 42,
-  ["binance-test"]: 97,
-} as {
-  [key: string]: Chains;
-};
+//   ropsten: 3,
+//   kovan: 42,
+//   ["binance-test"]: 97,
+// } as {
+//   [key: string]: Chains;
+// };
 
 const idToChain = {
-  1: "ethereum-main",
-  56: "binance-main",
+  1: "ethereum",
+  56: "binance",
   3: "ropsten",
   42: "kovan",
   97: "binance-test",
@@ -820,7 +820,7 @@ const BridgeWidget = () => {
   const [isPopular, setPopular] = useState(true);
 
   const [loader, setLoader] = useState(false);
-  const [path, setPath] = useState([42, 97] as [Chains, Chains]);
+  const [path, setPath] = useState([1, 56] as [Chains, Chains]);
 
   const setMax = () => {
     setTransferAmount(balance.toString());
