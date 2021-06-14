@@ -111,11 +111,11 @@ const approveOne = async (
     return new Error("too high gwei");
   }
 
-  const callGas = Math.floor(estimatedGas * ESTIMATE_MULT);
+  // const callGas = Math.floor(estimatedGas * ESTIMATE_MULT);
 
   const result = preparedMethod.send({
     from,
-    gas: callGas,
+    // gas: callGas,
     gasPrice: Number(gasPrice) + 1,
   });
 
