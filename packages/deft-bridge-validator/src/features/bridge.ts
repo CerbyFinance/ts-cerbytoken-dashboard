@@ -113,13 +113,6 @@ const approveOne = async (
 
   const callGas = Math.floor(estimatedGas * ESTIMATE_MULT);
 
-  console.log({
-    callGas,
-    gasPrice,
-    from,
-    proofHash,
-  });
-
   const result = preparedMethod.send({
     from,
     gas: callGas,
