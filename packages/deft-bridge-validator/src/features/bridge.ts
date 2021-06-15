@@ -24,11 +24,12 @@ const { PRIVATE_KEY } = process.env;
 const chains = ["binance", "ethereum"];
 
 const nodeUrlByChain = {
-  ethereum: "https://secret:X4gDeGtfQy2M@eth-node.wisetoken.me", // 1
+  ethereum: "https://secret:X4gDeGtfQy2M@eth-node.valar-solutions.com", // 1
   binance: "https://secret:X4gDeGtfQy2M@bsc-node.valar-solutions.com", // 56
   ropsten: "https://ropsten.infura.io/v3/6af3a6f4302246e8bbd4e69b5bfc9e33", // 3
-  kovan: "https://kovan.infura.io/v3/6af3a6f4302246e8bbd4e69b5bfc9e33", // 42
-  ["binance-test"]: "https://data-seed-prebsc-1-s1.binance.org:8545/", // 97
+  kovan: "https://secret:X4gDeGtfQy2M@eth-node-kovan.valar-solutions.com", // 42
+  ["binance-test"]:
+    "https://secret:X4gDeGtfQy2M@bsc-node-testnet.valar-solutions.com", // 97
 };
 
 const contractByChain = {
@@ -73,6 +74,8 @@ const sdkAndWeb3ByChain = Object.fromEntries(
     const nodeUrl = nodeUrlByChain[chain];
 
     const web3 = new Web3(new Web3.providers.HttpProvider(nodeUrl));
+    web3.eth.transactionPollingTimeout = 86400;
+
     applyMnemonicToWeb3(web3);
 
     const contractAddress = contractByChain[chain];
