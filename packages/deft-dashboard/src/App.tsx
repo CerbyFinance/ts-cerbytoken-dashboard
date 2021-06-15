@@ -222,7 +222,7 @@ function LeftMenu() {
         align="center"
         onClick={() =>
           window.open(
-            "https://app.uniswap.org/#/swap?inputCurrency=ETH&outputCurrency=0xdef1fac7Bf08f173D286BbBDcBeeADe695129840&use=V2",
+            "https://exchange.pancakeswap.finance/#/swap?inputCurrency=BNB&outputCurrency=0xdef1fac7bf08f173d286bbbdcbeeade695129840",
             "_blank",
           )
         }
@@ -335,7 +335,7 @@ function TaxCycle() {
     if (account) {
       refetchBalance(account);
     }
-  }, [account]);
+  }, [account, chainId]);
 
   const [progress, setProgress] = useState(0);
   const [cycleTax, setCycleTax] = useState(0);
