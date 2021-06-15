@@ -361,7 +361,7 @@ const BridgeWidgetProcess = () => {
       await refetchBalance(account);
 
       // TODO: update it locally ?
-      let i = 3;
+      let i = 99999;
       while (true) {
         const mintProof = await getProof(
           destClient,
@@ -884,6 +884,7 @@ const BridgeWidget = () => {
     client: ApolloClient<NormalizedCacheObject>,
     account: string,
     amount: string,
+    srcChainId: Chains,
     destChainId: Chains,
   ) => {
     try {
@@ -900,7 +901,7 @@ const BridgeWidget = () => {
 
       let proof: Pick<Proof, "id" | "src" | "dest">;
       // TODO: update it locally ?
-      let i = 3;
+      let i = 99999;
       while (true) {
         const resultQuery = await client.query<
           ProofByTxHashQuery,
@@ -937,14 +938,14 @@ const BridgeWidget = () => {
 
       if (result2.status === 1) {
         txnToast(
-          destChainId,
+          srcChainId,
           "success",
           "Transaction Successful",
           result2.transactionHash,
         );
       } else {
         txnToast(
-          destChainId,
+          srcChainId,
           "fail",
           "Transaction Canceled",
           result2.transactionHash,
@@ -961,9 +962,9 @@ const BridgeWidget = () => {
         const message = originalErrorMessage.split("CCB: ")[1];
 
         // @ts-ignore
-        txnToast(destChainId, "error", "Transaction Error", undefined, message);
+        txnToast(srcChainId, "error", "Transaction Error", undefined, message);
       } else {
-        txnToast(destChainId, "fail", "Transaction Canceled");
+        txnToast(srcChainId, "fail", "Transaction Canceled");
       }
     }
   };
@@ -987,7 +988,7 @@ const BridgeWidget = () => {
             actionButton = {
               text: "Transfer",
               onClick: () => {
-                transfer(srcClient, account!, transferAmount, path[1]);
+                transfer(srcClient, account!, transferAmount, path[0], path[1]);
               },
             };
           } else {
