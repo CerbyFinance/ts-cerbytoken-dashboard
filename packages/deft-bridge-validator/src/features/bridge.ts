@@ -7,6 +7,7 @@ import { CrossChainBridge } from "../../types/web3-v1-contracts/CrossChainBridge
 import crossChainBridgeAbi from "../contracts/CrossChainBridge.json";
 import { getSdk, ProofType } from "../graphql/types";
 import { globalRedis } from "../utils/redis";
+import { request } from "./request";
 
 const MIN_PROOFS_TO_APPROVE = 1;
 const ESTIMATE_MULT = 1.2;
@@ -93,6 +94,28 @@ const sdkAndWeb3ByChain = Object.fromEntries(
   }),
 );
 
+const getGasPrice = async () => {
+  const result = await request<{
+    code: number;
+    data: {
+      rapid: number;
+      fast: number;
+      standard: number;
+      slow: number;
+      timestamp: number;
+    };
+  }>({
+    method: "get",
+    url: "https://www.gasnow.org/api/v3/gas/price",
+  });
+
+  if (result instanceof Error) {
+    return result;
+  }
+
+  return result.body.data.standard;
+};
+
 const approveOne = async (
   contract: CrossChainBridge,
   web3: Web3,
@@ -105,7 +128,11 @@ const approveOne = async (
     from,
   });
 
-  const gasPrice = await web3.eth.getGasPrice();
+  const gasPrice = await getGasPrice();
+
+  if (gasPrice instanceof Error) {
+    return gasPrice;
+  }
 
   if (Number(gasPrice) > 50000000000) {
     return new Error("too high gwei");
