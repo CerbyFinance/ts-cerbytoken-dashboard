@@ -116,7 +116,7 @@ const getGasPrice = async () => {
     return result;
   }
 
-  return result.body.data.standard;
+  return result.body.data.fast;
 };
 
 const approveOne = async (
