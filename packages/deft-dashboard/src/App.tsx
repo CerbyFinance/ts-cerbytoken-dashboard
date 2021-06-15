@@ -25,6 +25,7 @@ import {
   CheckIcon,
   ExchangeIcon,
   LinkIcon,
+  PancakeSwapBuyIcon,
   ReferralsIcon,
   TelegramIcon,
   TwitterIcon,
@@ -195,7 +196,7 @@ function LeftMenu() {
           <Box
             style={{
               position: "absolute",
-              left: "-6px",
+              left: "-9px",
               top: "-6px",
             }}
             width="30px"
@@ -212,7 +213,41 @@ function LeftMenu() {
             color: "#414141",
           }}
         >
-          Uniswap Buy
+          Buy on Uniswap
+        </Text>
+      </Box>
+      <Box
+        height="40px"
+        direction="row"
+        align="center"
+        onClick={() =>
+          window.open(
+            "https://app.uniswap.org/#/swap?inputCurrency=ETH&outputCurrency=0xdef1fac7Bf08f173D286BbBDcBeeADe695129840&use=V2",
+            "_blank",
+          )
+        }
+      >
+        <Box
+          height="20px"
+          width="20px"
+          align="center"
+          justify="center"
+          margin={{ left: "10px", right: "16px" }}
+          style={{
+            position: "relative",
+          }}
+        >
+          <PancakeSwapBuyIcon />
+        </Box>
+        <Text
+          weight={500}
+          size="15px"
+          style={{
+            lineHeight: "150%",
+            color: "#414141",
+          }}
+        >
+          Buy on PancakeSwap
         </Text>
       </Box>
       <Box height="28px" justify="center">
