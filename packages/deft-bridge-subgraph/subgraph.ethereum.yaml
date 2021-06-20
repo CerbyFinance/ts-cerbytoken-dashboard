@@ -6,7 +6,7 @@ dataSources:
     name: SourceChain
     network: mainnet
     source:
-      address: "0xc89302c356A100A01bd235295b62eeA4D19CB6A5"
+      address: "0x01e835C7A3f7B51243229DfB85A1EA08a5512499"
       abi: CrossChainBridge
       startBlock: 12626750
     mapping:
