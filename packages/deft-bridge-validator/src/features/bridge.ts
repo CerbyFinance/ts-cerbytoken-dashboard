@@ -124,6 +124,7 @@ const approveOne = async (
   web3: Web3,
   from: string,
   proofHash: string,
+  isMain: boolean,
 ) => {
   const preparedMethod = contract.methods.markTransactionAsApproved(proofHash);
 
@@ -131,7 +132,7 @@ const approveOne = async (
     from,
   });
 
-  const gasPrice = await getGasPrice();
+  const gasPrice = isMain ? await getGasPrice() : await web3.eth.getGasPrice();
 
   if (gasPrice instanceof Error) {
     return gasPrice;
@@ -285,6 +286,7 @@ const approver = async ([srcChain, destChain]: [string, string]) => {
         dest.web3,
         from,
         proofsHashes[0],
+        destChain === "ethereum",
       );
 
       if (approveRes instanceof Error) {
