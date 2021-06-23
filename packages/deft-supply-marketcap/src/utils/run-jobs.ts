@@ -41,7 +41,7 @@ const getOrUpdatePrices = async () => {
   }>(
     {
       method: "POST",
-      url: `http://server.wisetoken.me:8000/subgraphs/name/deft/deft-uniswap-v2`,
+      url: `http://server.defifactory.fi:8000/subgraphs/name/deft/deft-uniswap-v2`,
       headers: {
         "Content-Type": "application/json",
       },
