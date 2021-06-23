@@ -17,7 +17,7 @@ export const createAgent = (proxy: string) => {
 
 const web3 = new Web3(
   new Web3.providers.HttpProvider(
-    "https://secret:X4gDeGtfQy2M@eth-node.wisetoken.me/",
+    "https://secret:X4gDeGtfQy2M@eth-node.valar-solutions.com/",
 
     {
       ...(globalConfig.isDevelopment

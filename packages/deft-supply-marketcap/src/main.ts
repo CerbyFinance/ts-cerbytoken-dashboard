@@ -1,13 +1,10 @@
 import { NestFactory } from "@nestjs/core";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import { AppModule } from "./app.module";
-import { globalRedis } from "./utils/redis";
 import { triggerRunJobs } from "./utils/run-jobs";
 
 async function bootstrap() {
   triggerRunJobs();
-
-  await globalRedis.set("aaa", 1111);
 
   const app = await NestFactory.create(AppModule);
 
