@@ -1,6 +1,6 @@
 specVersion: 0.0.2
 schema:
-  file: ./schema.graphql
+  file: schema.graphql
 dataSources:
   - kind: ethereum/contract
     name: deft
@@ -18,7 +18,7 @@ dataSources:
         - User
       abis:
         - name: DeftStorage
-          file: ./abis/DeftStorage.json
+          file: deft/abis/DeftStorage.json
       eventHandlers:
         - event: MarkedAsHuman(address,bool)
           handler: handleMarkedAsHuman
@@ -26,4 +26,4 @@ dataSources:
           handler: handleMarkedAsBot
         - event: BulkMarkedAsBot(address[])
           handler: handleBulkMarkedAsBot
-      file: ./src/mapping.ts
+      file: deft/deft.wasm
