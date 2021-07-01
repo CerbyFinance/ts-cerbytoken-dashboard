@@ -21,6 +21,22 @@ const {
   MONGO_HOST_DEV,
   MONGO_PORT_DEV,
   MONGO_NAME_DEV,
+
+  COMMON_PROVIDER_PROD,
+  BALANCE_PROVIDER_PROD,
+  DEFT_UNISWAP_PAIR_START_BLOCK_PROD,
+  DEFT_UNISWAP_PAIR_PROD,
+  DEFT_TOKEN_PROD,
+  WETH_TOKEN_PROD,
+  IS_CONTRACT_BULK_PROD,
+
+  COMMON_PROVIDER_DEV,
+  BALANCE_PROVIDER_DEV,
+  DEFT_UNISWAP_PAIR_START_BLOCK_DEV,
+  DEFT_UNISWAP_PAIR_DEV,
+  DEFT_TOKEN_DEV,
+  WETH_TOKEN_DEV,
+  IS_CONTRACT_BULK_DEV,
 } = process.env;
 
 // @ts-ignore
@@ -42,6 +58,15 @@ const globalConfig = {
       port: MONGO_PORT_PROD!,
       name: MONGO_NAME_PROD!,
     },
+    contract: {
+      commonProvider: COMMON_PROVIDER_PROD!,
+      balanceProvider: BALANCE_PROVIDER_PROD!,
+      deftUniswapPairStartBlock: DEFT_UNISWAP_PAIR_START_BLOCK_PROD!,
+      deftUniswapPair: DEFT_UNISWAP_PAIR_PROD!,
+      deftToken: DEFT_TOKEN_PROD!,
+      wethToken: WETH_TOKEN_PROD!,
+      isContractBulk: IS_CONTRACT_BULK_PROD!,
+    },
   },
 
   development: {
@@ -56,6 +81,15 @@ const globalConfig = {
       host: MONGO_HOST_DEV!,
       port: MONGO_PORT_DEV!,
       name: MONGO_NAME_DEV!,
+    },
+    contract: {
+      commonProvider: COMMON_PROVIDER_DEV!,
+      balanceProvider: BALANCE_PROVIDER_DEV!,
+      deftUniswapPairStartBlock: DEFT_UNISWAP_PAIR_START_BLOCK_DEV!,
+      deftUniswapPair: DEFT_UNISWAP_PAIR_DEV!,
+      deftToken: DEFT_TOKEN_DEV!,
+      wethToken: WETH_TOKEN_DEV!,
+      isContractBulk: IS_CONTRACT_BULK_DEV!,
     },
   },
 };

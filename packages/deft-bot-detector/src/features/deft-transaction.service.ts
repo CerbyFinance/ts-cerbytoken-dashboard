@@ -5,13 +5,14 @@ import { Swap, Transfer } from "../../types/web3-v1-contracts/UniswapPair";
 import uniswapV2Router from "../contracts/UniswapV2Router.json";
 import {
   deftTokenContract,
-  deftUniswapPairContract,
   DEFT_TOKEN,
   DEFT_UNISWAP_PAIR,
   DEFT_UNISWAP_PAIR_START_BLOCK,
   globalWeb3Client,
   isContractBulkContract,
+  uniswapPairContract,
   uniswapPairContractAbi,
+  WETH_TOKEN,
 } from "../utils/contract";
 import { globalMongo } from "../utils/mongo";
 import { globalRedis } from "../utils/redis";
@@ -140,19 +141,29 @@ export class DeftTransactionRepository {
   }
 }
 
+const l = (s: string) => s.toLowerCase();
+
 export class DeftTransactionService {
   deftTransactionRepo = new DeftTransactionRepository();
 
-  async getIsToken0Deft(deftAddr: string) {
-    let isToken0Deft = await globalRedis.get(deftAddr);
+  async getTokens(address: string) {
+    let tokens = await globalRedis.get(address);
 
-    if (!isToken0Deft) {
-      const token0 = await deftUniswapPairContract.methods.token0().call();
-      isToken0Deft = token0 == deftAddr ? "y" : "n";
-      await globalRedis.set(deftAddr, isToken0Deft);
+    if (!tokens) {
+      let pairContract = uniswapPairContract(address);
+
+      const [token0, token1] = await Promise.all([
+        pairContract.methods.token0().call(),
+        pairContract.methods.token1().call(),
+      ]);
+
+      const tokens = [token0, token1];
+      await globalRedis.set(address, JSON.stringify(tokens));
+
+      return tokens;
     }
 
-    return isToken0Deft;
+    return JSON.parse(tokens!) as [string, string];
   }
 
   async syncTransactions() {
@@ -165,9 +176,6 @@ export class DeftTransactionService {
           blockNumber: 1,
         };
 
-    const isToken0Deft = await this.getIsToken0Deft(DEFT_TOKEN);
-    const defaultOrder = isToken0Deft == "y";
-
     const latestBlock = await globalWeb3Client.eth.getBlockNumber();
 
     // TODO: add environment variable
@@ -176,12 +184,14 @@ export class DeftTransactionService {
       lastBlockNumber + 1,
     );
 
+    const thisLatestBlock = Math.min(fromBlock + 250, latestBlock);
+
     const web3 = globalWeb3Client;
     const newEvents = await getPastLogs(
       web3,
       DEFT_UNISWAP_PAIR,
       fromBlock,
-      latestBlock,
+      thisLatestBlock,
       [SWAP_EVENT_HASH],
     );
 
@@ -208,18 +218,15 @@ export class DeftTransactionService {
 
             const blockNumber = event.blockNumber;
 
-            const { timestamp } = await globalWeb3Client.eth.getBlock(
-              blockNumber,
-            );
-
-            const {
-              input,
-              value,
-              hash: txHash,
-            } = await globalWeb3Client.eth.getTransaction(transactionHash);
-
-            const { from, to, logs } =
-              await globalWeb3Client.eth.getTransactionReceipt(transactionHash);
+            const [
+              { timestamp },
+              { input, value, hash: txHash },
+              { from, to, logs },
+            ] = await Promise.all([
+              globalWeb3Client.eth.getBlock(blockNumber),
+              globalWeb3Client.eth.getTransaction(transactionHash),
+              globalWeb3Client.eth.getTransactionReceipt(transactionHash),
+            ]);
 
             const decodedLogs = logs.map(item => decodeLog(web3, item, getAbi));
 
@@ -231,13 +238,26 @@ export class DeftTransactionService {
               item => item.eventName === "Swap",
             ) as EventDoc<Swap, any>[];
 
+            const zero = {
+              amount0In: "0",
+              amount1In: "0",
+              amount0Out: "0",
+              amount1Out: "0",
+            };
+
             const firstSwap = swaps
               ? swaps[0]
-              : { decoded: { amount0In: "0", amount1In: "0" } };
+              : {
+                  decoded: zero,
+                  address: "",
+                };
 
             const latestSwap = swaps
               ? swaps[swaps.length - 1]
-              : { decoded: { amount0Out: "0", amount1Out: "0" } };
+              : {
+                  decoded: zero,
+                  address: "",
+                };
 
             const amount0In = firstSwap.decoded.amount0In;
             const amount1In = firstSwap.decoded.amount1In;
@@ -245,12 +265,31 @@ export class DeftTransactionService {
             const amount0Out = latestSwap.decoded.amount0Out;
             const amount1Out = latestSwap.decoded.amount1Out;
 
-            let isBuy = false;
-            if (defaultOrder) {
-              isBuy = Web3.utils.toBN(amount1In).gt(Web3.utils.toBN(1));
-            } else {
-              isBuy = Web3.utils.toBN(amount0In).gt(Web3.utils.toBN(1));
-            }
+            const [token0, token1] = latestSwap.address
+              ? await this.getTokens(latestSwap.address)
+              : ["", ""];
+
+            const amount1InGt1 = Web3.utils
+              .toBN(latestSwap.decoded.amount1In)
+              .gt(Web3.utils.toBN(1));
+
+            const amount0InGt1 = Web3.utils
+              .toBN(latestSwap.decoded.amount0In)
+              .gt(Web3.utils.toBN(1));
+
+            const statement1 =
+              l(DEFT_TOKEN) < l(WETH_TOKEN) &&
+              l(token0) == l(DEFT_TOKEN) &&
+              l(token1) == l(WETH_TOKEN) &&
+              amount1InGt1;
+
+            const statement2 =
+              l(DEFT_TOKEN) > l(WETH_TOKEN) &&
+              l(token0) == l(WETH_TOKEN) &&
+              l(token1) == l(DEFT_TOKEN) &&
+              amount0InGt1;
+
+            const isBuy = latestSwap.address ? statement1 || statement2 : false;
 
             const recipients = transfers.map(item => item.decoded.to);
             const recipientsBalancesBefore = await Promise.all(
@@ -340,14 +379,18 @@ export class DeftTransactionService {
             const num1 = Number(Web3.utils.fromWei(amountInMax));
             const deNom1 = Number(Web3.utils.fromWei(amountIn));
 
-            const slippagePercentIn = Math.abs((num1 - deNom1) / deNom1);
+            const slippagePercentIn =
+              num1 > 0 ? Math.abs((num1 - deNom1) / num1) : 1;
 
             const num2 = Number(web3.utils.fromWei(amountOut));
             const deNom2 = Number(web3.utils.fromWei(amountOutMin));
 
             const slippagePercentOut = Math.abs((num2 - deNom2) / num2);
 
-            const slippage = slippagePercentIn + slippagePercentOut - 1;
+            const slippage =
+              fnName === "unknown"
+                ? 0
+                : slippagePercentIn + slippagePercentOut - 1;
 
             const isSlippageBot = slippage > 0.5001;
             const isDeadlineBot =

@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev:start-server": "NODE_ENV=development && ts-node-dev --respawn --no-deps --transpile-only --ignore-watch node_modules src/main.ts"
+    "dev:start-server": "export NODE_ENV=development && ts-node-dev --respawn --no-deps --transpile-only --ignore-watch node_modules src/main.ts",
+    "prod:start-server": "export NODE_ENV=production && ts-node-dev --respawn --no-deps --transpile-only --ignore-watch node_modules src/main.ts"
   },
   "keywords": [],
   "author": "",

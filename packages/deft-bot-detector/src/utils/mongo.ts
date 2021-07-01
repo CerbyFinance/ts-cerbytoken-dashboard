@@ -1,14 +1,14 @@
 import { Db, MongoClient } from "mongodb";
 import { globalConfig } from "./config";
 
-const dbName = "deft";
+const env = globalConfig.isDevelopment ? "development" : "production";
+
+const dbName = globalConfig[env].mongodb.name;
 
 export let globalMongo = {} as Db;
 
 export const createMongoConnectionString = () => {
-  const { host, password, port, username } = globalConfig.isDevelopment
-    ? globalConfig.development.mongodb
-    : globalConfig.production.mongodb;
+  const { host, password, port, username } = globalConfig[env].mongodb;
 
   return `mongodb://${username}:${password}@${host}:${port}/?authSource=admin`;
 };

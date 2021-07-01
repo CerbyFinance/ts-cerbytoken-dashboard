@@ -19,15 +19,17 @@ export const createAgent = (proxy: string) => {
   });
 };
 
+const env = globalConfig.isDevelopment ? "development" : "production";
+const contract = globalConfig[env].contract;
+
 const web3 = new Web3(
   new Web3.providers.HttpProvider(
-    "http://secret:X4gDeGtfQy2M@eth-node.valar-solutions.com/",
-
+    // "http://secret:X4gDeGtfQy2M@eth-node.valar-solutions.com/",
+    contract.commonProvider,
     {
       ...(globalConfig.isDevelopment
         ? {
             agent: {
-              // https: createAgent("http://localhost:8883"),
               http: createAgent("http://localhost:8883"),
             },
           }
@@ -38,36 +40,30 @@ const web3 = new Web3(
 
 const web3_2 = new Web3(
   new Web3.providers.HttpProvider(
-    "https://eth-mainnet.alchemyapi.io/v2/mBo3SzayqDld2gXipvIWqHOLesqHsKNK",
-
-    {
-      ...(globalConfig.isDevelopment
-        ? {
-            agent: {
-              // https: createAgent("http://localhost:8883"),
-              http: createAgent("http://localhost:8883"),
-            },
-          }
-        : {}),
-    },
+    // "https://eth-mainnet.alchemyapi.io/v2/mBo3SzayqDld2gXipvIWqHOLesqHsKNK",
+    contract.balanceProvider,
   ),
 );
 
 export const globalWeb3Client = web3;
 
-export const SYNC_TIMEOUT = 5000;
+export const SYNC_TIMEOUT = 2000;
 
-export const DEFT_UNISWAP_PAIR_START_BLOCK = 12495074;
+export const DEFT_UNISWAP_PAIR_START_BLOCK = Number(
+  contract.deftUniswapPairStartBlock,
+);
 
-export const DEFT_UNISWAP_PAIR = "0xfa6687922bf40ff51bcd45f9fd339215a4869d82";
+export const DEFT_UNISWAP_PAIR = contract.deftUniswapPair;
 
-export const deftUniswapPairContract = new web3.eth.Contract(
-  // @ts-ignore
-  uniswapPairContractAbi,
-  DEFT_UNISWAP_PAIR,
-) as unknown as UniswapPair;
+export const uniswapPairContract = (address: string) =>
+  new web3.eth.Contract(
+    // @ts-ignore
+    uniswapPairContractAbi,
+    address,
+  ) as unknown as UniswapPair;
 
-export const DEFT_TOKEN = "0xdef1fac7bf08f173d286bbbdcbeeade695129840";
+export const DEFT_TOKEN = contract.deftToken;
+export const WETH_TOKEN = contract.wethToken;
 
 export const deftTokenContract = new web3_2.eth.Contract(
   // @ts-ignore
@@ -75,7 +71,7 @@ export const deftTokenContract = new web3_2.eth.Contract(
   DEFT_TOKEN,
 ) as unknown as DeftToken;
 
-export const IS_CONTRACT_BULK = "0x13882970C480EaFe5493Ef3DE2c6EF3DFA68E1F7";
+export const IS_CONTRACT_BULK = contract.isContractBulk;
 
 export const isContractBulkContract = new web3.eth.Contract(
   // @ts-ignore
