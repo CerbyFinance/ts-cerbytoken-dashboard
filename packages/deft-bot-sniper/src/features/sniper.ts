@@ -6,6 +6,7 @@ import {
   deftStorageContract,
   globalWeb3Client,
 } from "../utils/contract";
+import { globalRedis } from "../utils/redis";
 import { request } from "./request";
 
 interface DeftTransaction {
@@ -91,7 +92,8 @@ const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
 const FROM_ADDRESS = globalWeb3Client.eth.accounts.wallet[0].address;
 const IS_MAIN = false;
 
-const ESTIMATE_MULT = 3;
+const ESTIMATE_MULT = 1.2;
+const SPLIT_BY = 50;
 
 const sendTransaction = async (
   generateMethod: () => NonPayableTransactionObject<void>,
@@ -124,29 +126,11 @@ const sendTransaction = async (
   };
 };
 
-export const sniper = async () => {
-  // const fromBlockNumber = 1;
-  // const toBlockNumber = await globalWeb3Client.eth.getBlockNumber();
-  const fromBlockNumber = 12495074;
-  const toBlockNumber = 12498074;
+const log = (input: string) => {
+  console.log(new Date().toLocaleString(), " ", input);
+};
 
-  // TODO: pages till empty
-  const transactions = await getTransactions(
-    "ascending",
-    "buy",
-    1,
-    100,
-    fromBlockNumber,
-    toBlockNumber,
-  );
-
-  // TODO: including all pages
-  const maxBlockNumber = 111;
-
-  if (transactions instanceof Error) {
-    return transactions;
-  }
-
+export const snipe = async (transactions: DeftTransaction[]) => {
   const possibleUniqHumans = _.uniq(
     transactions.filter(tx => tx.fnName === "unknown").map(tx => tx.to),
   );
@@ -192,23 +176,101 @@ export const sniper = async () => {
   // ignore existing bots
   const botsToMark = possibleUniqBots.filter(bot => !botsSet.has(bot));
 
+  log("bots to snipe: " + botsToMark.length);
+
   // split by 50
-  const chunkedBotsToMark = _.chunk(botsToMark, 50);
+  const chunkedBotsToMark = _.chunk(botsToMark, SPLIT_BY);
 
   for (const botsToMark of chunkedBotsToMark) {
     if (botsToMark.length > 0) {
-      console.log("sending transaction");
       const { pendingTx, transactionHash } = await sendTransaction(() => {
+        if (botsToMark.length === 1) {
+          return deftStorageContract.methods.markAddressAsBot(botsToMark[0]);
+        }
+
         return deftStorageContract.methods.bulkMarkAddressAsBot(botsToMark);
       });
-      console.log(transactionHash);
+      log("processing tx: " + transactionHash);
       const txResult = await pendingTx;
-      console.log("bots detected and sniped: ", botsToMark.length);
-      // TODO: update max block
+      if (!txResult.status) {
+        log("it's not approved for some reason");
+        return false;
+      }
+      log("bots detected and sniped: " + botsToMark.length);
+    }
+  }
+
+  return true;
+};
+
+const sleep = (ms: number) => new Promise(r => setTimeout(r, ms));
+
+const sniperLoop = async () => {
+  let once = false;
+  while (true) {
+    await sleep(once ? globalConfig.snipeTimeout * 1000 : 0);
+    once = true;
+
+    try {
+      const latestBlockNumber = await globalRedis
+        .get("latest_block_number")
+        .then(some => (some ? Number(some) : null));
+
+      if (!latestBlockNumber) {
+        log("!!! block undefined !!!");
+        return;
+      }
+
+      const headBlockNumber = await globalWeb3Client.eth.getBlockNumber();
+
+      log("latest block number: " + latestBlockNumber);
+      log("head block number: " + headBlockNumber);
+
+      // TODO: pages till empty  (not necessary)
+      const transactions = await getTransactions(
+        "ascending",
+        "buy",
+        1,
+        1000,
+        latestBlockNumber + 1,
+        headBlockNumber,
+      );
+
+      if (transactions instanceof Error) {
+        log(transactions.message);
+        continue;
+      }
+
+      if (transactions.length === 0) {
+        log("no new transaction yet");
+        continue;
+      }
+
+      const maxBlockNumber = Math.max(
+        ...transactions.map(item => item.blockNumber),
+      );
+
+      let isOk = false;
+      try {
+        isOk = await snipe(transactions);
+      } catch (error) {
+        log(error.message);
+        continue;
+      }
+
+      if (!isOk) {
+        continue;
+      }
+
+      await globalRedis.set("latest_block_number", maxBlockNumber);
+    } catch (error) {
+      log("things happen");
+      console.log(error);
     }
   }
 };
 
 export const triggerRunJobs = () => {
-  sniper();
+  sniperLoop();
+  // snipe();
 };
