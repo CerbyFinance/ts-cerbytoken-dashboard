@@ -102,6 +102,14 @@ const sendTransaction = async (
     ? await getGasPrice()
     : await globalWeb3Client.eth.getGasPrice();
 
+  if (gasPrice instanceof Error) {
+    return gasPrice;
+  }
+
+  if (Number(gasPrice) > 10000000000) {
+    return new Error("too high gwei");
+  }
+
   const preparedMethod = generateMethod();
 
   const estimatedGas = await preparedMethod.estimateGas({
@@ -130,26 +138,33 @@ const log = (input: string) => {
   console.log(new Date().toLocaleString(), " ", input);
 };
 
-export const snipe = async (transactions: DeftTransaction[]) => {
+const snipe = async (transactions: DeftTransaction[]) => {
   const possibleUniqHumans = _.uniq(
-    transactions.filter(tx => tx.fnName === "unknown").map(tx => tx.to),
+    transactions
+      .filter(tx => tx.fnName === "unknown")
+      .map(tx => tx.to.toLowerCase()),
   );
   const humansFromContract = await deftStorageContract.methods
     .isMarkedAsHumanStorageBulk(possibleUniqHumans)
     .call({
       from: FROM_ADDRESS,
     });
-  const humansForUnknownSet = new Set(humansFromContract);
+  const humansForUnknownSet = new Set(
+    humansFromContract.map(item => item.toLowerCase()),
+  );
 
   const possibleBots = transactions.flatMap(tx => {
-    const to = tx.to;
+    const to = tx.to.toLowerCase();
     const recipients = tx.recipients;
 
     if (tx.fnName === "unknown") {
       const isHuman = humansForUnknownSet.has(to);
+
       if (isHuman) {
         return [];
       }
+
+      return recipients;
     }
 
     if (tx.isBot) {
@@ -162,7 +177,7 @@ export const snipe = async (transactions: DeftTransaction[]) => {
   const possibleUniqBots = _.uniq(
     possibleBots
       .filter(r => r.id !== ZERO_ADDRESS && !r.isContract && r.isNewHolder)
-      .map(r => r.id),
+      .map(r => r.id.toLowerCase()),
   );
 
   const botsFromContract = await deftStorageContract.methods
@@ -174,7 +189,9 @@ export const snipe = async (transactions: DeftTransaction[]) => {
   const botsSet = new Set(botsFromContract);
 
   // ignore existing bots
-  const botsToMark = possibleUniqBots.filter(bot => !botsSet.has(bot));
+  const botsToMark = possibleUniqBots
+    .filter(bot => !botsSet.has(bot))
+    .map(item => item.toLowerCase());
 
   log("bots to snipe: " + botsToMark.length);
 
@@ -183,13 +200,21 @@ export const snipe = async (transactions: DeftTransaction[]) => {
 
   for (const botsToMark of chunkedBotsToMark) {
     if (botsToMark.length > 0) {
-      const { pendingTx, transactionHash } = await sendTransaction(() => {
+      const transactionRes = await sendTransaction(() => {
         if (botsToMark.length === 1) {
           return deftStorageContract.methods.markAddressAsBot(botsToMark[0]);
         }
 
         return deftStorageContract.methods.bulkMarkAddressAsBot(botsToMark);
       });
+
+      if (transactionRes instanceof Error) {
+        log(transactionRes.message);
+        return false;
+      }
+
+      const { pendingTx, transactionHash } = transactionRes;
+
       log("processing tx: " + transactionHash);
       const txResult = await pendingTx;
       if (!txResult.status) {
@@ -205,7 +230,7 @@ export const snipe = async (transactions: DeftTransaction[]) => {
 
 const sleep = (ms: number) => new Promise(r => setTimeout(r, ms));
 
-const sniperLoop = async () => {
+export const sniperLoop = async () => {
   let once = false;
   while (true) {
     await sleep(once ? globalConfig.snipeTimeout * 1000 : 0);
@@ -250,15 +275,14 @@ const sniperLoop = async () => {
         ...transactions.map(item => item.blockNumber),
       );
 
-      let isOk = false;
       try {
-        isOk = await snipe(transactions);
+        const isOk = await snipe(transactions);
+
+        if (!isOk) {
+          continue;
+        }
       } catch (error) {
         log(error.message);
-        continue;
-      }
-
-      if (!isOk) {
         continue;
       }
 

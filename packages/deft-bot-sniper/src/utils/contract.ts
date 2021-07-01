@@ -47,6 +47,7 @@ const web3 = new Web3(
   ),
 );
 
+web3.eth.transactionPollingTimeout = 1800;
 applyMnemonicToWeb3(web3);
 
 export const globalWeb3Client = web3;
