@@ -1,5 +1,5 @@
-import { Controller, Get, Query } from "@nestjs/common";
-import { ApiQuery, ApiResponse } from "@nestjs/swagger";
+import { Body, Controller, Post, Query, ValidationPipe } from "@nestjs/common";
+import { ApiBody, ApiProperty, ApiQuery, ApiResponse } from "@nestjs/swagger";
 import { DeftTransactionFeedService } from "./features/deft-transaction-feed.service";
 import {
   AnyResponse,
@@ -7,11 +7,19 @@ import {
   IApiResponse,
 } from "./utils/nestjs.utils";
 
+class FeedDTO {
+  @ApiProperty()
+  toIn!: string[];
+
+  @ApiProperty()
+  recipientsIn!: string[];
+}
+
 @Controller("detector")
 export class AppController {
   deftTransactionFeedService = new DeftTransactionFeedService();
 
-  @Get("feed")
+  @Post("feed")
   @ApiResponse({
     status: 200,
     type: ApiAnyResponse,
@@ -28,6 +36,7 @@ export class AppController {
     name: "orderBy",
     enum: ["ascending", "descending"],
   })
+  @ApiBody({ required: true, type: FeedDTO })
   async wiseFeed(
     @Query("toBlockNumber") toBlockNumber: number,
     @Query("fromBlockNumber") fromBlockNumber: number,
@@ -35,6 +44,7 @@ export class AppController {
     @Query("page") page: number,
     @Query("type") type: "buy" | "sell" | "any",
     @Query("orderBy") orderBy: "ascending" | "descending",
+    @Body(new ValidationPipe({ transform: true })) input: FeedDTO,
   ): Promise<IApiResponse<AnyResponse>> {
     const result = await this.deftTransactionFeedService.feed(
       Number(fromBlockNumber),
@@ -43,6 +53,8 @@ export class AppController {
       page,
       type,
       orderBy,
+      input.toIn || [],
+      input.recipientsIn || [],
     );
 
     return {

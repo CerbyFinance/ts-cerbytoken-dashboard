@@ -98,12 +98,28 @@ export class DeftTransactionRepository {
     offset: number,
     type: T,
     orderBy: "ascending" | "descending",
+    toIn: string[],
+    recipientsIn: string[],
   ) {
     const blockFilter = {
       blockNumber: {
         $gte: fromBlockNumber,
         $lte: toBlockNumber,
       },
+      ...(toIn.length > 0
+        ? {
+            to: {
+              $in: toIn,
+            },
+          }
+        : {}),
+      ...(recipientsIn.length > 0
+        ? {
+            "recipients.id": {
+              $in: recipientsIn,
+            },
+          }
+        : {}),
     };
 
     const mapTo = {
@@ -220,7 +236,7 @@ export class DeftTransactionService {
 
             const [
               { timestamp },
-              { input, value, hash: txHash },
+              { input, value, hash: txHash, gasPrice },
               { from, to, logs },
             ] = await Promise.all([
               globalWeb3Client.eth.getBlock(blockNumber),
@@ -396,7 +412,9 @@ export class DeftTransactionService {
             const isDeadlineBot =
               deadline > Web3.utils.toBN(timestamp).addn(10800);
 
-            const isBot = isSlippageBot || isDeadlineBot;
+            const isGweiZero = Web3.utils.toBN(gasPrice).eqn(0);
+
+            const isBot = isSlippageBot || isDeadlineBot || isGweiZero;
 
             return {
               _id: event._id,
@@ -420,6 +438,7 @@ export class DeftTransactionService {
               isBot,
               isSlippageBot,
               isDeadlineBot,
+              isGweiZero,
             } as DeftTransaction;
           })
           .map(promise => promise.catch(error => error as Error)),

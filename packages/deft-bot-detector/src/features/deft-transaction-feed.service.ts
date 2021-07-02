@@ -10,6 +10,8 @@ export class DeftTransactionFeedService {
     _page: number,
     type: T,
     orderBy: "ascending" | "descending",
+    toIn: string[],
+    recipientsIn: string[],
   ) {
     const limit = Math.min(Math.max(_limit, 1), 1000);
     const page = Math.max(_page, 1);
@@ -27,6 +29,8 @@ export class DeftTransactionFeedService {
       offset,
       type,
       orderBy,
+      toIn,
+      recipientsIn,
     );
 
     return result;
