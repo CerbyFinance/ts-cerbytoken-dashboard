@@ -31,7 +31,26 @@ interface DeftTransaction {
   isDeadlineBot: boolean;
 }
 
-const DETECTOR_URL = "http://localhost:3001";
+const DETECTOR_URL = "http://localhost:3002";
+
+// TODO: !!!
+const FLASHBOTS_URL = "http://localhost:3001";
+
+const getBlockNumber = async () => {
+  const result = await request<{
+    message: string;
+    data: number;
+  }>({
+    method: "GET",
+    url: `${FLASHBOTS_URL}/flashbots/last-block`,
+  });
+
+  if (result instanceof Error) {
+    return result;
+  }
+
+  return result.body.data;
+};
 
 const getGasPrice = async () => {
   const result = await request<{
@@ -52,7 +71,7 @@ const getGasPrice = async () => {
     return result;
   }
 
-  return result.body.data.fast;
+  return result.body.data.rapid;
 };
 
 const getTransactions = async (
@@ -68,7 +87,7 @@ const getTransactions = async (
     message: string;
     status: string;
   }>({
-    method: "GET",
+    method: "POST",
     url:
       DETECTOR_URL +
       `/detector/feed?orderBy=${orderBy}&type=${type}&page=${page}&limit=${limit}&fromBlockNumber=${fromBlockNumber}&toBlockNumber=${toBlockNumber}`,
@@ -79,6 +98,10 @@ const getTransactions = async (
           },
         }
       : {}),
+    json: {
+      toIn: [],
+      recipientsIn: [],
+    },
   });
 
   if (result instanceof Error) {
@@ -89,8 +112,9 @@ const getTransactions = async (
 };
 
 const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
+const DEAD_ADDRESS = "0xdEad000000000000000000000000000000000000";
 const FROM_ADDRESS = globalWeb3Client.eth.accounts.wallet[0].address;
-const IS_MAIN = false;
+const IS_MAIN = !globalConfig.isDevelopment;
 
 const ESTIMATE_MULT = 1.2;
 const SPLIT_BY = 50;
@@ -98,17 +122,15 @@ const SPLIT_BY = 50;
 const sendTransaction = async (
   generateMethod: () => NonPayableTransactionObject<void>,
 ) => {
-  const gasPrice = IS_MAIN
+  const _gasPrice = IS_MAIN
     ? await getGasPrice()
     : await globalWeb3Client.eth.getGasPrice();
 
-  if (gasPrice instanceof Error) {
-    return gasPrice;
+  if (_gasPrice instanceof Error) {
+    return _gasPrice;
   }
 
-  if (Number(gasPrice) > 10000000000) {
-    return new Error("too high gwei");
-  }
+  const gasPrice = Math.min(Number(_gasPrice), 10000000000);
 
   const preparedMethod = generateMethod();
 
@@ -138,34 +160,11 @@ const log = (input: string) => {
   console.log(new Date().toLocaleString(), " ", input);
 };
 
+const l = (s: string) => s.toLowerCase();
+
 const snipe = async (transactions: DeftTransaction[]) => {
-  const possibleUniqHumans = _.uniq(
-    transactions
-      .filter(tx => tx.fnName === "unknown")
-      .map(tx => tx.to.toLowerCase()),
-  );
-  const humansFromContract = await deftStorageContract.methods
-    .isMarkedAsHumanStorageBulk(possibleUniqHumans)
-    .call({
-      from: FROM_ADDRESS,
-    });
-  const humansForUnknownSet = new Set(
-    humansFromContract.map(item => item.toLowerCase()),
-  );
-
   const possibleBots = transactions.flatMap(tx => {
-    const to = tx.to.toLowerCase();
     const recipients = tx.recipients;
-
-    if (tx.fnName === "unknown") {
-      const isHuman = humansForUnknownSet.has(to);
-
-      if (isHuman) {
-        return [];
-      }
-
-      return recipients;
-    }
 
     if (tx.isBot) {
       return recipients;
@@ -176,7 +175,13 @@ const snipe = async (transactions: DeftTransaction[]) => {
 
   const possibleUniqBots = _.uniq(
     possibleBots
-      .filter(r => r.id !== ZERO_ADDRESS && !r.isContract && r.isNewHolder)
+      .filter(
+        r =>
+          l(r.id) !== l(ZERO_ADDRESS) &&
+          l(r.id) !== l(DEAD_ADDRESS) &&
+          !r.isContract &&
+          r.isNewHolder,
+      )
       .map(r => r.id.toLowerCase()),
   );
 
@@ -186,7 +191,7 @@ const snipe = async (transactions: DeftTransaction[]) => {
       from: FROM_ADDRESS,
     });
 
-  const botsSet = new Set(botsFromContract);
+  const botsSet = new Set(botsFromContract.map(item => item.toLowerCase()));
 
   // ignore existing bots
   const botsToMark = possibleUniqBots
@@ -246,7 +251,12 @@ export const sniperLoop = async () => {
         return;
       }
 
-      const headBlockNumber = await globalWeb3Client.eth.getBlockNumber();
+      const headBlockNumber = await getBlockNumber();
+
+      if (headBlockNumber instanceof Error) {
+        return headBlockNumber;
+      }
+      // const headBlockNumber = await globalWeb3Client.eth.getBlockNumber();
 
       log("latest block number: " + latestBlockNumber);
       log("head block number: " + headBlockNumber);

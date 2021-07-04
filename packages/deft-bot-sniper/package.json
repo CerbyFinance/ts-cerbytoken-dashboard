@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev:start-server": "NODE_ENV=development && ts-node-dev --respawn --no-deps --transpile-only --ignore-watch node_modules src/main.ts"
+    "dev:start-server": "export NODE_ENV=development && ts-node-dev --respawn --no-deps --transpile-only --ignore-watch node_modules src/main.ts"
   },
   "devDependencies": {
     "@types/ioredis": "^4.26.4",
