@@ -8,6 +8,7 @@ import {
   DEFT_TOKEN,
   DEFT_UNISWAP_PAIR,
   DEFT_UNISWAP_PAIR_START_BLOCK,
+  globalSecondaryWeb3Client,
   globalWeb3Client,
   isContractBulkContract,
   uniswapPairContract,
@@ -194,15 +195,25 @@ export class DeftTransactionService {
 
     const latestBlock = await globalWeb3Client.eth.getBlockNumber();
 
-    // TODO: add environment variable
     const fromBlock = Math.max(
       DEFT_UNISWAP_PAIR_START_BLOCK,
       lastBlockNumber + 1,
     );
 
-    const thisLatestBlock = Math.min(fromBlock + 250, latestBlock);
+    /// only for fetch at once
+    // const thisLatestBlock = globalConfig.isDevelopment
+    //   ? Math.min(fromBlock + 255, latestBlock)
+    //   : latestBlock;
+
+    // const thisLatestBlock = globalConfig.isDevelopment
+    // ? Math.min(fromBlock + 255, latestBlock)
+    // : latestBlock;
+
+    const thisLatestBlock = latestBlock;
 
     const web3 = globalWeb3Client;
+    const secondaryWeb3 = globalSecondaryWeb3Client;
+
     const newEvents = await getPastLogs(
       web3,
       DEFT_UNISWAP_PAIR,
@@ -231,7 +242,6 @@ export class DeftTransactionService {
             //   .for(newItems)
             //   .process(async event => {
             const transactionHash = event.transactionHash;
-
             const blockNumber = event.blockNumber;
 
             const [
@@ -309,11 +319,21 @@ export class DeftTransactionService {
 
             const recipients = transfers.map(item => item.decoded.to);
             const recipientsBalancesBefore = await Promise.all(
-              recipients.map(item =>
-                deftTokenContract.methods
-                  .balanceOf(item)
-                  .call({}, blockNumber - 1),
-              ),
+              recipients.map(async item => {
+                try {
+                  const balance = await deftTokenContract(web3)
+                    .methods.balanceOf(item)
+                    .call({}, blockNumber - 1);
+                  return balance;
+                } catch (error) {}
+
+                // fallback
+                const balance = await deftTokenContract(secondaryWeb3)
+                  .methods.balanceOf(item)
+                  .call({}, blockNumber - 1);
+
+                return balance;
+              }),
             );
 
             const isContractBulkResult = await isContractBulkContract.methods
@@ -408,9 +428,9 @@ export class DeftTransactionService {
                 ? 0
                 : slippagePercentIn + slippagePercentOut - 1;
 
-            const isSlippageBot = slippage > 0.5001;
+            const isSlippageBot = slippage > 0.5101;
             const isDeadlineBot =
-              deadline > Web3.utils.toBN(timestamp).addn(10800);
+              deadline > Web3.utils.toBN(timestamp).addn(12000);
 
             const isGweiZero = Web3.utils.toBN(gasPrice).eqn(0);
 

@@ -1,4 +1,26 @@
 import { DeftTransactionRepository } from "./deft-transaction.service";
+import { request } from "./request";
+
+const FLASHBOTS_URL = "http://localhost:3001";
+
+const areFlashBots = async (transactions: string[]) => {
+  const result = await request<{
+    data: string[];
+    message: string;
+  }>({
+    method: "POST",
+    url: `${FLASHBOTS_URL}/flashbots/are-flash-bots`,
+    json: {
+      transactions,
+    },
+  });
+
+  if (result instanceof Error) {
+    return result;
+  }
+
+  return result.body.data;
+};
 
 export class DeftTransactionFeedService {
   deftTransactionRepository = new DeftTransactionRepository();
@@ -33,6 +55,25 @@ export class DeftTransactionFeedService {
       recipientsIn,
     );
 
-    return result;
+    const transactions = result.map(item => item.txHash);
+
+    const flashbots = await areFlashBots(transactions);
+
+    if (flashbots instanceof Error) {
+      return flashbots;
+    }
+
+    const flasbotsSet = new Set(flashbots);
+
+    const resultWithFlashbots = result.map(item => {
+      const isFlashBot = flasbotsSet.has(item.txHash);
+      return {
+        ...item,
+        isFlashBot,
+        isBot: isFlashBot ? true : item.isBot,
+      };
+    });
+
+    return resultWithFlashbots;
   }
 }

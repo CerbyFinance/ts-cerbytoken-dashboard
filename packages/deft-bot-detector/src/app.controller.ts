@@ -8,10 +8,10 @@ import {
 } from "./utils/nestjs.utils";
 
 class FeedDTO {
-  @ApiProperty()
+  @ApiProperty({ default: [] })
   toIn!: string[];
 
-  @ApiProperty()
+  @ApiProperty({ default: [] })
   recipientsIn!: string[];
 }
 
@@ -37,7 +37,7 @@ export class AppController {
     enum: ["ascending", "descending"],
   })
   @ApiBody({ required: true, type: FeedDTO })
-  async wiseFeed(
+  async feed(
     @Query("toBlockNumber") toBlockNumber: number,
     @Query("fromBlockNumber") fromBlockNumber: number,
     @Query("limit") limit: number,

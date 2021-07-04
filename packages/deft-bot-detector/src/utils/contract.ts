@@ -41,11 +41,12 @@ const web3 = new Web3(
 const web3_2 = new Web3(
   new Web3.providers.HttpProvider(
     // "https://eth-mainnet.alchemyapi.io/v2/mBo3SzayqDld2gXipvIWqHOLesqHsKNK",
-    contract.balanceProvider,
+    contract.additionalProvider,
   ),
 );
 
 export const globalWeb3Client = web3;
+export const globalSecondaryWeb3Client = web3_2;
 
 export const SYNC_TIMEOUT = 2000;
 
@@ -65,11 +66,12 @@ export const uniswapPairContract = (address: string) =>
 export const DEFT_TOKEN = contract.deftToken;
 export const WETH_TOKEN = contract.wethToken;
 
-export const deftTokenContract = new web3_2.eth.Contract(
-  // @ts-ignore
-  deftTokenContractAbi,
-  DEFT_TOKEN,
-) as unknown as DeftToken;
+export const deftTokenContract = (provider: Web3) =>
+  new provider.eth.Contract(
+    // @ts-ignore
+    deftTokenContractAbi,
+    DEFT_TOKEN,
+  ) as unknown as DeftToken;
 
 export const IS_CONTRACT_BULK = contract.isContractBulk;
 
