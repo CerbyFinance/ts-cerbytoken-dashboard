@@ -3,6 +3,7 @@ import Web3 from "web3";
 import { Log } from "web3-core";
 import { Swap, Transfer } from "../../types/web3-v1-contracts/UniswapPair";
 import uniswapV2Router from "../contracts/UniswapV2Router.json";
+import { globalConfig } from "../utils/config";
 import {
   deftTokenContract,
   DEFT_TOKEN,
@@ -200,16 +201,12 @@ export class DeftTransactionService {
       lastBlockNumber + 1,
     );
 
-    /// only for fetch at once
-    // const thisLatestBlock = globalConfig.isDevelopment
-    //   ? Math.min(fromBlock + 255, latestBlock)
-    //   : latestBlock;
+    const thisLatestBlock =
+      globalConfig.fetchAtOnce === -1
+        ? latestBlock
+        : Math.min(fromBlock + globalConfig.fetchAtOnce, latestBlock);
 
-    // const thisLatestBlock = globalConfig.isDevelopment
-    // ? Math.min(fromBlock + 255, latestBlock)
-    // : latestBlock;
-
-    const thisLatestBlock = latestBlock;
+    // const thisLatestBlock = latestBlock;
 
     const web3 = globalWeb3Client;
     const secondaryWeb3 = globalSecondaryWeb3Client;

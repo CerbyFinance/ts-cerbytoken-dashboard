@@ -39,6 +39,7 @@ const {
   IS_CONTRACT_BULK_DEV,
 
   FLASHBOTS_URL,
+  FETCH_AT_ONCE,
 } = process.env;
 
 // @ts-ignore
@@ -47,6 +48,7 @@ const isJest = global.__DEV__;
 const globalConfig = {
   isDevelopment: isJest || (NODE_ENV || "development") === "development",
 
+  fetchAtOnce: Number(FETCH_AT_ONCE! || -1),
   flashBotsUrl: FLASHBOTS_URL!,
 
   production: {
