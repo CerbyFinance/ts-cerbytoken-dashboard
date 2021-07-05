@@ -1,3 +1,3 @@
-import { sniperLoop } from "./features/sniper";
+import { triggerRunJobs } from "./features/sniper";
 
-sniperLoop();
+triggerRunJobs();
