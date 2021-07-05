@@ -135,6 +135,11 @@ const sendTransaction = async (
 
   const gasPrice = Math.min(__gasPrice, 10000000000);
 
+  log("is main " + IS_MAIN);
+  log("_gasPrice " + _gasPrice);
+  log("__gasPrice " + __gasPrice);
+  log("gasPrice " + gasPrice);
+
   const preparedMethod = generateMethod();
 
   const estimatedGas = await preparedMethod.estimateGas({
@@ -142,6 +147,10 @@ const sendTransaction = async (
   });
 
   const callGas = Math.floor(estimatedGas * ESTIMATE_MULT);
+
+  log("callGas " + callGas);
+
+  throw new Error("---------------");
 
   const result = preparedMethod.send({
     from: FROM_ADDRESS,
