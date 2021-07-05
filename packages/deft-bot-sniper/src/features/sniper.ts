@@ -320,12 +320,14 @@ export const sniperLoop = async () => {
 
 export const triggerRunJobs = async () => {
   const chainId = await globalWeb3Client.eth.getChainId();
+  log("chain id: " + chainId);
 
   if (chainId === 1) {
     IS_MAIN = true;
   }
 
   const latestBlockNumber = await getProcessedLatestBlockNumber();
+  log("latest block number: " + latestBlockNumber);
 
   const newBlockNumber = Math.max(globalConfig.startFromBlock - 1, 0);
 
