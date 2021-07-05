@@ -209,7 +209,7 @@ const BridgeWidgetProcess = () => {
 
   const path = [Number(srcChainId), Number(destChainId)] as [Chains, Chains];
 
-  const [transferAmount, setTransferAmount] = useState<number | undefined>();
+  const [transferAmount, setTransferAmount] = useState<string | undefined>();
 
   const bridgeContract = useBridgeContract();
   const tokenContract = useTokenContract();
@@ -231,7 +231,7 @@ const BridgeWidgetProcess = () => {
   const fee = data?.global?.currentFee || 0;
 
   const receiveAmount = transferAmount
-    ? transferAmount - transferAmount * fee
+    ? Number(transferAmount) - Number(transferAmount) * fee
     : undefined;
 
   const [processesStatus, setProcessesStatus] = useState({
@@ -251,6 +251,7 @@ const BridgeWidgetProcess = () => {
         const destChainId = burnProof.dest! as Chains;
 
         setNonce(burnProof.nonce!);
+        // @ts-ignore
         setTransferAmount(burnProof.amount);
 
         const destClient = clientByChain[idToChain[destChainId]];
@@ -350,7 +351,7 @@ const BridgeWidgetProcess = () => {
       }));
 
       const result = await bridgeContract.mintWithBurnProof({
-        amount: ethers.utils.parseEther(transferAmount?.toString()!),
+        amount: ethers.utils.parseEther(transferAmount!),
         sourceChainId: srcChainId,
         sourceNonce: srcNonce,
         transactionHash: currentProofId,
@@ -510,7 +511,9 @@ const BridgeWidgetProcess = () => {
           const processText = processTextStatuses[processStatus];
 
           const dynamicText = dynamicTemplate(processText, {
-            transferAmount: transferAmount ? transferAmount.toFixed(2) : "...",
+            transferAmount: transferAmount
+              ? Number(transferAmount).toFixed(2)
+              : "...",
             receiveAmount: receiveAmount ? receiveAmount.toFixed(2) : "...",
             src,
             dest,

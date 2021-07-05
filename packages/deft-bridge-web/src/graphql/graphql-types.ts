@@ -24,7 +24,7 @@ export const scalarTypePolicies = {
       nonce: numberTypePolicy,
       src: numberTypePolicy,
       dest: numberTypePolicy,
-      amount: numberTypePolicy,
+      // amount: numberTypePolicy,
       fee: numberTypePolicy,
       txFee: numberTypePolicy,
       logIndex: numberTypePolicy,
