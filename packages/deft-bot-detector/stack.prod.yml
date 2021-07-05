@@ -1,0 +1,10 @@
+version: "3.7"
+services:
+  deft-bot-detector-server:
+    # build: .
+    image: deft-bot-detector-server
+    environment:
+      NODE_ENV: production
+    restart: always
+    ports:
+      - 1100:3002

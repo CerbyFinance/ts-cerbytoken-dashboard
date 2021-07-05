@@ -37,6 +37,8 @@ const {
   DEFT_TOKEN_DEV,
   WETH_TOKEN_DEV,
   IS_CONTRACT_BULK_DEV,
+
+  FLASHBOTS_URL,
 } = process.env;
 
 // @ts-ignore
@@ -44,6 +46,8 @@ const isJest = global.__DEV__;
 
 const globalConfig = {
   isDevelopment: isJest || (NODE_ENV || "development") === "development",
+
+  flashBotsUrl: FLASHBOTS_URL!,
 
   production: {
     redis: {

@@ -1,7 +1,6 @@
+import { globalConfig } from "../utils/config";
 import { DeftTransactionRepository } from "./deft-transaction.service";
 import { request } from "./request";
-
-const FLASHBOTS_URL = "http://localhost:3002";
 
 const areFlashBots = async (transactions: string[]) => {
   const result = await request<{
@@ -9,7 +8,7 @@ const areFlashBots = async (transactions: string[]) => {
     message: string;
   }>({
     method: "POST",
-    url: `${FLASHBOTS_URL}/flashbots/are-flash-bots`,
+    url: `${globalConfig.flashBotsUrl}/flashbots/are-flash-bots`,
     json: {
       transactions,
     },
