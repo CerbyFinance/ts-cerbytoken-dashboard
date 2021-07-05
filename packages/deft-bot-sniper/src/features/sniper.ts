@@ -143,10 +143,6 @@ const sendTransaction = async (
 
   const callGas = Math.floor(estimatedGas * ESTIMATE_MULT);
 
-  log("callGas " + callGas);
-
-  throw new Error("---------------");
-
   const result = preparedMethod.send({
     from: FROM_ADDRESS,
     gas: callGas,
