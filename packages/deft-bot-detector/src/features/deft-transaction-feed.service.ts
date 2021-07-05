@@ -1,7 +1,7 @@
 import { DeftTransactionRepository } from "./deft-transaction.service";
 import { request } from "./request";
 
-const FLASHBOTS_URL = "http://localhost:3001";
+const FLASHBOTS_URL = "http://localhost:3002";
 
 const areFlashBots = async (transactions: string[]) => {
   const result = await request<{
@@ -57,11 +57,14 @@ export class DeftTransactionFeedService {
 
     const transactions = result.map(item => item.txHash);
 
-    const flashbots = await areFlashBots(transactions);
+    const flashbots = await areFlashBots(transactions).then(r => {
+      if (r instanceof Error) {
+        console.log(r);
+        return [];
+      }
 
-    if (flashbots instanceof Error) {
-      return flashbots;
-    }
+      return r;
+    });
 
     const flasbotsSet = new Set(flashbots);
 
