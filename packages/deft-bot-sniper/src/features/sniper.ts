@@ -325,7 +325,7 @@ export const triggerRunJobs = async () => {
     IS_MAIN = true;
   }
 
-  const latestBlockNumber = getProcessedLatestBlockNumber();
+  const latestBlockNumber = await getProcessedLatestBlockNumber();
 
   const newBlockNumber = Math.max(globalConfig.startFromBlock - 1, 0);
 
