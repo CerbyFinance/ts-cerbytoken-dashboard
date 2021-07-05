@@ -7,7 +7,7 @@ COPY package*.json ./
 RUN yarn global add pm2
 RUN yarn install --prod
 
-COPY . .
+COPY ../ .
 
 EXPOSE 3001
 
