@@ -1,0 +1,15 @@
+version: "3.7"
+services:
+  deft-sniper:
+    image: bot-sniper-server
+    environment:
+      NODE_ENV: production
+    env_file:
+      - ./.env-deft
+  redis:
+    image: redis:latest
+    volumes:
+      - shared-redis:/data
+
+volumes:
+  shared-redis:

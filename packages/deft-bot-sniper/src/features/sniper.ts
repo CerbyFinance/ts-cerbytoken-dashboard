@@ -31,10 +31,8 @@ interface DeftTransaction {
   isDeadlineBot: boolean;
 }
 
-const DETECTOR_URL = "http://localhost:3002";
-
-// TODO: !!!
-const FLASHBOTS_URL = "http://localhost:3001";
+const DETECTOR_URL = globalConfig.detectorUrl;
+const FLASHBOTS_URL = globalConfig.flashBotsUrl;
 
 const getBlockNumber = async () => {
   const result = await request<{
@@ -114,9 +112,10 @@ const getTransactions = async (
 const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
 const DEAD_ADDRESS = "0xdEad000000000000000000000000000000000000";
 const FROM_ADDRESS = globalWeb3Client.eth.accounts.wallet[0].address;
-const IS_MAIN = !globalConfig.isDevelopment;
+let IS_MAIN = false;
 
 const ESTIMATE_MULT = 1.2;
+const GAS_PRICE_MULT = 1.3;
 const SPLIT_BY = 50;
 
 const sendTransaction = async (
@@ -130,7 +129,11 @@ const sendTransaction = async (
     return _gasPrice;
   }
 
-  const gasPrice = Math.min(Number(_gasPrice), 10000000000);
+  const __gasPrice = IS_MAIN
+    ? Math.floor(Number(_gasPrice) * GAS_PRICE_MULT)
+    : Number(_gasPrice);
+
+  const gasPrice = Math.min(__gasPrice, 10000000000);
 
   const preparedMethod = generateMethod();
 
@@ -235,6 +238,19 @@ const snipe = async (transactions: DeftTransaction[]) => {
 
 const sleep = (ms: number) => new Promise(r => setTimeout(r, ms));
 
+const LATEST_BLOCK_NUMBER_KEY =
+  globalConfig.projectName + "-" + "latest_block_number";
+
+const getProcessedLatestBlockNumber = () => {
+  return globalRedis
+    .get(LATEST_BLOCK_NUMBER_KEY)
+    .then(some => (some ? Number(some) : null));
+};
+
+const setProcessedLatestBlockNumber = (newBlockNumber: number) => {
+  return globalRedis.set(LATEST_BLOCK_NUMBER_KEY, newBlockNumber);
+};
+
 export const sniperLoop = async () => {
   let once = false;
   while (true) {
@@ -242,9 +258,7 @@ export const sniperLoop = async () => {
     once = true;
 
     try {
-      const latestBlockNumber = await globalRedis
-        .get("latest_block_number")
-        .then(some => (some ? Number(some) : null));
+      const latestBlockNumber = await getProcessedLatestBlockNumber();
 
       if (!latestBlockNumber) {
         log("!!! block undefined !!!");
@@ -296,7 +310,7 @@ export const sniperLoop = async () => {
         continue;
       }
 
-      await globalRedis.set("latest_block_number", maxBlockNumber);
+      await setProcessedLatestBlockNumber(maxBlockNumber);
     } catch (error) {
       log("things happen");
       console.log(error);
@@ -304,7 +318,23 @@ export const sniperLoop = async () => {
   }
 };
 
-export const triggerRunJobs = () => {
+export const triggerRunJobs = async () => {
+  const chainId = await globalWeb3Client.eth.getChainId();
+
+  if (chainId === 1) {
+    IS_MAIN = true;
+  }
+
+  const latestBlockNumber = getProcessedLatestBlockNumber();
+
+  const newBlockNumber = Math.max(globalConfig.startFromBlock - 1, 0);
+
+  if (!latestBlockNumber) {
+    log("!!! block undefined !!!");
+    log(`!!! updating block to ${newBlockNumber} !!!`);
+    await setProcessedLatestBlockNumber(newBlockNumber);
+  }
+
   sniperLoop();
   // snipe();
 };

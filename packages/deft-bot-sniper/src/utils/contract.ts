@@ -31,9 +31,7 @@ const applyMnemonicToWeb3 = (web3: Web3) => {
 
 const web3 = new Web3(
   new Web3.providers.HttpProvider(
-    // "http://secret:X4gDeGtfQy2M@eth-node.valar-solutions.com/",
-    // "http://secret:X4gDeGtfQy2M@eth-node-kovan.valar-solutions.com",
-    "https://eth-kovan.alchemyapi.io/v2/T-HrWz2nVQ8FIQ5227T0bfUTeO7UjZC5",
+    globalConfig.nodeUrl,
 
     {
       ...(globalConfig.isDevelopment
@@ -52,7 +50,7 @@ applyMnemonicToWeb3(web3);
 
 export const globalWeb3Client = web3;
 
-export const DEFT_STORAGE = "0x6B739F6737B3992bf906D2042999A5B0e9a7b178";
+export const DEFT_STORAGE = globalConfig.deftStorage;
 
 export const deftStorageContract = new web3.eth.Contract(
   // @ts-ignore
