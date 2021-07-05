@@ -4,8 +4,6 @@ import { globalMongo } from "../utils/mongo";
 import { request } from "./request";
 import { BlocksResult, Transaction, TransactionsResult } from "./syncer.types";
 
-const EPAY_PAIR_START_BLOCK = 12601500;
-
 const useProxy = globalConfig.isDevelopment
   ? {
       agent: {
@@ -166,9 +164,8 @@ export class BlockTransactionsService {
       return latestBlock;
     }
 
-    const fromBlock = Math.max(EPAY_PAIR_START_BLOCK, lastBlockNumber + 1);
+    const fromBlock = Math.max(globalConfig.startAtBlock, lastBlockNumber + 1);
 
-    console.time("timer");
     const FETCH_AT_ONCE = 50;
     const thisLatestBlock = Math.min(fromBlock + FETCH_AT_ONCE, latestBlock);
 
@@ -176,6 +173,12 @@ export class BlockTransactionsService {
       length: thisLatestBlock - fromBlock + 1,
     }).map((_, i) => fromBlock + i);
 
+    if (blocksNumbers.length === 0) {
+      console.log("no new blocks yet");
+      return 0;
+    }
+
+    console.time("timer");
     console.log("from-to: " + fromBlock + "->" + thisLatestBlock);
 
     // const results = await Promise.all(

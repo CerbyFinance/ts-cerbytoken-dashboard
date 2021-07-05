@@ -14,6 +14,8 @@ const {
   MONGO_HOST_DEV,
   MONGO_PORT_DEV,
   MONGO_NAME_DEV,
+
+  START_AT_BLOCK,
 } = process.env;
 
 // @ts-ignore
@@ -21,6 +23,7 @@ const isJest = global.__DEV__;
 
 const globalConfig = {
   isDevelopment: isJest || (NODE_ENV || "development") === "development",
+  startAtBlock: Number(START_AT_BLOCK!),
 
   production: {
     mongodb: {

@@ -1,0 +1,10 @@
+version: "3.7"
+services:
+  flasbots-syncer-server:
+    # build: .
+    image: flasbots-syncer-server
+    environment:
+      NODE_ENV: production
+    restart: always
+    ports:
+      - 1100:3002
