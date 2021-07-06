@@ -1,5 +1,6 @@
 import {
   BurnedByBridge,
+  BurnHumanAddress,
   Transfer,
 } from "../generated/DefiFactoryToken/DefiFactoryToken";
 import { BotTransactionDetected } from "../generated/NoBotsTech/NoBotsTech";
@@ -54,6 +55,7 @@ export function handleBotTransactionDetected(
 }
 
 const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
+const VESTING_ADDRESS = "0xDEF1fAE3A7713173C168945b8704D4600B6Fc7B9";
 
 export function handleBurnedByBridge(event: BurnedByBridge): void {
   let global = getOrCreateGlobal();
@@ -62,8 +64,17 @@ export function handleBurnedByBridge(event: BurnedByBridge): void {
   global.save();
 }
 
+export function handleBurnHumandAddress(event: BurnHumanAddress): void {
+  let global = getOrCreateGlobal();
+  global.totalTaxed = global.totalTaxed.minus(event.params.amount);
+  global.userTaxed = global.totalTaxed.minus(global.botTaxed);
+  global.save();
+}
+
 export function handleDefiFactoryTransfer(event: Transfer): void {
-  if (event.params.to.toHexString() != ZERO_ADDRESS) {
+  let toAddr = event.params.to.toHexString();
+
+  if (toAddr != ZERO_ADDRESS) {
     return;
   }
 
