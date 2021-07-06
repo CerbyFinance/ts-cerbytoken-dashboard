@@ -6,3 +6,4 @@ git pull
 docker build . --tag=bot-detector-server
 docker stack deploy --resolve-image=never -c ./stack.prod.yml bot-detector-stack
 docker service update --force bot-detector-stack_deft-detector
+docker service update --force bot-detector-stack_deft-detector-binance

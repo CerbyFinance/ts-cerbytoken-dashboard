@@ -161,11 +161,26 @@ export class DeftTransactionRepository {
 
 const l = (s: string) => s.toLowerCase();
 
+let CHAIN_ID = 0;
+
+const getChainId = async () => {
+  if (!CHAIN_ID) {
+    CHAIN_ID = await globalWeb3Client.eth.getChainId();
+    return CHAIN_ID;
+  }
+
+  return CHAIN_ID;
+};
+
 export class DeftTransactionService {
   deftTransactionRepo = new DeftTransactionRepository();
 
   async getTokens(address: string) {
-    let tokens = await globalRedis.get(address);
+    const chainId = await getChainId();
+
+    const KEY = chainId + "-" + address;
+
+    let tokens = await globalRedis.get(KEY);
 
     if (!tokens) {
       let pairContract = uniswapPairContract(address);
@@ -176,7 +191,7 @@ export class DeftTransactionService {
       ]);
 
       const tokens = [token0, token1];
-      await globalRedis.set(address, JSON.stringify(tokens));
+      await globalRedis.set(KEY, JSON.stringify(tokens));
 
       return tokens;
     }

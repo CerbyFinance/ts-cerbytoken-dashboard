@@ -9,6 +9,15 @@ services:
       - 1105:3001
     env_file:
       - ./.env-deft
+  deft-detector-binance:
+    image: bot-detector-server
+    environment:
+      NODE_ENV: production
+    restart: always
+    ports:
+      - 1106:3001
+    env_file:
+      - ./.env-deft-binance
   redis:
     image: redis:latest
     restart: always
