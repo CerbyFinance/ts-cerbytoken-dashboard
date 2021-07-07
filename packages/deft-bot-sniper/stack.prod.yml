@@ -6,6 +6,12 @@ services:
       NODE_ENV: production
     env_file:
       - ./.env-deft
+  deft-sniper-binance:
+    image: bot-sniper-server
+    environment:
+      NODE_ENV: production
+    env_file:
+      - ./.env-deft-binance
   redis:
     image: redis:latest
     volumes:

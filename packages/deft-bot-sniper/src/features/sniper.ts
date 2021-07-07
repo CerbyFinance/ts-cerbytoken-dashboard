@@ -265,7 +265,9 @@ export const sniperLoop = async () => {
         return;
       }
 
-      const headBlockNumber = await getBlockNumber();
+      const headBlockNumber = FLASHBOTS_URL
+        ? await getBlockNumber()
+        : await globalWeb3Client.eth.getBlockNumber();
 
       if (headBlockNumber instanceof Error) {
         return headBlockNumber;

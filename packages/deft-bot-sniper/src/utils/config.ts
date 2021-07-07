@@ -23,7 +23,7 @@ const globalConfig = {
   nodeUrl: NODE_URL!,
   startFromBlock: Number(START_FROM_BLOCK!),
   projectName: PROJECT_NAME!,
-  flashBotsUrl: FLASHBOTS_URL!,
+  flashBotsUrl: FLASHBOTS_URL,
   detectorUrl: DETECTOR_URL!,
 
   production: {
