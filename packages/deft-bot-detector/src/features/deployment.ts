@@ -136,7 +136,7 @@ const create = (chain: string, tokens: Token[]) => {
     fs.writeFileSync(path + "/" + ".env-" + token.token, envToken);
   });
 
-  const flatTokens = ethTokens.map(token => token.token);
+  const flatTokens = tokens.map(token => token.token);
 
   const deployAndUpdate = deployAndUpdateTemplate(chain, flatTokens);
   const dockerCompose = dockerComposeTemplate(flatTokens);
