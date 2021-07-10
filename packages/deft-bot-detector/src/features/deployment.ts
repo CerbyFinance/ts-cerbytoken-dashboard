@@ -75,7 +75,7 @@ WETH_TOKEN_PROD=${weth}`;
 // prettier-ignore
 const deployAndUpdateTemplate = (chain: string, tokens: string[]) => `
 docker stack deploy --resolve-image=never -c ./${chain}.yml ${chain}-bot-detector-stack` + '\n' + 
-tokens.map(token => `docker service update --force ${chain}-bot-detector-stack_${token} &`).join('\n')
+tokens.map(token => `docker service update --force ${chain}-bot-detector-stack_${token.slice(0, 16)} &`).join('\n')
 
 const dockerComposeTemplate = (tokens: string[]) =>
   `
@@ -89,7 +89,7 @@ services:
 ` +
   tokens
     .map(
-      token => `  ${token}:
+      token => `  ${token.slice(0, 16)}:
     image: bot-detector-server
     environment:
       NODE_ENV: production
