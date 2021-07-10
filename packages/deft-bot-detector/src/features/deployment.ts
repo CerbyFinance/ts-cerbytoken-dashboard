@@ -89,7 +89,7 @@ services:
 ` +
   tokens
     .map(
-      token => `  ${token.slice(0, 16)}:
+      token => `  '${token.slice(0, 16)}':
     image: bot-detector-server
     environment:
       NODE_ENV: production
