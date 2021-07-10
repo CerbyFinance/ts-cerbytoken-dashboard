@@ -40,6 +40,8 @@ const {
 
   FLASHBOTS_URL,
   FETCH_AT_ONCE,
+
+  SYNCTIME_FLASHBOTS,
 } = process.env;
 
 // @ts-ignore
@@ -50,6 +52,7 @@ const globalConfig = {
 
   fetchAtOnce: Number(FETCH_AT_ONCE! || -1),
   flashBotsUrl: FLASHBOTS_URL!,
+  syncTimeFlashBots: SYNCTIME_FLASHBOTS === "true",
 
   production: {
     redis: {

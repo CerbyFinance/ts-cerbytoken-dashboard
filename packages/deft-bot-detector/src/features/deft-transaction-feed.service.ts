@@ -1,25 +1,7 @@
-import { globalConfig } from "../utils/config";
-import { DeftTransactionRepository } from "./deft-transaction.service";
-import { request } from "./request";
-
-const areFlashBots = async (transactions: string[]) => {
-  const result = await request<{
-    data: string[];
-    message: string;
-  }>({
-    method: "POST",
-    url: `${globalConfig.flashBotsUrl}/flashbots/are-flash-bots`,
-    json: {
-      transactions,
-    },
-  });
-
-  if (result instanceof Error) {
-    return result;
-  }
-
-  return result.body.data;
-};
+import {
+  DeftTransactionRepository,
+  withFlashBots,
+} from "./deft-transaction.service";
 
 export class DeftTransactionFeedService {
   deftTransactionRepository = new DeftTransactionRepository();
@@ -54,27 +36,7 @@ export class DeftTransactionFeedService {
       recipientsIn,
     );
 
-    const transactions = result.map(item => item.txHash);
-
-    const flashbots = await areFlashBots(transactions).then(r => {
-      if (r instanceof Error) {
-        console.log(r);
-        return [];
-      }
-
-      return r;
-    });
-
-    const flasbotsSet = new Set(flashbots);
-
-    const resultWithFlashbots = result.map(item => {
-      const isFlashBot = flasbotsSet.has(item.txHash);
-      return {
-        ...item,
-        isFlashBot,
-        isBot: isFlashBot ? true : item.isBot,
-      };
-    });
+    const resultWithFlashbots = await withFlashBots(result);
 
     return resultWithFlashbots;
   }

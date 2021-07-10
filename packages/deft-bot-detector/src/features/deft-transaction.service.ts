@@ -25,6 +25,7 @@ import {
   EventDoc,
   getPastLogs,
 } from "../utils/web3.utils";
+import { request } from "./request";
 
 const SWAP_EVENT_HASH =
   "0xd78ad95fa46c994b6551d0da85fc275fe613ce37657fb8d5e3d130840159d822";
@@ -53,7 +54,7 @@ const decodeByFnHash = Object.fromEntries(
     }),
 );
 
-interface DeftTransaction {
+export interface DeftTransaction {
   _id: string;
   isBuy: boolean;
   txHash: string;
@@ -76,6 +77,51 @@ interface DeftTransaction {
 }
 
 const collectionName = "deft-transactions";
+
+const areFlashBots = async (transactions: string[]) => {
+  const result = await request<{
+    data: string[];
+    message: string;
+  }>({
+    method: "POST",
+    url: `${globalConfig.flashBotsUrl}/flashbots/are-flash-bots`,
+    json: {
+      transactions,
+    },
+  });
+
+  if (result instanceof Error) {
+    return result;
+  }
+
+  return result.body.data;
+};
+
+export const withFlashBots = async (transactions: DeftTransaction[]) => {
+  const txsHashes = transactions.map(item => item.txHash);
+
+  const flashbots = await areFlashBots(txsHashes).then(r => {
+    if (r instanceof Error) {
+      console.log(r);
+      return [];
+    }
+
+    return r;
+  });
+
+  const flasbotsSet = new Set(flashbots);
+
+  const resultWithFlashbots = transactions.map(item => {
+    const isFlashBot = flasbotsSet.has(item.txHash);
+    return {
+      ...item,
+      isFlashBot,
+      isBot: isFlashBot ? true : item.isBot,
+    } as DeftTransaction & { isFlashBot: true };
+  });
+
+  return resultWithFlashbots;
+};
 
 export class DeftTransactionRepository {
   async insertMany(items: DeftTransaction[]) {
@@ -462,6 +508,9 @@ export class DeftTransactionService {
               amountInMax: amountInMax.toString(),
               amountOutMin: amountOutMin.toString(),
 
+              amountIn: amountIn.toString(),
+              amountOut: amountOut.toString(),
+
               deadline: deadline.toString(),
               slippage,
 
@@ -491,7 +540,12 @@ export class DeftTransactionService {
         return -1;
       }
 
-      await this.deftTransactionRepo.insertMany(validResults);
+      if (globalConfig.syncTimeFlashBots) {
+        const resultWithFlashBots = await withFlashBots(validResults);
+        await this.deftTransactionRepo.insertMany(resultWithFlashBots);
+      } else {
+        await this.deftTransactionRepo.insertMany(validResults);
+      }
 
       i += items.length;
       j += results.length;
