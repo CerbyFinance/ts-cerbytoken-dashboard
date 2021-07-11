@@ -462,13 +462,15 @@ export class DeftTransactionService {
             deadline = Web3.utils.toBN(decoded['deadline'])
           }
 
-            const amountIn = Web3.utils
-              .toBN(amount0In)
-              .add(Web3.utils.toBN(amount1In));
+            const amountIn =
+              l(WETH_TOKEN) < l(DEFT_TOKEN)
+                ? Web3.utils.toBN(amount0In)
+                : Web3.utils.toBN(amount1In);
 
-            const amountOut = Web3.utils
-              .toBN(amount0Out)
-              .add(Web3.utils.toBN(amount1Out));
+            const amountOut =
+              l(WETH_TOKEN) < l(DEFT_TOKEN)
+                ? Web3.utils.toBN(amount1Out)
+                : Web3.utils.toBN(amount0Out);
 
             const num1 = Number(Web3.utils.fromWei(amountInMax));
             const deNom1 = Number(Web3.utils.fromWei(amountIn));
