@@ -169,6 +169,11 @@ const snipe = async (transactions: DeftTransaction[]) => {
   const possibleBots = transactions.flatMap(tx => {
     const recipients = tx.recipients;
 
+    if (tx.slippage > 1.01) {
+      log("unreal slippage " + tx.slippage);
+      return [];
+    }
+
     if (tx.isBot) {
       return recipients;
     }
