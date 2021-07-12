@@ -97,6 +97,66 @@ const areFlashBots = async (transactions: string[]) => {
   return result.body.data;
 };
 
+const areOffChainBots = async (addresses: string[]) => {
+  const result = await request<{
+    data: string[];
+    message: string;
+  }>({
+    method: "POST",
+    url: `${globalConfig.offChainStorageUrl}/storage/are-bots`,
+    json: {
+      addresses,
+    },
+  });
+
+  if (result instanceof Error) {
+    return result;
+  }
+
+  return result.body.data;
+};
+
+const ZERO_ADDR = "0x0000000000000000000000000000000000000000";
+
+export const withOffChainBots = async (transactions: DeftTransaction[]) => {
+  // prettier-ignore
+  const addresses = transactions.flatMap(item =>
+    item.recipients
+      .filter(recip => recip.id !== ZERO_ADDR && recip.isNewHolder && !recip.isContract)
+      .map(recip => recip.id),
+  );
+
+  const bots =
+    addresses.length > 0
+      ? await areOffChainBots(addresses).then(r => {
+          if (r instanceof Error) {
+            console.log(r);
+            return [];
+          }
+
+          return r;
+        })
+      : [];
+
+  const botsSet = new Set(bots);
+
+  const result = transactions.map(item => {
+    // prettier-ignore
+    const theseRecipients = item.recipients
+      .filter(recip =>  recip.id !== ZERO_ADDR && recip.isNewHolder && !recip.isContract)
+      .map(recip => recip.id);
+
+    const isBotInDB = theseRecipients.some(recip => botsSet.has(recip));
+    return {
+      ...item,
+      isBotInDB,
+      isBot: isBotInDB ? true : item.isBot,
+    } as DeftTransaction & { isBotInDB: true };
+  });
+
+  return result;
+};
+
 export const withFlashBots = async (transactions: DeftTransaction[]) => {
   const txsHashes = transactions.map(item => item.txHash);
 
@@ -281,6 +341,8 @@ export class DeftTransactionService {
     );
 
     const newEventsNoDups = newEvents;
+
+    console.log("checking bots");
 
     // @ts-ignore
     const getAbi = createGetAbi(uniswapPairContractAbi);
@@ -542,12 +604,20 @@ export class DeftTransactionService {
         return -1;
       }
 
-      if (globalConfig.syncTimeFlashBots) {
-        const resultWithFlashBots = await withFlashBots(validResults);
-        await this.deftTransactionRepo.insertMany(resultWithFlashBots);
-      } else {
-        await this.deftTransactionRepo.insertMany(validResults);
-      }
+      console.log("fetching flashbots and off-chain bots");
+      console.time("flashbots");
+
+      const resultWithFlashBots = globalConfig.syncTimeFlashBots
+        ? await withFlashBots(validResults)
+        : validResults;
+
+      const resultWithOffChainBots = globalConfig.syncTimeOffChainStorage
+        ? await withOffChainBots(resultWithFlashBots)
+        : resultWithFlashBots;
+
+      console.timeEnd("flashbots");
+
+      await this.deftTransactionRepo.insertMany(resultWithOffChainBots);
 
       i += items.length;
       j += results.length;
