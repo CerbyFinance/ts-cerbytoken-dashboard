@@ -39,9 +39,11 @@ const {
   IS_CONTRACT_BULK_DEV,
 
   FLASHBOTS_URL,
+  OFFCHAIN_STORAGE_URL,
   FETCH_AT_ONCE,
 
   SYNCTIME_FLASHBOTS,
+  SYNCTIME_OFFCHAIN_STORAGE,
 } = process.env;
 
 // @ts-ignore
@@ -52,7 +54,9 @@ const globalConfig = {
 
   fetchAtOnce: Number(FETCH_AT_ONCE! || -1),
   flashBotsUrl: FLASHBOTS_URL!,
+  offChainStorageUrl: OFFCHAIN_STORAGE_URL!,
   syncTimeFlashBots: SYNCTIME_FLASHBOTS === "true",
+  syncTimeOffChainStorage: SYNCTIME_OFFCHAIN_STORAGE === "true",
 
   production: {
     redis: {
