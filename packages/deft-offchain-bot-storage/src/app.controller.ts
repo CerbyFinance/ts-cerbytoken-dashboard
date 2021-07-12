@@ -9,7 +9,7 @@ import {
 
 class AreBotsDTO {
   @ApiProperty()
-  transactions!: string[];
+  addresses!: string[];
 }
 
 class FeedDTO {
@@ -90,7 +90,7 @@ export class AppController {
   async areFlashBots(
     @Body(new ValidationPipe({ transform: true })) input: AreBotsDTO,
   ): Promise<IApiResponse<AnyResponse>> {
-    const bots = await this.transactionRepository.areBots(input.transactions);
+    const bots = await this.transactionRepository.areBots(input.addresses);
 
     return {
       data: bots,
