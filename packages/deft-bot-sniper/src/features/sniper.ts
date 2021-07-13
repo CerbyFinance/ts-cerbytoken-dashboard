@@ -133,7 +133,7 @@ const sendTransaction = async (
     ? Math.floor(Number(_gasPrice) * GAS_PRICE_MULT)
     : Number(_gasPrice);
 
-  const gasPrice = Math.min(__gasPrice, 100000000000);
+  const gasPrice = Math.min(__gasPrice, 200000000000);
 
   const preparedMethod = generateMethod();
 
