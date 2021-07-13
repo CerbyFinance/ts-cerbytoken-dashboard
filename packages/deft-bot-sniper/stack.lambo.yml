@@ -1,0 +1,15 @@
+version: "3.7"
+services:
+  lambo-sniper:
+    image: bot-sniper-server
+    environment:
+      NODE_ENV: production
+    env_file:
+      - ./.env-lambo
+  redis:
+    image: redis:latest
+    volumes:
+      - shared-redis:/data
+
+volumes:
+  shared-redis:

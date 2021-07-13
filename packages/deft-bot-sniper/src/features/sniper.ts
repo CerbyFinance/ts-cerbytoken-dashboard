@@ -346,7 +346,7 @@ export const sniperLoop = async () => {
 export const gasPriceLoop = async () => {
   while (true) {
     try {
-      if (SNIPING) {
+      if (SNIPING && CURRENT_GAS_PRICE) {
         const newGasPrice = await calculateGasPrice();
 
         if (newGasPrice instanceof Error) {
@@ -358,8 +358,6 @@ export const gasPriceLoop = async () => {
         // prettier-ignore
         if (newGasPrice > CURRENT_GAS_PRICE) {
           log(`(RESTART recommended) new gas price ${newGasPrice}, current gas price ${CURRENT_GAS_PRICE}`);
-        } else {
-          log("gas ok");
         }
       }
 
