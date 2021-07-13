@@ -118,9 +118,10 @@ const ESTIMATE_MULT = 1.2;
 const GAS_PRICE_MULT = 1.3;
 const SPLIT_BY = 50;
 
-const sendTransaction = async (
-  generateMethod: () => NonPayableTransactionObject<void>,
-) => {
+let SNIPING = false;
+let CURRENT_GAS_PRICE = 0;
+
+const calculateGasPrice = async () => {
   const _gasPrice = IS_MAIN
     ? await getGasPrice()
     : await globalWeb3Client.eth.getGasPrice();
@@ -134,6 +135,20 @@ const sendTransaction = async (
     : Number(_gasPrice);
 
   const gasPrice = Math.min(__gasPrice, 200000000000);
+
+  return gasPrice;
+};
+
+const sendTransaction = async (
+  generateMethod: () => NonPayableTransactionObject<void>,
+) => {
+  const gasPrice = await calculateGasPrice();
+
+  if (gasPrice instanceof Error) {
+    return gasPrice;
+  }
+  // for gasPrice loop
+  CURRENT_GAS_PRICE = gasPrice;
 
   const preparedMethod = generateMethod();
 
@@ -306,6 +321,7 @@ export const sniperLoop = async () => {
         ...transactions.map(item => item.blockNumber),
       );
 
+      SNIPING = true;
       try {
         const isOk = await snipe(transactions);
 
@@ -315,9 +331,39 @@ export const sniperLoop = async () => {
       } catch (error) {
         log(error.message);
         continue;
+      } finally {
+        SNIPING = false;
       }
 
       await setProcessedLatestBlockNumber(maxBlockNumber);
+    } catch (error) {
+      log("things happen");
+      console.log(error);
+    }
+  }
+};
+
+export const gasPriceLoop = async () => {
+  while (true) {
+    try {
+      if (SNIPING) {
+        const newGasPrice = await calculateGasPrice();
+
+        if (newGasPrice instanceof Error) {
+          log("error while fetching gasPrice");
+          log(newGasPrice.message);
+          continue;
+        }
+
+        // prettier-ignore
+        if (newGasPrice > CURRENT_GAS_PRICE) {
+          log(`(RESTART recommended) new gas price ${newGasPrice}, current gas price ${CURRENT_GAS_PRICE}`);
+        } else {
+          log("gas ok");
+        }
+      }
+
+      await sleep(1000);
     } catch (error) {
       log("things happen");
       console.log(error);
@@ -345,5 +391,6 @@ export const triggerRunJobs = async () => {
   }
 
   sniperLoop();
+  gasPriceLoop();
   // snipe();
 };
