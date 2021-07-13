@@ -7,6 +7,7 @@ import {
   ValidationPipe,
 } from "@nestjs/common";
 import { ApiBody, ApiProperty, ApiQuery, ApiResponse } from "@nestjs/swagger";
+import { IsArray } from "class-validator";
 import { BlockTransactionsRepository } from "./features/blocks-transactions.service";
 import {
   AnyResponse,
@@ -15,6 +16,7 @@ import {
 } from "./utils/nestjs.utils";
 
 class AreFlashBotsDTO {
+  @IsArray()
   @ApiProperty()
   transactions!: string[];
 }
