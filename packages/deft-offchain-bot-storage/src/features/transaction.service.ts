@@ -48,7 +48,12 @@ export class TransactionRepository {
 
     const items = await globalMongo
       .collection(collectionName)
-      .aggregate<{}>(aggregatorOpts)
+      .aggregate<{}>(aggregatorOpts, {
+        collation: {
+          locale: "en_US",
+          strength: 1,
+        },
+      })
       .toArray();
 
     return items;

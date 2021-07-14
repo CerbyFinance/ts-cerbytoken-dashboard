@@ -258,7 +258,12 @@ export class DeftTransactionRepository {
 
     const items = await globalMongo
       .collection(collectionName)
-      .aggregate<DeftTransaction>(aggregatorOpts)
+      .aggregate<DeftTransaction>(aggregatorOpts, {
+        collation: {
+          locale: "en_US",
+          strength: 1,
+        },
+      })
       .toArray();
 
     return items;
