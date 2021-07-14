@@ -550,7 +550,7 @@ export class DeftTransactionService {
                 ? 0
                 : slippagePercentIn + slippagePercentOut - 1;
 
-            const isSlippageBot = slippage > 0.5101;
+            const isSlippageBot = slippage > 0.7501;
             const isDeadlineBot =
               deadline > Web3.utils.toBN(timestamp).addn(12000);
 
