@@ -56,7 +56,7 @@ export function handleSwap(event: SwapEvent): void {
 
   let feedType = "";
 
-  if (amount0In > ZERO_BD) {
+  if (amount1In > ZERO_BD) {
     feedType = "buy";
   } else {
     feedType = "sell";
@@ -65,16 +65,16 @@ export function handleSwap(event: SwapEvent): void {
   let deftInEth = ZERO_BD;
   let amountDeft = ZERO_BD;
   let amountDeftInEth = ZERO_BD;
-  if (amount1In > ZERO_BD && amount0Out > ZERO_BD) {
-    deftInEth = amount0Out.div(amount1In);
+  if (amount0In > ZERO_BD && amount1Out > ZERO_BD) {
+    deftInEth = amount1Out.div(amount0In);
 
-    amountDeft = amount1In;
-    amountDeftInEth = amount0Out;
-  } else if (amount1Out > ZERO_BD && amount0In > ZERO_BD) {
-    deftInEth = amount0In.div(amount1Out);
+    amountDeft = amount0In;
+    amountDeftInEth = amount1Out;
+  } else if (amount0Out > ZERO_BD && amount1In > ZERO_BD) {
+    deftInEth = amount1In.div(amount0Out);
 
-    amountDeft = amount1Out;
-    amountDeftInEth = amount0In;
+    amountDeft = amount0Out;
+    amountDeftInEth = amount1In;
   }
 
   let deftInUsd = deftInEth.times(usdt.price);
