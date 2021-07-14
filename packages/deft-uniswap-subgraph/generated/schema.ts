@@ -96,13 +96,13 @@ export class Swap extends Entity {
     this.set("to", Value.fromBytes(value));
   }
 
-  get deftInBnb(): BigDecimal {
-    let value = this.get("deftInBnb");
+  get deftInEth(): BigDecimal {
+    let value = this.get("deftInEth");
     return value.toBigDecimal();
   }
 
-  set deftInBnb(value: BigDecimal) {
-    this.set("deftInBnb", Value.fromBigDecimal(value));
+  set deftInEth(value: BigDecimal) {
+    this.set("deftInEth", Value.fromBigDecimal(value));
   }
 
   get deftInUsd(): BigDecimal {
@@ -123,13 +123,13 @@ export class Swap extends Entity {
     this.set("amountDeft", Value.fromBigDecimal(value));
   }
 
-  get amountDeftInBnb(): BigDecimal {
-    let value = this.get("amountDeftInBnb");
+  get amountDeftInEth(): BigDecimal {
+    let value = this.get("amountDeftInEth");
     return value.toBigDecimal();
   }
 
-  set amountDeftInBnb(value: BigDecimal) {
-    this.set("amountDeftInBnb", Value.fromBigDecimal(value));
+  set amountDeftInEth(value: BigDecimal) {
+    this.set("amountDeftInEth", Value.fromBigDecimal(value));
   }
 
   get amountDeftInUsd(): BigDecimal {
@@ -141,13 +141,13 @@ export class Swap extends Entity {
     this.set("amountDeftInUsd", Value.fromBigDecimal(value));
   }
 
-  get transactionFeeInBnb(): BigDecimal {
-    let value = this.get("transactionFeeInBnb");
+  get transactionFeeInEth(): BigDecimal {
+    let value = this.get("transactionFeeInEth");
     return value.toBigDecimal();
   }
 
-  set transactionFeeInBnb(value: BigDecimal) {
-    this.set("transactionFeeInBnb", Value.fromBigDecimal(value));
+  set transactionFeeInEth(value: BigDecimal) {
+    this.set("transactionFeeInEth", Value.fromBigDecimal(value));
   }
 
   get transactionFeeInUsd(): BigDecimal {
