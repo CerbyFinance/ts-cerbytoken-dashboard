@@ -16,3 +16,23 @@ export const formatCurrency = (amount: number) => {
 // borrowed from https://github.com/mikemaccana/dynamic-template
 export const dynamicTemplate = (templateStr: string, vars: any) =>
   templateStr.replace(/\${(.*?)}/g, (_, g) => vars[g]);
+
+function chunk<T>(arr: T[], len: number) {
+  var chunks = [],
+    i = 0,
+    n = arr.length;
+
+  while (i < n) {
+    chunks.push(arr.slice(i, (i += len)));
+  }
+
+  return chunks;
+}
+
+export const formatNum = (num: number) => {
+  const s = Number(num).toString().split("").reverse();
+  return chunk(s, 3)
+    .map(item => item.reverse().join(""))
+    .reverse()
+    .join(",");
+};

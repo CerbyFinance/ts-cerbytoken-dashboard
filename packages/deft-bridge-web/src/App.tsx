@@ -4,6 +4,7 @@ import { useWeb3React, Web3ReactProvider } from "@web3-react/core";
 import { serializeError } from "eth-rpc-errors";
 import { ethers } from "ethers";
 import { Box, Grommet, Text } from "grommet";
+import Tooltip from "rc-tooltip";
 import React, {
   createContext,
   CSSProperties,
@@ -43,7 +44,6 @@ import {
   ProofByTxHashQuery,
   ProofByTxHashQueryVariables,
   ProofType,
-  useGlobalQuery,
 } from "./graphql/types";
 import {
   BinanceLogo,
@@ -57,7 +57,7 @@ import { Logo } from "./logo";
 import { clientByChain, noopApollo } from "./shared/client";
 import { HoveredElement } from "./shared/hooks";
 import { useBridgeContract, useTokenContract } from "./shared/useContract";
-import { dynamicTemplate } from "./shared/utils";
+import { dynamicTemplate, formatNum } from "./shared/utils";
 import Web3ReactManager from "./shared/Web3Manager";
 import { txnToast } from "./toaster";
 
@@ -117,12 +117,12 @@ type ProcessStatus = "none" | "loading" | "error" | "success";
 
 const processesTextStatuses = {
   transfer: {
-    none: "transfer <b>${transferAmount} DEFT</b> from <b>${src}</b> to <b>${dest}</b>",
+    none: "transfer <b>${transferAmount} ${token}</b> from <b>${src}</b> to <b>${dest}</b>",
     loading:
-      "transfering <b>${transferAmount} DEFT</b> from <b>${src}</b> to <b>${dest}</b>",
+      "transfering <b>${transferAmount} ${token}</b> from <b>${src}</b> to <b>${dest}</b>",
     error: "",
     success:
-      "transfered <b>${transferAmount} DEFT</b> from <b>${src}</b> to <b>${dest}</b>",
+      "transfered <b>${transferAmount} ${token}</b> from <b>${src}</b> to <b>${dest}</b>",
   },
   validation: {
     none: "ensure correctness of transfer",
@@ -131,10 +131,10 @@ const processesTextStatuses = {
     success: "transfer is correct",
   },
   receive: {
-    none: "receive <b>${receiveAmount} DEFT</b> on <b>${dest}</b>",
-    loading: "receiving <b>${receiveAmount} DEFT</b> on <b>${dest}</b>",
+    none: "receive <b>${receiveAmount} ${token}</b> on <b>${dest}</b>",
+    loading: "receiving <b>${receiveAmount} ${token}</b> on <b>${dest}</b>",
     error: "",
-    success: "you received <b>${receiveAmount} DEFT</b> on <b>${dest}</b>",
+    success: "you received <b>${receiveAmount} ${token}</b> on <b>${dest}</b>",
   },
 } as {
   [key in Process]: {
@@ -205,19 +205,17 @@ const BridgeWidgetProcess = () => {
     id: currentProofId,
   } = useParams<{ id: string; src: string; dest: string }>();
 
-  // const [srcChainId,destChainId,nonce] =Buffer.from(miniProofId, 'hex').toString().split('-')
-
   const path = [Number(srcChainId), Number(destChainId)] as [Chains, Chains];
 
   const [transferAmount, setTransferAmount] = useState<string | undefined>();
 
   const bridgeContract = useBridgeContract();
-  const tokenContract = useTokenContract();
 
   const [loader, setLoader] = useState(false);
   const [nonce, setNonce] = useState<number>(0);
 
-  const { balance, refetchBalance } = useContext(GlobalContext);
+  const { balance, fee, token, tokenAddress, refetchBalance } =
+    useContext(GlobalContext);
 
   // const [currentProofId, setCurrentProofId] = useState<string>("");
   // const [path, setPath] = useState([0, 0] as unknown as [Chains, Chains]);
@@ -225,10 +223,7 @@ const BridgeWidgetProcess = () => {
   const srcClient = clientByChain[idToChain[path[0]]] || noopApollo;
   const destClient = clientByChain[idToChain[path[1]]] || noopApollo;
 
-  const { data } = useGlobalQuery({
-    client: destClient,
-  });
-  const fee = data?.global?.currentFee || 0;
+  // const fee = data?.global?.currentFee || 0;
 
   const receiveAmount = transferAmount
     ? Number(transferAmount) - Number(transferAmount) * fee
@@ -338,6 +333,7 @@ const BridgeWidgetProcess = () => {
 
   // TODO: show actual error in ui
   const receive = async (
+    tokenAddress: string,
     account: string,
     srcNonce: number,
     srcChainId: Chains,
@@ -352,6 +348,7 @@ const BridgeWidgetProcess = () => {
 
       const result = await bridgeContract.mintWithBurnProof({
         amount: ethers.utils.parseEther(transferAmount!),
+        sourceTokenAddr: tokenAddress,
         sourceChainId: srcChainId,
         sourceNonce: srcNonce,
         transactionHash: currentProofId,
@@ -456,7 +453,8 @@ const BridgeWidgetProcess = () => {
         } else {
           actionButton = {
             text: "Receive",
-            onClick: () => receive(account!, nonce, path[0], path[1]),
+            onClick: () =>
+              receive(tokenAddress, account!, nonce, path[0], path[1]),
           };
         }
       } else {
@@ -501,6 +499,7 @@ const BridgeWidgetProcess = () => {
         position: "relative",
         alignSelf: "center",
       }}
+      background="white"
       round="12px"
       pad="30px 22px 20px"
     >
@@ -514,6 +513,7 @@ const BridgeWidgetProcess = () => {
             transferAmount: transferAmount
               ? Number(transferAmount).toFixed(2)
               : "...",
+            token,
             receiveAmount: receiveAmount ? receiveAmount.toFixed(2) : "...",
             src,
             dest,
@@ -793,6 +793,29 @@ const getGraphBlockNumber = async (
   return result.data._meta?.block.number;
 };
 
+const HoverScale = styled(Box)`
+  &:hover {
+    transform: scale(1.048);
+  }
+`;
+
+const HoveredColor = styled(Box)`
+  &:hover {
+    background: rgba(203, 226, 255, 0.35);
+  }
+`;
+
+const tokens = [
+  {
+    name: "TEST1",
+    address: "0x5564217Dd1e1255eA751C9C506Fac9eD25FA5240",
+  },
+  {
+    name: "TEST2",
+    address: "0x60b6F75D513E3C60bd325AE6B64Ea08ca3217527",
+  },
+];
+
 const BridgeWidget = () => {
   const { account, activate, chainId, library, connector, error } =
     useWeb3React();
@@ -813,17 +836,26 @@ const BridgeWidget = () => {
   }, [library, chainId]);
 
   const bridgeContract = useBridgeContract();
-  const tokenContract = useTokenContract();
+  // const tokenContract = useTokenContract();
 
   const history = useHistory();
 
-  const { balance, refetchBalance } = useContext(GlobalContext);
+  const {
+    balance,
+    setToken,
+    minAmount,
+    fee,
+    token,
+    tokenAddress,
+    refetchBalance,
+  } = useContext(GlobalContext);
 
   const [transferAmount, setTransferAmount] = useState("");
   const [isPopular, setPopular] = useState(true);
 
   const [loader, setLoader] = useState(false);
-  const [path, setPath] = useState([1, 56] as [Chains, Chains]);
+  // const [path, setPath] = useState([1, 56] as [Chains, Chains]);
+  const [path, setPath] = useState([42, 97] as [Chains, Chains]);
 
   const setMax = () => {
     setTransferAmount(balance.toString());
@@ -845,12 +877,13 @@ const BridgeWidget = () => {
   const srcClient = clientByChain[idToChain[path[0]]] || noopApollo;
   const destClient = clientByChain[idToChain[path[1]]] || noopApollo;
 
-  const { data } = useGlobalQuery({ client: destClient });
-  const fee = data?.global?.currentFee || 0;
+  // const fee = data?.global?.currentFee || 0;
 
   const computedFee = Number(transferAmount) * fee;
 
   const [graphBlockNumber, setGraphBlockNumber] = useState<number>(0);
+
+  const [visible, onVisibleChange] = useState(false);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -885,6 +918,7 @@ const BridgeWidget = () => {
 
   const transfer = async (
     client: ApolloClient<NormalizedCacheObject>,
+    tokenAddress: string,
     account: string,
     amount: string,
     srcChainId: Chains,
@@ -894,6 +928,7 @@ const BridgeWidget = () => {
       setLoader(true);
 
       const result = await bridgeContract.burnAndCreateProof(
+        tokenAddress,
         ethers.utils.parseEther(amount),
         destChainId,
       );
@@ -991,7 +1026,14 @@ const BridgeWidget = () => {
             actionButton = {
               text: "Transfer",
               onClick: () => {
-                transfer(srcClient, account!, transferAmount, path[0], path[1]);
+                transfer(
+                  srcClient,
+                  tokenAddress,
+                  account!,
+                  transferAmount,
+                  path[0],
+                  path[1],
+                );
               },
             };
           } else {
@@ -1053,6 +1095,7 @@ const BridgeWidget = () => {
 
         // margin: "40px 20px 0px 0px",
       }}
+      background="white"
       round="12px"
       pad="20px 22px 20px"
     >
@@ -1114,7 +1157,7 @@ const BridgeWidget = () => {
               lineHeight: "132%",
             }}
           >
-            {balance.toFixed(0)} DEFT
+            {formatNum(Number(balance.toFixed(0)))} {token}
           </Text>
         </Box>
         <Box height="6px" />
@@ -1136,29 +1179,101 @@ const BridgeWidget = () => {
               }
             }}
           />
-          <Box>
+          {/* <Box>
             <Text size="18px" weight={400} color="#414141">
               DEFT
             </Text>
-          </Box>
-          <Box
-            margin={{
-              left: "auto",
+          </Box> */}
+          <Tooltip
+            placement="bottomRight"
+            align={{
+              offset: [0, -35],
             }}
-            style={{
-              background: "rgba(252, 208, 207, 0.5)",
-              cursor: "pointer",
-            }}
-            round="8px"
-            align="center"
-            justify="center"
-            pad={"3px 11px"}
-            onClick={() => setMax()}
+            trigger={["click"]}
+            overlay={
+              <Box
+                background="white"
+                style={{
+                  width: "120px",
+                  height: "84px",
+                  boxShadow: "rgba(0,0,0, 0.12) 0px 3px 14px 3px",
+                  border: "1px solid rgb(192, 192, 192)",
+
+                  // border: "1px solid #f2f2f2",
+                  // 1px solid rgb(192, 192, 192)
+                }}
+                round="6px"
+              >
+                <Box height="2px"></Box>
+                {tokens.map((token2, i) => {
+                  const isLast = tokens.length === i + 1;
+                  const isActive = token2.name === token;
+
+                  return (
+                    <HoveredColor
+                      height="40px"
+                      pad="0px 10px"
+                      align="center"
+                      direction="row"
+                      style={{
+                        cursor: "pointer",
+                        ...(isLast
+                          ? {}
+                          : {
+                              borderBottom: "1px solid #cecece",
+                            }),
+                      }}
+                      onClick={() => {
+                        setToken(token2.name);
+                        onVisibleChange(false);
+                      }}
+                    >
+                      <Text
+                        size="16px"
+                        {...(isActive
+                          ? {
+                              weight: 600,
+                              color: "#414141",
+                            }
+                          : {
+                              weight: 500,
+                              color: "#818181",
+                            })}
+                      >
+                        {token2.name}
+                      </Text>
+                    </HoveredColor>
+                  );
+                })}
+
+                <Box height="2px"></Box>
+              </Box>
+            }
+            visible={visible}
+            onVisibleChange={v => onVisibleChange(v)}
           >
-            <Text weight={500} color="#E1125E" size="14px">
-              MAX
-            </Text>
-          </Box>
+            <HoverScale
+              margin={{
+                left: "auto",
+              }}
+              style={{
+                // border: "1px solid #007eff",
+                border: "1px solid rgb(192, 192, 192)",
+                boxShadow: "rgba(97,97,97,0.10) 0px 2px 1px 0px",
+                cursor: "pointer",
+              }}
+              round="8px"
+              align="center"
+              justify="center"
+              pad={"3px 7px 3px 11px"}
+              direction="row"
+            >
+              <Text weight={600} color="#414141" size="14px">
+                {token}
+              </Text>
+              <Angle />
+            </HoverScale>
+          </Tooltip>
         </Box>
       </Box>
       <Box height="12px" />
@@ -1274,7 +1389,39 @@ const BridgeWidget = () => {
             }}
           ></Box>
           <Text size="14px" color="#414141" weight={700}>
-            {computedFee.toFixed(0)} DEFT
+            {formatNum(Number(computedFee.toFixed(0)))} {token}
+          </Text>
+        </Box>
+        <Box direction="row" align="center" height="36px">
+          <Text size="14px" color="#818181" weight={500}>
+            Min amount
+          </Text>
+          <Box margin={{ left: "6px" }}>
+            <Hint
+              description={
+                <Text
+                  size="13px"
+                  style={{
+                    lineHeight: "22px",
+                  }}
+                  textAlign="center"
+                >
+                  Min amount to transfer
+                </Text>
+              }
+            >
+              <Box>
+                <QuestionIcon />
+              </Box>
+            </Hint>
+          </Box>
+          <Box
+            margin={{
+              left: "auto",
+            }}
+          ></Box>
+          <Text size="14px" color="#414141" weight={700}>
+            {formatNum(Number(minAmount.toFixed(0)))} {token}
           </Text>
         </Box>
       </Box>
@@ -1334,8 +1481,36 @@ const BridgeWidget = () => {
   );
 };
 
+const Angle = ({
+  rotate,
+  color,
+  size,
+}: {
+  rotate?: boolean;
+  color?: string;
+  size?: string;
+}) => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      height={size ? size : "24px"}
+      fill={color ? color : "#414141"}
+      style={
+        rotate
+          ? {
+              transform: "rotate(180deg)",
+            }
+          : {}
+      }
+    >
+      <path d="M17,9.17a1,1,0,0,0-1.41,0L12,12.71,8.46,9.17a1,1,0,0,0-1.41,0,1,1,0,0,0,0,1.42l4.24,4.24a1,1,0,0,0,1.42,0L17,10.59A1,1,0,0,0,17,9.17Z" />
+    </svg>
+  );
+};
+
 function getLibrary(provider: any): Web3Provider {
-  const library = new Web3Provider(provider);
+  const library = new Web3Provider(provider, "any");
   //   const library = new ethers.providers.JsonRpcProvider('')
 
   library.pollingInterval = 5000;
@@ -1350,7 +1525,12 @@ const BoxHoveredScale = styled(Box)`
 `;
 
 const GlobalContext = createContext({
+  token: "TEST1",
+  tokenAddress: "",
   balance: 0,
+  fee: 0,
+  minAmount: 0,
+  setToken: (token: string) => {},
   setBalance: (balance: number) => {},
   refetchBalance: async (account: string) => {},
 });
@@ -1359,13 +1539,45 @@ const GlobalState = ({ children }: { children: React.ReactNode }) => {
   const { account, chainId } = useWeb3React();
 
   const [balance, setBalance] = useState(0);
-  const tokenContract = useTokenContract();
+  const [fee, setFee] = useState(0);
+  const [minAmount, setMinAmount] = useState(0);
+
+  const [token, setToken] = useState("TEST1");
+
+  const tokenAddress = tokens.find(item => item.name === token)?.address!;
+
+  const tokenContract = useTokenContract(tokenAddress);
+  const bridgeContract = useBridgeContract();
+
+  console.log({
+    fee,
+    minAmount,
+  });
+
+  const refetchSettings = async (tokenAddress: string) => {
+    try {
+      const [allowed, minAmount, fee] = await bridgeContract.getSettings(
+        tokenAddress,
+      );
+      setFee(fee.toNumber() / 1e6);
+      setMinAmount(Math.ceil(Number(ethers.utils.formatEther(minAmount))));
+      setTimeout(() => refetchSettings(tokenAddress), 3500);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (account) {
+      refetchSettings(tokenAddress);
+    }
+  }, [account, tokenAddress, chainId]);
 
   const refetchBalance = async (account: string) => {
     try {
       const balance = await tokenContract.balanceOf(account);
 
-      setBalance(Number(ethers.utils.formatEther(balance)));
+      setBalance(Math.floor(Number(ethers.utils.formatEther(balance))));
       console.log({
         balance: ethers.utils.formatEther(balance),
       });
@@ -1379,12 +1591,17 @@ const GlobalState = ({ children }: { children: React.ReactNode }) => {
     if (account) {
       refetchBalance(account);
     }
-  }, [account, chainId]);
+  }, [account, tokenAddress, chainId]);
 
   return (
     <GlobalContext.Provider
       value={{
+        token,
+        tokenAddress,
+        setToken,
         balance,
+        fee,
+        minAmount,
         setBalance,
         refetchBalance,
       }}
@@ -1397,9 +1614,11 @@ const GlobalState = ({ children }: { children: React.ReactNode }) => {
 export const AccountBalance = ({
   account,
   balance,
+  token,
 }: {
   account: string;
   balance: number;
+  token: string;
 }) => {
   return (
     <React.Fragment>
@@ -1412,7 +1631,7 @@ export const AccountBalance = ({
         align="center"
       >
         <Text size="15px" color="#414141" weight={600}>
-          {balance.toFixed(0)} DEFT
+          {formatNum(Number(balance.toFixed(0)))} {token}
         </Text>
         <Box
           background="white"
@@ -1449,11 +1668,11 @@ export const Top = () => {
     useWeb3React();
 
   const chain = idToChain[chainId as Chains] || "";
-  const tokenContract = useTokenContract();
+  // const tokenContract = useTokenContract();
 
   const history = useHistory();
 
-  const { balance } = useContext(GlobalContext);
+  const { balance, token } = useContext(GlobalContext);
 
   const isMobileOrTablet = useMedia({ maxWidth: "500px" });
 
@@ -1484,7 +1703,7 @@ export const Top = () => {
         {chain}
       </Text>
       {!isMobileOrTablet && (
-        <AccountBalance account={account!} balance={balance} />
+        <AccountBalance account={account!} balance={balance} token={token} />
       )}
     </Box>
   );
@@ -1492,7 +1711,7 @@ export const Top = () => {
 
 export const Bottom = () => {
   const { account } = useWeb3React();
-  const { balance } = useContext(GlobalContext);
+  const { balance, token } = useContext(GlobalContext);
 
   const isMobileOrTablet = useMedia({ maxWidth: "500px" });
 
@@ -1510,7 +1729,7 @@ export const Bottom = () => {
         bottom: "85px",
       }}
     >
-      <AccountBalance account={account!} balance={balance} />
+      <AccountBalance account={account!} balance={balance} token={token} />
     </Box>
   );
 };

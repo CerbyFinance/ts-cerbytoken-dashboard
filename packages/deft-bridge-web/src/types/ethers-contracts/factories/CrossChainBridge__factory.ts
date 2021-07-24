@@ -46,8 +46,27 @@ const _abi = [
     inputs: [
       {
         indexed: false,
+        internalType: "uint256",
+        name: "newFeePercent",
+        type: "uint256",
+      },
+    ],
+    name: "FeeUpdated",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
         internalType: "address",
         name: "addr",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "address",
+        name: "token",
         type: "address",
       },
       {
@@ -91,6 +110,12 @@ const _abi = [
         indexed: false,
         internalType: "address",
         name: "addr",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "address",
+        name: "token",
         type: "address",
       },
       {
@@ -217,13 +242,54 @@ const _abi = [
     type: "function",
   },
   {
+    inputs: [
+      {
+        internalType: "address",
+        name: "token",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "chainId",
+        type: "uint256",
+      },
+      {
+        internalType: "bool",
+        name: "isAllowed",
+        type: "bool",
+      },
+    ],
+    name: "allowChain",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "addr",
+        type: "address",
+      },
+      {
+        internalType: "bool",
+        name: "isAllow",
+        type: "bool",
+      },
+    ],
+    name: "allowContract",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
     inputs: [],
-    name: "ROLE_BENEFICIARY",
+    name: "beneficiaryAddress",
     outputs: [
       {
-        internalType: "bytes32",
+        internalType: "address",
         name: "",
-        type: "bytes32",
+        type: "address",
       },
     ],
     stateMutability: "view",
@@ -245,6 +311,11 @@ const _abi = [
   {
     inputs: [
       {
+        internalType: "address",
+        name: "token",
+        type: "address",
+      },
+      {
         internalType: "uint256",
         name: "amount",
         type: "uint256",
@@ -263,12 +334,12 @@ const _abi = [
   {
     inputs: [
       {
-        internalType: "uint256",
+        internalType: "address",
         name: "",
-        type: "uint256",
+        type: "address",
       },
     ],
-    name: "chainIdToFee",
+    name: "currentNonce",
     outputs: [
       {
         internalType: "uint256",
@@ -281,7 +352,26 @@ const _abi = [
   },
   {
     inputs: [],
-    name: "currentNonce",
+    name: "feePercent",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "token",
+        type: "address",
+      },
+    ],
+    name: "getMinAmountToBurn",
     outputs: [
       {
         internalType: "uint256",
@@ -357,6 +447,35 @@ const _abi = [
   {
     inputs: [
       {
+        internalType: "address",
+        name: "token",
+        type: "address",
+      },
+    ],
+    name: "getSettings",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
         internalType: "bytes32",
         name: "role",
         type: "bytes32",
@@ -368,6 +487,31 @@ const _abi = [
       },
     ],
     name: "grantRole",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        components: [
+          {
+            internalType: "bytes32",
+            name: "role",
+            type: "bytes32",
+          },
+          {
+            internalType: "address",
+            name: "addr",
+            type: "address",
+          },
+        ],
+        internalType: "struct RoleAccess[]",
+        name: "roles",
+        type: "tuple[]",
+      },
+    ],
+    name: "grantRolesBulk",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -399,6 +543,30 @@ const _abi = [
   {
     inputs: [
       {
+        internalType: "address",
+        name: "addr",
+        type: "address",
+      },
+    ],
+    name: "isAllowedContract",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+      {
         internalType: "uint256",
         name: "",
         type: "uint256",
@@ -429,19 +597,6 @@ const _abi = [
     type: "function",
   },
   {
-    inputs: [],
-    name: "minAmountToBurn",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
     inputs: [
       {
         components: [
@@ -459,6 +614,11 @@ const _abi = [
             internalType: "uint256",
             name: "sourceNonce",
             type: "uint256",
+          },
+          {
+            internalType: "address",
+            name: "sourceTokenAddr",
+            type: "address",
           },
           {
             internalType: "bytes32",
@@ -553,22 +713,12 @@ const _abi = [
   {
     inputs: [
       {
-        internalType: "uint256",
-        name: "chainId",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "chainFee",
-        type: "uint256",
-      },
-      {
-        internalType: "bool",
-        name: "isAllowed",
-        type: "bool",
+        internalType: "address",
+        name: "newBeneficiaryAddr",
+        type: "address",
       },
     ],
-    name: "updateChains",
+    name: "updateBeneficiaryAddress",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -577,16 +727,11 @@ const _abi = [
     inputs: [
       {
         internalType: "uint256",
-        name: "newMinAmountToBurn",
+        name: "newFeePercent",
         type: "uint256",
       },
-      {
-        internalType: "address",
-        name: "newDefiFactoryContract",
-        type: "address",
-      },
     ],
-    name: "updateSettings",
+    name: "updateFee",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",

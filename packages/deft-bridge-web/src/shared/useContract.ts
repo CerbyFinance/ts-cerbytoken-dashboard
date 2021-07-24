@@ -4,7 +4,6 @@ import {
   CrossChainBridge__factory,
   MintableBurnableToken__factory,
 } from "../types/ethers-contracts";
-
 export function getSigner(
   library: Web3Provider,
   account: string,
@@ -19,8 +18,8 @@ export function getProviderOrSigner(
   return account ? getSigner(library, account) : library;
 }
 
-const BRIDGE_CONTRACT = "0x01e835C7A3f7B51243229DfB85A1EA08a5512499";
-const TOKEN_CONTRACT = "0xdef1fac7Bf08f173D286BbBDcBeeADe695129840";
+const BRIDGE_CONTRACT = "0xf65c3c4cB733b3641bCb14d248EF1A34Ed5A2016";
+// const TOKEN_CONTRACT = "0xdef1fac7Bf08f173D286BbBDcBeeADe695129840";
 
 export function useBridgeContract() {
   const { account, library, connector } = useWeb3React();
@@ -35,15 +34,18 @@ export function useBridgeContract() {
   return res;
 }
 
-export function useTokenContract() {
+export function useTokenContract(token: string) {
   const { account, library, connector } = useWeb3React();
 
   const providerOrSigner = getProviderOrSigner(library, account);
 
-  const res = MintableBurnableToken__factory.connect(
-    TOKEN_CONTRACT,
-    providerOrSigner,
-  );
+  const res = MintableBurnableToken__factory.connect(token, providerOrSigner);
+
+  // res.on("error", err =>
+  //   console.log({
+  //     err,
+  //   }),
+  // );
 
   return res;
 }

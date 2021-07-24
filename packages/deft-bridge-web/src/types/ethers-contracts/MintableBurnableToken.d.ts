@@ -25,10 +25,12 @@ interface MintableBurnableTokenInterface extends ethers.utils.Interface {
     "approve(address,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
     "burnByBridge(address,uint256)": FunctionFragment;
+    "burnHumanAddress(address,uint256)": FunctionFragment;
     "decimals()": FunctionFragment;
     "decreaseAllowance(address,uint256)": FunctionFragment;
     "increaseAllowance(address,uint256)": FunctionFragment;
     "mintByBridge(address,uint256)": FunctionFragment;
+    "mintHumanAddress(address,uint256)": FunctionFragment;
     "name()": FunctionFragment;
     "symbol()": FunctionFragment;
     "totalSupply()": FunctionFragment;
@@ -49,6 +51,10 @@ interface MintableBurnableTokenInterface extends ethers.utils.Interface {
     functionFragment: "burnByBridge",
     values: [string, BigNumberish]
   ): string;
+  encodeFunctionData(
+    functionFragment: "burnHumanAddress",
+    values: [string, BigNumberish]
+  ): string;
   encodeFunctionData(functionFragment: "decimals", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "decreaseAllowance",
@@ -60,6 +66,10 @@ interface MintableBurnableTokenInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "mintByBridge",
+    values: [string, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "mintHumanAddress",
     values: [string, BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
@@ -84,6 +94,10 @@ interface MintableBurnableTokenInterface extends ethers.utils.Interface {
     functionFragment: "burnByBridge",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "burnHumanAddress",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "decimals", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "decreaseAllowance",
@@ -95,6 +109,10 @@ interface MintableBurnableTokenInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "mintByBridge",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "mintHumanAddress",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
@@ -182,6 +200,12 @@ export class MintableBurnableToken extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    burnHumanAddress(
+      from: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     decimals(overrides?: CallOverrides): Promise<[number]>;
 
     decreaseAllowance(
@@ -197,6 +221,12 @@ export class MintableBurnableToken extends BaseContract {
     ): Promise<ContractTransaction>;
 
     mintByBridge(
+      to: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    mintHumanAddress(
       to: string,
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -242,6 +272,12 @@ export class MintableBurnableToken extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  burnHumanAddress(
+    from: string,
+    amount: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   decimals(overrides?: CallOverrides): Promise<number>;
 
   decreaseAllowance(
@@ -257,6 +293,12 @@ export class MintableBurnableToken extends BaseContract {
   ): Promise<ContractTransaction>;
 
   mintByBridge(
+    to: string,
+    amount: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  mintHumanAddress(
     to: string,
     amount: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -302,6 +344,12 @@ export class MintableBurnableToken extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    burnHumanAddress(
+      from: string,
+      amount: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     decimals(overrides?: CallOverrides): Promise<number>;
 
     decreaseAllowance(
@@ -317,6 +365,12 @@ export class MintableBurnableToken extends BaseContract {
     ): Promise<boolean>;
 
     mintByBridge(
+      to: string,
+      amount: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    mintHumanAddress(
       to: string,
       amount: BigNumberish,
       overrides?: CallOverrides
@@ -383,6 +437,12 @@ export class MintableBurnableToken extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    burnHumanAddress(
+      from: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     decimals(overrides?: CallOverrides): Promise<BigNumber>;
 
     decreaseAllowance(
@@ -398,6 +458,12 @@ export class MintableBurnableToken extends BaseContract {
     ): Promise<BigNumber>;
 
     mintByBridge(
+      to: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    mintHumanAddress(
       to: string,
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -447,6 +513,12 @@ export class MintableBurnableToken extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
+    burnHumanAddress(
+      from: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
     decimals(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     decreaseAllowance(
@@ -462,6 +534,12 @@ export class MintableBurnableToken extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     mintByBridge(
+      to: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    mintHumanAddress(
       to: string,
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }

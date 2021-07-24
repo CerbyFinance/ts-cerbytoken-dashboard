@@ -36,7 +36,7 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "feeAmount",
+        "name": "newFeePercent",
         "type": "uint256"
       }
     ],
@@ -48,21 +48,14 @@
     "inputs": [
       {
         "indexed": false,
-        "internalType": "uint256",
-        "name": "newMinAmountToBurn",
-        "type": "uint256"
-      }
-    ],
-    "name": "MinimumAmountToBurnUpdated",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
+        "internalType": "address",
+        "name": "addr",
+        "type": "address"
+      },
       {
         "indexed": false,
         "internalType": "address",
-        "name": "addr",
+        "name": "token",
         "type": "address"
       },
       {
@@ -106,6 +99,12 @@
         "indexed": false,
         "internalType": "address",
         "name": "addr",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "token",
         "type": "address"
       },
       {
@@ -234,6 +233,11 @@
   {
     "inputs": [
       {
+        "internalType": "address",
+        "name": "token",
+        "type": "address"
+      },
+      {
         "internalType": "uint256",
         "name": "chainId",
         "type": "uint256"
@@ -245,6 +249,24 @@
       }
     ],
     "name": "allowChain",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "addr",
+        "type": "address"
+      },
+      {
+        "internalType": "bool",
+        "name": "isAllow",
+        "type": "bool"
+      }
+    ],
+    "name": "allowContract",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -278,6 +300,11 @@
   {
     "inputs": [
       {
+        "internalType": "address",
+        "name": "token",
+        "type": "address"
+      },
+      {
         "internalType": "uint256",
         "name": "amount",
         "type": "uint256"
@@ -294,7 +321,13 @@
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
     "name": "currentNonce",
     "outputs": [
       {
@@ -309,6 +342,25 @@
   {
     "inputs": [],
     "name": "feePercent",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "token",
+        "type": "address"
+      }
+    ],
+    "name": "getMinAmountToBurn",
     "outputs": [
       {
         "internalType": "uint256",
@@ -372,6 +424,35 @@
     ],
     "name": "getRoleMemberCount",
     "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "token",
+        "type": "address"
+      }
+    ],
+    "name": "getSettings",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      },
       {
         "internalType": "uint256",
         "name": "",
@@ -451,6 +532,30 @@
   {
     "inputs": [
       {
+        "internalType": "address",
+        "name": "addr",
+        "type": "address"
+      }
+    ],
+    "name": "isAllowedContract",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      },
+      {
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
@@ -468,19 +573,6 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "mainTokenContract",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [
       {
         "internalType": "bytes32",
@@ -491,19 +583,6 @@
     "name": "markTransactionAsApproved",
     "outputs": [],
     "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "minAmountToBurn",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -524,6 +603,11 @@
             "internalType": "uint256",
             "name": "sourceNonce",
             "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "sourceTokenAddr",
+            "type": "address"
           },
           {
             "internalType": "bytes32",
@@ -618,38 +702,25 @@
   {
     "inputs": [
       {
+        "internalType": "address",
+        "name": "newBeneficiaryAddr",
+        "type": "address"
+      }
+    ],
+    "name": "updateBeneficiaryAddress",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "uint256",
         "name": "newFeePercent",
         "type": "uint256"
       }
     ],
     "name": "updateFee",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "newMainTokenContract",
-        "type": "address"
-      }
-    ],
-    "name": "updateMainTokenContract",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "newMinAmountToBurn",
-        "type": "uint256"
-      }
-    ],
-    "name": "updateMinimumAmountToBurn",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
