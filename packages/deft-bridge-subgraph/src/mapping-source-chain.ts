@@ -1,9 +1,7 @@
-import { BigDecimal } from "@graphprotocol/graph-ts";
 import { BridgeTransfer, Global, Proof } from "../generated/schema";
 import {
   ApprovedTransaction,
   BulkApprovedTransactions,
-  FeeUpdated,
   ProofOfBurn,
   ProofOfMint,
 } from "../generated/SourceChain/CrossChainBridge";
@@ -34,7 +32,9 @@ function getOrCreateGlobal(): Global | null {
     global = new Global("1");
     global.mintedCount = ZERO_BI;
     global.mintedAmount = ZERO_BD;
-    global.currentFee = BigDecimal.fromString("0");
+
+    // fetching directly from contract
+    // global.currentFee = BigDecimal.fromString("0");
 
     global.burnedCount = ZERO_BI;
     global.burnedAmount = ZERO_BD;
@@ -46,14 +46,6 @@ function getOrCreateGlobal(): Global | null {
   }
 
   return global;
-}
-
-export function handleFeeUpdated(event: FeeUpdated): void {
-  let global = getOrCreateGlobal();
-  global.currentFee = event.params.feeAmount
-    .toBigDecimal()
-    .div(BigDecimal.fromString("1000000"));
-  global.save();
 }
 
 export function handleProofOfBurn(event: ProofOfBurn): void {
@@ -74,6 +66,7 @@ export function handleProofOfBurn(event: ProofOfBurn): void {
   let proof = new Proof(proofHash);
   proof.src = event.params.sourceChain;
   proof.dest = event.params.destinationChain;
+  proof.token = event.params.token.toHexString();
   proof.nonce = event.params.currentNonce;
   proof.type = "Burn";
   proof.sender = event.transaction.from;
@@ -109,6 +102,7 @@ export function handleProofOfMint(event: ProofOfMint): void {
 
   let proof = new Proof(proofHash);
   proof.nonce = null; // find from burn
+  proof.token = event.params.token.toHexString();
   proof.type = "Mint";
   proof.sender = event.transaction.from;
   proof.amount = convertTokenToDecimal(event.params.finalAmount, BI_18);

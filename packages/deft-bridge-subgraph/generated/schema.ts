@@ -102,6 +102,15 @@ export class Proof extends Entity {
     }
   }
 
+  get token(): string {
+    let value = this.get("token");
+    return value.toString();
+  }
+
+  set token(value: string) {
+    this.set("token", Value.fromString(value));
+  }
+
   get sender(): Bytes {
     let value = this.get("sender");
     return value.toBytes();
@@ -243,15 +252,6 @@ export class Global extends Entity {
 
   set id(value: string) {
     this.set("id", Value.fromString(value));
-  }
-
-  get currentFee(): BigDecimal {
-    let value = this.get("currentFee");
-    return value.toBigDecimal();
-  }
-
-  set currentFee(value: BigDecimal) {
-    this.set("currentFee", Value.fromBigDecimal(value));
   }
 
   get approvedCount(): BigInt {
