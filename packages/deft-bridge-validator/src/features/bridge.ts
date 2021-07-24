@@ -20,8 +20,8 @@ const makeRemoteUrl = (chain: string) =>
 
 const { PRIVATE_KEY } = process.env;
 
-const chains = ["kovan", "binance-test"];
-// const chains = ["binance", "ethereum"];
+// const chains = ["kovan", "binance-test"];
+const chains = ["binance", "ethereum"];
 
 const nodeUrlByChain = {
   ethereum: "https://secret:X4gDeGtfQy2M@eth-node.valar-solutions.com", // 1
