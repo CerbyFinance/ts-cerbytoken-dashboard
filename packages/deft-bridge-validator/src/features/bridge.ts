@@ -12,16 +12,16 @@ import { request } from "./request";
 const MIN_PROOFS_TO_APPROVE = 1;
 const ESTIMATE_MULT = 1.2;
 
-const makeRemoteUrl = (chain: string) =>
-  `http://server.wisetoken.me:8000/subgraphs/name/deft/deft-bridge-${chain}`;
-
 // const makeRemoteUrl = (chain: string) =>
-//   `http://localhost:8000/subgraphs/name/deft/deft-bridge-${chain}`;
+//   `http://server.wisetoken.me:8000/subgraphs/name/deft/deft-bridge-${chain}`;
+
+const makeRemoteUrl = (chain: string) =>
+  `http://localhost:8000/subgraphs/name/deft/deft-bridge-${chain}`;
 
 const { PRIVATE_KEY } = process.env;
 
-// const chains = ["kovan", "binance-test"];
-const chains = ["binance", "ethereum"];
+const chains = ["kovan", "binance-test"];
+// const chains = ["binance", "ethereum"];
 
 const nodeUrlByChain = {
   ethereum: "https://secret:X4gDeGtfQy2M@eth-node.valar-solutions.com", // 1
@@ -33,11 +33,11 @@ const nodeUrlByChain = {
 };
 
 const contractByChain = {
-  ethereum: "0x01e835C7A3f7B51243229DfB85A1EA08a5512499",
-  binance: "0x01e835C7A3f7B51243229DfB85A1EA08a5512499",
-  ropsten: "0x9fd0a5B42C7E536d9AFaF42707C80f195612601c",
-  kovan: "0x9fd0a5B42C7E536d9AFaF42707C80f195612601c",
-  ["binance-test"]: "0x9fd0a5B42C7E536d9AFaF42707C80f195612601c",
+  ethereum: "0xf65c3c4cB733b3641bCb14d248EF1A34Ed5A2016",
+  binance: "0xf65c3c4cB733b3641bCb14d248EF1A34Ed5A2016",
+  ropsten: "0xf65c3c4cB733b3641bCb14d248EF1A34Ed5A2016",
+  kovan: "0xf65c3c4cB733b3641bCb14d248EF1A34Ed5A2016",
+  ["binance-test"]: "0xf65c3c4cB733b3641bCb14d248EF1A34Ed5A2016",
 };
 
 const chainToId = {
@@ -49,10 +49,10 @@ const chainToId = {
 };
 
 const allowedPaths = [
-  ["binance", "ethereum"],
-  ["ethereum", "binance"],
-  // ["kovan", "binance-test"],
-  // ["binance-test", "kovan"],
+  // ["binance", "ethereum"],
+  // ["ethereum", "binance"],
+  ["kovan", "binance-test"],
+  ["binance-test", "kovan"],
 ] as [string, string][];
 
 const applyMnemonicToWeb3 = (web3: Web3) => {

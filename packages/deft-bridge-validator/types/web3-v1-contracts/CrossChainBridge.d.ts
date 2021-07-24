@@ -29,8 +29,13 @@ export type BulkApprovedTransactions = ContractEventLog<{
   transactionHashes: string[];
   0: string[];
 }>;
+export type FeeUpdated = ContractEventLog<{
+  newFeePercent: string;
+  0: string;
+}>;
 export type ProofOfBurn = ContractEventLog<{
   addr: string;
+  token: string;
   amount: string;
   currentNonce: string;
   sourceChain: string;
@@ -42,9 +47,11 @@ export type ProofOfBurn = ContractEventLog<{
   3: string;
   4: string;
   5: string;
+  6: string;
 }>;
 export type ProofOfMint = ContractEventLog<{
   addr: string;
+  token: string;
   amountAsFee: string;
   finalAmount: string;
   transactionHash: string;
@@ -52,6 +59,7 @@ export type ProofOfMint = ContractEventLog<{
   1: string;
   2: string;
   3: string;
+  4: string;
 }>;
 export type RoleAdminChanged = ContractEventLog<{
   role: string;
@@ -90,22 +98,34 @@ export interface CrossChainBridge extends BaseContract {
 
     ROLE_APPROVER(): NonPayableTransactionObject<string>;
 
-    ROLE_BENEFICIARY(): NonPayableTransactionObject<string>;
+    allowChain(
+      token: string,
+      chainId: number | string | BN,
+      isAllowed: boolean
+    ): NonPayableTransactionObject<void>;
+
+    allowContract(
+      addr: string,
+      isAllow: boolean
+    ): NonPayableTransactionObject<void>;
+
+    beneficiaryAddress(): NonPayableTransactionObject<string>;
 
     bulkMarkTransactionsAsApproved(
       transactionHashes: (string | number[])[]
     ): NonPayableTransactionObject<void>;
 
     burnAndCreateProof(
+      token: string,
       amount: number | string | BN,
       destinationChainId: number | string | BN
     ): NonPayableTransactionObject<void>;
 
-    chainIdToFee(
-      arg0: number | string | BN
-    ): NonPayableTransactionObject<string>;
+    currentNonce(arg0: string): NonPayableTransactionObject<string>;
 
-    currentNonce(): NonPayableTransactionObject<string>;
+    feePercent(): NonPayableTransactionObject<string>;
+
+    getMinAmountToBurn(token: string): NonPayableTransactionObject<string>;
 
     getRoleAdmin(role: string | number[]): NonPayableTransactionObject<string>;
 
@@ -118,9 +138,19 @@ export interface CrossChainBridge extends BaseContract {
       role: string | number[]
     ): NonPayableTransactionObject<string>;
 
+    getSettings(token: string): NonPayableTransactionObject<{
+      0: boolean;
+      1: string;
+      2: string;
+    }>;
+
     grantRole(
       role: string | number[],
       account: string
+    ): NonPayableTransactionObject<void>;
+
+    grantRolesBulk(
+      roles: [string | number[], string][]
     ): NonPayableTransactionObject<void>;
 
     hasRole(
@@ -128,21 +158,23 @@ export interface CrossChainBridge extends BaseContract {
       account: string
     ): NonPayableTransactionObject<boolean>;
 
+    isAllowedContract(addr: string): NonPayableTransactionObject<boolean>;
+
     isAllowedToBridgeToChainId(
-      arg0: number | string | BN
+      arg0: string,
+      arg1: number | string | BN
     ): NonPayableTransactionObject<boolean>;
 
     markTransactionAsApproved(
       transactionHash: string | number[]
     ): NonPayableTransactionObject<void>;
 
-    minAmountToBurn(): NonPayableTransactionObject<string>;
-
     mintWithBurnProof(
       sourceProofOfBurn: [
         number | string | BN,
         number | string | BN,
         number | string | BN,
+        string,
         string | number[]
       ]
     ): NonPayableTransactionObject<void>;
@@ -165,15 +197,12 @@ export interface CrossChainBridge extends BaseContract {
       arg0: string | number[]
     ): NonPayableTransactionObject<string>;
 
-    updateChains(
-      chainId: number | string | BN,
-      chainFee: number | string | BN,
-      isAllowed: boolean
+    updateBeneficiaryAddress(
+      newBeneficiaryAddr: string
     ): NonPayableTransactionObject<void>;
 
-    updateSettings(
-      newMinAmountToBurn: number | string | BN,
-      newDefiFactoryContract: string
+    updateFee(
+      newFeePercent: number | string | BN
     ): NonPayableTransactionObject<void>;
   };
   events: {
@@ -190,6 +219,9 @@ export interface CrossChainBridge extends BaseContract {
       options?: EventOptions,
       cb?: Callback<BulkApprovedTransactions>
     ): EventEmitter;
+
+    FeeUpdated(cb?: Callback<FeeUpdated>): EventEmitter;
+    FeeUpdated(options?: EventOptions, cb?: Callback<FeeUpdated>): EventEmitter;
 
     ProofOfBurn(cb?: Callback<ProofOfBurn>): EventEmitter;
     ProofOfBurn(
@@ -239,6 +271,13 @@ export interface CrossChainBridge extends BaseContract {
     event: "BulkApprovedTransactions",
     options: EventOptions,
     cb: Callback<BulkApprovedTransactions>
+  ): void;
+
+  once(event: "FeeUpdated", cb: Callback<FeeUpdated>): void;
+  once(
+    event: "FeeUpdated",
+    options: EventOptions,
+    cb: Callback<FeeUpdated>
   ): void;
 
   once(event: "ProofOfBurn", cb: Callback<ProofOfBurn>): void;
