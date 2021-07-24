@@ -7,13 +7,13 @@ import { Chains } from "./chains";
 
 // TODO: add bsc
 const ETHERSCAN_PREFIXES: { [chainId in Chains]: string } = {
-  // 1: "etherscan.io",
+  1: "etherscan.io",
   // 3: "ropsten.etherscan.io",
   // 4: "rinkeby.etherscan.io",
   // 5: "goerli.etherscan.io",
-  42: "kovan.etherscan.io",
-  // 56: "bscscan.com",
-  97: "testnet.bscscan.com",
+  // 42: "kovan.etherscan.io",
+  56: "bscscan.com",
+  // 97: "testnet.bscscan.com",
 };
 
 export function getEtherscanLink(
@@ -21,13 +21,13 @@ export function getEtherscanLink(
   data: string,
   type: "transaction" | "token" | "address" | "block",
 ): string {
-  // const prefix = `https://${
-  //   ETHERSCAN_PREFIXES[chainId] || ETHERSCAN_PREFIXES[1]
-  // }`;
-
   const prefix = `https://${
-    ETHERSCAN_PREFIXES[chainId] || ETHERSCAN_PREFIXES[97]
+    ETHERSCAN_PREFIXES[chainId] || ETHERSCAN_PREFIXES[1]
   }`;
+
+  // const prefix = `https://${
+  //   ETHERSCAN_PREFIXES[chainId] || ETHERSCAN_PREFIXES[97]
+  // }`;
 
   // const prefix = "https://testnet.bscscan.com";
   // const prefix = "https://ropsten.etherscan.io/";

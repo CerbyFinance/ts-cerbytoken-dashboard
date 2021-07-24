@@ -1525,7 +1525,7 @@ const BoxHoveredScale = styled(Box)`
 `;
 
 const GlobalContext = createContext({
-  token: "TEST1",
+  token: "DEFT",
   tokenAddress: "",
   balance: 0,
   fee: 0,
@@ -1542,7 +1542,7 @@ const GlobalState = ({ children }: { children: React.ReactNode }) => {
   const [fee, setFee] = useState(0);
   const [minAmount, setMinAmount] = useState(0);
 
-  const [token, setToken] = useState("TEST1");
+  const [token, setToken] = useState("DEFT");
 
   const tokenAddress = tokens.find(item => item.name === token)?.address!;
 
@@ -1561,16 +1561,24 @@ const GlobalState = ({ children }: { children: React.ReactNode }) => {
       );
       setFee(fee.toNumber() / 1e6);
       setMinAmount(Math.ceil(Number(ethers.utils.formatEther(minAmount))));
-      setTimeout(() => refetchSettings(tokenAddress), 3500);
     } catch (error) {
       console.log(error);
     }
   };
 
   useEffect(() => {
-    if (account) {
-      refetchSettings(tokenAddress);
-    }
+    const emit = async () => {
+      if (account) {
+        await refetchSettings(tokenAddress);
+      }
+    };
+
+    const interval = setInterval(async () => {
+      emit();
+    }, 3500);
+
+    emit();
+    return () => clearInterval(interval);
   }, [account, tokenAddress, chainId]);
 
   const refetchBalance = async (account: string) => {

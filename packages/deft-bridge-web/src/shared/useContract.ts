@@ -41,11 +41,5 @@ export function useTokenContract(token: string) {
 
   const res = MintableBurnableToken__factory.connect(token, providerOrSigner);
 
-  // res.on("error", err =>
-  //   console.log({
-  //     err,
-  //   }),
-  // );
-
   return res;
 }
