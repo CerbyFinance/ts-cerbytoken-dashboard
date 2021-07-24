@@ -18,7 +18,7 @@ export function getProviderOrSigner(
   return account ? getSigner(library, account) : library;
 }
 
-const BRIDGE_CONTRACT = "0xf65c3c4cB733b3641bCb14d248EF1A34Ed5A2016";
+const BRIDGE_CONTRACT = "0x1d2900622B5049D9479DC8BE06469A4ede3Fc96e";
 // const TOKEN_CONTRACT = "0xdef1fac7Bf08f173D286BbBDcBeeADe695129840";
 
 export function useBridgeContract() {

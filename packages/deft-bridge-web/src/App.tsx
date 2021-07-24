@@ -25,7 +25,6 @@ import styled from "styled-components";
 import useMedia from "use-media";
 import { Chains } from "./chains";
 import { Hint } from "./components/Hint";
-import { injected } from "./connectors";
 import {
   BridgeTransferDocument,
   BridgeTransferQuery,
@@ -55,6 +54,7 @@ import {
 } from "./Icons";
 import { Logo } from "./logo";
 import { clientByChain, noopApollo } from "./shared/client";
+import { injected } from "./shared/connectors";
 import { HoveredElement } from "./shared/hooks";
 import { useBridgeContract, useTokenContract } from "./shared/useContract";
 import { dynamicTemplate, formatNum } from "./shared/utils";
@@ -807,12 +807,12 @@ const HoveredColor = styled(Box)`
 
 const tokens = [
   {
-    name: "TEST1",
-    address: "0x5564217Dd1e1255eA751C9C506Fac9eD25FA5240",
+    name: "DEFT",
+    address: "0xdef1fac7Bf08f173D286BbBDcBeeADe695129840",
   },
   {
-    name: "TEST2",
-    address: "0x60b6F75D513E3C60bd325AE6B64Ea08ca3217527",
+    name: "LAMBO",
+    address: "0x44EB8f6C496eAA8e0321006d3c61d851f87685BD",
   },
 ];
 
@@ -854,8 +854,8 @@ const BridgeWidget = () => {
   const [isPopular, setPopular] = useState(true);
 
   const [loader, setLoader] = useState(false);
-  // const [path, setPath] = useState([1, 56] as [Chains, Chains]);
-  const [path, setPath] = useState([42, 97] as [Chains, Chains]);
+  const [path, setPath] = useState([1, 56] as [Chains, Chains]);
+  // const [path, setPath] = useState([42, 97] as [Chains, Chains]);
 
   const setMax = () => {
     setTransferAmount(balance.toString());
