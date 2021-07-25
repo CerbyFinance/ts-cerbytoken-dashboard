@@ -138,7 +138,7 @@ const approveOne = async (
     return gasPrice;
   }
 
-  if (Number(gasPrice) > 50000000000) {
+  if (Number(gasPrice) > 25000000000) {
     return new Error("too high gwei");
   }
 
