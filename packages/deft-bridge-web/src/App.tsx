@@ -414,8 +414,9 @@ const BridgeWidgetProcess = () => {
       }));
 
       const serializedError = serializeError(error);
-      const originalErrorMessage = (serializedError.data as any)?.originalError
-        ?.error?.message;
+      const originalErrorMessage =
+        (serializedError.data as any)?.originalError?.error?.message ||
+        (serializedError.data as any)?.message;
 
       if (originalErrorMessage && originalErrorMessage.includes("CCB: ")) {
         const message = originalErrorMessage.split("CCB: ")[1];
@@ -926,7 +927,6 @@ const BridgeWidget = () => {
   ) => {
     try {
       setLoader(true);
-
       const result = await bridgeContract.burnAndCreateProof(
         tokenAddress,
         ethers.utils.parseEther(amount),
@@ -993,8 +993,9 @@ const BridgeWidget = () => {
       setLoader(false);
 
       const serializedError = serializeError(error);
-      const originalErrorMessage = (serializedError.data as any)?.originalError
-        ?.error?.message;
+      const originalErrorMessage =
+        (serializedError.data as any)?.originalError?.error?.message ||
+        (serializedError.data as any)?.message;
 
       if (originalErrorMessage && originalErrorMessage.includes("CCB: ")) {
         const message = originalErrorMessage.split("CCB: ")[1];
