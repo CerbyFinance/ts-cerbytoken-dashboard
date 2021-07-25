@@ -33,11 +33,11 @@ const nodeUrlByChain = {
 };
 
 const contractByChain = {
-  ethereum: "0xf65c3c4cB733b3641bCb14d248EF1A34Ed5A2016",
-  binance: "0xf65c3c4cB733b3641bCb14d248EF1A34Ed5A2016",
-  ropsten: "0xf65c3c4cB733b3641bCb14d248EF1A34Ed5A2016",
-  kovan: "0xf65c3c4cB733b3641bCb14d248EF1A34Ed5A2016",
-  ["binance-test"]: "0xf65c3c4cB733b3641bCb14d248EF1A34Ed5A2016",
+  ethereum: "0x1d2900622B5049D9479DC8BE06469A4ede3Fc96e",
+  binance: "0x1d2900622B5049D9479DC8BE06469A4ede3Fc96e",
+  ropsten: "0x1d2900622B5049D9479DC8BE06469A4ede3Fc96e",
+  kovan: "0x1d2900622B5049D9479DC8BE06469A4ede3Fc96e",
+  ["binance-test"]: "0x1d2900622B5049D9479DC8BE06469A4ede3Fc96e",
 };
 
 const chainToId = {
