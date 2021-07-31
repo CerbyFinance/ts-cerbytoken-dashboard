@@ -1,0 +1,92 @@
+[
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "walletAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "page",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "limit",
+        "type": "uint256"
+      }
+    ],
+    "name": "listPresales",
+    "outputs": [
+      {
+        "components": [
+          {
+            "components": [
+              {
+                "internalType": "address",
+                "name": "presaleContractAddress",
+                "type": "address"
+              },
+              {
+                "internalType": "string",
+                "name": "presaleName",
+                "type": "string"
+              },
+              {
+                "internalType": "uint256",
+                "name": "totalInvestedWeth",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "maxWethCap",
+                "type": "uint256"
+              }
+            ],
+            "internalType": "struct PresaleFactory.PresaleListItem",
+            "name": "presaleList",
+            "type": "tuple"
+          },
+          {
+            "components": [
+              {
+                "internalType": "address",
+                "name": "walletAddress",
+                "type": "address"
+              },
+              {
+                "internalType": "uint256",
+                "name": "walletInvestedWeth",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "walletReferralEarnings",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "minimumWethPerWallet",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "maximumWethPerWallet",
+                "type": "uint256"
+              }
+            ],
+            "internalType": "struct PresaleFactory.WalletInfoItem",
+            "name": "walletInfo",
+            "type": "tuple"
+          }
+        ],
+        "internalType": "struct PresaleFactory.OutputItem[]",
+        "name": "",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]
