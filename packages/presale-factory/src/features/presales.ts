@@ -9,14 +9,14 @@ const globalChains = [
     chainCode: "kovan",
     chainName: "Kovan Testnet",
     chainId: 42,
-    factoryContractAddress: "0x1374C2160Ae7D5b2f6737cEB408ccC0cd9FBa1c8",
+    factoryContractAddress: "0x31e43cBEA2f7F20491212F4986780dbE6BC2a442",
     node: "https://secret:X4gDeGtfQy2M@eth-node-kovan.valar-solutions.com",
   },
   {
     chainCode: "binance-test",
     chainName: "Binance Testnet",
     chainId: 97,
-    factoryContractAddress: "0xcf66E0DB47811D82DAf710503ad55C075a788133",
+    factoryContractAddress: "0x5179ec25a57dB09FB1E1dddEC05cf0E9b1Ccc18b",
     node: "https://secret:X4gDeGtfQy2M@bsc-node-testnet.valar-solutions.com",
   },
 ];
@@ -137,22 +137,24 @@ export const listPresales = async (
           .call();
 
         const prepared = result.map(item => ({
+          // prettier-ignore
           presaleList: {
             presaleContractAddress: item[0][0],
             presaleName: item[0][1],
-            totalInvestedWeth: item[0][2],
-            maxWethCap: item[0][3],
+            totalInvestedWeth: (Number(Web3.utils.fromWei(item[0][2]))).toFixed(4),
+            maxWethCap: (Number(Web3.utils.fromWei(item[0][3]))).toFixed(4),
             isCompleted: item[0][4],
             isEnabled: item[0][5],
             website: item[0][6],
             telegram: item[0][7],
           },
+          // prettier-ignore
           walletInfo: {
             walletAddress: item[1][0],
-            walletInvestedWeth: item[1][1],
-            walletReferralEarnings: item[1][2],
-            minimumWethPerWallet: item[1][3],
-            maximumWethPerWallet: item[1][4],
+            walletInvestedWeth: (Number(Web3.utils.fromWei(item[1][1]))).toFixed(4),
+            walletReferralEarnings: (Number(Web3.utils.fromWei(item[1][2]))).toFixed(4),
+            minimumWethPerWallet: (Number(Web3.utils.fromWei(item[1][3]))).toFixed(4),
+            maximumWethPerWallet: (Number(Web3.utils.fromWei(item[1][4]))).toFixed(4), 
           },
           tokenomics: item[2]
             .map(item2 => ({
@@ -175,8 +177,8 @@ export const listPresales = async (
             }))
             .filter(
               item2 =>
-                item2.tokenomicsAddr === ZERO_ADDR ||
-                Number(item2.tokenomicsPercentage) === 0,
+                item2.tokenomicsAddr !== ZERO_ADDR ||
+                Number(item2.tokenomicsPercentage) !== 0,
             ),
           listingPrice: Number(Web3.utils.fromWei(item[3])).toFixed(6),
           createdAt: Number(item[4]),
