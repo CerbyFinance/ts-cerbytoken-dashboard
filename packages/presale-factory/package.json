@@ -8,8 +8,10 @@
     "prod:start-server": "export NODE_ENV=production && pm2 start --name 'server' ./node_modules/.bin/ts-node -- --transpile-only ./src/main.ts && pm2 logs"
   },
   "devDependencies": {
+    "@types/humanize-duration": "^3.25.1",
     "@types/ioredis": "^4.26.4",
     "@types/lodash": "^4.14.170",
+    "@types/swagger-ui-express": "^4.1.3",
     "typechain": "^5.1.2"
   },
   "dependencies": {
@@ -24,6 +26,7 @@
     "dotenv": "^8.2.0",
     "got": "^11.8.1",
     "hpagent": "^0.1.1",
+    "humanize-duration": "^3.27.0",
     "ioredis": "^4.19.4",
     "lodash": "^4.17.20",
     "nanoid": "^3.1.20",

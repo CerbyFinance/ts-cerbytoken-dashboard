@@ -3,14 +3,16 @@
 /* eslint-disable */
 
 import BN from "bn.js";
-import { EventEmitter } from "events";
-import { EventLog } from "web3-core";
 import { ContractOptions } from "web3-eth-contract";
+import { EventLog } from "web3-core";
+import { EventEmitter } from "events";
 import {
-  BaseContract,
-  BlockType,
   Callback,
+  PayableTransactionObject,
   NonPayableTransactionObject,
+  BlockType,
+  ContractEventLog,
+  BaseContract,
 } from "./types";
 
 interface EventOptions {
@@ -23,18 +25,21 @@ export interface PresaleFactory extends BaseContract {
   constructor(
     jsonInterface: any[],
     address?: string,
-    options?: ContractOptions,
+    options?: ContractOptions
   ): PresaleFactory;
   clone(): PresaleFactory;
   methods: {
     listPresales(
       walletAddress: string,
       page: number | string | BN,
-      limit: number | string | BN,
+      limit: number | string | BN
     ): NonPayableTransactionObject<
       [
-        [string, string, string, string],
+        [string, string, string, string, boolean, boolean, string, string],
         [string, string, string, string, string],
+        [string, string, string, string, string][],
+        string,
+        string
       ][]
     >;
   };

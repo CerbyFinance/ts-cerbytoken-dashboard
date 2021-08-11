@@ -42,10 +42,30 @@
                 "internalType": "uint256",
                 "name": "maxWethCap",
                 "type": "uint256"
+              },
+              {
+                "internalType": "bool",
+                "name": "isCompleted",
+                "type": "bool"
+              },
+              {
+                "internalType": "bool",
+                "name": "isEnabled",
+                "type": "bool"
+              },
+              {
+                "internalType": "string",
+                "name": "website",
+                "type": "string"
+              },
+              {
+                "internalType": "string",
+                "name": "telegram",
+                "type": "string"
               }
             ],
             "internalType": "struct PresaleFactory.PresaleListItem",
-            "name": "presaleList",
+            "name": "presaleItem",
             "type": "tuple"
           },
           {
@@ -79,6 +99,48 @@
             "internalType": "struct PresaleFactory.WalletInfoItem",
             "name": "walletInfo",
             "type": "tuple"
+          },
+          {
+            "components": [
+              {
+                "internalType": "address",
+                "name": "tokenomicsAddr",
+                "type": "address"
+              },
+              {
+                "internalType": "string",
+                "name": "tokenomicsName",
+                "type": "string"
+              },
+              {
+                "internalType": "uint256",
+                "name": "tokenomicsPercentage",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "tokenomicsLockedForXSeconds",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "tokenomicsVestedForXSeconds",
+                "type": "uint256"
+              }
+            ],
+            "internalType": "struct PresaleFactory.TokenomicsItem[]",
+            "name": "tokenomics",
+            "type": "tuple[]"
+          },
+          {
+            "internalType": "uint256",
+            "name": "listingPrice",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "createdAt",
+            "type": "uint256"
           }
         ],
         "internalType": "struct PresaleFactory.OutputItem[]",
