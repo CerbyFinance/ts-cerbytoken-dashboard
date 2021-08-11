@@ -1,6 +1,6 @@
 version: "3.7"
 services:
-  deft-detector:
+  presale-factory-server:
     image: presale-factory-server
     environment:
       NODE_ENV: production
