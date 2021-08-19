@@ -104,6 +104,38 @@
             "components": [
               {
                 "internalType": "address",
+                "name": "vestingAddr",
+                "type": "address"
+              },
+              {
+                "internalType": "uint256",
+                "name": "tokensReserved",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "tokensClaimed",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "lockedUntilTimestamp",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "vestedUntilTimestamp",
+                "type": "uint256"
+              }
+            ],
+            "internalType": "struct PresaleFactory.VestingItem",
+            "name": "vestingInfo",
+            "type": "tuple"
+          },
+          {
+            "components": [
+              {
+                "internalType": "address",
                 "name": "tokenomicsAddr",
                 "type": "address"
               },

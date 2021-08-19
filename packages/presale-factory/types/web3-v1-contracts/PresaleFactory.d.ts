@@ -37,6 +37,7 @@ export interface PresaleFactory extends BaseContract {
       [
         [string, string, string, string, boolean, boolean, string, string],
         [string, string, string, string, string],
+        [string, string, string, string, string],
         [string, string, string, string, string][],
         string,
         string
