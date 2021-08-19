@@ -13,7 +13,7 @@ const MIN_PROOFS_TO_APPROVE = 1;
 const ESTIMATE_MULT = 1.2;
 
 const makeRemoteUrl = (chain: string) =>
-  `http://server.wisetoken.me:8000/subgraphs/name/deft/deft-bridge-${chain}`;
+  `https://bridge.defifactory.fi/subgraphs/name/deft/deft-bridge-${chain}`;
 
 // const makeRemoteUrl = (chain: string) =>
 //   `http://localhost:8000/subgraphs/name/deft/deft-bridge-${chain}`;
