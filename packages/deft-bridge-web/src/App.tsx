@@ -811,10 +811,10 @@ const tokens = [
     name: "DEFT",
     address: "0xdef1fac7Bf08f173D286BbBDcBeeADe695129840",
   },
-  {
-    name: "LAMBO",
-    address: "0x44EB8f6C496eAA8e0321006d3c61d851f87685BD",
-  },
+  // {
+  //   name: "LAMBO",
+  //   address: "0x44EB8f6C496eAA8e0321006d3c61d851f87685BD",
+  // },
 ];
 
 const BridgeWidget = () => {
