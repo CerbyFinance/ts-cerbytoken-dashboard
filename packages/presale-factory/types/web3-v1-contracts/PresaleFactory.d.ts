@@ -29,6 +29,30 @@ export interface PresaleFactory extends BaseContract {
   ): PresaleFactory;
   clone(): PresaleFactory;
   methods: {
+    createPresale(
+      _tokenomics: [
+        string,
+        string,
+        number | string | BN,
+        number | string | BN,
+        number | string | BN
+      ][],
+      _settings: [
+        string,
+        string,
+        string,
+        string,
+        number | string | BN,
+        number | string | BN,
+        number | string | BN,
+        number | string | BN,
+        number | string | BN,
+        number | string | BN,
+        number | string | BN,
+        number | string | BN
+      ]
+    ): NonPayableTransactionObject<string>;
+
     listPresales(
       walletAddress: string,
       page: number | string | BN,
@@ -43,6 +67,10 @@ export interface PresaleFactory extends BaseContract {
         string
       ][]
     >;
+
+    presaleContracts(
+      arg0: number | string | BN
+    ): NonPayableTransactionObject<string>;
   };
   events: {
     allEvents(options?: EventOptions, cb?: Callback<EventLog>): EventEmitter;

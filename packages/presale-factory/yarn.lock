@@ -300,10 +300,13 @@
   resolved "https://registry.yarnpkg.com/@typechain/ethers-v5/-/ethers-v5-7.0.1.tgz#f9ae60ae5bd9e8ea8a996f66244147e8e74034ae"
   integrity sha512-mXEJ7LG0pOYO+MRPkHtbf30Ey9X2KAsU0wkeoVvjQIn7iAY6tB3k3s+82bbmJAUMyENbQ04RDOZit36CgSG6Gg==
 
-"@typechain/web3-v1@^3.0.0":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@typechain/web3-v1/-/web3-v1-3.0.0.tgz#8aaeeae0e1bbb871dc0d25071e8ab9d88440fb92"
-  integrity sha512-7N9yGzGOmyW8HJAa3U+0oUqc1JxZcMUIh6Fn4jMkl1z98rKyrzvrllXzT2QmqJ9etZKiyI39AVVly/YPYKTCxQ==
+"@typechain/web3-v1@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/@typechain/web3-v1/-/web3-v1-3.1.0.tgz#3124cd25589dad93c5115acb87c65ea708d89ab3"
+  integrity sha512-pZG8Kd+sm5DzxZsBn/4SVBb1tu3k6Kh5K6iUiqKffuTJoMHGkDpJLLC+UTGPMs3+8q+0tAGwgGFDFdaCjAkqFQ==
+  dependencies:
+    lodash "^4.17.15"
+    ts-essentials "^7.0.1"
 
 "@types/bn.js@^4.11.5":
   version "4.11.6"

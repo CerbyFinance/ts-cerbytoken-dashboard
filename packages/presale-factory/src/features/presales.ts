@@ -5,20 +5,27 @@ import { globalRedis } from "../utils/redis";
 import { shortEnglishHumanizer } from "../utils/utils";
 
 const globalChains = [
-  // {
-  //   chainCode: "kovan",
-  //   chainName: "Kovan Testnet",
-  //   chainId: 42,
-  //   factoryContractAddress: "0x31e43cBEA2f7F20491212F4986780dbE6BC2a442",
-  //   node: "https://secret:X4gDeGtfQy2M@eth-node-kovan.valar-solutions.com",
-  // },
   {
-    chainCode: "binance-test",
-    chainName: "Binance Testnet",
-    chainId: 97,
-    factoryContractAddress: "0xbdA1F977381E3E60a481bCF3773dDd4d70a6DFE7",
-    node: "https://secret:X4gDeGtfQy2M@bsc-node-testnet.valar-solutions.com",
+    chainCode: "kovan",
+    chainName: "Kovan Testnet",
+    chainId: 42,
+    factoryContractAddress: "0x009Fbe5C1b05e9F9Bed19C11174f6DB6Dac9D2F9",
+    node: "https://secret:X4gDeGtfQy2M@eth-node-kovan.valar-solutions.com",
   },
+  {
+    chainCode: "ropsten",
+    chainName: "ropsten Testnet",
+    chainId: 3,
+    factoryContractAddress: "0x8d2fd9c263ddC682e63A89c0DFe268a7DfE83c72",
+    node: "https://ropsten.infura.io/v3/df9e284157ea44d08931c1dfaf28e658",
+  },
+  // {
+  //   chainCode: "binance-test",
+  //   chainName: "Binance Testnet",
+  //   chainId: 97,
+  //   factoryContractAddress: "0xbdA1F977381E3E60a481bCF3773dDd4d70a6DFE7",
+  //   node: "https://secret:X4gDeGtfQy2M@bsc-node-testnet.valar-solutions.com",
+  // },
 ];
 
 const allChainCodes = globalChains.map(item => item.chainCode);
@@ -100,7 +107,7 @@ const fetchOrGet = async <T>(
 export const listPresales = async (
   _walletAddress: string,
   _chains: string[],
-  isCompleted: boolean | undefined,
+  isActive: boolean | undefined,
   page: number,
   limit: number,
 ) => {
@@ -143,7 +150,7 @@ export const listPresales = async (
             presaleName: item[0][1],
             totalInvestedWeth: (Number(Web3.utils.fromWei(item[0][2]))).toFixed(4),
             maxWethCap: (Number(Web3.utils.fromWei(item[0][3]))).toFixed(4),
-            isCompleted: item[0][4],
+            isActive: item[0][4],
             isEnabled: item[0][5],
             website: item[0][6],
             telegram: item[0][7],
@@ -198,13 +205,13 @@ export const listPresales = async (
       // sort is mutable
       fetched.sort(
         (a, b) =>
-          Number(a.presaleList.isCompleted) -
-            Number(b.presaleList.isCompleted) || b.createdAt - a.createdAt,
+          Number(a.presaleList.isActive) - Number(b.presaleList.isActive) ||
+          b.createdAt - a.createdAt,
       );
 
       const fetchedFilter =
-        typeof isCompleted === "boolean"
-          ? fetched.filter(item => item.presaleList.isCompleted === isCompleted)
+        typeof isActive === "boolean"
+          ? fetched.filter(item => item.presaleList.isActive === isActive)
           : fetched;
 
       return {

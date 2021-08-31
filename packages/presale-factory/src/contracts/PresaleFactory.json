@@ -2,6 +2,119 @@
   {
     "inputs": [
       {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "tokenomicsAddr",
+            "type": "address"
+          },
+          {
+            "internalType": "string",
+            "name": "tokenomicsName",
+            "type": "string"
+          },
+          {
+            "internalType": "uint256",
+            "name": "tokenomicsPercentage",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "tokenomicsLockedForXSeconds",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "tokenomicsVestedForXSeconds",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct Tokenomics[]",
+        "name": "_tokenomics",
+        "type": "tuple[]"
+      },
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "tokenAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "string",
+            "name": "presaleName",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "website",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "telegram",
+            "type": "string"
+          },
+          {
+            "internalType": "uint256",
+            "name": "uniswapLiquidityLockedFor",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "presaleLockedFor",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "presaleVestedFor",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "referralsLockedFor",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "referralsVestedFor",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "maxWethCap",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "perWalletMinWeth",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "perWalletMaxWeth",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct Settings",
+        "name": "_settings",
+        "type": "tuple"
+      }
+    ],
+    "name": "createPresale",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "address",
         "name": "walletAddress",
         "type": "address"
@@ -45,7 +158,7 @@
               },
               {
                 "internalType": "bool",
-                "name": "isCompleted",
+                "name": "isActive",
                 "type": "bool"
               },
               {
@@ -64,7 +177,7 @@
                 "type": "string"
               }
             ],
-            "internalType": "struct PresaleFactory.PresaleListItem",
+            "internalType": "struct PresaleItem",
             "name": "presaleItem",
             "type": "tuple"
           },
@@ -96,7 +209,7 @@
                 "type": "uint256"
               }
             ],
-            "internalType": "struct PresaleFactory.WalletInfoItem",
+            "internalType": "struct WalletInfo",
             "name": "walletInfo",
             "type": "tuple"
           },
@@ -128,7 +241,7 @@
                 "type": "uint256"
               }
             ],
-            "internalType": "struct PresaleFactory.VestingItem",
+            "internalType": "struct Vesting",
             "name": "vestingInfo",
             "type": "tuple"
           },
@@ -160,7 +273,7 @@
                 "type": "uint256"
               }
             ],
-            "internalType": "struct PresaleFactory.TokenomicsItem[]",
+            "internalType": "struct Tokenomics[]",
             "name": "tokenomics",
             "type": "tuple[]"
           },
@@ -175,9 +288,28 @@
             "type": "uint256"
           }
         ],
-        "internalType": "struct PresaleFactory.OutputItem[]",
-        "name": "",
+        "internalType": "struct OutputItem[]",
+        "name": "output",
         "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "presaleContracts",
+    "outputs": [
+      {
+        "internalType": "contract PresaleContract",
+        "name": "",
+        "type": "address"
       }
     ],
     "stateMutability": "view",

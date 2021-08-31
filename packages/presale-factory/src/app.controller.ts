@@ -12,7 +12,7 @@ class ListDTO {
   walletAddress!: string;
 
   @ApiProperty()
-  isCompleted!: boolean;
+  isActive!: boolean;
 
   @ApiProperty()
   page!: number;
@@ -38,7 +38,7 @@ export class AppController {
     const result = await listPresales(
       input.walletAddress,
       input.chains,
-      input.isCompleted,
+      input.isActive,
       input.page,
       input.limit,
     );
