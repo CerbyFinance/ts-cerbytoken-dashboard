@@ -28,11 +28,11 @@ const globalChains = [
   // },
 ];
 
-const allChainCodes = globalChains.map(item => item.chainCode);
+const allChainIds = globalChains.map(item => item.chainId);
 
-const chainCodeToNameId = Object.fromEntries(
+const chainIdToNameId = Object.fromEntries(
   globalChains.map(chain => [
-    chain.chainCode,
+    chain.chainId,
     {
       chainCode: chain.chainCode,
       chainName: chain.chainName,
@@ -48,9 +48,9 @@ const createPresaleFactoryContract = (address: string, web3: Web3) =>
     address,
   ) as unknown as PresaleFactory;
 
-const chainCodeToContract = Object.fromEntries(
+const chainIdToContract = Object.fromEntries(
   globalChains.map(chain => [
-    chain.chainCode,
+    chain.chainId,
     createPresaleFactoryContract(
       chain.factoryContractAddress,
       new Web3(new Web3.providers.HttpProvider(chain.node)),
@@ -75,10 +75,10 @@ const ZERO_ADDR = "0x0000000000000000000000000000000000000000";
 
 const makeKey = (
   walletAddress: string,
-  chain: string,
+  chainId: number,
   page: number,
   limit: number,
-) => walletAddress + ":" + chain + ":" + page + ":" + limit;
+) => walletAddress + ":" + chainId + ":" + page + ":" + limit;
 
 const fetchOrGet = async <T>(
   _key: string,
@@ -106,7 +106,7 @@ const fetchOrGet = async <T>(
 
 export const listPresales = async (
   _walletAddress: string,
-  _chains: string[],
+  _chains: number[],
   isActive: boolean | undefined,
   page: number,
   limit: number,
@@ -121,9 +121,9 @@ export const listPresales = async (
 
   const chains =
     _chains.length === 0
-      ? allChainCodes
+      ? allChainIds
       : _chains.filter(chain =>
-          globalChains.some(item => item.chainCode === chain),
+          globalChains.some(item => item.chainId === chain),
         );
 
   if (chains.length === 0) {
@@ -131,12 +131,12 @@ export const listPresales = async (
   }
 
   const result = await Promise.all(
-    chains.map(async chainCode => {
-      const contract = chainCodeToContract[chainCode];
+    chains.map(async chainId => {
+      const contract = chainIdToContract[chainId];
 
-      const nameId = chainCodeToNameId[chainCode];
+      const nameId = chainIdToNameId[chainId];
 
-      const _key = makeKey(walletAddress, chainCode, page, limit);
+      const _key = makeKey(walletAddress, chainId, page, limit);
 
       const fetched = await fetchOrGet(_key, async () => {
         const result = await contract.methods

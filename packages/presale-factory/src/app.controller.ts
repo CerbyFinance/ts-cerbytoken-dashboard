@@ -21,7 +21,7 @@ class ListDTO {
   limit!: number;
 
   @ApiProperty({ default: [] })
-  chains!: string[];
+  chains!: number[];
 }
 
 @Controller("presale-factory")
