@@ -28,6 +28,10 @@ export class AppController {
   @ApiQuery({ name: "fromBlockNumber", type: Number })
   @ApiQuery({ name: "limit", type: Number })
   @ApiQuery({ name: "page", type: Number })
+  @ApiQuery({ name: "chainId", type: Number, required: false })
+  @ApiQuery({ name: "token", type: String, required: false })
+  @ApiQuery({ name: "fnName", type: String, required: false })
+  @ApiQuery({ name: "isBot", type: Boolean, required: false })
   @ApiQuery({
     name: "type",
     enum: ["buy", "sell", "any"],
@@ -42,6 +46,10 @@ export class AppController {
     @Query("fromBlockNumber") fromBlockNumber: number,
     @Query("limit") limit: number,
     @Query("page") page: number,
+    @Query("chainId") chainId: number,
+    @Query("token") token: string,
+    @Query("fnName") fnName: string,
+    @Query("isBot") isBot: string,
     @Query("type") type: "buy" | "sell" | "any",
     @Query("orderBy") orderBy: "ascending" | "descending",
     @Body(new ValidationPipe({ transform: true })) input: FeedDTO,
@@ -51,6 +59,10 @@ export class AppController {
       Number(toBlockNumber),
       limit,
       page,
+      Number(chainId),
+      token,
+      fnName,
+      typeof isBot === "string" ? (isBot === "true" ? true : false) : undefined,
       type,
       orderBy,
       input.toIn || [],

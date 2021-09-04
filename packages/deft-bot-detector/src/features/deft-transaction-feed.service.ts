@@ -1,7 +1,4 @@
-import {
-  DeftTransactionRepository,
-  withFlashBots,
-} from "./deft-transaction.service";
+import { DeftTransactionRepository } from "./deft-transaction.service";
 
 export class DeftTransactionFeedService {
   deftTransactionRepository = new DeftTransactionRepository();
@@ -11,6 +8,10 @@ export class DeftTransactionFeedService {
     toBlockNumber: number,
     _limit: number,
     _page: number,
+    chainId: number | undefined,
+    token: string | undefined,
+    fnName: string | undefined,
+    isBot: boolean | undefined,
     type: T,
     orderBy: "ascending" | "descending",
     toIn: string[],
@@ -30,14 +31,18 @@ export class DeftTransactionFeedService {
       toBlockNumber,
       limit,
       offset,
+      chainId,
+      token,
+      fnName,
+      isBot,
       type,
       orderBy,
       toIn,
       recipientsIn,
     );
 
-    const resultWithFlashbots = await withFlashBots(result);
+    // const resultWithFlashbots = await withFlashBots(result);
 
-    return resultWithFlashbots;
+    return result;
   }
 }

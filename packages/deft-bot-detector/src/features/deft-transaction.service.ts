@@ -1,15 +1,14 @@
+import DataLoader from "dataloader";
 import _ from "lodash";
 import Web3 from "web3";
-import { Log } from "web3-core";
 import { Swap, Transfer } from "../../types/web3-v1-contracts/UniswapPair";
 import uniswapV2Router from "../contracts/UniswapV2Router.json";
 import { globalConfig } from "../utils/config";
 import {
-  deftTokenContract,
+  deftStorageContract,
   DEFT_TOKEN,
+  DEFT_TOKEN_START_BLOCK,
   DEFT_UNISWAP_PAIR,
-  DEFT_UNISWAP_PAIR_START_BLOCK,
-  globalSecondaryWeb3Client,
   globalWeb3Client,
   isContractBulkContract,
   uniswapPairContract,
@@ -27,8 +26,11 @@ import {
 } from "../utils/web3.utils";
 import { request } from "./request";
 
-const SWAP_EVENT_HASH =
-  "0xd78ad95fa46c994b6551d0da85fc275fe613ce37657fb8d5e3d130840159d822";
+// const SWAP_EVENT_HASH =
+//   "0xd78ad95fa46c994b6551d0da85fc275fe613ce37657fb8d5e3d130840159d822";
+
+const TRANSFER_EVENT_HASH =
+  "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef";
 
 const decodeByFnHash = Object.fromEntries(
   uniswapV2Router
@@ -56,6 +58,8 @@ const decodeByFnHash = Object.fromEntries(
 
 export interface DeftTransaction {
   _id: string;
+  token: string;
+  chainId: number;
   isBuy: boolean;
   txHash: string;
   from: string;
@@ -75,8 +79,6 @@ export interface DeftTransaction {
   isSlippageBot: boolean;
   isDeadlineBot: boolean;
 }
-
-const collectionName = "deft-transactions";
 
 const areFlashBots = async (transactions: string[]) => {
   const result = await request<{
@@ -183,14 +185,50 @@ export const withFlashBots = async (transactions: DeftTransaction[]) => {
   return resultWithFlashbots;
 };
 
-export class DeftTransactionRepository {
-  async insertMany(items: DeftTransaction[]) {
-    return globalMongo.collection(collectionName).insertMany(items);
+interface TokenState {
+  token: string;
+  chainId: number;
+  blockNumber: number;
+  holders: string[];
+}
+
+export class DeftTokenStateRepository {
+  collectionName = "token-state";
+
+  async findState(chainId: number) {
+    return globalMongo.collection(this.collectionName).findOne<TokenState>({
+      token: DEFT_TOKEN,
+      chainId,
+    });
   }
 
-  async getLastTransaction() {
+  async updateState(chainId: number, blockNumber: number, holders: string[]) {
+    return globalMongo.collection(this.collectionName).updateOne(
+      {
+        token: DEFT_TOKEN,
+        chainId,
+      },
+      {
+        $set: {
+          blockNumber,
+        },
+        $addToSet: { holders: { $each: holders } },
+      },
+      { upsert: true },
+    );
+  }
+}
+
+export class DeftTransactionRepository {
+  collectionName = "transactions";
+
+  async insertMany(items: DeftTransaction[]) {
+    return globalMongo.collection(this.collectionName).insertMany(items);
+  }
+
+  async _getLastTransaction() {
     const items = await globalMongo
-      .collection(collectionName)
+      .collection(this.collectionName)
       .find<DeftTransaction>({}, {})
       .sort({ blockNumber: -1 })
       .limit(1)
@@ -204,6 +242,10 @@ export class DeftTransactionRepository {
     toBlockNumber: number,
     limit: number,
     offset: number,
+    chainId: number | undefined,
+    token: string | undefined,
+    fnName: string | undefined,
+    isBot: boolean | undefined,
     type: T,
     orderBy: "ascending" | "descending",
     toIn: string[],
@@ -214,6 +256,10 @@ export class DeftTransactionRepository {
         $gte: fromBlockNumber,
         $lte: toBlockNumber,
       },
+      ...(chainId ? { chainId: Number(chainId) } : {}),
+      ...(token ? { token } : {}),
+      ...(fnName ? { fnName } : {}),
+      ...(typeof isBot === "boolean" ? { isBot } : {}),
       ...(toIn.length > 0
         ? {
             to: {
@@ -257,7 +303,7 @@ export class DeftTransactionRepository {
     ];
 
     const items = await globalMongo
-      .collection(collectionName)
+      .collection(this.collectionName)
       .aggregate<DeftTransaction>(aggregatorOpts, {
         collation: {
           locale: "en_US",
@@ -285,11 +331,12 @@ const getChainId = async () => {
 
 export class DeftTransactionService {
   deftTransactionRepo = new DeftTransactionRepository();
+  deftTokenStateRepo = new DeftTokenStateRepository();
 
   async getTokens(address: string) {
     const chainId = await getChainId();
 
-    const KEY = chainId + "-" + address;
+    const KEY = "token" + "-" + chainId + "-" + address;
 
     let tokens = await globalRedis.get(KEY);
 
@@ -311,57 +358,140 @@ export class DeftTransactionService {
   }
 
   async syncTransactions() {
-    const lastTx = await this.deftTransactionRepo.getLastTransaction();
+    const chainId = await getChainId();
+    // const lastTx = await this.deftTransactionRepo.getLastTransaction();
+    const state =
+      (await this.deftTokenStateRepo.findState(chainId)) ||
+      ({
+        chainId,
+        blockNumber: 0,
+        holders: [],
+        token: DEFT_TOKEN,
+      } as TokenState);
 
-    const { _id: lastItemId, blockNumber: lastBlockNumber } = lastTx
-      ? lastTx
-      : {
-          _id: "",
-          blockNumber: 1,
-        };
+    // const { _id: lastItemId, blockNumber: lastTxBlockNumber } = lastTx
+    //   ? lastTx
+    //   : {
+    //       _id: "",
+    //       blockNumber: 1,
+    //     };
+
+    const lastBlockNumber = state.blockNumber;
 
     const latestBlock = await globalWeb3Client.eth.getBlockNumber();
 
-    const fromBlock = Math.max(
-      DEFT_UNISWAP_PAIR_START_BLOCK,
-      lastBlockNumber + 1,
-    );
+    const fromBlock = Math.max(DEFT_TOKEN_START_BLOCK, lastBlockNumber + 1);
 
     const thisLatestBlock =
       globalConfig.fetchAtOnce === -1
         ? latestBlock
         : Math.min(fromBlock + globalConfig.fetchAtOnce, latestBlock);
 
-    // const thisLatestBlock = latestBlock;
-
     const web3 = globalWeb3Client;
-    const secondaryWeb3 = globalSecondaryWeb3Client;
 
     const newEvents = await getPastLogs(
       web3,
-      DEFT_UNISWAP_PAIR,
+      DEFT_TOKEN,
       fromBlock,
       thisLatestBlock,
-      [SWAP_EVENT_HASH],
+      [TRANSFER_EVENT_HASH],
     );
 
-    const newEventsNoDups = newEvents;
-
-    console.log("checking bots");
+    const holdersFromStorage = new Set(state.holders);
 
     // @ts-ignore
     const getAbi = createGetAbi(uniswapPairContractAbi);
-    const chunked = _.chunk(newEventsNoDups, 100) as Log[][];
+
+    const newDecodedEvents = newEvents.map(item =>
+      decodeLog(web3, item, getAbi),
+    ) as EventDoc<Transfer, any>[];
+
+    // precomputing holders below
+    const holdersByBlock = newDecodedEvents
+      .map(item => [item.blockNumber, item.decoded.to] as [number, string])
+      .reduce(
+        (acc, val) => {
+          const [blockNumber, to] = val;
+          if (!acc[blockNumber]) {
+            acc[blockNumber] = new Set<string>();
+          }
+          const set = acc[blockNumber];
+          set.add(to.toLowerCase());
+          return acc;
+        },
+        {} as {
+          [blockNumber: number]: Set<string>;
+        },
+      );
+
+    const blocks = Object.keys(holdersByBlock).map(item => Number(item));
+    blocks.sort(); // mutated in place, asc sort
+
+    const isHolder = (blockNumber: number, holder: string) => {
+      const blocksToTravel = _.dropRightWhile(blocks, b => b > blockNumber);
+      const isHolderFromTravel = blocksToTravel.some(block =>
+        holdersByBlock[block].has(holder),
+      );
+
+      if (!isHolderFromTravel) {
+        return holdersFromStorage.has(holder);
+      }
+
+      return isHolderFromTravel;
+    };
+
+    const newUniqueDecodedEvents = _.uniqWith(
+      newDecodedEvents,
+      (a, b) => a.transactionHash === b.transactionHash,
+    );
+
+    // TODO: maybe process multiple blocks (?)
+    // right now only unique transactions
+    const chunked = _.chunk(newUniqueDecodedEvents, 100);
+
+    // TODO: transform to batches
+    const blockLoader = new DataLoader((keys: readonly number[]) => {
+      return Promise.all(keys.map(key => globalWeb3Client.eth.getBlock(key)));
+    });
+    const transactionLoader = new DataLoader((keys: readonly string[]) => {
+      return Promise.all(
+        keys.map(key => globalWeb3Client.eth.getTransaction(key)),
+      );
+    });
+    const transactionReceiptLoader = new DataLoader(
+      (keys: readonly string[]) => {
+        return Promise.all(
+          keys.map(key => globalWeb3Client.eth.getTransactionReceipt(key)),
+        );
+      },
+    );
+    const removeIsContractBulkLoader = new DataLoader(
+      (keys: readonly string[]) => {
+        return isContractBulkContract.methods
+          .removeIsContractBulk(keys as string[])
+          .call();
+      },
+    );
+
+    const isMarkedAsHumanStorageBulkLoader = new DataLoader(
+      (keys: readonly string[]) => {
+        return deftStorageContract.methods
+          .isMarkedAsHumanStorageBulk(keys as string[])
+          .call();
+      },
+    );
+
+    // to get rid of "pits"
+    if (newEvents.length === 0) {
+      await this.deftTokenStateRepo.updateState(chainId, thisLatestBlock, []);
+    }
 
     let i = 0;
     let j = 0;
     for (const items of chunked) {
-      // prettier-ignore
-      const newItems = items.map(item => decodeLog(web3, item, getAbi));
-
       // preserve order
       const results = await Promise.all(
-        newItems
+        items
           .map(async event => {
             // const { results, errors } = await PromisePool.withConcurrency(10)
             //   .for(newItems)
@@ -370,24 +500,34 @@ export class DeftTransactionService {
             const blockNumber = event.blockNumber;
 
             const [
-              { timestamp },
-              { input, value, hash: txHash, gasPrice },
+              // { timestamp },
+              // { input, value, hash: txHash, gasPrice },
               { from, to, logs },
             ] = await Promise.all([
-              globalWeb3Client.eth.getBlock(blockNumber),
-              globalWeb3Client.eth.getTransaction(transactionHash),
-              globalWeb3Client.eth.getTransactionReceipt(transactionHash),
+              // blockLoader.load(blockNumber),
+              // transactionLoader.load(transactionHash),
+              transactionReceiptLoader.load(transactionHash),
             ]);
 
             const decodedLogs = logs.map(item => decodeLog(web3, item, getAbi));
 
             const transfers = decodedLogs.filter(
-              item => item.eventName === "Transfer",
+              item =>
+                item.eventName === "Transfer" &&
+                l(item.address) === l(DEFT_TOKEN),
             ) as EventDoc<Transfer, any>[];
 
+            const recipients = transfers.map(item => item.decoded.to);
+
             const swaps = decodedLogs.filter(
-              item => item.eventName === "Swap",
+              item =>
+                item.eventName === "Swap" &&
+                l(item.address) === l(DEFT_UNISWAP_PAIR),
             ) as EventDoc<Swap, any>[];
+
+            if (swaps.length === 0) {
+              return null;
+            }
 
             const zero = {
               amount0In: "0",
@@ -442,40 +582,35 @@ export class DeftTransactionService {
 
             const isBuy = latestSwap.address ? statement1 || statement2 : false;
 
-            const recipients = transfers.map(item => item.decoded.to);
-            const recipientsBalancesBefore = await Promise.all(
-              recipients.map(async item => {
-                try {
-                  const balance = await deftTokenContract(web3)
-                    .methods.balanceOf(item)
-                    .call({}, blockNumber - 1);
-                  return balance;
-                } catch (error) {}
+            if (!isBuy) {
+              return null;
+            }
 
-                // fallback
-                const balance = await deftTokenContract(secondaryWeb3)
-                  .methods.balanceOf(item)
-                  .call({}, blockNumber - 1);
+            const [{ timestamp }, { input, value, hash: txHash, gasPrice }] =
+              await Promise.all([
+                blockLoader.load(blockNumber),
+                transactionLoader.load(transactionHash),
+              ]);
 
-                return balance;
-              }),
+            const areRecipientsHoldersBefore = recipients.map(item =>
+              isHolder(blockNumber - 1, item),
             );
 
-            const isContractBulkResult = await isContractBulkContract.methods
-              .removeIsContractBulk(recipients)
-              .call();
+            const isContractBulkResult =
+              await removeIsContractBulkLoader.loadMany(recipients);
 
             const realRecipients = _.zipWith(
               recipients,
-              recipientsBalancesBefore,
+              areRecipientsHoldersBefore,
               isContractBulkResult,
-              (recipient, balanceBefore, self) => {
+              (recipient, isHolder, self) => {
                 const isNotContract = recipient === self;
-                const isNewHolder = balanceBefore === "0";
+                const isNewHolder = !isHolder;
                 return {
                   id: recipient,
                   isNewHolder,
                   isContract: !isNotContract,
+                  isOrigin: l(recipient) === l(from),
                 };
               },
             );
@@ -496,38 +631,44 @@ export class DeftTransactionService {
             const fnName = decode ? decode.fnName : "unknown";
             const decoded = decode ? decode.decode(sliced) : {};
 
+            const isToHumanAddr = await isMarkedAsHumanStorageBulkLoader.load(
+              to,
+            );
+            const isToHuman = l(isToHumanAddr) === to;
+            const isProxy = fnName === "unknown" && !isToHuman;
+
             // prettier-ignore
             if (fnName === 'swapETHForExactTokens') {
-            amountInMax = Web3.utils.toBN(value)
-            amountOutMin = ZERO_BI;
-            deadline = Web3.utils.toBN(decoded['deadline'])
-          } else if (fnName === 'swapExactETHForTokens') {
-            amountInMax = ZERO_BI;
-            amountOutMin = Web3.utils.toBN(decoded['amountOutMin'])
-            deadline = Web3.utils.toBN(decoded['deadline'])
-          } else if (fnName === 'swapExactETHForTokensSupportingFeeOnTransferTokens') {
-            amountInMax = ZERO_BI;
-            amountOutMin = Web3.utils.toBN(decoded['amountOutMin'])
-            deadline = Web3.utils.toBN(decoded['deadline'])
-          } else if (fnName === 'swapExactTokensForETH') {
-            //
-          } else if (fnName === 'swapExactTokensForETHSupportingFeeOnTransferTokens') {
-            //
-          } else if (fnName === 'swapExactTokensForTokens') {
-            amountInMax = ZERO_BI;
-            amountOutMin = Web3.utils.toBN(decoded['amountOutMin'])
-            deadline = Web3.utils.toBN(decoded['deadline'])
-          } else if (fnName === 'swapExactTokensForTokensSupportingFeeOnTransferTokens') {
-            amountInMax = ZERO_BI;
-            amountOutMin = Web3.utils.toBN(decoded['amountOutMin'])
-            deadline = Web3.utils.toBN(decoded['deadline'])
-          } else if (fnName === 'swapTokensForExactETH') {
-            //
-          } else if (fnName === 'swapTokensForExactTokens') {
-            amountInMax =  Web3.utils.toBN(decoded['amountInMax']);
-            amountOutMin = ZERO_BI;
-            deadline = Web3.utils.toBN(decoded['deadline'])
-          }
+              amountInMax = Web3.utils.toBN(value)
+              amountOutMin = ZERO_BI;
+              deadline = Web3.utils.toBN(decoded['deadline'])
+            } else if (fnName === 'swapExactETHForTokens') {
+              amountInMax = ZERO_BI;
+              amountOutMin = Web3.utils.toBN(decoded['amountOutMin'])
+              deadline = Web3.utils.toBN(decoded['deadline'])
+            } else if (fnName === 'swapExactETHForTokensSupportingFeeOnTransferTokens') {
+              amountInMax = ZERO_BI;
+              amountOutMin = Web3.utils.toBN(decoded['amountOutMin'])
+              deadline = Web3.utils.toBN(decoded['deadline'])
+            } else if (fnName === 'swapExactTokensForETH') {
+              //
+            } else if (fnName === 'swapExactTokensForETHSupportingFeeOnTransferTokens') {
+              //
+            } else if (fnName === 'swapExactTokensForTokens') {
+              amountInMax = ZERO_BI;
+              amountOutMin = Web3.utils.toBN(decoded['amountOutMin'])
+              deadline = Web3.utils.toBN(decoded['deadline'])
+            } else if (fnName === 'swapExactTokensForTokensSupportingFeeOnTransferTokens') {
+              amountInMax = ZERO_BI;
+              amountOutMin = Web3.utils.toBN(decoded['amountOutMin'])
+              deadline = Web3.utils.toBN(decoded['deadline'])
+            } else if (fnName === 'swapTokensForExactETH') {
+              //
+            } else if (fnName === 'swapTokensForExactTokens') {
+              amountInMax =  Web3.utils.toBN(decoded['amountInMax']);
+              amountOutMin = ZERO_BI;
+              deadline = Web3.utils.toBN(decoded['deadline'])
+            }
 
             const amountIn =
               l(WETH_TOKEN) < l(DEFT_TOKEN)
@@ -555,18 +696,25 @@ export class DeftTransactionService {
                 ? 0
                 : slippagePercentIn + slippagePercentOut - 1;
 
-            const isSlippageBot = slippage > 0.7501;
+            // const isSlippageBot = slippage > 0.7501;
+            const isSlippageBot = slippage >= 0.95;
+
             const isDeadlineBot =
               deadline > Web3.utils.toBN(timestamp).addn(12000);
 
             const isGweiZero = Web3.utils.toBN(gasPrice).eqn(0);
 
-            const isBot = isSlippageBot || isDeadlineBot || isGweiZero;
+            const isBot =
+              isSlippageBot || isDeadlineBot || isGweiZero || isProxy;
 
             return {
               _id: event._id,
 
+              token: DEFT_TOKEN,
+              chainId,
+
               isBuy,
+              isProxy,
 
               txHash,
               from,
@@ -595,7 +743,7 @@ export class DeftTransactionService {
       );
 
       const validResults = results.filter(
-        result => !(result instanceof Error),
+        result => result && !(result instanceof Error),
       ) as DeftTransaction[];
 
       const someError = results.find(item => item instanceof Error) as Error;
@@ -609,23 +757,33 @@ export class DeftTransactionService {
         return -1;
       }
 
-      console.log("fetching flashbots and off-chain bots");
-      console.time("flashbots");
+      if (validResults.length > 0) {
+        await this.deftTransactionRepo.insertMany(validResults);
+      }
 
-      const resultWithFlashBots = globalConfig.syncTimeFlashBots
-        ? await withFlashBots(validResults)
-        : validResults;
+      const blocksFromResults = items.map(item => item.blockNumber);
+      const minBlockFromResults = Math.min(...blocksFromResults);
+      const maxBlockFromResults = Math.max(...blocksFromResults);
 
-      const resultWithOffChainBots = globalConfig.syncTimeOffChainStorage
-        ? await withOffChainBots(resultWithFlashBots)
-        : resultWithFlashBots;
+      const blocksToTravel = _.dropRightWhile(
+        _.dropWhile(blocks, b => b < minBlockFromResults),
+        b => b > maxBlockFromResults,
+      );
+      const mergedHolders = blocksToTravel.flatMap(block =>
+        Array.from(holdersByBlock[block]),
+      );
 
-      console.timeEnd("flashbots");
-
-      await this.deftTransactionRepo.insertMany(resultWithOffChainBots);
+      await this.deftTokenStateRepo.updateState(
+        chainId,
+        thisLatestBlock,
+        mergedHolders,
+      );
 
       i += items.length;
       j += results.length;
+      // prettier-ignore
+      console.log('min block: ' + minBlockFromResults, ' max block: ' + maxBlockFromResults)
+      console.log("holders count: " + mergedHolders.length);
       console.log("inserted deft transactions: ", i, " ", j);
     }
 
