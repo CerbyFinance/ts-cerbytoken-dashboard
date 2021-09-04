@@ -21,10 +21,12 @@ interface DeftTransaction {
   amountOutMin: string;
   deadline: string;
   slippage: number;
+  isProxy: boolean;
   recipients: {
     id: string;
     isNewHolder: boolean;
     isContract: boolean;
+    isOrigin: boolean;
   }[];
   isBot: boolean;
   isSlippageBot: boolean;
@@ -183,6 +185,10 @@ const l = (s: string) => s.toLowerCase();
 const snipe = async (transactions: DeftTransaction[]) => {
   const possibleBots = transactions.flatMap(tx => {
     const recipients = tx.recipients;
+
+    if (tx.isProxy) {
+      return recipients.filter(r => r.isOrigin);
+    }
 
     if (tx.slippage > 1.01) {
       log("unreal slippage " + tx.slippage);
