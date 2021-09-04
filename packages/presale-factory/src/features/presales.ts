@@ -231,5 +231,7 @@ export const listPresales = async (
       ? result1.filter(item => item.result.presaleList.isActive === isActive)
       : result1;
 
-  return result2;
+  const result3 = result2.map(item => ({ ...item, result: [item.result] }));
+
+  return result3;
 };
