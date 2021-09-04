@@ -9,15 +9,15 @@ const globalChains = [
     chainCode: "kovan",
     chainName: "Kovan Testnet",
     chainId: 42,
-    factoryContractAddress: "0x009Fbe5C1b05e9F9Bed19C11174f6DB6Dac9D2F9",
+    factoryContractAddress: "0xd02bfe66fa0a9bc6b5769fc56fe68cd1e921e2d1",
     node: "https://secret:X4gDeGtfQy2M@eth-node-kovan.valar-solutions.com",
   },
   {
     chainCode: "ropsten",
     chainName: "ropsten Testnet",
     chainId: 3,
-    factoryContractAddress: "0x8d2fd9c263ddC682e63A89c0DFe268a7DfE83c72",
-    node: "https://ropsten.infura.io/v3/df9e284157ea44d08931c1dfaf28e658",
+    factoryContractAddress: "0x5859dd36e4ac6cb63f7f69be09a904637be70173",
+    node: "https://secret:X4gDeGtfQy2M@eth-node-ropsten.valar-solutions.com",
   },
   // {
   //   chainCode: "binance-test",
@@ -130,7 +130,7 @@ export const listPresales = async (
     return new FError("chain_not_found");
   }
 
-  const result = await Promise.all(
+  const result0 = await Promise.all(
     chains.map(async chainId => {
       const contract = chainIdToContract[chainId];
 
@@ -202,24 +202,34 @@ export const listPresales = async (
         return prepared;
       });
 
-      // sort is mutable
-      fetched.sort(
-        (a, b) =>
-          Number(a.presaleList.isActive) - Number(b.presaleList.isActive) ||
-          b.createdAt - a.createdAt,
-      );
-
-      const fetchedFilter =
-        typeof isActive === "boolean"
-          ? fetched.filter(item => item.presaleList.isActive === isActive)
-          : fetched;
-
       return {
         ...nameId,
-        result: fetchedFilter,
+        result: fetched,
       };
     }),
   );
 
-  return result;
+  const result1 = result0.flatMap(item =>
+    item.result.map(item2 => ({
+      chainCode: item.chainCode,
+      chainName: item.chainName,
+      chainId: item.chainId,
+      result: item2,
+    })),
+  );
+
+  // sort is mutable
+  result1.sort(
+    (a, b) =>
+      Number(a.result.presaleList.isActive) -
+        Number(b.result.presaleList.isActive) ||
+      b.result.createdAt - a.result.createdAt,
+  );
+
+  const result2 =
+    typeof isActive === "boolean"
+      ? result1.filter(item => item.result.presaleList.isActive === isActive)
+      : result1;
+
+  return result2;
 };
