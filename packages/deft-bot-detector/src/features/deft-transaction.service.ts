@@ -330,49 +330,67 @@ const getChainId = async () => {
   return CHAIN_ID;
 };
 
-const computeSlippage = (
-  {
-    amount0In,
-    amount1In,
-    amount1Out,
-    amount0Out,
-    amountInMax,
-    amountOutMin,
-  }: {
-    amount0In: string;
-    amount1In: string;
-    amount1Out: string;
-    amount0Out: string;
-    amountInMax: BN;
-    amountOutMin: BN;
-  },
-  directionCondition: boolean,
-) => {
-  const amountIn = directionCondition
-    ? Web3.utils.toBN(amount0In)
-    : Web3.utils.toBN(amount1In);
+const computeSlippage = ({
+  amount0In,
+  amount1In,
+  amount1Out,
+  amount0Out,
+  amountInMax,
+  amountOutMin,
+}: {
+  amount0In: string;
+  amount1In: string;
+  amount1Out: string;
+  amount0Out: string;
+  amountInMax: BN;
+  amountOutMin: BN;
+}) => {
+  const _amountInMax = Number(Web3.utils.fromWei(amountInMax));
+  const _amountOutMin = Number(Web3.utils.fromWei(amountOutMin));
+  const _amount0In = Number(Web3.utils.fromWei(amount0In));
+  const _amount1In = Number(Web3.utils.fromWei(amount1In));
 
-  const amountOut = directionCondition
-    ? Web3.utils.toBN(amount1Out)
-    : Web3.utils.toBN(amount0Out);
+  const _amount0Out = Number(Web3.utils.fromWei(amount0Out));
+  const _amount1Out = Number(Web3.utils.fromWei(amount1Out));
 
-  const num1 = Number(Web3.utils.fromWei(amountInMax));
-  const deNom1 = Number(Web3.utils.fromWei(amountIn));
+  if (amountInMax.gtn(0)) {
+    const slippagePercentIn1 =
+      _amount0In > 1 ? Math.abs((_amountInMax - _amount0In) / _amountInMax) : 1;
+    const slippagePercentIn2 =
+      _amount1In > 1 ? Math.abs((_amountInMax - _amount1In) / _amountInMax) : 1;
 
-  const slippagePercentIn = num1 > 0 ? Math.abs((num1 - deNom1) / num1) : 1;
+    const slippage = slippagePercentIn1 + slippagePercentIn2 - 1;
 
-  const num2 = Number(Web3.utils.fromWei(amountOut));
-  const deNom2 = Number(Web3.utils.fromWei(amountOutMin));
+    return {
+      slippage,
 
-  const slippagePercentOut = Math.abs((num2 - deNom2) / num2);
+      amountInMax: _amountInMax,
+      amountOutMin: _amountOutMin,
+      amount0In: _amount0In,
+      amount1In: _amount1In,
+      amount0Out: _amount0Out,
+      amount1Out: _amount1Out,
+    };
+  } else {
+    const slippagePercentOut1 =
+      _amount0Out > 1 ? Math.abs(_amount0Out - _amountOutMin) / _amount0Out : 1;
 
-  const slippage = slippagePercentIn + slippagePercentOut - 1;
+    const slippagePercentOut2 =
+      _amount1Out > 1 ? Math.abs(_amount1Out - _amountOutMin) / _amount1Out : 1;
 
-  return {
-    value: slippage,
-    amountIn,
-    amountOut,
-  };
+    const slippage = slippagePercentOut1 + slippagePercentOut2 - 1;
+
+    return {
+      slippage,
+
+      amountInMax: _amountInMax,
+      amountOutMin: _amountOutMin,
+      amount0In: _amount0In,
+      amount1In: _amount1In,
+      amount0Out: _amount0Out,
+      amount1Out: _amount1Out,
+    };
+  }
 };
 
 const firstAndLatestSwaps = (swaps: EventDoc<Swap, any>[]) => {
@@ -708,7 +726,7 @@ export class DeftTransactionService {
             const isToHuman = l(isToHumanAddr) === to;
             const isProxy = fnName === "unknown" && !isToHuman;
 
-            let handleCritical = false;
+            // let handleCritical = false;
             // prettier-ignore
             if (fnName === 'swapETHForExactTokens') {
               amountInMax = Web3.utils.toBN(value)
@@ -730,7 +748,7 @@ export class DeftTransactionService {
               amountInMax = ZERO_BI;
               amountOutMin = Web3.utils.toBN(decoded['amountOutMin'])
               deadline = Web3.utils.toBN(decoded['deadline'])
-              handleCritical=  true
+              // handleCritical=  true
             } else if (fnName === 'swapExactTokensForTokensSupportingFeeOnTransferTokens') {
               amountInMax = ZERO_BI;
               amountOutMin = Web3.utils.toBN(decoded['amountOutMin'])
@@ -741,38 +759,35 @@ export class DeftTransactionService {
               amountInMax =  Web3.utils.toBN(decoded['amountInMax']);
               amountOutMin = ZERO_BI;
               deadline = Web3.utils.toBN(decoded['deadline'])
-              handleCritical = true
+              // handleCritical = true
             }
 
             const allSwapsAmounts = amountsFromSwaps(allSwaps);
             const deftSwapsAmounts = amountsFromSwaps(deftSwaps);
 
-            const [slippage1, slippage2] = handleCritical
-              ? [true, false].map(cond =>
-                  computeSlippage(
-                    {
-                      ...allSwapsAmounts,
-                      amountInMax,
-                      amountOutMin,
-                    },
-                    cond,
-                  ),
-                )
-              : [
-                  computeSlippage(
-                    { ...deftSwapsAmounts, amountInMax, amountOutMin },
-                    l(WETH_TOKEN) < l(DEFT_TOKEN),
-                  ),
-                  {
-                    value: -1,
-                    amountIn: Web3.utils.toBN(0),
-                    amountOut: Web3.utils.toBN(0),
-                  },
-                ];
+            // const [slippage1, slippage2] = handleCritical
+            //   ? [true, false].map(cond =>
+            const slippage0 = computeSlippage({
+              ...allSwapsAmounts,
+              amountInMax,
+              amountOutMin,
+            });
+            // )
+            // : [
+            //     computeSlippage(
+            //       { ...deftSwapsAmounts, amountInMax, amountOutMin },
+            //       l(WETH_TOKEN) < l(DEFT_TOKEN),
+            //     ),
+            //     {
+            //       value: -1,
+            //       amountIn: Web3.utils.toBN(0),
+            //       amountOut: Web3.utils.toBN(0),
+            //     },
+            //   ];
 
-            const realSlippage = slippage1.value <= 1 ? slippage1 : slippage2;
+            // const realSlippage = slippage1.value <= 1 ? slippage1 : slippage2;
 
-            const slippage = fnName === "unknown" ? 0 : realSlippage.value;
+            const slippage = fnName === "unknown" ? 0 : slippage0.slippage;
 
             // const isSlippageBot = slippage > 0.7501;
             const isSlippageBot = slippage >= 0.95;
@@ -803,14 +818,16 @@ export class DeftTransactionService {
               amountInMax: amountInMax.toString(),
               amountOutMin: amountOutMin.toString(),
 
-              amountIn: realSlippage.amountIn.toString(),
-              amountOut: realSlippage.amountOut.toString(),
+              // amountIn: realSlippage.amountIn.toString(),
+              // amountOut: realSlippage.amountOut.toString(),
 
               deadline: deadline.toString(),
 
               slippage,
-              slippage1: slippage1.value,
-              slippage2: slippage2.value,
+              debug: slippage0,
+
+              allSwapsAmounts,
+              deftSwapsAmounts,
 
               // amount0In,
               // amount1In,
