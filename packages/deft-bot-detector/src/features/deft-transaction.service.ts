@@ -355,9 +355,14 @@ const computeSlippage = ({
 
   if (amountInMax.gtn(0)) {
     const slippagePercentIn1 =
-      _amount0In > 1 ? Math.abs((_amountInMax - _amount0In) / _amountInMax) : 1;
+      _amount0In > 1e-18 && _amountInMax >= _amount0In
+        ? Math.abs((_amountInMax - _amount0In) / _amountInMax)
+        : 1;
+
     const slippagePercentIn2 =
-      _amount1In > 1 ? Math.abs((_amountInMax - _amount1In) / _amountInMax) : 1;
+      _amount1In > 1e-18 && _amountInMax >= _amount1In
+        ? Math.abs((_amountInMax - _amount1In) / _amountInMax)
+        : 1;
 
     const slippage = slippagePercentIn1 + slippagePercentIn2 - 1;
 
@@ -370,13 +375,20 @@ const computeSlippage = ({
       amount1In: _amount1In,
       amount0Out: _amount0Out,
       amount1Out: _amount1Out,
+
+      slippagePercentIn1,
+      slippagePercentIn2,
     };
   } else {
     const slippagePercentOut1 =
-      _amount0Out > 1 ? Math.abs(_amount0Out - _amountOutMin) / _amount0Out : 1;
+      _amount0Out > 1e-18
+        ? Math.abs(_amount0Out - _amountOutMin) / _amount0Out
+        : 1;
 
     const slippagePercentOut2 =
-      _amount1Out > 1 ? Math.abs(_amount1Out - _amountOutMin) / _amount1Out : 1;
+      _amount1Out > 1e-18
+        ? Math.abs(_amount1Out - _amountOutMin) / _amount1Out
+        : 1;
 
     const slippage = slippagePercentOut1 + slippagePercentOut2 - 1;
 
@@ -389,6 +401,9 @@ const computeSlippage = ({
       amount1In: _amount1In,
       amount0Out: _amount0Out,
       amount1Out: _amount1Out,
+
+      slippagePercentOut1,
+      slippagePercentOut2,
     };
   }
 };
@@ -726,7 +741,6 @@ export class DeftTransactionService {
             const isToHuman = l(isToHumanAddr) === to;
             const isProxy = fnName === "unknown" && !isToHuman;
 
-            // let handleCritical = false;
             // prettier-ignore
             if (fnName === 'swapETHForExactTokens') {
               amountInMax = Web3.utils.toBN(value)
@@ -748,7 +762,6 @@ export class DeftTransactionService {
               amountInMax = ZERO_BI;
               amountOutMin = Web3.utils.toBN(decoded['amountOutMin'])
               deadline = Web3.utils.toBN(decoded['deadline'])
-              // handleCritical=  true
             } else if (fnName === 'swapExactTokensForTokensSupportingFeeOnTransferTokens') {
               amountInMax = ZERO_BI;
               amountOutMin = Web3.utils.toBN(decoded['amountOutMin'])
@@ -759,37 +772,19 @@ export class DeftTransactionService {
               amountInMax =  Web3.utils.toBN(decoded['amountInMax']);
               amountOutMin = ZERO_BI;
               deadline = Web3.utils.toBN(decoded['deadline'])
-              // handleCritical = true
             }
 
             const allSwapsAmounts = amountsFromSwaps(allSwaps);
-            const deftSwapsAmounts = amountsFromSwaps(deftSwaps);
+            // const deftSwapsAmounts = amountsFromSwaps(deftSwaps);
 
-            // const [slippage1, slippage2] = handleCritical
-            //   ? [true, false].map(cond =>
             const slippage0 = computeSlippage({
               ...allSwapsAmounts,
               amountInMax,
               amountOutMin,
             });
-            // )
-            // : [
-            //     computeSlippage(
-            //       { ...deftSwapsAmounts, amountInMax, amountOutMin },
-            //       l(WETH_TOKEN) < l(DEFT_TOKEN),
-            //     ),
-            //     {
-            //       value: -1,
-            //       amountIn: Web3.utils.toBN(0),
-            //       amountOut: Web3.utils.toBN(0),
-            //     },
-            //   ];
-
-            // const realSlippage = slippage1.value <= 1 ? slippage1 : slippage2;
 
             const slippage = fnName === "unknown" ? 0 : slippage0.slippage;
 
-            // const isSlippageBot = slippage > 0.7501;
             const isSlippageBot = slippage >= 0.95;
 
             const isDeadlineBot =
@@ -818,16 +813,13 @@ export class DeftTransactionService {
               amountInMax: amountInMax.toString(),
               amountOutMin: amountOutMin.toString(),
 
-              // amountIn: realSlippage.amountIn.toString(),
-              // amountOut: realSlippage.amountOut.toString(),
-
               deadline: deadline.toString(),
 
               slippage,
-              debug: slippage0,
+              // debug: slippage0,
 
-              allSwapsAmounts,
-              deftSwapsAmounts,
+              // allSwapsAmounts,
+              // deftSwapsAmounts,
 
               // amount0In,
               // amount1In,
