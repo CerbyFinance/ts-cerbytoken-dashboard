@@ -1,11 +1,7 @@
 import _ from "lodash";
 import { NonPayableTransactionObject } from "../../types/web3-v1-contracts/types";
 import { globalConfig } from "../utils/config";
-import {
-  createAgent,
-  deftStorageContract,
-  globalWeb3Client,
-} from "../utils/contract";
+import { deftStorageContract, globalWeb3Client } from "../utils/contract";
 import { globalRedis } from "../utils/redis";
 import { request } from "./request";
 
@@ -35,22 +31,6 @@ interface DeftTransaction {
 
 const DETECTOR_URL = globalConfig.detectorUrl;
 const FLASHBOTS_URL = globalConfig.flashBotsUrl;
-
-const getBlockNumber = async () => {
-  const result = await request<{
-    message: string;
-    data: number;
-  }>({
-    method: "GET",
-    url: `${FLASHBOTS_URL}/flashbots/last-block`,
-  });
-
-  if (result instanceof Error) {
-    return result;
-  }
-
-  return result.body.data;
-};
 
 const getGasPrice = async () => {
   const result = await request<{
@@ -90,12 +70,12 @@ const getTransactions = async (
     method: "POST",
     url:
       DETECTOR_URL +
-      `/detector/feed?orderBy=${orderBy}&type=${type}&page=${page}&limit=${limit}&fromBlockNumber=${fromBlockNumber}&toBlockNumber=${toBlockNumber}`,
+      `/detector/feed?orderBy=${orderBy}&type=${type}&page=${page}&limit=${limit}&fromBlockNumber=${fromBlockNumber}&toBlockNumber=${toBlockNumber}&chainId=${CHAIN_ID}`,
     ...(globalConfig.isDevelopment
       ? {
-          agent: {
-            http: createAgent("http://localhost:8883"),
-          },
+          // agent: {
+          //   http: createAgent("http://localhost:8883"),
+          // },
         }
       : {}),
     json: {
@@ -114,7 +94,9 @@ const getTransactions = async (
 const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
 const DEAD_ADDRESS = "0xdEad000000000000000000000000000000000000";
 const FROM_ADDRESS = globalWeb3Client.eth.accounts.wallet[0].address;
-let IS_MAIN = false;
+// let IS_MAIN = false;
+let CHAIN_ID = 0;
+// let TEST = true;
 
 const ESTIMATE_MULT = 1.2;
 const GAS_PRICE_MULT = 1.3;
@@ -124,6 +106,7 @@ let SNIPING = false;
 let CURRENT_GAS_PRICE = 0;
 
 const calculateGasPrice = async () => {
+  const IS_MAIN = CHAIN_ID === 1;
   const _gasPrice = IS_MAIN
     ? await getGasPrice()
     : await globalWeb3Client.eth.getGasPrice();
@@ -136,7 +119,7 @@ const calculateGasPrice = async () => {
     ? Math.floor(Number(_gasPrice) * GAS_PRICE_MULT)
     : Number(_gasPrice);
 
-  const gasPrice = Math.min(__gasPrice, 200000000000);
+  const gasPrice = Math.min(__gasPrice, 300000000000);
 
   return gasPrice;
 };
@@ -196,7 +179,7 @@ const snipe = async (transactions: DeftTransaction[]) => {
     }
 
     if (tx.isBot) {
-      return recipients;
+      return recipients.filter(r => r.isOrigin);
     }
 
     return [];
@@ -291,14 +274,7 @@ export const sniperLoop = async () => {
         return;
       }
 
-      const headBlockNumber = FLASHBOTS_URL
-        ? await getBlockNumber()
-        : await globalWeb3Client.eth.getBlockNumber();
-
-      if (headBlockNumber instanceof Error) {
-        return headBlockNumber;
-      }
-      // const headBlockNumber = await globalWeb3Client.eth.getBlockNumber();
+      const headBlockNumber = await globalWeb3Client.eth.getBlockNumber();
 
       log("latest block number: " + latestBlockNumber);
       log("head block number: " + headBlockNumber);
@@ -379,9 +355,11 @@ export const triggerRunJobs = async () => {
   const chainId = await globalWeb3Client.eth.getChainId();
   log("chain id: " + chainId);
 
-  if (chainId === 1) {
-    IS_MAIN = true;
-  }
+  CHAIN_ID = chainId;
+
+  // if (TEST) {
+  //   CHAIN_ID = 1;
+  // }
 
   const latestBlockNumber = await getProcessedLatestBlockNumber();
   log("latest block number: " + latestBlockNumber);

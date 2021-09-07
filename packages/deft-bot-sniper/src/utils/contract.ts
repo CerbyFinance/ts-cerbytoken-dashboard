@@ -36,9 +36,9 @@ const web3 = new Web3(
     {
       ...(globalConfig.isDevelopment
         ? {
-            agent: {
-              http: createAgent("http://localhost:8883"),
-            },
+            // agent: {
+            //   http: createAgent("http://localhost:8883"),
+            // },
           }
         : {}),
     },
