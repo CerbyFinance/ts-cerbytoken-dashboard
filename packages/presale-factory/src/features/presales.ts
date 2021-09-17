@@ -6,40 +6,23 @@ import { shortEnglishHumanizer } from "../utils/utils";
 
 const globalChains = [
   {
-    chainCode: "kovan",
-    chainName: "Kovan Testnet",
     chainId: 42,
-    factoryContractAddress: "0xd02bfe66fa0a9bc6b5769fc56fe68cd1e921e2d1",
+    factoryContractAddress: "0x741D1789dA1cD23568B1586a99e1aFB9Bf1F7dfa",
     node: "https://secret:X4gDeGtfQy2M@eth-node-kovan.valar-solutions.com",
   },
   {
-    chainCode: "ropsten",
-    chainName: "ropsten Testnet",
     chainId: 3,
-    factoryContractAddress: "0x5859dd36e4ac6cb63f7f69be09a904637be70173",
+    factoryContractAddress: "0xa7894bc572ffbC27fb1c7F4E36185B276b1a5068",
     node: "https://secret:X4gDeGtfQy2M@eth-node-ropsten.valar-solutions.com",
   },
-  // {
-  //   chainCode: "binance-test",
-  //   chainName: "Binance Testnet",
-  //   chainId: 97,
-  //   factoryContractAddress: "0xbdA1F977381E3E60a481bCF3773dDd4d70a6DFE7",
-  //   node: "https://secret:X4gDeGtfQy2M@bsc-node-testnet.valar-solutions.com",
-  // },
+  {
+    chainId: 97,
+    factoryContractAddress: "0xb502633f80e66ae1c9e7d068812f85028a4e22fe",
+    node: "https://secret:X4gDeGtfQy2M@bsc-node-testnet.valar-solutions.com",
+  },
 ];
 
 const allChainIds = globalChains.map(item => item.chainId);
-
-const chainIdToNameId = Object.fromEntries(
-  globalChains.map(chain => [
-    chain.chainId,
-    {
-      chainCode: chain.chainCode,
-      chainName: chain.chainName,
-      chainId: chain.chainId,
-    },
-  ]),
-);
 
 const createPresaleFactoryContract = (address: string, web3: Web3) =>
   new web3.eth.Contract(
@@ -68,7 +51,7 @@ export class FError extends Error {
   }
 }
 
-const PASSED_SEC = 30 * 1000;
+const PASSED_SEC = 10 * 1000;
 const LIST_PREFIX = "l";
 const LIST_TS_PREFIX = "lts";
 const ZERO_ADDR = "0x0000000000000000000000000000000000000000";
@@ -104,6 +87,10 @@ const fetchOrGet = async <T>(
   return fetched;
 };
 
+const fromWeiNum = (s: string) => {
+  return Number(Web3.utils.fromWei(s));
+};
+
 export const listPresales = async (
   _walletAddress: string,
   _chains: number[],
@@ -134,8 +121,6 @@ export const listPresales = async (
     chains.map(async chainId => {
       const contract = chainIdToContract[chainId];
 
-      const nameId = chainIdToNameId[chainId];
-
       const _key = makeKey(walletAddress, chainId, page, limit);
 
       const fetched = await fetchOrGet(_key, async () => {
@@ -144,12 +129,13 @@ export const listPresales = async (
           .call();
 
         const prepared = result.map(item => ({
+          chainId,
           // prettier-ignore
           presaleList: {
             presaleContractAddress: item[0][0],
             presaleName: item[0][1],
-            totalInvestedWeth: (Number(Web3.utils.fromWei(item[0][2]))).toFixed(4),
-            maxWethCap: (Number(Web3.utils.fromWei(item[0][3]))).toFixed(4),
+            totalInvestedWeth: fromWeiNum(item[0][2]),
+            maxWethCap: fromWeiNum(item[0][3]),
             isActive: item[0][4],
             isEnabled: item[0][5],
             website: item[0][6],
@@ -158,26 +144,26 @@ export const listPresales = async (
           // prettier-ignore
           walletInfo: {
             walletAddress: item[1][0],
-            walletInvestedWeth: (Number(Web3.utils.fromWei(item[1][1]))).toFixed(4),
-            walletReferralEarnings: (Number(Web3.utils.fromWei(item[1][2]))).toFixed(4),
-            minimumWethPerWallet: (Number(Web3.utils.fromWei(item[1][3]))).toFixed(4),
-            maximumWethPerWallet: (Number(Web3.utils.fromWei(item[1][4]))).toFixed(4), 
+            walletInvestedWeth: fromWeiNum(item[1][1]),
+            walletReferralEarnings: fromWeiNum(item[1][2]),
+            minimumWethPerWallet: fromWeiNum(item[1][3]),
+            maximumWethPerWallet: fromWeiNum(item[1][4]), 
           },
           // prettier-ignore
           vestingInfo: {
             vestingAddr: item[2][0],
-            tokensReserved: (Number(Web3.utils.fromWei(item[2][1]))).toFixed(4),
-            tokensClaimed: (Number(Web3.utils.fromWei(item[2][2]))).toFixed(4), 
-            lockedUntilTimestamp: item[2][3],
-            vestedUntilTimestamp: item[2][4],
+            tokensReserved: fromWeiNum(item[2][1]),
+            tokensClaimed: fromWeiNum(item[2][2]), 
+            lockedUntilTimestamp: Number(item[2][3]),
+            vestedUntilTimestamp: Number(item[2][4]),
           },
           tokenomics: item[3]
             .map(item2 => ({
               tokenomicsAddr: item2[0],
               tokenomicsName: item2[1],
               tokenomicsPercentage: Number(item2[2]) / 1e6,
-              tokenomicsLockedForXSeconds: item2[3],
-              tokenomicsVestedForXSeconds: item2[4],
+              tokenomicsLockedForXSeconds: Number(item2[3]),
+              tokenomicsVestedForXSeconds: Number(item2[4]),
 
               tokenomicsLockedFor: shortEnglishHumanizer(Number(item2[3]), {
                 maxDecimalPoints: 0,
@@ -195,43 +181,30 @@ export const listPresales = async (
                 item2.tokenomicsAddr !== ZERO_ADDR ||
                 Number(item2.tokenomicsPercentage) !== 0,
             ),
-          listingPrice: Number(Web3.utils.fromWei(item[4])).toFixed(6),
+          listingPrice: fromWeiNum(item[4]),
           createdAt: Number(item[5]),
         }));
 
         return prepared;
       });
 
-      return {
-        ...nameId,
-        result: fetched,
-      };
+      return fetched;
     }),
   );
 
-  const result1 = result0.flatMap(item =>
-    item.result.map(item2 => ({
-      chainCode: item.chainCode,
-      chainName: item.chainName,
-      chainId: item.chainId,
-      result: item2,
-    })),
-  );
+  const result1 = result0.flatMap(item => item.map(item2 => item2));
 
   // sort is mutable
   result1.sort(
     (a, b) =>
-      Number(a.result.presaleList.isActive) -
-        Number(b.result.presaleList.isActive) ||
-      b.result.createdAt - a.result.createdAt,
+      Number(b.presaleList.isActive) - Number(a.presaleList.isActive) ||
+      b.createdAt - a.createdAt,
   );
 
   const result2 =
     typeof isActive === "boolean"
-      ? result1.filter(item => item.result.presaleList.isActive === isActive)
+      ? result1.filter(item => item.presaleList.isActive === isActive)
       : result1;
 
-  const result3 = result2.map(item => ({ ...item, result: [item.result] }));
-
-  return result3;
+  return result2;
 };

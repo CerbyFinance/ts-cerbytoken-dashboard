@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev:start-server": "export NODE_ENV=development && ts-node-dev --respawn --no-deps --transpile-only --ignore-watch node_modules src/main.ts",
-    "prod:start-server": "export NODE_ENV=production && pm2 start --name 'server' ./node_modules/.bin/ts-node -- --transpile-only ./src/main.ts && pm2 logs"
+    "dev:start-server": "NODE_ENV=development ts-node-dev --respawn --no-deps --transpile-only --ignore-watch node_modules src/main.ts",
+    "prod:start-server": "NODE_ENV=production pm2 start --name 'server' ./node_modules/.bin/ts-node -- --transpile-only ./src/main.ts && pm2 logs"
   },
   "devDependencies": {
     "@types/humanize-duration": "^3.25.1",
