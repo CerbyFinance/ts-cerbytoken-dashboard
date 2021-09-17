@@ -1,0 +1,76 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-gray-200 dark:bg-black dark:text-gray-400;
+  }
+}
+
+.tooltip {
+  @apply absolute invisible;
+}
+
+.has-tooltip:hover .tooltip {
+  @apply z-50 visible;
+}
+
+.root,
+#root,
+#docs-root {
+  --ethbtnleft: #5294ff;
+  --ethbtnlefthov: #477cd1;
+  --ethbtnright: #29e994;
+  --ethbtnrighthov: #20b974;
+  --bscbtnleft: #ffb300;
+  --bscbtnlefthov: #d89801;
+  --bscbtnright: #ff6f00;
+  --bscbtnrighthov: #cf5a00;
+  --polybtnleft: #782aff;
+  --polybtnlefthov: #6023c9;
+  --polybtnright: #bd29e9;
+  --polybtnrighthov: #8e21af;
+  --subtextprimary: #29343e;
+  --subtextsecondary: #c4c4c4;
+  --activetext: #5294ff;
+  --activetextbg: #eaf2ff;
+  --background: #e9e9e9;
+  --icons: #8d97a0;
+  --iconsdark: #646464;
+  --darksecondary: #101e33;
+  --disabledbtnsec: #aaaaaa;
+}
+
+.btn {
+  @apply flex items-center justify-center px-4 text-sm font-medium text-center text-white transition-colors duration-200 border-none rounded-md outline-none h-9 bg-gradient-to-br focus:outline-none;
+}
+
+.bscbtn {
+  @apply from-bscbtnleft to-bscbtnright hover:from-bscbtnlefthov hover:to-bscbtnrighthov;
+}
+.ethbtn {
+  @apply from-ethbtnleft to-ethbtnright hover:from-ethbtnlefthov hover:to-ethbtnrighthov;
+}
+.polybtn {
+  @apply from-polybtnleft to-polybtnright hover:from-polybtnlefthov hover:to-polybtnrighthov;
+}
+
+.bscbtn-modal {
+  @apply hover:from-yellow-400 hover:to-yellow-500 from-yellow-500 to-yellow-600;
+}
+
+.ethbtn-modal {
+  @apply from-blue-500 to-green-500 hover:from-blue-700 hover:to-green-700;
+}
+
+.polybtn-modal {
+  @apply from-purple-700 to-pink-500 hover:from-purple-800 hover:to-pink-600;
+}
+.disabledcard {
+  @apply pointer-events-none from-iconsdark to-disabledbtnsec;
+}
+
+svg {
+  fill: currentColor;
+}
