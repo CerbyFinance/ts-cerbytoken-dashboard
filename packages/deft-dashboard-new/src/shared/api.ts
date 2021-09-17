@@ -1,7 +1,7 @@
 import { PresaleItem } from "./api.d";
 
 // const HOST = "http://localhost:3001";
-const HOST = "http://f491-8-21-110-85.ngrok.io";
+const HOST = "https://api-launchpad.defifactory.fi/";
 
 export class FError extends Error {
   constructor(m: string) {
