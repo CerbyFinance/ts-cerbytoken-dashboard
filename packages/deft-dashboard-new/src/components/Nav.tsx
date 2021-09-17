@@ -103,8 +103,6 @@ function Nav() {
     },
   ];
 
-  const walletAddress = "";
-
   return (
     <nav
       className={classNames(
@@ -137,7 +135,10 @@ function Nav() {
             >
               <CloseMenuIcon className="h-4" />
             </div>
-            <div className="flex items-center justify-center cursor-pointer overflow-ellipsis">
+            <div
+              className="flex items-center justify-center cursor-pointer overflow-ellipsis"
+              onClick={() => history.push("/presale")}
+            >
               <DefiFactoryIcon className="" />
               {(sidebar || isTabletOrMobile) && (
                 <span

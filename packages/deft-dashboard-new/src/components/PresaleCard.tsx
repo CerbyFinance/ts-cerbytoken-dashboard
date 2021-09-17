@@ -85,14 +85,7 @@ function PresaleCard({
     (presaleList.totalInvestedWeth / presaleList.maxWethCap) * 100 || 0;
 
   return (
-    <div
-      style={
-        presaleList && presaleList.maxWethCap <= presaleList.totalInvestedWeth
-          ? { pointerEvents: "none" }
-          : {}
-      }
-      className="w-10/12 max-w-xs p-5 mx-auto text-sm font-medium bg-white border-2 rounded-lg shadow-lg w-76 sm:w-full lg:min-w-full dark:border-gray-500 dark:bg-black"
-    >
+    <div className="w-10/12 max-w-xs p-5 mx-auto text-sm font-medium bg-white border-2 rounded-lg shadow-lg w-76 sm:w-full lg:min-w-full dark:border-gray-500 dark:bg-black">
       <div className="flex justify-between lg:items-center">
         <div className="lg:flex">
           <h3 className="mr-2 text-base dark:text-white">
