@@ -7,7 +7,7 @@ import { shortEnglishHumanizer } from "../utils/utils";
 const globalChains = [
   {
     chainId: 42,
-    factoryContractAddress: "0x1FF44E6648377c9ddC12815AE7f592CD54eC8A82",
+    factoryContractAddress: "0xc44b736826D2Eb7af13A0541b5D2eACE137D5511",
     node: "https://secret:X4gDeGtfQy2M@eth-node-kovan.valar-solutions.com",
   },
   /*{
