@@ -137,7 +137,7 @@ function Nav() {
             </div>
             <div
               className="flex items-center justify-center cursor-pointer overflow-ellipsis"
-              onClick={() => history.push("/presale")}
+              onClick={() => history.push("/")}
             >
               <DefiFactoryIcon className="" />
               {(sidebar || isTabletOrMobile) && (

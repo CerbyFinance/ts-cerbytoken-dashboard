@@ -20,18 +20,42 @@ export const PresaleContext = createContext({
 export const ALL_CHAINS_MAIN = 10101010;
 export const ALL_CHAINS_TEST = 10101011;
 
+// key consits of: address
+interface ItemsMap {
+  [key: string]: {
+    isLoading: boolean;
+    items: PresaleItem[];
+  };
+}
+
 // TODO: differentiate between main + test items
 export const PresaleProvider = ({ children }: { children: JSX.Element }) => {
   const { account, chainId } = useWeb3React();
 
-  const [isLoading, setIsLodaing] = useState(true);
-  const [items, setItems] = useState([] as PresaleItem[]);
+  // const [isLoading, setIsLodaing] = useState(true);
+  // const [items, setItems] = useState([] as PresaleItem[]);
+
+  const [itemsMap, setItemsMap] = useState({} as ItemsMap);
+
+  const key = account || "";
+
+  const { isLoading, items = [] } = itemsMap[key] || {
+    isLoading: true,
+    items: [],
+  };
+
   const [filters, setFilters] = useState({
     currentChain: ALL_CHAINS_TEST,
   } as Filters);
 
   const fire = async () => {
-    setIsLodaing(true);
+    setItemsMap(prev => ({
+      ...prev,
+      [key]: {
+        ...prev[key],
+        isLoading: true,
+      },
+    }));
     const results = await fetchPresaleList({
       walletAddress: account ? account : "",
       chains: [],
@@ -41,14 +65,30 @@ export const PresaleProvider = ({ children }: { children: JSX.Element }) => {
     if (results instanceof Error) {
       console.log(results);
     } else {
-      setItems(results);
+      setItemsMap(prev => ({
+        ...prev,
+        [key]: {
+          ...prev[key],
+          items: results,
+        },
+      }));
     }
-    setIsLodaing(false);
+    setItemsMap(prev => ({
+      ...prev,
+      [key]: {
+        ...prev[key],
+        isLoading: false,
+      },
+    }));
   };
 
   useEffect(() => {
-    // if (account && chainId) {
+    const interval = setInterval(async () => {
+      fire();
+    }, 10000);
+
     fire();
+    return () => clearInterval(interval);
   }, [account, chainId]);
 
   const filteredItems = (isPresale: boolean) =>

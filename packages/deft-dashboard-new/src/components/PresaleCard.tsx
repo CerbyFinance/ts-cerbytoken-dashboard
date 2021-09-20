@@ -103,7 +103,7 @@ function PresaleCard({
           <div className="z-10 p-3 text-white transform -translate-x-56 translate-y-full rounded-md pointer-events-none bg-icons tooltip w-80 dark:bg-darksecondary">
             <div className="flex justify-between">
               <p>Listing Price:</p>
-              <p>{`$${Number(listingPrice).toFixed(2)}`}</p>
+              <p>{`${Number(listingPrice).toFixed(4)} DEFT`}</p>
             </div>
             {tokenomics.map(element => {
               return (
@@ -118,7 +118,7 @@ function PresaleCard({
                       {element.tokenomicsVestedFor})
                     </span>
                   </p>
-                  <p>{`${element.tokenomicsPercentage * 100}%`}</p>
+                  <p>{`${(element.tokenomicsPercentage * 100).toFixed(1)}%`}</p>
                 </div>
               );
             })}
@@ -177,7 +177,10 @@ function PresaleCard({
                 <dt className="">My Total Contribution</dt>
                 <dd className="flex items-center space-x-1 text-subtextprimary dark:text-gray-300">
                   <span>
-                    {Number(walletInfo.walletInvestedWeth).toFixed(2) || ""}
+                    {Number(
+                      walletInfo.walletInvestedWeth +
+                        walletInfo.walletReferralEarnings,
+                    ).toFixed(4) || ""}
                   </span>
                   {tokenIcon}
                 </dd>
@@ -206,7 +209,7 @@ function PresaleCard({
                 <dt className="">Min. per Wallet</dt>
                 <dd className="flex items-center space-x-1 text-subtextprimary dark:text-gray-300">
                   <span>
-                    {Number(walletInfo.minimumWethPerWallet).toFixed(2) || ""}
+                    {Number(walletInfo.minimumWethPerWallet).toFixed(4) || ""}
                   </span>
                   {tokenIcon}
                 </dd>
@@ -215,7 +218,7 @@ function PresaleCard({
                 <dt className="">Max. per Wallet</dt>
                 <dd className="flex items-center space-x-1 text-subtextprimary dark:text-gray-300">
                   <span>
-                    {Number(walletInfo.maximumWethPerWallet).toFixed(2) || ""}
+                    {Number(walletInfo.maximumWethPerWallet).toFixed(4) || ""}
                   </span>
                   {tokenIcon}
                 </dd>
@@ -223,7 +226,7 @@ function PresaleCard({
               <div className="flex justify-between mb-1">
                 <dt className="">Hard Cap</dt>
                 <dd className="flex items-center space-x-1 text-subtextprimary dark:text-gray-300">
-                  <span>{Number(presaleList.maxWethCap).toFixed(2) || ""}</span>
+                  <span>{Number(presaleList.maxWethCap).toFixed(4) || ""}</span>
                   {tokenIcon}
                 </dd>
               </div>

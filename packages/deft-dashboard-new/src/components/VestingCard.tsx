@@ -203,7 +203,7 @@ function VestingCard({
             {vestingInfo.lockedUntilTimestamp === 0
               ? "N/A"
               : vestingInfo?.lockedUntilTimestamp &&
-                new Date(+vestingInfo.lockedUntilTimestamp).toUTCString()}
+                new Date(vestingInfo.lockedUntilTimestamp * 1000).toUTCString()}
           </span>
         </div>
         <div className="flex justify-between">
@@ -213,7 +213,7 @@ function VestingCard({
             {vestingInfo.vestedUntilTimestamp === 0
               ? "N/A"
               : vestingInfo?.vestedUntilTimestamp &&
-                new Date(+vestingInfo.vestedUntilTimestamp).toUTCString()}
+                new Date(vestingInfo.vestedUntilTimestamp * 1000).toUTCString()}
           </span>
         </div>
         <div className="flex justify-between">
