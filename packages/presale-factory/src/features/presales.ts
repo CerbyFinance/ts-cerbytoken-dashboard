@@ -7,10 +7,10 @@ import { shortEnglishHumanizer } from "../utils/utils";
 const globalChains = [
   {
     chainId: 42,
-    factoryContractAddress: "0x741D1789dA1cD23568B1586a99e1aFB9Bf1F7dfa",
+    factoryContractAddress: "0x2532394CBD8ABe38bC85d369cC5Fe21f2A4070e5",
     node: "https://secret:X4gDeGtfQy2M@eth-node-kovan.valar-solutions.com",
   },
-  {
+  /*{
     chainId: 3,
     factoryContractAddress: "0xa7894bc572ffbC27fb1c7F4E36185B276b1a5068",
     node: "https://secret:X4gDeGtfQy2M@eth-node-ropsten.valar-solutions.com",
@@ -19,7 +19,7 @@ const globalChains = [
     chainId: 97,
     factoryContractAddress: "0xb502633f80e66ae1c9e7d068812f85028a4e22fe",
     node: "https://secret:X4gDeGtfQy2M@bsc-node-testnet.valar-solutions.com",
-  },
+  },*/
 ];
 
 const allChainIds = globalChains.map(item => item.chainId);
