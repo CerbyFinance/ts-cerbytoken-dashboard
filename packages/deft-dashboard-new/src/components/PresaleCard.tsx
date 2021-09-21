@@ -79,7 +79,7 @@ function PresaleCard({
   // prettier-ignore
   const raised = (
     (presaleList.totalInvestedWeth / presaleList.maxWethCap) * 100
-  ).toFixed(2) || 0
+  ).asCurrency(2) || 0
 
   const percent =
     (presaleList.totalInvestedWeth / presaleList.maxWethCap) * 100 || 0;
@@ -103,7 +103,7 @@ function PresaleCard({
           <div className="z-10 p-3 text-white transform -translate-x-56 translate-y-full rounded-md pointer-events-none bg-icons tooltip w-80 dark:bg-darksecondary">
             <div className="flex justify-between">
               <p>Listing Price:</p>
-              <p>{`${Number(listingPrice).toFixed(4)} DEFT`}</p>
+              <p>{`${listingPrice.asCurrency(4)} DEFT`}</p>
             </div>
             {tokenomics.map(element => {
               return (
@@ -148,7 +148,7 @@ function PresaleCard({
           <div className="absolute flex flex-col items-center justify-center h-full mx-auto text-center w-150 text-icons ">
             {tokenIconBig}
             <div className="text-xs cursor-pointer text-subtextprimary dark:text-white has-tooltip">
-              {`${presaleList.totalInvestedWeth.toFixed(2)}`}
+              {`${presaleList.totalInvestedWeth.asCurrency(2)}`}
               <div className="z-10 p-3 text-white transform -translate-x-3 rounded-md pointer-events-none bg-icons tooltip min-w-min dark:bg-darksecondary">
                 {presaleList.totalInvestedWeth}
               </div>
@@ -180,7 +180,7 @@ function PresaleCard({
                     {Number(
                       walletInfo.walletInvestedWeth +
                         walletInfo.walletReferralEarnings,
-                    ).toFixed(4) || ""}
+                    ).asCurrency(4) || ""}
                   </span>
                   {tokenIcon}
                 </dd>
@@ -209,7 +209,7 @@ function PresaleCard({
                 <dt className="">Min. per Wallet</dt>
                 <dd className="flex items-center space-x-1 text-subtextprimary dark:text-gray-300">
                   <span>
-                    {Number(walletInfo.minimumWethPerWallet).toFixed(4) || ""}
+                    {walletInfo.minimumWethPerWallet.asCurrency(4) || ""}
                   </span>
                   {tokenIcon}
                 </dd>
@@ -218,7 +218,7 @@ function PresaleCard({
                 <dt className="">Max. per Wallet</dt>
                 <dd className="flex items-center space-x-1 text-subtextprimary dark:text-gray-300">
                   <span>
-                    {Number(walletInfo.maximumWethPerWallet).toFixed(4) || ""}
+                    {walletInfo.maximumWethPerWallet.asCurrency(4) || ""}
                   </span>
                   {tokenIcon}
                 </dd>
@@ -226,7 +226,7 @@ function PresaleCard({
               <div className="flex justify-between mb-1">
                 <dt className="">Hard Cap</dt>
                 <dd className="flex items-center space-x-1 text-subtextprimary dark:text-gray-300">
-                  <span>{Number(presaleList.maxWethCap).toFixed(4) || ""}</span>
+                  <span>{presaleList.maxWethCap.asCurrency(4) || ""}</span>
                   {tokenIcon}
                 </dd>
               </div>

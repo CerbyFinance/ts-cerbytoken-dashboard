@@ -181,8 +181,8 @@ function VestingCard({
         </div>
         <div className="flex justify-between text-subtextprimary dark:text-white">
           <span>0</span>
-          <span>Available Token(s): {available}</span>
-          <span>{total}</span>
+          <span>Available Token(s): {available.asCurrency(1)}</span>
+          <span>{total.asCurrency(1)}</span>
         </div>
       </div>
 
@@ -192,7 +192,7 @@ function VestingCard({
         <div className="flex justify-between">
           <span>Total Amount</span>
           <span className="text-subtextprimary dark:text-gray-300 ">
-            <span className="mr-2 text-activetext">{total}</span>
+            <span className="mr-2 text-activetext">{total.asCurrency(1)}</span>
             {tokenName}
           </span>
         </div>
@@ -219,14 +219,18 @@ function VestingCard({
         <div className="flex justify-between">
           <span>Claimed Amount</span>
           <span className="text-subtextprimary dark:text-gray-300">
-            <span className="mr-2 text-activetext">{claimed}</span>
+            <span className="mr-2 text-activetext">
+              {claimed.asCurrency(1)}
+            </span>
             {tokenName}
           </span>
         </div>
         <div className="flex justify-between">
           <span>Available Amount</span>
           <span className="text-subtextprimary dark:text-gray-300">
-            <span className="mr-2 text-activetext">{available}</span>
+            <span className="mr-2 text-activetext">
+              {available.asCurrency(1)}
+            </span>
             {tokenName}
           </span>
         </div>
