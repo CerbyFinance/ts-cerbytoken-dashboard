@@ -117,8 +117,8 @@ function VestingCard({
   const tokenName = presaleList.presaleName.split(" ")[0];
 
   const claimed = vestingInfo.tokensClaimed;
-  const available = vestingInfo.tokensReserved;
-  const total = claimed + available;
+  const available = vestingInfo.tokensReserved - vestingInfo.tokensClaimed;
+  const total = vestingInfo.tokensReserved;
 
   return (
     <div className="flex flex-col justify-between w-10/12 max-w-sm p-5 mx-auto text-xs font-medium bg-white border-2 rounded-lg shadow-lg sm:w-full md:min-w-full dark:border-gray-500 dark:bg-black ">
@@ -192,7 +192,9 @@ function VestingCard({
         <div className="flex justify-between">
           <span>Total Amount</span>
           <span className="text-subtextprimary dark:text-gray-300 ">
-            <span className="mr-2 text-activetext">{total.asCurrency(1)}</span>
+            <span className="mr-2 text-activetext">
+              {vestingInfo.tokensReserved.asCurrency(1)}
+            </span>
             {tokenName}
           </span>
         </div>
@@ -220,7 +222,7 @@ function VestingCard({
           <span>Claimed Amount</span>
           <span className="text-subtextprimary dark:text-gray-300">
             <span className="mr-2 text-activetext">
-              {claimed.asCurrency(1)}
+              {vestingInfo.tokensClaimed.asCurrency(1)}
             </span>
             {tokenName}
           </span>
