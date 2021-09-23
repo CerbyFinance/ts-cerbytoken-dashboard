@@ -63,6 +63,7 @@ export function handleStakeEnded(event: StakeEnded): void {
 
 export function handleStakeOwnerSchanged(event: StakeOwnerChanged): void {
   let newOwnerId = event.params.newOwner.toHexString();
+  let newOwner = getOrCreateUser(newOwnerId);
 
   let stake = Stake.load(event.params.stakeId.toString());
   stake.owner = newOwnerId;
