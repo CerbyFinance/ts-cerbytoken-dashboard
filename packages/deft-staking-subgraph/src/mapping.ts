@@ -18,6 +18,7 @@ function getOrCreateUser(id: string): User | null {
   let user = User.load(id);
   if (user == null) {
     user = new User(id);
+    user.save();
   }
   return user;
 }
