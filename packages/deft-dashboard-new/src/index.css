@@ -42,6 +42,16 @@
   --disabledbtnsec: #aaaaaa;
 }
 
+.dark {
+  --staking-item: #101e33;
+  --staking-divider: rgba(255, 255, 255, 0.3);
+}
+
+.light {
+  --staking-item: #f2f2f2;
+  --staking-divider: rgba(41, 52, 62, 0.3);
+}
+
 .btn {
   @apply flex items-center justify-center px-4 text-sm font-medium text-center text-white transition-colors duration-200 border-none rounded-md outline-none h-9 bg-gradient-to-br focus:outline-none;
 }
@@ -71,6 +81,35 @@
   @apply pointer-events-none from-iconsdark to-disabledbtnsec;
 }
 
-svg {
+/* svg {
   fill: currentColor;
+} */
+
+.dialog-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rc-dialog-content {
+  position: relative;
+  background-color: transparent;
+  border: none;
+  border-radius: 0px;
+}
+
+@media (min-width: 768px) {
+  .rc-dialog {
+    width: auto;
+    margin: 0px;
+    /* margin: 30px auto; */
+  }
+}
+
+.rc-tooltip-hidden {
+  display: none;
+}
+.rc-tooltip {
+  position: absolute;
+  z-index: 1600;
 }

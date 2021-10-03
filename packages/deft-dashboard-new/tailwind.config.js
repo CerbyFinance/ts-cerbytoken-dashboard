@@ -25,7 +25,10 @@ module.exports = {
         iconsdark: "var(--iconsdark)",
         darksecondary: "var(--darksecondary)",
         disabledbtnsec: "var(--disabledbtnsec)",
+        "staking-item": "var(--staking-item)",
+        "staking-divider": "var(--staking-divider)",
       },
+
       width: {
         150: "150px",
         136: "136px",
@@ -33,7 +36,8 @@ module.exports = {
     },
   },
   variants: {
-    extend: {},
+    backgroundColor: ["dark", "hover"],
+
     margin: ["responsive", "last"],
   },
   plugins: [],

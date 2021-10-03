@@ -1,5 +1,29 @@
 import { createContext, useEffect, useState } from "react";
 
+export const globalTheme = {
+  global: {
+    colors: {
+      "grey-1": "#29343E",
+      "white-1": "#FFFFFF",
+      text: {
+        light: "grey-1",
+        dark: "white-1",
+      },
+      background: {
+        light: "#e5e7eb",
+        dark: "#000000",
+      },
+    },
+    focus: {
+      outline: undefined,
+      border: {
+        color: "all",
+      },
+      shadow: undefined,
+    },
+  },
+};
+
 export const ThemeContext = createContext({
   theme: "light",
   setTheme: (theme: string) => {},
