@@ -3,14 +3,15 @@ require("dotenv").config();
 import { GraphQLClient } from "graphql-request";
 import Web3 from "web3";
 import { TransactionReceipt } from "web3-core/types";
+import { BlockTransactionObject } from "web3-eth";
 import { CrossChainBridge } from "../../types/web3-v1-contracts/CrossChainBridge";
 import crossChainBridgeAbi from "../contracts/CrossChainBridge.json";
 import { getSdk, ProofType } from "../graphql/types";
 import { globalRedis } from "../utils/redis";
-import { request } from "./request";
 
 const MIN_PROOFS_TO_APPROVE = 1;
 const ESTIMATE_MULT = 1.2;
+const BASEFEE_MULT = 1.3;
 
 const makeRemoteUrl = (chain: string) =>
   `https://bridge.defifactory.fi/subgraphs/name/deft/deft-bridge-${chain}`;
@@ -97,28 +98,6 @@ const sdkAndWeb3ByChain = Object.fromEntries(
   }),
 );
 
-const getGasPrice = async () => {
-  const result = await request<{
-    code: number;
-    data: {
-      rapid: number;
-      fast: number;
-      standard: number;
-      slow: number;
-      timestamp: number;
-    };
-  }>({
-    method: "get",
-    url: "https://www.gasnow.org/api/v3/gas/price",
-  });
-
-  if (result instanceof Error) {
-    return result;
-  }
-
-  return result.body.data.fast;
-};
-
 const approveOne = async (
   contract: CrossChainBridge,
   web3: Web3,
@@ -128,17 +107,29 @@ const approveOne = async (
 ) => {
   const preparedMethod = contract.methods.markTransactionAsApproved(proofHash);
 
-  const estimatedGas = await preparedMethod.estimateGas({
-    from,
-  });
+  const estimatedGas = await preparedMethod.estimateGas({ from });
 
-  const gasPrice = isMain ? await getGasPrice() : await web3.eth.getGasPrice();
+  const [gasPrice, block] = await Promise.all([
+    web3.eth.getGasPrice(),
+    web3.eth.getBlock("latest", false) as Promise<
+      BlockTransactionObject & {
+        baseFeePerGas?: number;
+      }
+    >,
+  ]);
 
-  if (gasPrice instanceof Error) {
-    return gasPrice;
-  }
+  const fees = block.baseFeePerGas
+    ? {
+        maxFeePerGas: block.baseFeePerGas! * BASEFEE_MULT,
+        maxPriorityFeePerGas: 2000000000,
+      }
+    : {
+        gasPrice: Number(gasPrice) + 1,
+      };
 
-  if (Number(gasPrice) > 100000000000) {
+  const whichGas = block.baseFeePerGas ? fees.maxFeePerGas : fees.gasPrice;
+
+  if (Number(whichGas) > 200000000000) {
     return new Error("too high gwei");
   }
 
@@ -147,7 +138,7 @@ const approveOne = async (
   const result = preparedMethod.send({
     from,
     gas: callGas,
-    gasPrice: Number(gasPrice) + 1,
+    ...fees,
   });
 
   const transactionHash = await new Promise<string>(resolve => {
@@ -169,17 +160,38 @@ const approveMany = async (
   const preparedMethod =
     contract.methods.bulkMarkTransactionsAsApproved(proofHashes);
 
-  const estimatedGas = await preparedMethod.estimateGas({
-    from,
-  });
+  const estimatedGas = await preparedMethod.estimateGas({ from });
 
-  const gasPrice = await web3.eth.getGasPrice();
+  const [gasPrice, block] = await Promise.all([
+    web3.eth.getGasPrice(),
+    web3.eth.getBlock("latest", false) as Promise<
+      BlockTransactionObject & {
+        baseFeePerGas?: number;
+      }
+    >,
+  ]);
+
+  const fees = block.baseFeePerGas
+    ? {
+        maxFeePerGas: block.baseFeePerGas! * BASEFEE_MULT,
+        maxPriorityFeePerGas: 2000000000,
+      }
+    : {
+        gasPrice: Number(gasPrice) + 1,
+      };
+
+  const whichGas = block.baseFeePerGas ? fees.maxFeePerGas : fees.gasPrice;
+
+  if (Number(whichGas) > 200000000000) {
+    return new Error("too high gwei");
+  }
+
   const callGas = Math.floor(estimatedGas * ESTIMATE_MULT);
 
   const result = preparedMethod.send({
     from,
     gas: callGas,
-    gasPrice: Number(gasPrice) + 1,
+    ...fees,
   });
 
   const transactionHash = await new Promise<string>(resolve => {
