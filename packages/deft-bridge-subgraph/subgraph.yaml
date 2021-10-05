@@ -20,7 +20,7 @@ dataSources:
         - name: CrossChainBridge
           file: ./abis/CrossChainBridge.json
       eventHandlers:
-        - event: ProofOfBurn(address,address,uint256,uint256,uint256,uint256,bytes32)
+        - event: ProofOfBurn(address,address,uint256,uint256,uint256,uint256,uint256,bytes32)
           handler: handleProofOfBurn
         - event: ProofOfMint(address,address,uint256,uint256,bytes32)
           handler: handleProofOfMint

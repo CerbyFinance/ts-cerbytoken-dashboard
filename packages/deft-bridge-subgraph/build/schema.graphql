@@ -23,6 +23,8 @@ type Proof @entity {
   src: BigInt
   dest: BigInt
 
+  token: String!
+
   sender: Bytes!
 
   amount: BigDecimal!
@@ -64,7 +66,7 @@ type BridgeTransfer @entity {
 
 type Global @entity {
   id: ID!
-  currentFee: BigDecimal!
+  # currentFee: BigDecimal!
   approvedCount: BigInt!
 
   mintedCount: BigInt!

@@ -4,11 +4,11 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: SourceChain
-    network: binance-test
+    network: polygon
     source:
-      address: "0xf8096b2c9d95Ea1BEbaE926b00A7788553d91861"
+      address: "0xa5df69790ba509c511e2a0a31ceeffecc4d156c7"
       abi: CrossChainBridge
-      startBlock: 12935828
+      startBlock: 19754147
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4

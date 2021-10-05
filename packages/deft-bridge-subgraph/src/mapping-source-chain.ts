@@ -58,6 +58,7 @@ export function handleProofOfBurn(event: ProofOfBurn): void {
   bridgeTransfer.status = "Burned";
 
   let burnedAmount = convertTokenToDecimal(event.params.amount, BI_18);
+  let amountAsFee = convertTokenToDecimal(event.params.amountAsFee, BI_18);
 
   let global = getOrCreateGlobal();
   global.burnedCount = global.burnedCount.plus(ONE_BI);
@@ -71,7 +72,7 @@ export function handleProofOfBurn(event: ProofOfBurn): void {
   proof.type = "Burn";
   proof.sender = event.transaction.from;
   proof.amount = burnedAmount;
-  proof.fee = ZERO_BD;
+  proof.fee = amountAsFee;
   proof.txFee = convertTokenToDecimal(gasPrice.times(gasUsed), BI_18);
   proof.txHash = event.transaction.hash;
   proof.logIndex = event.logIndex;
