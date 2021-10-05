@@ -23,7 +23,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 import styled from "styled-components";
 import useMedia from "use-media";
-import { Chains } from "./chains";
+import { Chains, supportedChainIds } from "./chains";
 import { Hint } from "./components/Hint";
 import {
   BridgeTransferDocument,
@@ -49,6 +49,7 @@ import {
   CheckLg,
   Direction,
   EthereumLogo,
+  PolygonLogo,
   QuestionIcon,
   TelegramIcon,
 } from "./Icons";
@@ -752,6 +753,7 @@ const idToChain = {
   3: "ropsten",
   42: "kovan",
   97: "binance-test",
+  137: "polygon",
 } as {
   [key in Chains]: string;
 };
@@ -759,6 +761,7 @@ const idToChain = {
 const chainIdToShort = {
   1: "ETH",
   56: "BSC",
+  137: "Polygon",
 
   3: "ETH (ROP)",
   42: "ETH (KOV)",
@@ -770,6 +773,7 @@ const chainIdToShort = {
 const chainIdToIcon = {
   1: <EthereumLogo />,
   56: <BinanceLogo />,
+  137: <PolygonLogo />,
 
   3: <EthereumLogo />,
   42: <EthereumLogo />,
@@ -819,6 +823,112 @@ const tokens = [
   //   address: "0x44EB8f6C496eAA8e0321006d3c61d851f87685BD",
   // },
 ];
+
+const ChooseChain = ({
+  chain,
+  filter,
+  onChange,
+}: {
+  chain: Chains;
+  filter: Chains;
+
+  onChange: (chainId: Chains) => void;
+}) => {
+  const [visible, onVisibleChange] = useState(false);
+
+  return (
+    <Tooltip
+      placement="bottom"
+      align={{
+        offset: [0, -54],
+      }}
+      trigger={["click"]}
+      overlay={
+        <Box
+          background="white"
+          style={{
+            width: "149px",
+            boxShadow: "rgba(0,0,0, 0.12) 0px 3px 14px 3px",
+            border: "1px solid rgb(192, 192, 192)",
+          }}
+          round="6px"
+        >
+          {supportedChainIds
+            .filter(item => item !== filter)
+            .map(item => (
+              <HoveredColor
+                pad="8px 12px 7px"
+                height="54px"
+                width="149px"
+                round="8px"
+                style={{
+                  cursor: "pointer",
+                  borderBottom: "1px solid #E3E3E3",
+                  borderBottomLeftRadius: 0,
+                  borderBottomRightRadius: 0,
+                }}
+                justify="between"
+                direction="row"
+                onClick={() => {
+                  onChange(item);
+                  onVisibleChange(false);
+                }}
+              >
+                <Box>
+                  <Text
+                    style={{
+                      lineHeight: "132%",
+                    }}
+                    size="13px"
+                    color="#818181"
+                  >
+                    From
+                  </Text>
+                  <Box height="2px"></Box>
+                  <Text weight={600} size="15px" color="#414141">
+                    {chainIdToShort[item]}
+                  </Text>
+                </Box>
+                {chainIdToIcon[item]}
+              </HoveredColor>
+            ))}
+        </Box>
+      }
+      visible={visible}
+      onVisibleChange={v => onVisibleChange(v)}
+    >
+      <HoverScale
+        pad="8px 12px 7px"
+        height="54px"
+        width="149px"
+        round="8px"
+        style={{
+          border: "1px solid #E3E3E3",
+          cursor: "pointer",
+        }}
+        justify="between"
+        direction="row"
+      >
+        <Box>
+          <Text
+            style={{
+              lineHeight: "132%",
+            }}
+            size="13px"
+            color="#818181"
+          >
+            From
+          </Text>
+          <Box height="2px"></Box>
+          <Text weight={600} size="15px" color="#414141">
+            {chainIdToShort[chain]}
+          </Text>
+        </Box>
+        {chainIdToIcon[chain]}
+      </HoverScale>
+    </Tooltip>
+  );
+};
 
 const BridgeWidget = () => {
   const { account, activate, chainId, library, connector, error } =
@@ -887,7 +997,7 @@ const BridgeWidget = () => {
 
   const [graphBlockNumber, setGraphBlockNumber] = useState<number>(0);
 
-  const [visible, onVisibleChange] = useState(false);
+  const [visibleToken, onVisibleTokenChange] = useState(false);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -1248,7 +1358,7 @@ const BridgeWidget = () => {
                       }}
                       onClick={() => {
                         setToken(token2.name);
-                        onVisibleChange(false);
+                        onVisibleTokenChange(false);
                       }}
                     >
                       <Text
@@ -1272,8 +1382,8 @@ const BridgeWidget = () => {
                 <Box height="2px"></Box>
               </Box>
             }
-            visible={visible}
-            onVisibleChange={v => onVisibleChange(v)}
+            visible={visibleToken}
+            onVisibleChange={v => onVisibleTokenChange(v)}
           >
             <HoverScale
               margin={{
@@ -1302,35 +1412,14 @@ const BridgeWidget = () => {
       <Box height="12px" />
 
       <Box direction="row" justify="between" align="center">
-        <Box
-          pad="8px 12px 7px"
-          height="54px"
-          width="149px"
-          round="8px"
-          style={{
-            border: "1px solid #E3E3E3",
-            cursor: "pointer",
+        <ChooseChain
+          chain={path[0]}
+          filter={path[1]}
+          onChange={chainId => {
+            setPath(oldPath => [chainId, oldPath[1]]);
           }}
-          justify="between"
-          direction="row"
-        >
-          <Box>
-            <Text
-              style={{
-                lineHeight: "132%",
-              }}
-              size="13px"
-              color="#818181"
-            >
-              From
-            </Text>
-            <Box height="2px"></Box>
-            <Text weight={600} size="15px" color="#414141">
-              {chainIdToShort[path[0]]}
-            </Text>
-          </Box>
-          {chainIdToIcon[path[0]]}
-        </Box>
+        />
+
         <Box
           height="40px"
           width="40px"
@@ -1344,36 +1433,13 @@ const BridgeWidget = () => {
         >
           <Direction />
         </Box>
-        <Box
-          pad="8px 12px 7px"
-          height="54px"
-          width="149px"
-          round="8px"
-          style={{
-            border: "1px solid #E3E3E3",
-            cursor: "pointer",
+        <ChooseChain
+          chain={path[1]}
+          filter={path[0]}
+          onChange={chainId => {
+            setPath(oldPath => [oldPath[0], chainId]);
           }}
-          justify="between"
-          direction="row"
-        >
-          <Box>
-            <Text
-              style={{
-                lineHeight: "132%",
-              }}
-              size="13px"
-              color="#818181"
-            >
-              To
-            </Text>
-            <Box height="2px"></Box>
-            <Text weight={600} size="15px" color="#414141">
-              {chainIdToShort[path[1]]}
-            </Text>
-          </Box>
-
-          {chainIdToIcon[path[1]]}
-        </Box>
+        />
       </Box>
 
       <Box height="15px" />
