@@ -858,8 +858,8 @@ const BridgeWidget = () => {
   const [isPopular, setPopular] = useState(true);
 
   const [loader, setLoader] = useState(false);
-  // const [path, setPath] = useState([1, 56] as [Chains, Chains]);
-  const [path, setPath] = useState([42, 97] as [Chains, Chains]);
+  const [path, setPath] = useState([1, 56] as [Chains, Chains]);
+  // const [path, setPath] = useState([42, 97] as [Chains, Chains]);
 
   const setMax = () => {
     setTransferAmount(balance.toString());
