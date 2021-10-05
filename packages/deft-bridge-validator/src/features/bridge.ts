@@ -22,7 +22,7 @@ const makeRemoteUrl = (chain: string) =>
 const { PRIVATE_KEY } = process.env;
 
 // const chains = ["kovan", "binance-test"];
-const chains = ["binance", "ethereum"];
+const chains = ["binance", "ethereum", "polygon"];
 
 const nodeUrlByChain = {
   ethereum: "https://secret:X4gDeGtfQy2M@eth-node.valar-solutions.com", // 1
@@ -31,14 +31,16 @@ const nodeUrlByChain = {
   kovan: "https://secret:X4gDeGtfQy2M@eth-node-kovan.valar-solutions.com", // 42
   ["binance-test"]:
     "https://secret:X4gDeGtfQy2M@bsc-node-testnet.valar-solutions.com", // 97
+  ["polygon"]: "https://secret:X4gDeGtfQy2M@polygon-node.valar-solutions.com", // 137
 };
 
 const contractByChain = {
-  ethereum: "0x1d2900622B5049D9479DC8BE06469A4ede3Fc96e",
-  binance: "0x1d2900622B5049D9479DC8BE06469A4ede3Fc96e",
-  ropsten: "0x1d2900622B5049D9479DC8BE06469A4ede3Fc96e",
-  kovan: "0x1d2900622B5049D9479DC8BE06469A4ede3Fc96e",
-  ["binance-test"]: "0x1d2900622B5049D9479DC8BE06469A4ede3Fc96e",
+  ethereum: "0xa5df69790ba509c511e2a0a31ceeffecc4d156c7",
+  binance: "0xa5df69790ba509c511e2a0a31ceeffecc4d156c7",
+  ropsten: "0xa5df69790ba509c511e2a0a31ceeffecc4d156c7",
+  kovan: "0xa5df69790ba509c511e2a0a31ceeffecc4d156c7",
+  ["binance-test"]: "0xa5df69790ba509c511e2a0a31ceeffecc4d156c7",
+  ["polygon"]: "0xa5df69790ba509c511e2a0a31ceeffecc4d156c7",
 };
 
 const chainToId = {
@@ -47,13 +49,22 @@ const chainToId = {
   ropsten: 3,
   kovan: 42,
   ["binance-test"]: 97,
+  ["polygon"]: 137,
 };
 
 const allowedPaths = [
-  ["binance", "ethereum"],
-  ["ethereum", "binance"],
+  // ["binance", "ethereum"],
+  // ["ethereum", "binance"],
   // ["kovan", "binance-test"],
   // ["binance-test", "kovan"],
+  ...[
+    ["binance", "ethereum"],
+    ["binance", "polygon"],
+    ["ethereum", "binance"],
+    ["ethereum", "polygon"],
+    ["polygon", "binance"],
+    ["polygon", "ethereum"],
+  ],
 ] as [string, string][];
 
 const applyMnemonicToWeb3 = (web3: Web3) => {
@@ -120,7 +131,10 @@ const approveOne = async (
 
   const fees = block.baseFeePerGas
     ? {
-        maxFeePerGas: block.baseFeePerGas! * BASEFEE_MULT,
+        maxFeePerGas: Math.max(
+          Math.floor(Number(block.baseFeePerGas!) * BASEFEE_MULT),
+          2000000000,
+        ),
         maxPriorityFeePerGas: 2000000000,
       }
     : {
@@ -173,7 +187,10 @@ const approveMany = async (
 
   const fees = block.baseFeePerGas
     ? {
-        maxFeePerGas: block.baseFeePerGas! * BASEFEE_MULT,
+        maxFeePerGas: Math.max(
+          Math.floor(Number(block.baseFeePerGas!) * BASEFEE_MULT),
+          2000000000,
+        ),
         maxPriorityFeePerGas: 2000000000,
       }
     : {

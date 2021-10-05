@@ -160,8 +160,10 @@ export type Proof = {
   nonce?: Maybe<Scalars['BigInt']>;
   src?: Maybe<Scalars['BigInt']>;
   dest?: Maybe<Scalars['BigInt']>;
+  token: Scalars['String'];
   sender: Scalars['Bytes'];
   amount: Scalars['BigDecimal'];
+  amountAsFee: Scalars['BigDecimal'];
   fee: Scalars['BigDecimal'];
   txFee: Scalars['BigDecimal'];
   txHash: Scalars['Bytes'];
@@ -210,6 +212,20 @@ export type Proof_Filter = {
   dest_lte?: Maybe<Scalars['BigInt']>;
   dest_in?: Maybe<Array<Scalars['BigInt']>>;
   dest_not_in?: Maybe<Array<Scalars['BigInt']>>;
+  token?: Maybe<Scalars['String']>;
+  token_not?: Maybe<Scalars['String']>;
+  token_gt?: Maybe<Scalars['String']>;
+  token_lt?: Maybe<Scalars['String']>;
+  token_gte?: Maybe<Scalars['String']>;
+  token_lte?: Maybe<Scalars['String']>;
+  token_in?: Maybe<Array<Scalars['String']>>;
+  token_not_in?: Maybe<Array<Scalars['String']>>;
+  token_contains?: Maybe<Scalars['String']>;
+  token_not_contains?: Maybe<Scalars['String']>;
+  token_starts_with?: Maybe<Scalars['String']>;
+  token_not_starts_with?: Maybe<Scalars['String']>;
+  token_ends_with?: Maybe<Scalars['String']>;
+  token_not_ends_with?: Maybe<Scalars['String']>;
   sender?: Maybe<Scalars['Bytes']>;
   sender_not?: Maybe<Scalars['Bytes']>;
   sender_in?: Maybe<Array<Scalars['Bytes']>>;
@@ -224,6 +240,14 @@ export type Proof_Filter = {
   amount_lte?: Maybe<Scalars['BigDecimal']>;
   amount_in?: Maybe<Array<Scalars['BigDecimal']>>;
   amount_not_in?: Maybe<Array<Scalars['BigDecimal']>>;
+  amountAsFee?: Maybe<Scalars['BigDecimal']>;
+  amountAsFee_not?: Maybe<Scalars['BigDecimal']>;
+  amountAsFee_gt?: Maybe<Scalars['BigDecimal']>;
+  amountAsFee_lt?: Maybe<Scalars['BigDecimal']>;
+  amountAsFee_gte?: Maybe<Scalars['BigDecimal']>;
+  amountAsFee_lte?: Maybe<Scalars['BigDecimal']>;
+  amountAsFee_in?: Maybe<Array<Scalars['BigDecimal']>>;
+  amountAsFee_not_in?: Maybe<Array<Scalars['BigDecimal']>>;
   fee?: Maybe<Scalars['BigDecimal']>;
   fee_not?: Maybe<Scalars['BigDecimal']>;
   fee_gt?: Maybe<Scalars['BigDecimal']>;
@@ -278,8 +302,10 @@ export enum Proof_OrderBy {
   Nonce = 'nonce',
   Src = 'src',
   Dest = 'dest',
+  Token = 'token',
   Sender = 'sender',
   Amount = 'amount',
+  AmountAsFee = 'amountAsFee',
   Fee = 'fee',
   TxFee = 'txFee',
   TxHash = 'txHash',
