@@ -57,7 +57,6 @@ export enum BridgeTransfer_OrderBy {
 export type Global = {
   __typename?: 'Global';
   id: Scalars['ID'];
-  currentFee: Scalars['BigDecimal'];
   approvedCount: Scalars['BigInt'];
   mintedCount: Scalars['BigInt'];
   mintedAmount: Scalars['BigDecimal'];
@@ -76,14 +75,6 @@ export type Global_Filter = {
   id_lte?: Maybe<Scalars['ID']>;
   id_in?: Maybe<Array<Scalars['ID']>>;
   id_not_in?: Maybe<Array<Scalars['ID']>>;
-  currentFee?: Maybe<Scalars['BigDecimal']>;
-  currentFee_not?: Maybe<Scalars['BigDecimal']>;
-  currentFee_gt?: Maybe<Scalars['BigDecimal']>;
-  currentFee_lt?: Maybe<Scalars['BigDecimal']>;
-  currentFee_gte?: Maybe<Scalars['BigDecimal']>;
-  currentFee_lte?: Maybe<Scalars['BigDecimal']>;
-  currentFee_in?: Maybe<Array<Scalars['BigDecimal']>>;
-  currentFee_not_in?: Maybe<Array<Scalars['BigDecimal']>>;
   approvedCount?: Maybe<Scalars['BigInt']>;
   approvedCount_not?: Maybe<Scalars['BigInt']>;
   approvedCount_gt?: Maybe<Scalars['BigInt']>;
@@ -150,7 +141,6 @@ export type Global_Filter = {
 
 export enum Global_OrderBy {
   Id = 'id',
-  CurrentFee = 'currentFee',
   ApprovedCount = 'approvedCount',
   MintedCount = 'mintedCount',
   MintedAmount = 'mintedAmount',
@@ -172,8 +162,10 @@ export type Proof = {
   nonce?: Maybe<Scalars['BigInt']>;
   src?: Maybe<Scalars['BigInt']>;
   dest?: Maybe<Scalars['BigInt']>;
+  token: Scalars['String'];
   sender: Scalars['Bytes'];
   amount: Scalars['BigDecimal'];
+  amountAsFee: Scalars['BigDecimal'];
   fee: Scalars['BigDecimal'];
   txFee: Scalars['BigDecimal'];
   txHash: Scalars['Bytes'];
@@ -222,6 +214,20 @@ export type Proof_Filter = {
   dest_lte?: Maybe<Scalars['BigInt']>;
   dest_in?: Maybe<Array<Scalars['BigInt']>>;
   dest_not_in?: Maybe<Array<Scalars['BigInt']>>;
+  token?: Maybe<Scalars['String']>;
+  token_not?: Maybe<Scalars['String']>;
+  token_gt?: Maybe<Scalars['String']>;
+  token_lt?: Maybe<Scalars['String']>;
+  token_gte?: Maybe<Scalars['String']>;
+  token_lte?: Maybe<Scalars['String']>;
+  token_in?: Maybe<Array<Scalars['String']>>;
+  token_not_in?: Maybe<Array<Scalars['String']>>;
+  token_contains?: Maybe<Scalars['String']>;
+  token_not_contains?: Maybe<Scalars['String']>;
+  token_starts_with?: Maybe<Scalars['String']>;
+  token_not_starts_with?: Maybe<Scalars['String']>;
+  token_ends_with?: Maybe<Scalars['String']>;
+  token_not_ends_with?: Maybe<Scalars['String']>;
   sender?: Maybe<Scalars['Bytes']>;
   sender_not?: Maybe<Scalars['Bytes']>;
   sender_in?: Maybe<Array<Scalars['Bytes']>>;
@@ -236,6 +242,14 @@ export type Proof_Filter = {
   amount_lte?: Maybe<Scalars['BigDecimal']>;
   amount_in?: Maybe<Array<Scalars['BigDecimal']>>;
   amount_not_in?: Maybe<Array<Scalars['BigDecimal']>>;
+  amountAsFee?: Maybe<Scalars['BigDecimal']>;
+  amountAsFee_not?: Maybe<Scalars['BigDecimal']>;
+  amountAsFee_gt?: Maybe<Scalars['BigDecimal']>;
+  amountAsFee_lt?: Maybe<Scalars['BigDecimal']>;
+  amountAsFee_gte?: Maybe<Scalars['BigDecimal']>;
+  amountAsFee_lte?: Maybe<Scalars['BigDecimal']>;
+  amountAsFee_in?: Maybe<Array<Scalars['BigDecimal']>>;
+  amountAsFee_not_in?: Maybe<Array<Scalars['BigDecimal']>>;
   fee?: Maybe<Scalars['BigDecimal']>;
   fee_not?: Maybe<Scalars['BigDecimal']>;
   fee_gt?: Maybe<Scalars['BigDecimal']>;
@@ -290,8 +304,10 @@ export enum Proof_OrderBy {
   Nonce = 'nonce',
   Src = 'src',
   Dest = 'dest',
+  Token = 'token',
   Sender = 'sender',
   Amount = 'amount',
+  AmountAsFee = 'amountAsFee',
   Fee = 'fee',
   TxFee = 'txFee',
   TxHash = 'txHash',
@@ -627,7 +643,6 @@ export interface BytesScalarConfig extends GraphQLScalarTypeConfig<ResolversType
 
 export type GlobalResolvers<ContextType = any, ParentType extends ResolversParentTypes['Global'] = ResolversParentTypes['Global']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  currentFee?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
   approvedCount?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   mintedCount?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   mintedAmount?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
@@ -644,8 +659,10 @@ export type ProofResolvers<ContextType = any, ParentType extends ResolversParent
   nonce?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
   src?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
   dest?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
+  token?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   sender?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
   amount?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
+  amountAsFee?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
   fee?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
   txFee?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
   txHash?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
@@ -730,17 +747,6 @@ export type MetaBlockNumberQuery = (
       { __typename?: '_Block_' }
       & Pick<_Block_, 'number'>
     ) }
-  )> }
-);
-
-export type GlobalQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GlobalQuery = (
-  { __typename?: 'Query' }
-  & { global?: Maybe<(
-    { __typename?: 'Global' }
-    & Pick<Global, 'currentFee'>
   )> }
 );
 
@@ -835,40 +841,6 @@ export function useMetaBlockNumberLazyQuery(baseOptions?: Apollo.LazyQueryHookOp
 export type MetaBlockNumberQueryHookResult = ReturnType<typeof useMetaBlockNumberQuery>;
 export type MetaBlockNumberLazyQueryHookResult = ReturnType<typeof useMetaBlockNumberLazyQuery>;
 export type MetaBlockNumberQueryResult = Apollo.QueryResult<MetaBlockNumberQuery, MetaBlockNumberQueryVariables>;
-export const GlobalDocument = gql`
-    query Global {
-  global(id: 1) {
-    currentFee
-  }
-}
-    `;
-
-/**
- * __useGlobalQuery__
- *
- * To run a query within a React component, call `useGlobalQuery` and pass it any options that fit your needs.
- * When your component renders, `useGlobalQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGlobalQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGlobalQuery(baseOptions?: Apollo.QueryHookOptions<GlobalQuery, GlobalQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GlobalQuery, GlobalQueryVariables>(GlobalDocument, options);
-      }
-export function useGlobalLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GlobalQuery, GlobalQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GlobalQuery, GlobalQueryVariables>(GlobalDocument, options);
-        }
-export type GlobalQueryHookResult = ReturnType<typeof useGlobalQuery>;
-export type GlobalLazyQueryHookResult = ReturnType<typeof useGlobalLazyQuery>;
-export type GlobalQueryResult = Apollo.QueryResult<GlobalQuery, GlobalQueryVariables>;
 export const ProofByTxHashDocument = gql`
     query ProofByTxHash($txHash: Bytes!) {
   proofs(where: {txHash: $txHash}, orderBy: nonce, orderDirection: desc, first: 1) {

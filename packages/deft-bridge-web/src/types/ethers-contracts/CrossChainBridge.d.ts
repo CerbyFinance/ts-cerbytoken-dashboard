@@ -23,23 +23,17 @@ interface CrossChainBridgeInterface extends ethers.utils.Interface {
   functions: {
     "ROLE_ADMIN()": FunctionFragment;
     "ROLE_APPROVER()": FunctionFragment;
-    "allowChain(address,uint256,bool)": FunctionFragment;
-    "allowContract(address,bool)": FunctionFragment;
     "beneficiaryAddress()": FunctionFragment;
     "bulkMarkTransactionsAsApproved(bytes32[])": FunctionFragment;
     "burnAndCreateProof(address,uint256,uint256)": FunctionFragment;
     "currentNonce(address)": FunctionFragment;
-    "feePercent()": FunctionFragment;
-    "getMinAmountToBurn(address)": FunctionFragment;
+    "getFeeDependingOnDestinationChainId(address,uint256)": FunctionFragment;
     "getRoleAdmin(bytes32)": FunctionFragment;
     "getRoleMember(bytes32,uint256)": FunctionFragment;
     "getRoleMemberCount(bytes32)": FunctionFragment;
-    "getSettings(address)": FunctionFragment;
     "grantRole(bytes32,address)": FunctionFragment;
     "grantRolesBulk(tuple[])": FunctionFragment;
     "hasRole(bytes32,address)": FunctionFragment;
-    "isAllowedContract(address)": FunctionFragment;
-    "isAllowedToBridgeToChainId(address,uint256)": FunctionFragment;
     "markTransactionAsApproved(bytes32)": FunctionFragment;
     "mintWithBurnProof(tuple)": FunctionFragment;
     "renounceRole(bytes32,address)": FunctionFragment;
@@ -47,7 +41,7 @@ interface CrossChainBridgeInterface extends ethers.utils.Interface {
     "supportsInterface(bytes4)": FunctionFragment;
     "transactionStorage(bytes32)": FunctionFragment;
     "updateBeneficiaryAddress(address)": FunctionFragment;
-    "updateFee(uint256)": FunctionFragment;
+    "updateFeeDependingOnDestinationChainId(address,uint256,uint256)": FunctionFragment;
   };
 
   encodeFunctionData(
@@ -57,14 +51,6 @@ interface CrossChainBridgeInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "ROLE_APPROVER",
     values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "allowChain",
-    values: [string, BigNumberish, boolean]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "allowContract",
-    values: [string, boolean]
   ): string;
   encodeFunctionData(
     functionFragment: "beneficiaryAddress",
@@ -83,12 +69,8 @@ interface CrossChainBridgeInterface extends ethers.utils.Interface {
     values: [string]
   ): string;
   encodeFunctionData(
-    functionFragment: "feePercent",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getMinAmountToBurn",
-    values: [string]
+    functionFragment: "getFeeDependingOnDestinationChainId",
+    values: [string, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "getRoleAdmin",
@@ -102,7 +84,6 @@ interface CrossChainBridgeInterface extends ethers.utils.Interface {
     functionFragment: "getRoleMemberCount",
     values: [BytesLike]
   ): string;
-  encodeFunctionData(functionFragment: "getSettings", values: [string]): string;
   encodeFunctionData(
     functionFragment: "grantRole",
     values: [BytesLike, string]
@@ -116,14 +97,6 @@ interface CrossChainBridgeInterface extends ethers.utils.Interface {
     values: [BytesLike, string]
   ): string;
   encodeFunctionData(
-    functionFragment: "isAllowedContract",
-    values: [string]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "isAllowedToBridgeToChainId",
-    values: [string, BigNumberish]
-  ): string;
-  encodeFunctionData(
     functionFragment: "markTransactionAsApproved",
     values: [BytesLike]
   ): string;
@@ -131,7 +104,8 @@ interface CrossChainBridgeInterface extends ethers.utils.Interface {
     functionFragment: "mintWithBurnProof",
     values: [
       {
-        amount: BigNumberish;
+        amountToBridge: BigNumberish;
+        amountAsFee: BigNumberish;
         sourceChainId: BigNumberish;
         sourceNonce: BigNumberish;
         sourceTokenAddr: string;
@@ -160,18 +134,13 @@ interface CrossChainBridgeInterface extends ethers.utils.Interface {
     values: [string]
   ): string;
   encodeFunctionData(
-    functionFragment: "updateFee",
-    values: [BigNumberish]
+    functionFragment: "updateFeeDependingOnDestinationChainId",
+    values: [string, BigNumberish, BigNumberish]
   ): string;
 
   decodeFunctionResult(functionFragment: "ROLE_ADMIN", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "ROLE_APPROVER",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "allowChain", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "allowContract",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -190,9 +159,8 @@ interface CrossChainBridgeInterface extends ethers.utils.Interface {
     functionFragment: "currentNonce",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "feePercent", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "getMinAmountToBurn",
+    functionFragment: "getFeeDependingOnDestinationChainId",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -207,24 +175,12 @@ interface CrossChainBridgeInterface extends ethers.utils.Interface {
     functionFragment: "getRoleMemberCount",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "getSettings",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(functionFragment: "grantRole", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "grantRolesBulk",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "hasRole", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "isAllowedContract",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "isAllowedToBridgeToChainId",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(
     functionFragment: "markTransactionAsApproved",
     data: BytesLike
@@ -250,13 +206,16 @@ interface CrossChainBridgeInterface extends ethers.utils.Interface {
     functionFragment: "updateBeneficiaryAddress",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "updateFee", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "updateFeeDependingOnDestinationChainId",
+    data: BytesLike
+  ): Result;
 
   events: {
     "ApprovedTransaction(bytes32)": EventFragment;
     "BulkApprovedTransactions(bytes32[])": EventFragment;
     "FeeUpdated(uint256)": EventFragment;
-    "ProofOfBurn(address,address,uint256,uint256,uint256,uint256,bytes32)": EventFragment;
+    "ProofOfBurn(address,address,uint256,uint256,uint256,uint256,uint256,bytes32)": EventFragment;
     "ProofOfMint(address,address,uint256,uint256,bytes32)": EventFragment;
     "RoleAdminChanged(bytes32,bytes32,bytes32)": EventFragment;
     "RoleGranted(bytes32,address,address)": EventFragment;
@@ -321,19 +280,6 @@ export class CrossChainBridge extends BaseContract {
 
     ROLE_APPROVER(overrides?: CallOverrides): Promise<[string]>;
 
-    allowChain(
-      token: string,
-      chainId: BigNumberish,
-      isAllowed: boolean,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    allowContract(
-      addr: string,
-      isAllow: boolean,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
     beneficiaryAddress(overrides?: CallOverrides): Promise<[string]>;
 
     bulkMarkTransactionsAsApproved(
@@ -350,10 +296,9 @@ export class CrossChainBridge extends BaseContract {
 
     currentNonce(arg0: string, overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    feePercent(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    getMinAmountToBurn(
-      token: string,
+    getFeeDependingOnDestinationChainId(
+      tokenAddr: string,
+      destinationChainId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
@@ -369,11 +314,6 @@ export class CrossChainBridge extends BaseContract {
       role: BytesLike,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
-
-    getSettings(
-      token: string,
-      overrides?: CallOverrides
-    ): Promise<[boolean, BigNumber, BigNumber]>;
 
     grantRole(
       role: BytesLike,
@@ -392,17 +332,6 @@ export class CrossChainBridge extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[boolean]>;
 
-    isAllowedContract(
-      addr: string,
-      overrides?: CallOverrides
-    ): Promise<[boolean]>;
-
-    isAllowedToBridgeToChainId(
-      arg0: string,
-      arg1: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[boolean]>;
-
     markTransactionAsApproved(
       transactionHash: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -410,7 +339,8 @@ export class CrossChainBridge extends BaseContract {
 
     mintWithBurnProof(
       sourceProofOfBurn: {
-        amount: BigNumberish;
+        amountToBridge: BigNumberish;
+        amountAsFee: BigNumberish;
         sourceChainId: BigNumberish;
         sourceNonce: BigNumberish;
         sourceTokenAddr: string;
@@ -446,8 +376,10 @@ export class CrossChainBridge extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    updateFee(
-      newFeePercent: BigNumberish,
+    updateFeeDependingOnDestinationChainId(
+      token: string,
+      chainId: BigNumberish,
+      amountAsFee: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
   };
@@ -455,19 +387,6 @@ export class CrossChainBridge extends BaseContract {
   ROLE_ADMIN(overrides?: CallOverrides): Promise<string>;
 
   ROLE_APPROVER(overrides?: CallOverrides): Promise<string>;
-
-  allowChain(
-    token: string,
-    chainId: BigNumberish,
-    isAllowed: boolean,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  allowContract(
-    addr: string,
-    isAllow: boolean,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
 
   beneficiaryAddress(overrides?: CallOverrides): Promise<string>;
 
@@ -485,10 +404,9 @@ export class CrossChainBridge extends BaseContract {
 
   currentNonce(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
-  feePercent(overrides?: CallOverrides): Promise<BigNumber>;
-
-  getMinAmountToBurn(
-    token: string,
+  getFeeDependingOnDestinationChainId(
+    tokenAddr: string,
+    destinationChainId: BigNumberish,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
@@ -504,11 +422,6 @@ export class CrossChainBridge extends BaseContract {
     role: BytesLike,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
-
-  getSettings(
-    token: string,
-    overrides?: CallOverrides
-  ): Promise<[boolean, BigNumber, BigNumber]>;
 
   grantRole(
     role: BytesLike,
@@ -527,14 +440,6 @@ export class CrossChainBridge extends BaseContract {
     overrides?: CallOverrides
   ): Promise<boolean>;
 
-  isAllowedContract(addr: string, overrides?: CallOverrides): Promise<boolean>;
-
-  isAllowedToBridgeToChainId(
-    arg0: string,
-    arg1: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<boolean>;
-
   markTransactionAsApproved(
     transactionHash: BytesLike,
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -542,7 +447,8 @@ export class CrossChainBridge extends BaseContract {
 
   mintWithBurnProof(
     sourceProofOfBurn: {
-      amount: BigNumberish;
+      amountToBridge: BigNumberish;
+      amountAsFee: BigNumberish;
       sourceChainId: BigNumberish;
       sourceNonce: BigNumberish;
       sourceTokenAddr: string;
@@ -578,8 +484,10 @@ export class CrossChainBridge extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  updateFee(
-    newFeePercent: BigNumberish,
+  updateFeeDependingOnDestinationChainId(
+    token: string,
+    chainId: BigNumberish,
+    amountAsFee: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -587,19 +495,6 @@ export class CrossChainBridge extends BaseContract {
     ROLE_ADMIN(overrides?: CallOverrides): Promise<string>;
 
     ROLE_APPROVER(overrides?: CallOverrides): Promise<string>;
-
-    allowChain(
-      token: string,
-      chainId: BigNumberish,
-      isAllowed: boolean,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    allowContract(
-      addr: string,
-      isAllow: boolean,
-      overrides?: CallOverrides
-    ): Promise<void>;
 
     beneficiaryAddress(overrides?: CallOverrides): Promise<string>;
 
@@ -617,10 +512,9 @@ export class CrossChainBridge extends BaseContract {
 
     currentNonce(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
-    feePercent(overrides?: CallOverrides): Promise<BigNumber>;
-
-    getMinAmountToBurn(
-      token: string,
+    getFeeDependingOnDestinationChainId(
+      tokenAddr: string,
+      destinationChainId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -636,11 +530,6 @@ export class CrossChainBridge extends BaseContract {
       role: BytesLike,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
-
-    getSettings(
-      token: string,
-      overrides?: CallOverrides
-    ): Promise<[boolean, BigNumber, BigNumber]>;
 
     grantRole(
       role: BytesLike,
@@ -659,17 +548,6 @@ export class CrossChainBridge extends BaseContract {
       overrides?: CallOverrides
     ): Promise<boolean>;
 
-    isAllowedContract(
-      addr: string,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
-
-    isAllowedToBridgeToChainId(
-      arg0: string,
-      arg1: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
-
     markTransactionAsApproved(
       transactionHash: BytesLike,
       overrides?: CallOverrides
@@ -677,7 +555,8 @@ export class CrossChainBridge extends BaseContract {
 
     mintWithBurnProof(
       sourceProofOfBurn: {
-        amount: BigNumberish;
+        amountToBridge: BigNumberish;
+        amountAsFee: BigNumberish;
         sourceChainId: BigNumberish;
         sourceNonce: BigNumberish;
         sourceTokenAddr: string;
@@ -713,8 +592,10 @@ export class CrossChainBridge extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    updateFee(
-      newFeePercent: BigNumberish,
+    updateFeeDependingOnDestinationChainId(
+      token: string,
+      chainId: BigNumberish,
+      amountAsFee: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
   };
@@ -736,16 +617,27 @@ export class CrossChainBridge extends BaseContract {
       addr?: null,
       token?: null,
       amount?: null,
+      amountAsFee?: null,
       currentNonce?: null,
       sourceChain?: null,
       destinationChain?: null,
       transactionHash?: null
     ): TypedEventFilter<
-      [string, string, BigNumber, BigNumber, BigNumber, BigNumber, string],
+      [
+        string,
+        string,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        string
+      ],
       {
         addr: string;
         token: string;
         amount: BigNumber;
+        amountAsFee: BigNumber;
         currentNonce: BigNumber;
         sourceChain: BigNumber;
         destinationChain: BigNumber;
@@ -803,19 +695,6 @@ export class CrossChainBridge extends BaseContract {
 
     ROLE_APPROVER(overrides?: CallOverrides): Promise<BigNumber>;
 
-    allowChain(
-      token: string,
-      chainId: BigNumberish,
-      isAllowed: boolean,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    allowContract(
-      addr: string,
-      isAllow: boolean,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
     beneficiaryAddress(overrides?: CallOverrides): Promise<BigNumber>;
 
     bulkMarkTransactionsAsApproved(
@@ -832,10 +711,9 @@ export class CrossChainBridge extends BaseContract {
 
     currentNonce(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
-    feePercent(overrides?: CallOverrides): Promise<BigNumber>;
-
-    getMinAmountToBurn(
-      token: string,
+    getFeeDependingOnDestinationChainId(
+      tokenAddr: string,
+      destinationChainId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -855,8 +733,6 @@ export class CrossChainBridge extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    getSettings(token: string, overrides?: CallOverrides): Promise<BigNumber>;
-
     grantRole(
       role: BytesLike,
       account: string,
@@ -874,17 +750,6 @@ export class CrossChainBridge extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    isAllowedContract(
-      addr: string,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    isAllowedToBridgeToChainId(
-      arg0: string,
-      arg1: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
     markTransactionAsApproved(
       transactionHash: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -892,7 +757,8 @@ export class CrossChainBridge extends BaseContract {
 
     mintWithBurnProof(
       sourceProofOfBurn: {
-        amount: BigNumberish;
+        amountToBridge: BigNumberish;
+        amountAsFee: BigNumberish;
         sourceChainId: BigNumberish;
         sourceNonce: BigNumberish;
         sourceTokenAddr: string;
@@ -928,8 +794,10 @@ export class CrossChainBridge extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    updateFee(
-      newFeePercent: BigNumberish,
+    updateFeeDependingOnDestinationChainId(
+      token: string,
+      chainId: BigNumberish,
+      amountAsFee: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
   };
@@ -938,19 +806,6 @@ export class CrossChainBridge extends BaseContract {
     ROLE_ADMIN(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     ROLE_APPROVER(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    allowChain(
-      token: string,
-      chainId: BigNumberish,
-      isAllowed: boolean,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    allowContract(
-      addr: string,
-      isAllow: boolean,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
 
     beneficiaryAddress(
       overrides?: CallOverrides
@@ -973,10 +828,9 @@ export class CrossChainBridge extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    feePercent(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    getMinAmountToBurn(
-      token: string,
+    getFeeDependingOnDestinationChainId(
+      tokenAddr: string,
+      destinationChainId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -993,11 +847,6 @@ export class CrossChainBridge extends BaseContract {
 
     getRoleMemberCount(
       role: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    getSettings(
-      token: string,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -1018,17 +867,6 @@ export class CrossChainBridge extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    isAllowedContract(
-      addr: string,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    isAllowedToBridgeToChainId(
-      arg0: string,
-      arg1: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
     markTransactionAsApproved(
       transactionHash: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -1036,7 +874,8 @@ export class CrossChainBridge extends BaseContract {
 
     mintWithBurnProof(
       sourceProofOfBurn: {
-        amount: BigNumberish;
+        amountToBridge: BigNumberish;
+        amountAsFee: BigNumberish;
         sourceChainId: BigNumberish;
         sourceNonce: BigNumberish;
         sourceTokenAddr: string;
@@ -1072,8 +911,10 @@ export class CrossChainBridge extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    updateFee(
-      newFeePercent: BigNumberish,
+    updateFeeDependingOnDestinationChainId(
+      token: string,
+      chainId: BigNumberish,
+      amountAsFee: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
   };

@@ -208,13 +208,14 @@ const BridgeWidgetProcess = () => {
   const path = [Number(srcChainId), Number(destChainId)] as [Chains, Chains];
 
   const [transferAmount, setTransferAmount] = useState<string | undefined>();
+  // const [fee, setAmountAsFee] = useState<string | undefined>();
 
   const bridgeContract = useBridgeContract();
 
   const [loader, setLoader] = useState(false);
   const [nonce, setNonce] = useState<number>(0);
 
-  const { balance, fee, token, tokenAddress, refetchBalance } =
+  const { balance, fee, setFee, token, tokenAddress, refetchBalance } =
     useContext(GlobalContext);
 
   // const [currentProofId, setCurrentProofId] = useState<string>("");
@@ -226,7 +227,7 @@ const BridgeWidgetProcess = () => {
   // const fee = data?.global?.currentFee || 0;
 
   const receiveAmount = transferAmount
-    ? Number(transferAmount) - Number(transferAmount) * fee
+    ? Number(transferAmount) - fee
     : undefined;
 
   const [processesStatus, setProcessesStatus] = useState({
@@ -245,6 +246,7 @@ const BridgeWidgetProcess = () => {
         const srcChainid = burnProof.src! as Chains;
         const destChainId = burnProof.dest! as Chains;
 
+        setFee(burnProof.fee);
         setNonce(burnProof.nonce!);
         // @ts-ignore
         setTransferAmount(burnProof.amount);
@@ -314,7 +316,7 @@ const BridgeWidgetProcess = () => {
       ) {
         validateMint(currentProofId).catch(e => e);
       }
-    }, 1000);
+    }, 3500);
 
     return () => clearInterval(timer);
   }, [account, currentProofId, processesStatus, destClient]);
@@ -347,7 +349,8 @@ const BridgeWidgetProcess = () => {
       }));
 
       const result = await bridgeContract.mintWithBurnProof({
-        amount: ethers.utils.parseEther(transferAmount!),
+        amountToBridge: ethers.utils.parseEther(transferAmount!),
+        amountAsFee: ethers.utils.parseEther(fee.toString()),
         sourceTokenAddr: tokenAddress,
         sourceChainId: srcChainId,
         sourceNonce: srcNonce,
@@ -512,10 +515,10 @@ const BridgeWidgetProcess = () => {
 
           const dynamicText = dynamicTemplate(processText, {
             transferAmount: transferAmount
-              ? Number(transferAmount).toFixed(2)
+              ? Number(transferAmount).asCurrency(2)
               : "...",
             token,
-            receiveAmount: receiveAmount ? receiveAmount.toFixed(2) : "...",
+            receiveAmount: receiveAmount ? receiveAmount.asCurrency(2) : "...",
             src,
             dest,
           });
@@ -844,8 +847,8 @@ const BridgeWidget = () => {
   const {
     balance,
     setToken,
-    minAmount,
     fee,
+    setFee,
     token,
     tokenAddress,
     refetchBalance,
@@ -855,8 +858,8 @@ const BridgeWidget = () => {
   const [isPopular, setPopular] = useState(true);
 
   const [loader, setLoader] = useState(false);
-  const [path, setPath] = useState([1, 56] as [Chains, Chains]);
-  // const [path, setPath] = useState([42, 97] as [Chains, Chains]);
+  // const [path, setPath] = useState([1, 56] as [Chains, Chains]);
+  const [path, setPath] = useState([42, 97] as [Chains, Chains]);
 
   const setMax = () => {
     setTransferAmount(balance.toString());
@@ -880,7 +883,7 @@ const BridgeWidget = () => {
 
   // const fee = data?.global?.currentFee || 0;
 
-  const computedFee = Number(transferAmount) * fee;
+  // const computedFee = Number(transferAmount) * fee;
 
   const [graphBlockNumber, setGraphBlockNumber] = useState<number>(0);
 
@@ -896,8 +899,27 @@ const BridgeWidget = () => {
     getGraphBlockNumber(srcClient)
       .then(bn => bn && setGraphBlockNumber(bn))
       .catch(e => e);
+
     return () => clearInterval(timer);
   }, [srcClient]);
+
+  useEffect(() => {
+    const fire = async () => {
+      try {
+        const fee = await bridgeContract.getFeeDependingOnDestinationChainId(
+          tokenAddress,
+          path[1],
+        );
+        setFee(Number(ethers.utils.formatEther(fee)));
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    if (bridgeContract) {
+      fire();
+    }
+  }, [bridgeContract]);
 
   console.log({
     blockNumber,
@@ -1196,7 +1218,7 @@ const BridgeWidget = () => {
                 background="white"
                 style={{
                   width: "120px",
-                  height: "84px",
+                  height: "44px",
                   boxShadow: "rgba(0,0,0, 0.12) 0px 3px 14px 3px",
                   border: "1px solid rgb(192, 192, 192)",
 
@@ -1375,7 +1397,7 @@ const BridgeWidget = () => {
                   }}
                   textAlign="center"
                 >
-                  {fee * 100}% fee
+                  Fixed fee
                 </Text>
               }
             >
@@ -1390,12 +1412,12 @@ const BridgeWidget = () => {
             }}
           ></Box>
           <Text size="14px" color="#414141" weight={700}>
-            {formatNum(Number(computedFee.toFixed(0)))} {token}
+            {formatNum(Number(fee.toFixed(0)))} {token}
           </Text>
         </Box>
         <Box direction="row" align="center" height="36px">
           <Text size="14px" color="#818181" weight={500}>
-            Min amount
+            You will get
           </Text>
           <Box margin={{ left: "6px" }}>
             <Hint
@@ -1407,7 +1429,7 @@ const BridgeWidget = () => {
                   }}
                   textAlign="center"
                 >
-                  Min amount to transfer
+                  transferAmount - bridgeFee
                 </Text>
               }
             >
@@ -1422,7 +1444,15 @@ const BridgeWidget = () => {
             }}
           ></Box>
           <Text size="14px" color="#414141" weight={700}>
-            {formatNum(Number(minAmount.toFixed(0)))} {token}
+            {formatNum(
+              Number(
+                (Number(transferAmount) > fee
+                  ? Number(transferAmount) - fee
+                  : 0
+                ).toFixed(0),
+              ),
+            )}{" "}
+            {token}
           </Text>
         </Box>
       </Box>
@@ -1530,8 +1560,9 @@ const GlobalContext = createContext({
   tokenAddress: "",
   balance: 0,
   fee: 0,
-  minAmount: 0,
+  // minAmount: 0,
   setToken: (token: string) => {},
+  setFee: (fee: number) => {},
   setBalance: (balance: number) => {},
   refetchBalance: async (account: string) => {},
 });
@@ -1541,7 +1572,7 @@ const GlobalState = ({ children }: { children: React.ReactNode }) => {
 
   const [balance, setBalance] = useState(0);
   const [fee, setFee] = useState(0);
-  const [minAmount, setMinAmount] = useState(0);
+  // const [minAmount, setMinAmount] = useState(0);
 
   const [token, setToken] = useState("DEFT");
 
@@ -1552,35 +1583,7 @@ const GlobalState = ({ children }: { children: React.ReactNode }) => {
 
   console.log({
     fee,
-    minAmount,
   });
-
-  const refetchSettings = async (tokenAddress: string) => {
-    try {
-      const [allowed, minAmount, fee] = await bridgeContract.getSettings(
-        tokenAddress,
-      );
-      setFee(fee.toNumber() / 1e6);
-      setMinAmount(Math.ceil(Number(ethers.utils.formatEther(minAmount))));
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    const emit = async () => {
-      if (account) {
-        await refetchSettings(tokenAddress);
-      }
-    };
-
-    const interval = setInterval(async () => {
-      emit();
-    }, 3500);
-
-    emit();
-    return () => clearInterval(interval);
-  }, [account, tokenAddress, chainId]);
 
   const refetchBalance = async (account: string) => {
     try {
@@ -1610,7 +1613,7 @@ const GlobalState = ({ children }: { children: React.ReactNode }) => {
         setToken,
         balance,
         fee,
-        minAmount,
+        setFee,
         setBalance,
         refetchBalance,
       }}

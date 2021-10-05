@@ -78,6 +78,12 @@ const _abi = [
       {
         indexed: false,
         internalType: "uint256",
+        name: "amountAsFee",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
         name: "currentNonce",
         type: "uint256",
       },
@@ -242,47 +248,6 @@ const _abi = [
     type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "address",
-        name: "token",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "chainId",
-        type: "uint256",
-      },
-      {
-        internalType: "bool",
-        name: "isAllowed",
-        type: "bool",
-      },
-    ],
-    name: "allowChain",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "addr",
-        type: "address",
-      },
-      {
-        internalType: "bool",
-        name: "isAllow",
-        type: "bool",
-      },
-    ],
-    name: "allowContract",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
     inputs: [],
     name: "beneficiaryAddress",
     outputs: [
@@ -351,27 +316,19 @@ const _abi = [
     type: "function",
   },
   {
-    inputs: [],
-    name: "feePercent",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
     inputs: [
       {
         internalType: "address",
-        name: "token",
+        name: "tokenAddr",
         type: "address",
       },
+      {
+        internalType: "uint256",
+        name: "destinationChainId",
+        type: "uint256",
+      },
     ],
-    name: "getMinAmountToBurn",
+    name: "getFeeDependingOnDestinationChainId",
     outputs: [
       {
         internalType: "uint256",
@@ -435,35 +392,6 @@ const _abi = [
     ],
     name: "getRoleMemberCount",
     outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "token",
-        type: "address",
-      },
-    ],
-    name: "getSettings",
-    outputs: [
-      {
-        internalType: "bool",
-        name: "",
-        type: "bool",
-      },
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
       {
         internalType: "uint256",
         name: "",
@@ -543,49 +471,6 @@ const _abi = [
   {
     inputs: [
       {
-        internalType: "address",
-        name: "addr",
-        type: "address",
-      },
-    ],
-    name: "isAllowedContract",
-    outputs: [
-      {
-        internalType: "bool",
-        name: "",
-        type: "bool",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    name: "isAllowedToBridgeToChainId",
-    outputs: [
-      {
-        internalType: "bool",
-        name: "",
-        type: "bool",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
         internalType: "bytes32",
         name: "transactionHash",
         type: "bytes32",
@@ -602,7 +487,12 @@ const _abi = [
         components: [
           {
             internalType: "uint256",
-            name: "amount",
+            name: "amountToBridge",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "amountAsFee",
             type: "uint256",
           },
           {
@@ -726,12 +616,22 @@ const _abi = [
   {
     inputs: [
       {
+        internalType: "address",
+        name: "token",
+        type: "address",
+      },
+      {
         internalType: "uint256",
-        name: "newFeePercent",
+        name: "chainId",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "amountAsFee",
         type: "uint256",
       },
     ],
-    name: "updateFee",
+    name: "updateFeeDependingOnDestinationChainId",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",

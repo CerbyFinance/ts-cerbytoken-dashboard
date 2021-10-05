@@ -14,6 +14,7 @@ export const clientByChain = Object.fromEntries(
     const client = new ApolloClient({
       link: new HttpLink({
         uri: `/subgraphs/name/deft/deft-bridge-${chain}`,
+        // uri: `https://bridge.defifactory.fi/subgraphs/name/deft/deft-bridge-${chain}`,
         // uri: `http://localhost:8000/subgraphs/name/deft/deft-bridge-${chain}`,
         // uri: `http://localhost:8000/subgraphs/name/deft/deft-bridge-${chain}`,
         // uri: `https://deft-graph.loca.lt/subgraphs/name/deft/deft-bridge-${chain}`,
