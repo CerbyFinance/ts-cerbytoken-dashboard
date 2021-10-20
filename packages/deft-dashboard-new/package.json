@@ -14,10 +14,12 @@
     "@web3-react/core": "^6.1.9",
     "@web3-react/injected-connector": "^6.0.7",
     "antd": "^4.16.13",
+    "dayjs": "^1.10.7",
     "eth-rpc-errors": "^4.0.3",
     "graphql": "^15.6.0",
     "graphql-tag": "^2.12.5",
     "grommet": "^2.18.0",
+    "lodash.mergewith": "^4.6.2",
     "postcss-cli": "^8.3.1",
     "rc-dialog": "^8.6.0",
     "rc-slider": "^9.7.2",
@@ -66,13 +68,14 @@
     "@graphql-codegen/typescript-operations": "^1.17.15",
     "@graphql-codegen/typescript-react-apollo": "^2.2.3",
     "@graphql-codegen/typescript-resolvers": "^1.19.0",
-    "@typechain/ethers-v5": "^7.1.2",
+    "@typechain/ethers-v5": "^7.2.0",
     "@types/autoprefixer": "^9.7.2",
+    "@types/lodash.mergewith": "^4.6.6",
     "@types/rc-tooltip": "^3.7.4",
     "@types/react-router-dom": "^5.1.9",
     "@types/styled-components": "^5.1.14",
     "autoprefixer": "^9",
     "postcss": "^7",
-    "typechain": "^5.1.2"
+    "typechain": "^5.2.0"
   }
 }

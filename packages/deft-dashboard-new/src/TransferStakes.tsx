@@ -1,8 +1,20 @@
+import { useWeb3React } from "@web3-react/core";
+import { serializeError } from "eth-rpc-errors";
 import { Box, Text } from "grommet";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
+import Loader from "react-loader-spinner";
+import { toast } from "react-toastify";
 import styled from "styled-components";
+import {
+  StakesDocument,
+  StakesQuery,
+  StakesQueryVariables,
+} from "./graphql/types";
+import { stakingClient } from "./shared/client";
 import { HoveredElement } from "./shared/hooks";
+import { ModalsContext, TransferStakesModalPayload } from "./shared/modals";
 import { ThemeContext } from "./shared/theme";
+import { useStakingContract } from "./shared/useContract";
 
 const Input = styled.input`
   border: none;
@@ -29,25 +41,105 @@ const Input = styled.input`
   transition: none;
 `;
 
-export const TransferStakesModal = () => {
+export const TransferStakesModal = ({
+  completedCount,
+  inProgressCount,
+  stakeIds,
+  totalStaked,
+  successCb,
+}: TransferStakesModalPayload) => {
   const { theme } = useContext(ThemeContext);
   const isDark = theme === "dark";
+
+  const { account, chainId } = useWeb3React();
+
+  const [newOwner, setNewOwner] = useState("");
+  const changeNewOwnerHandler = (evt: any) => {
+    setNewOwner(evt.target.value);
+  };
+
+  const { closeModal } = useContext(ModalsContext);
+
+  const stakingContract = useStakingContract();
+
+  const [loader, setLoader] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const transferStakes = async () => {
+    setErrorMessage("");
+
+    try {
+      setLoader(true);
+
+      const result = await stakingContract.bulkTransferOwnership(
+        stakeIds,
+        newOwner,
+      );
+      const result2 = await result.wait();
+
+      setLoader(false);
+
+      if (result2.status === 1) {
+        toast.success("Transaction successful");
+        successCb();
+      } else {
+        toast.error("Transaction Canceled");
+      }
+
+      // TODO: update it locally ?client
+      // TODO: may not fetch in time if subgraph outdated
+      const resultQuery = await stakingClient.query<
+        StakesQuery,
+        StakesQueryVariables
+      >({
+        query: StakesDocument,
+        variables: {
+          address: account?.toLowerCase() || "",
+        },
+        fetchPolicy: "network-only",
+      });
+
+      console.log(result2.status);
+    } catch (error) {
+      setLoader(false);
+      const serializedError = serializeError(error);
+      const originalErrorMessage = (serializedError.data as any)?.originalError
+        ?.error?.message;
+
+      if (originalErrorMessage && originalErrorMessage.includes("SS: ")) {
+        const message = originalErrorMessage.split("SS: ")[1];
+
+        // @ts-ignore
+        const readableError = message || "Unknown error";
+        toast.error("Transaction failed");
+        setErrorMessage(readableError);
+      } else {
+        setErrorMessage("Transaction Canceled");
+      }
+    }
+  };
+
   return (
     <Box
       pad="30px 30px 33px"
       width="510px"
       round="10px"
       className="bg-white dark:bg-black"
-      style={
-        isDark
+      style={{
+        ...(isDark
           ? {
               border: "1px solid #707070",
             }
-          : {}
-      }
+          : {}),
+        ...(loader
+          ? {
+              pointerEvents: "none",
+            }
+          : {}),
+      }}
     >
       <Text size="30px" color="text">
-        Transfer 2 stakes
+        Transfer {completedCount + inProgressCount} stakes
       </Text>
       <Box height="36px"></Box>
       <Box
@@ -56,30 +148,34 @@ export const TransferStakesModal = () => {
         background={isDark ? "#101E33" : "#E5E7EB"}
         round="5px"
       >
-        <Box direction="row" align="center">
-          <Box
-            round="50%"
-            height="12px"
-            width="12px"
-            background="#219653"
-          ></Box>
-          <Box width="10px"></Box>
-          <Text size="14px">Completed: 1 Stake</Text>
-        </Box>
-        <Box height="10px"></Box>
-        <Box direction="row" align="center">
-          <Box
-            round="50%"
-            height="12px"
-            width="12px"
-            background="#F2994A"
-          ></Box>
-          <Box width="10px"></Box>
-          <Text size="14px">In Progress: 1 Stake</Text>
-        </Box>
+        {completedCount > 0 && (
+          <Box direction="row" align="center">
+            <Box
+              round="50%"
+              height="12px"
+              width="12px"
+              background="#219653"
+            ></Box>
+            <Box width="10px"></Box>
+            <Text size="14px">Completed: {completedCount} Stakes</Text>
+          </Box>
+        )}
+        {completedCount > 0 && inProgressCount > 0 && <Box height="10px"></Box>}
+        {inProgressCount > 0 && (
+          <Box direction="row" align="center">
+            <Box
+              round="50%"
+              height="12px"
+              width="12px"
+              background="#F2994A"
+            ></Box>
+            <Box width="10px"></Box>
+            <Text size="14px">In Progress: {inProgressCount} Stake</Text>
+          </Box>
+        )}
         <Box height="15px"></Box>
         <Text size="16px" weight={500}>
-          Total staked: 24,700.00 DEFT
+          Total staked: {totalStaked.asCurrency(2)} DEFT
         </Text>
       </Box>
       <Box height="23px"></Box>
@@ -88,12 +184,21 @@ export const TransferStakesModal = () => {
       </Text>
       <Box height="13px"></Box>
       <Input
+        onChange={changeNewOwnerHandler}
         style={{
           border: isDark ? "2px solid #707070" : "2px solid #c4c4c4",
           color: isDark ? "white" : "#29343E",
         }}
       />
-      <Box height="20px"></Box>
+      <Box height={"10px"}></Box>
+      {errorMessage && (
+        <Box align="center" height="30px" justify="center">
+          <Text size="14px" color={"#FF5252"}>
+            {errorMessage}
+          </Text>
+        </Box>
+      )}
+      <Box height={"10px"}></Box>{" "}
       <Box direction="row" justify="between">
         <HoveredElement
           render={binder => (
@@ -109,6 +214,7 @@ export const TransferStakesModal = () => {
                 cursor: "pointer",
                 border: "1px solid #FF5252",
               }}
+              onClick={closeModal}
               {...binder.bind}
             >
               <Text
@@ -134,11 +240,17 @@ export const TransferStakesModal = () => {
               style={{
                 cursor: "pointer",
               }}
+              onClick={() => {
+                transferStakes();
+              }}
               {...binder.bind}
             >
-              <Text size="14px" weight={500} color="white">
-                Transfer
-              </Text>
+              {loader && <Loader type="ThreeDots" color="#fff" height={12} />}
+              {!loader && (
+                <Text size="14px" weight={500} color="white">
+                  Transfer
+                </Text>
+              )}
             </Box>
           )}
         ></HoveredElement>

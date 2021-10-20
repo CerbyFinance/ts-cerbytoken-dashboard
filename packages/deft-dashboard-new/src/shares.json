@@ -1,0 +1,4920 @@
+{
+  "cachedInterestPerShares": [
+    {
+      "cachedInterestPerShare": "0.091434288257286683",
+      "id": "0",
+      "sealedCachedDay": "0",
+      "sealedDay": "0"
+    },
+    {
+      "cachedInterestPerShare": "0.114285718913078952",
+      "id": "1",
+      "sealedCachedDay": "1",
+      "sealedDay": "1"
+    },
+    {
+      "cachedInterestPerShare": "0.11428571888806476",
+      "id": "2",
+      "sealedCachedDay": "2",
+      "sealedDay": "2"
+    },
+    {
+      "cachedInterestPerShare": "0.114285718727997826",
+      "id": "3",
+      "sealedCachedDay": "3",
+      "sealedDay": "3"
+    },
+    {
+      "cachedInterestPerShare": "0.1142857186289387",
+      "id": "4",
+      "sealedCachedDay": "4",
+      "sealedDay": "4"
+    },
+    {
+      "cachedInterestPerShare": "0.1142857186289387",
+      "id": "5",
+      "sealedCachedDay": "5",
+      "sealedDay": "5"
+    },
+    {
+      "cachedInterestPerShare": "0.1142857186289387",
+      "id": "6",
+      "sealedCachedDay": "6",
+      "sealedDay": "6"
+    },
+    {
+      "cachedInterestPerShare": "0.1142857186289387",
+      "id": "7",
+      "sealedCachedDay": "7",
+      "sealedDay": "7"
+    },
+    {
+      "cachedInterestPerShare": "0.1142857186289387",
+      "id": "8",
+      "sealedCachedDay": "8",
+      "sealedDay": "8"
+    },
+    {
+      "cachedInterestPerShare": "0.1142857186289387",
+      "id": "9",
+      "sealedCachedDay": "9",
+      "sealedDay": "9"
+    },
+    {
+      "cachedInterestPerShare": "0.1142857186289387",
+      "id": "10",
+      "sealedCachedDay": "10",
+      "sealedDay": "10"
+    },
+    {
+      "cachedInterestPerShare": "0.1142857186289387",
+      "id": "11",
+      "sealedCachedDay": "11",
+      "sealedDay": "11"
+    },
+    {
+      "cachedInterestPerShare": "0.1142857186289387",
+      "id": "12",
+      "sealedCachedDay": "12",
+      "sealedDay": "12"
+    },
+    {
+      "cachedInterestPerShare": "0.1142857186289387",
+      "id": "13",
+      "sealedCachedDay": "13",
+      "sealedDay": "13"
+    },
+    {
+      "cachedInterestPerShare": "0.1142857186289387",
+      "id": "14",
+      "sealedCachedDay": "14",
+      "sealedDay": "14"
+    },
+    {
+      "cachedInterestPerShare": "0.1142857186289387",
+      "id": "15",
+      "sealedCachedDay": "15",
+      "sealedDay": "15"
+    },
+    {
+      "cachedInterestPerShare": "0.1142857186289387",
+      "id": "16",
+      "sealedCachedDay": "16",
+      "sealedDay": "16"
+    },
+    {
+      "cachedInterestPerShare": "0.114285718613112134",
+      "id": "17",
+      "sealedCachedDay": "17",
+      "sealedDay": "17"
+    },
+    {
+      "cachedInterestPerShare": "0.11428571860632932",
+      "id": "18",
+      "sealedCachedDay": "18",
+      "sealedDay": "18"
+    },
+    {
+      "cachedInterestPerShare": "0.11428571860632932",
+      "id": "19",
+      "sealedCachedDay": "19",
+      "sealedDay": "19"
+    },
+    {
+      "cachedInterestPerShare": "0.11428571860632932",
+      "id": "20",
+      "sealedCachedDay": "20",
+      "sealedDay": "20"
+    },
+    {
+      "cachedInterestPerShare": "0.11428571860632932",
+      "id": "21",
+      "sealedCachedDay": "21",
+      "sealedDay": "21"
+    },
+    {
+      "cachedInterestPerShare": "0.11428571860632932",
+      "id": "22",
+      "sealedCachedDay": "22",
+      "sealedDay": "22"
+    },
+    {
+      "cachedInterestPerShare": "0.11428571792015916",
+      "id": "23",
+      "sealedCachedDay": "23",
+      "sealedDay": "23"
+    },
+    {
+      "cachedInterestPerShare": "0.277136276175411795",
+      "id": "24",
+      "sealedCachedDay": "24",
+      "sealedDay": "24"
+    },
+    {
+      "cachedInterestPerShare": "1.614713010183337445",
+      "id": "25",
+      "sealedCachedDay": "25",
+      "sealedDay": "25"
+    },
+    {
+      "cachedInterestPerShare": "0.37937920588050824",
+      "id": "26",
+      "sealedCachedDay": "26",
+      "sealedDay": "26"
+    },
+    {
+      "cachedInterestPerShare": "0.37937920588050824",
+      "id": "27",
+      "sealedCachedDay": "27",
+      "sealedDay": "27"
+    },
+    {
+      "cachedInterestPerShare": "0.37937920588050824",
+      "id": "28",
+      "sealedCachedDay": "28",
+      "sealedDay": "28"
+    },
+    {
+      "cachedInterestPerShare": "0.37937920588050824",
+      "id": "29",
+      "sealedCachedDay": "29",
+      "sealedDay": "29"
+    },
+    {
+      "cachedInterestPerShare": "0.37937920588050824",
+      "id": "30",
+      "sealedCachedDay": "30",
+      "sealedDay": "30"
+    },
+    {
+      "cachedInterestPerShare": "0.37937920588050824",
+      "id": "31",
+      "sealedCachedDay": "31",
+      "sealedDay": "31"
+    },
+    {
+      "cachedInterestPerShare": "0.37937920588050824",
+      "id": "32",
+      "sealedCachedDay": "32",
+      "sealedDay": "32"
+    },
+    {
+      "cachedInterestPerShare": "0.37937920588050824",
+      "id": "33",
+      "sealedCachedDay": "33",
+      "sealedDay": "33"
+    },
+    {
+      "cachedInterestPerShare": "0.37937920588050824",
+      "id": "34",
+      "sealedCachedDay": "34",
+      "sealedDay": "34"
+    },
+    {
+      "cachedInterestPerShare": "0.37937920588050824",
+      "id": "35",
+      "sealedCachedDay": "35",
+      "sealedDay": "35"
+    },
+    {
+      "cachedInterestPerShare": "0.37937920588050824",
+      "id": "36",
+      "sealedCachedDay": "36",
+      "sealedDay": "36"
+    },
+    {
+      "cachedInterestPerShare": "0.37937920588050824",
+      "id": "37",
+      "sealedCachedDay": "37",
+      "sealedDay": "37"
+    },
+    {
+      "cachedInterestPerShare": "0.37937920588050824",
+      "id": "38",
+      "sealedCachedDay": "38",
+      "sealedDay": "38"
+    },
+    {
+      "cachedInterestPerShare": "0.37937920588050824",
+      "id": "39",
+      "sealedCachedDay": "39",
+      "sealedDay": "39"
+    },
+    {
+      "cachedInterestPerShare": "0.37937920588050824",
+      "id": "40",
+      "sealedCachedDay": "40",
+      "sealedDay": "40"
+    },
+    {
+      "cachedInterestPerShare": "0.37937920588050824",
+      "id": "41",
+      "sealedCachedDay": "41",
+      "sealedDay": "41"
+    },
+    {
+      "cachedInterestPerShare": "0.37937920588050824",
+      "id": "42",
+      "sealedCachedDay": "42",
+      "sealedDay": "42"
+    },
+    {
+      "cachedInterestPerShare": "0.37937920588050824",
+      "id": "43",
+      "sealedCachedDay": "43",
+      "sealedDay": "43"
+    },
+    {
+      "cachedInterestPerShare": "0.37937920588050824",
+      "id": "44",
+      "sealedCachedDay": "44",
+      "sealedDay": "44"
+    },
+    {
+      "cachedInterestPerShare": "0.37937920588050824",
+      "id": "45",
+      "sealedCachedDay": "45",
+      "sealedDay": "45"
+    },
+    {
+      "cachedInterestPerShare": "0.37937920588050824",
+      "id": "46",
+      "sealedCachedDay": "46",
+      "sealedDay": "46"
+    },
+    {
+      "cachedInterestPerShare": "0.37937920588050824",
+      "id": "47",
+      "sealedCachedDay": "47",
+      "sealedDay": "47"
+    },
+    {
+      "cachedInterestPerShare": "0.37937920588050824",
+      "id": "48",
+      "sealedCachedDay": "48",
+      "sealedDay": "48"
+    },
+    {
+      "cachedInterestPerShare": "0.37937920588050824",
+      "id": "49",
+      "sealedCachedDay": "49",
+      "sealedDay": "49"
+    },
+    {
+      "cachedInterestPerShare": "0.37937920588050824",
+      "id": "50",
+      "sealedCachedDay": "50",
+      "sealedDay": "50"
+    }
+  ],
+  "dailySnapshots": [
+    {
+      "id": "1",
+      "inflationAmount": "0.04",
+      "sealedDay": "1",
+      "sharePrice": "0.000000000001",
+      "totalShares": "0",
+      "totalStaked": "0",
+      "totalSupply": "2276785252.298780854765212438"
+    },
+    {
+      "id": "2",
+      "inflationAmount": "400.04",
+      "sealedDay": "2",
+      "sharePrice": "0.000000000001",
+      "totalShares": "35000",
+      "totalStaked": "15000",
+      "totalSupply": "2276770252.298780854765212438"
+    },
+    {
+      "id": "3",
+      "inflationAmount": "400.04",
+      "sealedDay": "3",
+      "sharePrice": "0.000000000001",
+      "totalShares": "35000",
+      "totalStaked": "15000",
+      "totalSupply": "2276770252.298780854765212438"
+    },
+    {
+      "id": "4",
+      "inflationAmount": "400.04",
+      "sealedDay": "4",
+      "sharePrice": "0.000000000001",
+      "totalShares": "35000",
+      "totalStaked": "15000",
+      "totalSupply": "2276770252.298780854765212438"
+    },
+    {
+      "id": "5",
+      "inflationAmount": "400.04",
+      "sealedDay": "5",
+      "sharePrice": "0.000000000001",
+      "totalShares": "35000",
+      "totalStaked": "15000",
+      "totalSupply": "2276770252.298780854765212438"
+    },
+    {
+      "id": "6",
+      "inflationAmount": "400.04",
+      "sealedDay": "6",
+      "sharePrice": "0.000000000001",
+      "totalShares": "35000",
+      "totalStaked": "15000",
+      "totalSupply": "2276770252.298780854765212438"
+    },
+    {
+      "id": "7",
+      "inflationAmount": "444844.48",
+      "sealedDay": "7",
+      "sharePrice": "0.000000000001",
+      "totalShares": "38923888.5",
+      "totalStaked": "11126111",
+      "totalSupply": "2265659141.298780854765212438"
+    },
+    {
+      "id": "8",
+      "inflationAmount": "444844.48",
+      "sealedDay": "8",
+      "sharePrice": "0.000000000001",
+      "totalShares": "38923888.5",
+      "totalStaked": "11126111",
+      "totalSupply": "2265659141.298780854765212438"
+    },
+    {
+      "id": "9",
+      "inflationAmount": "937329.32",
+      "sealedDay": "9",
+      "sharePrice": "0.000000000001",
+      "totalShares": "82016312",
+      "totalStaked": "23438232",
+      "totalSupply": "2253347020.298780854765212438"
+    },
+    {
+      "id": "10",
+      "inflationAmount": "986578.64",
+      "sealedDay": "10",
+      "sharePrice": "0.000000000001",
+      "totalShares": "86325627.5",
+      "totalStaked": "24669465",
+      "totalSupply": "2252115787.298780854765212438"
+    },
+    {
+      "id": "11",
+      "inflationAmount": "986578.64",
+      "sealedDay": "11",
+      "sharePrice": "0.000000000001",
+      "totalShares": "86325627.5",
+      "totalStaked": "24669465",
+      "totalSupply": "2252115787.298780854765212438"
+    },
+    {
+      "id": "12",
+      "inflationAmount": "986578.64",
+      "sealedDay": "12",
+      "sharePrice": "0.000000000001",
+      "totalShares": "86325627.5",
+      "totalStaked": "24669465",
+      "totalSupply": "2252115787.298780854765212438"
+    },
+    {
+      "id": "13",
+      "inflationAmount": "986578.64",
+      "sealedDay": "13",
+      "sharePrice": "0.000000000001",
+      "totalShares": "86325627.5",
+      "totalStaked": "24669465",
+      "totalSupply": "2252115787.298780854765212438"
+    },
+    {
+      "id": "14",
+      "inflationAmount": "986578.64",
+      "sealedDay": "14",
+      "sharePrice": "0.000000000001",
+      "totalShares": "86325627.5",
+      "totalStaked": "24669465",
+      "totalSupply": "2252115787.298780854765212438"
+    },
+    {
+      "id": "15",
+      "inflationAmount": "986578.64",
+      "sealedDay": "15",
+      "sharePrice": "0.000000000001",
+      "totalShares": "86325627.5",
+      "totalStaked": "24669465",
+      "totalSupply": "2252115787.298780854765212438"
+    },
+    {
+      "id": "16",
+      "inflationAmount": "986578.64",
+      "sealedDay": "16",
+      "sharePrice": "0.000000000001",
+      "totalShares": "86325627.5",
+      "totalStaked": "24669465",
+      "totalSupply": "2252115787.298780854765212438"
+    },
+    {
+      "id": "17",
+      "inflationAmount": "986578.64",
+      "sealedDay": "17",
+      "sharePrice": "0.000000000001",
+      "totalShares": "86325627.5",
+      "totalStaked": "24669465",
+      "totalSupply": "2252115787.298780854765212438"
+    },
+    {
+      "id": "18",
+      "inflationAmount": "993281.32",
+      "sealedDay": "18",
+      "sharePrice": "0.000000000001",
+      "totalShares": "86912112",
+      "totalStaked": "24837032",
+      "totalSupply": "2251948220.298780854765212438"
+    },
+    {
+      "id": "19",
+      "inflationAmount": "993281.32",
+      "sealedDay": "19",
+      "sharePrice": "0.000000000001",
+      "totalShares": "86912112",
+      "totalStaked": "24837032",
+      "totalSupply": "2251948220.298780854765212438"
+    },
+    {
+      "id": "20",
+      "inflationAmount": "993281.32",
+      "sealedDay": "20",
+      "sharePrice": "0.000000000001",
+      "totalShares": "86912112",
+      "totalStaked": "24837032",
+      "totalSupply": "2251948220.298780854765212438"
+    },
+    {
+      "id": "21",
+      "inflationAmount": "993281.32",
+      "sealedDay": "21",
+      "sharePrice": "0.000000000001",
+      "totalShares": "86912112",
+      "totalStaked": "24837032",
+      "totalSupply": "2251948220.298780854765212438"
+    },
+    {
+      "id": "22",
+      "inflationAmount": "993281.32",
+      "sealedDay": "22",
+      "sharePrice": "0.000000000001",
+      "totalShares": "86912112",
+      "totalStaked": "24837032",
+      "totalSupply": "2251948220.298780854765212438"
+    },
+    {
+      "id": "23",
+      "inflationAmount": "993281.32",
+      "sealedDay": "23",
+      "sharePrice": "0.000000000001",
+      "totalShares": "86912112",
+      "totalStaked": "24837032",
+      "totalSupply": "2251948220.298780854765212438"
+    },
+    {
+      "id": "24",
+      "inflationAmount": "993281.32",
+      "sealedDay": "24",
+      "sharePrice": "0.000000000001",
+      "totalShares": "86912112",
+      "totalStaked": "24837032",
+      "totalSupply": "2251948220.298780854765212438"
+    },
+    {
+      "id": "25",
+      "inflationAmount": "993281.32",
+      "sealedDay": "25",
+      "sharePrice": "0.000000000001",
+      "totalShares": "86912112",
+      "totalStaked": "24837032",
+      "totalSupply": "2251948220.298780854765212438"
+    },
+    {
+      "id": "26",
+      "inflationAmount": "993281.32",
+      "sealedDay": "26",
+      "sharePrice": "0.000000000001",
+      "totalShares": "86912112",
+      "totalStaked": "24837032",
+      "totalSupply": "2251948220.298780854765212438"
+    },
+    {
+      "id": "27",
+      "inflationAmount": "993281.32",
+      "sealedDay": "27",
+      "sharePrice": "0.000000000001",
+      "totalShares": "86912112",
+      "totalStaked": "24837032",
+      "totalSupply": "2251948220.298780854765212438"
+    },
+    {
+      "id": "28",
+      "inflationAmount": "993281.32",
+      "sealedDay": "28",
+      "sharePrice": "0.000000000001",
+      "totalShares": "86912112",
+      "totalStaked": "24837032",
+      "totalSupply": "2251948220.298780854765212438"
+    },
+    {
+      "id": "29",
+      "inflationAmount": "993281.32",
+      "sealedDay": "29",
+      "sharePrice": "0.000000000001",
+      "totalShares": "86912112",
+      "totalStaked": "24837032",
+      "totalSupply": "2251948220.298780854765212438"
+    },
+    {
+      "id": "30",
+      "inflationAmount": "993281.32",
+      "sealedDay": "30",
+      "sharePrice": "0.000000000001",
+      "totalShares": "86912112",
+      "totalStaked": "24837032",
+      "totalSupply": "2251948220.298780854765212438"
+    },
+    {
+      "id": "31",
+      "inflationAmount": "993281.32",
+      "sealedDay": "31",
+      "sharePrice": "0.000000000001",
+      "totalShares": "86912112",
+      "totalStaked": "24837032",
+      "totalSupply": "2251948220.298780854765212438"
+    },
+    {
+      "id": "32",
+      "inflationAmount": "993281.32",
+      "sealedDay": "32",
+      "sharePrice": "0.000000000001",
+      "totalShares": "86912112",
+      "totalStaked": "24837032",
+      "totalSupply": "2251948220.298780854765212438"
+    },
+    {
+      "id": "33",
+      "inflationAmount": "1003290.1256",
+      "sealedDay": "33",
+      "sharePrice": "0.000000000001",
+      "totalShares": "87787882.49",
+      "totalStaked": "25087252.14",
+      "totalSupply": "2251698000.158780854765212438"
+    },
+    {
+      "id": "34",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "34",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "35",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "35",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "36",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "36",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "37",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "37",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "38",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "38",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "39",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "39",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "40",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "40",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "41",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "41",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "42",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "42",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "43",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "43",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "44",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "44",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "45",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "45",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "46",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "46",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "47",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "47",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "48",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "48",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "49",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "49",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "50",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "50",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "51",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "51",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "52",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "52",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "53",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "53",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "54",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "54",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "55",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "55",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "56",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "56",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "57",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "57",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "58",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "58",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "59",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "59",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "60",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "60",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "61",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "61",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "62",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "62",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "63",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "63",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "64",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "64",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "65",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "65",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "66",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "66",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "67",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "67",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "68",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "68",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "69",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "69",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "70",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "70",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "71",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "71",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "72",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "72",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "73",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "73",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "74",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "74",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "75",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "75",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "76",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "76",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "77",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "77",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "78",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "78",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "79",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "79",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "80",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "80",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "81",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "81",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "82",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "82",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "83",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "83",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "84",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "84",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "85",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "85",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "86",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "86",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "87",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "87",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "88",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "88",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "89",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "89",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "90",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "90",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "91",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "91",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "92",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "92",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "93",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "93",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "94",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "94",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "95",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "95",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "96",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "96",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "97",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "97",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "98",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "98",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "99",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "99",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "100",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "100",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "101",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "101",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "102",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "102",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "103",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "103",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "104",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "104",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "105",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "105",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "106",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "106",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "107",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "107",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "108",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "108",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "109",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "109",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "110",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "110",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "111",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "111",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "112",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "112",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "113",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "113",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "114",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "114",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "115",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "115",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "116",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "116",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "117",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "117",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "118",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "118",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "119",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "119",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "120",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "120",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "121",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "121",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "122",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "122",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "123",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "123",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "124",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "124",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "125",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "125",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "126",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "126",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "127",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "127",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "128",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "128",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "129",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "129",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "130",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "130",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "131",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "131",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "132",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "132",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "133",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "133",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "134",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "134",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "135",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "135",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "136",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "136",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "137",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "137",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "138",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "138",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "139",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "139",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "140",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "140",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "141",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "141",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "142",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "142",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "143",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "143",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "144",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "144",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "145",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "145",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "146",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "146",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "147",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "147",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "148",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "148",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "149",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "149",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "150",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "150",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "151",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "151",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "152",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "152",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "153",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "153",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "154",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "154",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "155",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "155",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "156",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "156",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "157",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "157",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "158",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "158",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "159",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "159",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "160",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "160",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "161",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "161",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "162",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "162",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "163",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "163",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "164",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "164",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "165",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "165",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "166",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "166",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "167",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "167",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "168",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "168",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "169",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "169",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "170",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "170",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "171",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "171",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "172",
+      "inflationAmount": "1052542.6056",
+      "sealedDay": "172",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92097474.49",
+      "totalStaked": "26318564.14",
+      "totalSupply": "2250466688.158780854765212438"
+    },
+    {
+      "id": "173",
+      "inflationAmount": "1058050.464",
+      "sealedDay": "173",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92579412.1",
+      "totalStaked": "26343599.86",
+      "totalSupply": "2250441652.438780854765212438"
+    },
+    {
+      "id": "174",
+      "inflationAmount": "1058050.464",
+      "sealedDay": "174",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92579412.1",
+      "totalStaked": "26343599.86",
+      "totalSupply": "2250441652.438780854765212438"
+    },
+    {
+      "id": "175",
+      "inflationAmount": "1058050.464",
+      "sealedDay": "175",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92579412.1",
+      "totalStaked": "26343599.86",
+      "totalSupply": "2250441652.438780854765212438"
+    },
+    {
+      "id": "176",
+      "inflationAmount": "1058050.464",
+      "sealedDay": "176",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92579412.1",
+      "totalStaked": "26343599.86",
+      "totalSupply": "2250441652.438780854765212438"
+    },
+    {
+      "id": "177",
+      "inflationAmount": "1058050.464",
+      "sealedDay": "177",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92579412.1",
+      "totalStaked": "26343599.86",
+      "totalSupply": "2250441652.438780854765212438"
+    },
+    {
+      "id": "178",
+      "inflationAmount": "1058050.464",
+      "sealedDay": "178",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92579412.1",
+      "totalStaked": "26343599.86",
+      "totalSupply": "2250441652.438780854765212438"
+    },
+    {
+      "id": "179",
+      "inflationAmount": "1058050.464",
+      "sealedDay": "179",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92579412.1",
+      "totalStaked": "26343599.86",
+      "totalSupply": "2250441652.438780854765212438"
+    },
+    {
+      "id": "180",
+      "inflationAmount": "1058050.464",
+      "sealedDay": "180",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92579412.1",
+      "totalStaked": "26343599.86",
+      "totalSupply": "2250441652.438780854765212438"
+    },
+    {
+      "id": "181",
+      "inflationAmount": "1058050.464",
+      "sealedDay": "181",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92579412.1",
+      "totalStaked": "26343599.86",
+      "totalSupply": "2250441652.438780854765212438"
+    },
+    {
+      "id": "182",
+      "inflationAmount": "1058050.464",
+      "sealedDay": "182",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92579412.1",
+      "totalStaked": "26343599.86",
+      "totalSupply": "2250441652.438780854765212438"
+    },
+    {
+      "id": "183",
+      "inflationAmount": "1058050.464",
+      "sealedDay": "183",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92579412.1",
+      "totalStaked": "26343599.86",
+      "totalSupply": "2250441652.438780854765212438"
+    },
+    {
+      "id": "184",
+      "inflationAmount": "1058050.464",
+      "sealedDay": "184",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92579412.1",
+      "totalStaked": "26343599.86",
+      "totalSupply": "2250441652.438780854765212438"
+    },
+    {
+      "id": "185",
+      "inflationAmount": "1058050.464",
+      "sealedDay": "185",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92579412.1",
+      "totalStaked": "26343599.86",
+      "totalSupply": "2250441652.438780854765212438"
+    },
+    {
+      "id": "186",
+      "inflationAmount": "1058050.464",
+      "sealedDay": "186",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92579412.1",
+      "totalStaked": "26343599.86",
+      "totalSupply": "2250441652.438780854765212438"
+    },
+    {
+      "id": "187",
+      "inflationAmount": "1058050.464",
+      "sealedDay": "187",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92579412.1",
+      "totalStaked": "26343599.86",
+      "totalSupply": "2250441652.438780854765212438"
+    },
+    {
+      "id": "188",
+      "inflationAmount": "1058050.464",
+      "sealedDay": "188",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92579412.1",
+      "totalStaked": "26343599.86",
+      "totalSupply": "2250441652.438780854765212438"
+    },
+    {
+      "id": "189",
+      "inflationAmount": "1058050.464",
+      "sealedDay": "189",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92579412.1",
+      "totalStaked": "26343599.86",
+      "totalSupply": "2250441652.438780854765212438"
+    },
+    {
+      "id": "190",
+      "inflationAmount": "1058050.464",
+      "sealedDay": "190",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92579412.1",
+      "totalStaked": "26343599.86",
+      "totalSupply": "2250441652.438780854765212438"
+    },
+    {
+      "id": "191",
+      "inflationAmount": "1058050.464",
+      "sealedDay": "191",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92579412.1",
+      "totalStaked": "26343599.86",
+      "totalSupply": "2250441652.438780854765212438"
+    },
+    {
+      "id": "192",
+      "inflationAmount": "1058050.464",
+      "sealedDay": "192",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92579412.1",
+      "totalStaked": "26343599.86",
+      "totalSupply": "2250441652.438780854765212438"
+    },
+    {
+      "id": "193",
+      "inflationAmount": "1058050.464",
+      "sealedDay": "193",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92579412.1",
+      "totalStaked": "26343599.86",
+      "totalSupply": "2250441652.438780854765212438"
+    },
+    {
+      "id": "194",
+      "inflationAmount": "1058050.464",
+      "sealedDay": "194",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92579412.1",
+      "totalStaked": "26343599.86",
+      "totalSupply": "2250441652.438780854765212438"
+    },
+    {
+      "id": "195",
+      "inflationAmount": "1058050.464",
+      "sealedDay": "195",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92579412.1",
+      "totalStaked": "26343599.86",
+      "totalSupply": "2250441652.438780854765212438"
+    },
+    {
+      "id": "196",
+      "inflationAmount": "1058050.464",
+      "sealedDay": "196",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92579412.1",
+      "totalStaked": "26343599.86",
+      "totalSupply": "2250441652.438780854765212438"
+    },
+    {
+      "id": "197",
+      "inflationAmount": "1058050.464",
+      "sealedDay": "197",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92579412.1",
+      "totalStaked": "26343599.86",
+      "totalSupply": "2250441652.438780854765212438"
+    },
+    {
+      "id": "198",
+      "inflationAmount": "1058050.464",
+      "sealedDay": "198",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92579412.1",
+      "totalStaked": "26343599.86",
+      "totalSupply": "2250441652.438780854765212438"
+    },
+    {
+      "id": "199",
+      "inflationAmount": "1058050.464",
+      "sealedDay": "199",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92579412.1",
+      "totalStaked": "26343599.86",
+      "totalSupply": "2250441652.438780854765212438"
+    },
+    {
+      "id": "200",
+      "inflationAmount": "1058050.464",
+      "sealedDay": "200",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92579412.1",
+      "totalStaked": "26343599.86",
+      "totalSupply": "2250441652.438780854765212438"
+    },
+    {
+      "id": "201",
+      "inflationAmount": "1058050.464",
+      "sealedDay": "201",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92579412.1",
+      "totalStaked": "26343599.86",
+      "totalSupply": "2250441652.438780854765212438"
+    },
+    {
+      "id": "202",
+      "inflationAmount": "1058050.464",
+      "sealedDay": "202",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92579412.1",
+      "totalStaked": "26343599.86",
+      "totalSupply": "2250441652.438780854765212438"
+    },
+    {
+      "id": "203",
+      "inflationAmount": "1058050.464",
+      "sealedDay": "203",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92579412.1",
+      "totalStaked": "26343599.86",
+      "totalSupply": "2250441652.438780854765212438"
+    },
+    {
+      "id": "204",
+      "inflationAmount": "1058050.464",
+      "sealedDay": "204",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92579412.1",
+      "totalStaked": "26343599.86",
+      "totalSupply": "2250441652.438780854765212438"
+    },
+    {
+      "id": "205",
+      "inflationAmount": "1058050.464",
+      "sealedDay": "205",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92579412.1",
+      "totalStaked": "26343599.86",
+      "totalSupply": "2250441652.438780854765212438"
+    },
+    {
+      "id": "206",
+      "inflationAmount": "1058050.464",
+      "sealedDay": "206",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92579412.1",
+      "totalStaked": "26343599.86",
+      "totalSupply": "2250441652.438780854765212438"
+    },
+    {
+      "id": "207",
+      "inflationAmount": "1058050.464",
+      "sealedDay": "207",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92579412.1",
+      "totalStaked": "26343599.86",
+      "totalSupply": "2250441652.438780854765212438"
+    },
+    {
+      "id": "208",
+      "inflationAmount": "1058050.464",
+      "sealedDay": "208",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92579412.1",
+      "totalStaked": "26343599.86",
+      "totalSupply": "2250441652.438780854765212438"
+    },
+    {
+      "id": "209",
+      "inflationAmount": "1058050.464",
+      "sealedDay": "209",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92579412.1",
+      "totalStaked": "26343599.86",
+      "totalSupply": "2250441652.438780854765212438"
+    },
+    {
+      "id": "210",
+      "inflationAmount": "1058050.464",
+      "sealedDay": "210",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92579412.1",
+      "totalStaked": "26343599.86",
+      "totalSupply": "2250441652.438780854765212438"
+    },
+    {
+      "id": "211",
+      "inflationAmount": "1058050.464",
+      "sealedDay": "211",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92579412.1",
+      "totalStaked": "26343599.86",
+      "totalSupply": "2250441652.438780854765212438"
+    },
+    {
+      "id": "212",
+      "inflationAmount": "1058050.464",
+      "sealedDay": "212",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92579412.1",
+      "totalStaked": "26343599.86",
+      "totalSupply": "2250441652.438780854765212438"
+    },
+    {
+      "id": "213",
+      "inflationAmount": "1058050.464",
+      "sealedDay": "213",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92579412.1",
+      "totalStaked": "26343599.86",
+      "totalSupply": "2250441652.438780854765212438"
+    },
+    {
+      "id": "214",
+      "inflationAmount": "1058050.464",
+      "sealedDay": "214",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92579412.1",
+      "totalStaked": "26343599.86",
+      "totalSupply": "2250441652.438780854765212438"
+    },
+    {
+      "id": "215",
+      "inflationAmount": "1058050.464",
+      "sealedDay": "215",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92579412.1",
+      "totalStaked": "26343599.86",
+      "totalSupply": "2250441652.438780854765212438"
+    },
+    {
+      "id": "216",
+      "inflationAmount": "1058050.464",
+      "sealedDay": "216",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92579412.1",
+      "totalStaked": "26343599.86",
+      "totalSupply": "2250441652.438780854765212438"
+    },
+    {
+      "id": "217",
+      "inflationAmount": "1058050.464",
+      "sealedDay": "217",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92579412.1",
+      "totalStaked": "26343599.86",
+      "totalSupply": "2250441652.438780854765212438"
+    },
+    {
+      "id": "218",
+      "inflationAmount": "1058050.464",
+      "sealedDay": "218",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92579412.1",
+      "totalStaked": "26343599.86",
+      "totalSupply": "2250441652.438780854765212438"
+    },
+    {
+      "id": "219",
+      "inflationAmount": "1058050.464",
+      "sealedDay": "219",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92579412.1",
+      "totalStaked": "26343599.86",
+      "totalSupply": "2250441652.438780854765212438"
+    },
+    {
+      "id": "220",
+      "inflationAmount": "1058050.464",
+      "sealedDay": "220",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92579412.1",
+      "totalStaked": "26343599.86",
+      "totalSupply": "2250441652.438780854765212438"
+    },
+    {
+      "id": "221",
+      "inflationAmount": "1058050.464",
+      "sealedDay": "221",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92579412.1",
+      "totalStaked": "26343599.86",
+      "totalSupply": "2250441652.438780854765212438"
+    },
+    {
+      "id": "222",
+      "inflationAmount": "1058050.464",
+      "sealedDay": "222",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92579412.1",
+      "totalStaked": "26343599.86",
+      "totalSupply": "2250441652.438780854765212438"
+    },
+    {
+      "id": "223",
+      "inflationAmount": "1058050.464",
+      "sealedDay": "223",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92579412.1",
+      "totalStaked": "26343599.86",
+      "totalSupply": "2250441652.438780854765212438"
+    },
+    {
+      "id": "224",
+      "inflationAmount": "1058050.464",
+      "sealedDay": "224",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92579412.1",
+      "totalStaked": "26343599.86",
+      "totalSupply": "2250441652.438780854765212438"
+    },
+    {
+      "id": "225",
+      "inflationAmount": "1058050.464",
+      "sealedDay": "225",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92579412.1",
+      "totalStaked": "26343599.86",
+      "totalSupply": "2250441652.438780854765212438"
+    },
+    {
+      "id": "226",
+      "inflationAmount": "1058050.464",
+      "sealedDay": "226",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92579412.1",
+      "totalStaked": "26343599.86",
+      "totalSupply": "2250441652.438780854765212438"
+    },
+    {
+      "id": "227",
+      "inflationAmount": "1058050.464",
+      "sealedDay": "227",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92579412.1",
+      "totalStaked": "26343599.86",
+      "totalSupply": "2250441652.438780854765212438"
+    },
+    {
+      "id": "228",
+      "inflationAmount": "1058050.464",
+      "sealedDay": "228",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92579412.1",
+      "totalStaked": "26343599.86",
+      "totalSupply": "2250441652.438780854765212438"
+    },
+    {
+      "id": "229",
+      "inflationAmount": "1058050.464",
+      "sealedDay": "229",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92579412.1",
+      "totalStaked": "26343599.86",
+      "totalSupply": "2250441652.438780854765212438"
+    },
+    {
+      "id": "230",
+      "inflationAmount": "1058050.464",
+      "sealedDay": "230",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92579412.1",
+      "totalStaked": "26343599.86",
+      "totalSupply": "2250441652.438780854765212438"
+    },
+    {
+      "id": "231",
+      "inflationAmount": "1058050.464",
+      "sealedDay": "231",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92579412.1",
+      "totalStaked": "26343599.86",
+      "totalSupply": "2250441652.438780854765212438"
+    },
+    {
+      "id": "232",
+      "inflationAmount": "1058050.464",
+      "sealedDay": "232",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92579412.1",
+      "totalStaked": "26343599.86",
+      "totalSupply": "2250441652.438780854765212438"
+    },
+    {
+      "id": "233",
+      "inflationAmount": "1058050.464",
+      "sealedDay": "233",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92579412.1",
+      "totalStaked": "26343599.86",
+      "totalSupply": "2250441652.438780854765212438"
+    },
+    {
+      "id": "234",
+      "inflationAmount": "1058050.464",
+      "sealedDay": "234",
+      "sharePrice": "0.000000000001",
+      "totalShares": "92579412.1",
+      "totalStaked": "26343599.86",
+      "totalSupply": "2250441652.438780854765212438"
+    },
+    {
+      "id": "235",
+      "inflationAmount": "1550543.664",
+      "sealedDay": "235",
+      "sharePrice": "0.000000000001",
+      "totalShares": "135672567.1",
+      "totalStaked": "38655929.86",
+      "totalSupply": "2238129322.438780854765212438"
+    },
+    {
+      "id": "236",
+      "inflationAmount": "1550543.664",
+      "sealedDay": "236",
+      "sharePrice": "0.000000000001",
+      "totalShares": "135672567.1",
+      "totalStaked": "38655929.86",
+      "totalSupply": "2238129322.438780854765212438"
+    },
+    {
+      "id": "237",
+      "inflationAmount": "1550543.664",
+      "sealedDay": "237",
+      "sharePrice": "0.000000000001",
+      "totalShares": "135672567.1",
+      "totalStaked": "38655929.86",
+      "totalSupply": "2238129322.438780854765212438"
+    },
+    {
+      "id": "238",
+      "inflationAmount": "1550543.664",
+      "sealedDay": "238",
+      "sharePrice": "0.000000000001",
+      "totalShares": "135672567.1",
+      "totalStaked": "38655929.86",
+      "totalSupply": "2238129322.438780854765212438"
+    },
+    {
+      "id": "239",
+      "inflationAmount": "1550543.664",
+      "sealedDay": "239",
+      "sharePrice": "0.000000000001",
+      "totalShares": "135672567.1",
+      "totalStaked": "38655929.86",
+      "totalSupply": "2238129322.438780854765212438"
+    },
+    {
+      "id": "240",
+      "inflationAmount": "1550543.664",
+      "sealedDay": "240",
+      "sharePrice": "0.000000000001",
+      "totalShares": "135672567.1",
+      "totalStaked": "38655929.86",
+      "totalSupply": "2238129322.438780854765212438"
+    },
+    {
+      "id": "241",
+      "inflationAmount": "1550543.664",
+      "sealedDay": "241",
+      "sharePrice": "0.000000000001",
+      "totalShares": "135672567.1",
+      "totalStaked": "38655929.86",
+      "totalSupply": "2238129322.438780854765212438"
+    },
+    {
+      "id": "242",
+      "inflationAmount": "1550543.664",
+      "sealedDay": "242",
+      "sharePrice": "0.000000000001",
+      "totalShares": "135672567.1",
+      "totalStaked": "38655929.86",
+      "totalSupply": "2238129322.438780854765212438"
+    },
+    {
+      "id": "243",
+      "inflationAmount": "1550543.664",
+      "sealedDay": "243",
+      "sharePrice": "0.000000000001",
+      "totalShares": "135672567.1",
+      "totalStaked": "38655929.86",
+      "totalSupply": "2238129322.438780854765212438"
+    },
+    {
+      "id": "244",
+      "inflationAmount": "1550543.664",
+      "sealedDay": "244",
+      "sharePrice": "0.000000000001",
+      "totalShares": "135672567.1",
+      "totalStaked": "38655929.86",
+      "totalSupply": "2238129322.438780854765212438"
+    },
+    {
+      "id": "245",
+      "inflationAmount": "1550543.664",
+      "sealedDay": "245",
+      "sharePrice": "0.000000000001",
+      "totalShares": "135672567.1",
+      "totalStaked": "38655929.86",
+      "totalSupply": "2238129322.438780854765212438"
+    },
+    {
+      "id": "246",
+      "inflationAmount": "1550543.664",
+      "sealedDay": "246",
+      "sharePrice": "0.000000000001",
+      "totalShares": "135672567.1",
+      "totalStaked": "38655929.86",
+      "totalSupply": "2238129322.438780854765212438"
+    },
+    {
+      "id": "247",
+      "inflationAmount": "1550543.664",
+      "sealedDay": "247",
+      "sharePrice": "0.000000000001",
+      "totalShares": "135672567.1",
+      "totalStaked": "38655929.86",
+      "totalSupply": "2238129322.438780854765212438"
+    },
+    {
+      "id": "248",
+      "inflationAmount": "1550543.664",
+      "sealedDay": "248",
+      "sharePrice": "0.000000000001",
+      "totalShares": "135672567.1",
+      "totalStaked": "38655929.86",
+      "totalSupply": "2238129322.438780854765212438"
+    },
+    {
+      "id": "249",
+      "inflationAmount": "15369314.333370342901677607",
+      "sealedDay": "249",
+      "sharePrice": "0.000000000001",
+      "totalShares": "88187921.725",
+      "totalStaked": "25023688.86",
+      "totalSupply": "2245476998.665413379124072018"
+    },
+    {
+      "id": "250",
+      "inflationAmount": "3363295.596030034593609696",
+      "sealedDay": "250",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "87357228.49",
+      "totalStaked": "24964208.14",
+      "totalSupply": "2245569855.903508177761140838"
+    },
+    {
+      "id": "251",
+      "inflationAmount": "57107989.427091550575106883",
+      "sealedDay": "251",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "44900805.728650330404438166",
+      "totalStaked": "13218974.14",
+      "totalSupply": "2251159029.593666230275689494"
+    },
+    {
+      "id": "252",
+      "inflationAmount": "1681261.495669077944151902",
+      "sealedDay": "252",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "44316121.064862753225720936",
+      "totalStaked": "12664431.14",
+      "totalSupply": "2251931353.730057918477171393"
+    },
+    {
+      "id": "253",
+      "inflationAmount": "1681261.495669077944151902",
+      "sealedDay": "253",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "44316121.064862753225720936",
+      "totalStaked": "12664431.14",
+      "totalSupply": "2251931353.730057918477171393"
+    },
+    {
+      "id": "254",
+      "inflationAmount": "1681261.495669077944151902",
+      "sealedDay": "254",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "44316121.064862753225720936",
+      "totalStaked": "12664431.14",
+      "totalSupply": "2251931353.730057918477171393"
+    },
+    {
+      "id": "255",
+      "inflationAmount": "1717090.992214449152112343",
+      "sealedDay": "255",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "44281121.064862753225720936",
+      "totalStaked": "12649431.14",
+      "totalSupply": "2251935482.32158518194472267"
+    },
+    {
+      "id": "256",
+      "inflationAmount": "2580616.440926220801987363",
+      "sealedDay": "256",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68022084.52456594352036168",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189088998.52158518194472267"
+    },
+    {
+      "id": "257",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "257",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "258",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "258",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "259",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "259",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "260",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "260",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "261",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "261",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "262",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "262",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "263",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "263",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "264",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "264",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "265",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "265",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "266",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "266",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "267",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "267",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "268",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "268",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "269",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "269",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "270",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "270",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "271",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "271",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "272",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "272",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "273",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "273",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "274",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "274",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "275",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "275",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "276",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "276",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "277",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "277",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "278",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "278",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "279",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "279",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "280",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "280",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "281",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "281",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "282",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "282",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "283",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "283",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "284",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "284",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "285",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "285",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "286",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "286",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "287",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "287",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "288",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "288",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "289",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "289",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "290",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "290",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "291",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "291",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "292",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "292",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "293",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "293",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "294",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "294",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "295",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "295",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "296",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "296",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "297",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "297",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "298",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "298",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "299",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "299",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "300",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "300",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "301",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "301",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "302",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "302",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "303",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "303",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "304",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "304",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "305",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "305",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "306",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "306",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "307",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "307",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "308",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "308",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "309",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "309",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "310",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "310",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "311",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "311",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "312",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "312",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "313",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "313",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "314",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "314",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "315",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "315",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "316",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "316",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "317",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "317",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "318",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "318",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "319",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "319",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "320",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "320",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "321",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "321",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "322",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "322",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "323",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "323",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "324",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "324",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "325",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "325",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "326",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "326",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "327",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "327",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "328",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "328",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "329",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "329",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "330",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "330",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "331",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "331",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "332",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "332",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "333",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "333",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "334",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "334",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "335",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "335",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "336",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "336",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "337",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "337",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "338",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "338",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "339",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "339",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "340",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "340",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "341",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "341",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "342",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "342",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "343",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "343",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "344",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "344",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "345",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "345",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "346",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "346",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "347",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "347",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "348",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "348",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "349",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "349",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "350",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "350",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "351",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "351",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "352",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "352",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "353",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "353",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "354",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "354",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "355",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "355",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "356",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "356",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "357",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "357",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "358",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "358",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "359",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "359",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "360",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "360",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "361",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "361",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "362",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "362",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "363",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "363",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "364",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "364",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "365",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "365",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "366",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "366",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "367",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "367",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "368",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "368",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "369",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "369",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "370",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "370",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "371",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "371",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "372",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "372",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "373",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "373",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "374",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "374",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "375",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "375",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "376",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "376",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "377",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "377",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "378",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "378",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "379",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "379",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "380",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "380",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "381",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "381",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "382",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "382",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "383",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "383",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "384",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "384",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "385",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "385",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "386",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "386",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "387",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "387",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "388",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "388",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "389",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "389",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "390",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "390",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "391",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "391",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "392",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "392",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "393",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "393",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "394",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "394",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "395",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "395",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "396",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "396",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "397",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "397",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "398",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "398",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "399",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "399",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "400",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "400",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "401",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "401",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "402",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "402",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "403",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "403",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "404",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "404",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "405",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "405",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "406",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "406",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "407",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "407",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "408",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "408",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "409",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "409",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "410",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "410",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "411",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "411",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "412",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "412",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "413",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "413",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "414",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "414",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "415",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "415",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "416",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "416",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "417",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "417",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "418",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "418",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "419",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "419",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "420",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "420",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "421",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "421",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "422",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "422",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "423",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "423",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "424",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "424",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "425",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "425",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "426",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "426",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "427",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "427",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "428",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "428",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "429",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "429",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "430",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "430",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "431",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "431",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "432",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "432",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "433",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "433",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "434",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "434",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "435",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "435",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "436",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "436",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "437",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "437",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "438",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "438",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "439",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "439",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "440",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "440",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "441",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "441",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "442",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "442",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "443",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "443",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "444",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "444",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "445",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "445",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "446",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "446",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "447",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "447",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "448",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "448",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "449",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "449",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "450",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "450",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "451",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "451",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "452",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "452",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "453",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "453",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "454",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "454",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "455",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "455",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "456",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "456",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "457",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "457",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "458",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "458",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "459",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "459",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "460",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "460",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "461",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "461",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "462",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "462",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "463",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "463",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "464",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "464",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "465",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "465",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "466",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "466",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "467",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "467",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "468",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "468",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "469",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "469",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "470",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "470",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "471",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "471",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "472",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "472",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "473",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "473",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "474",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "474",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "475",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "475",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "476",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "476",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "477",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "477",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "478",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "478",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "479",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "479",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "480",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "480",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "481",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "481",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "482",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "482",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "483",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "483",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "484",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "484",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "485",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "485",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "486",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "486",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "487",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "487",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "488",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "488",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "489",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "489",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "490",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "490",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "491",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "491",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "492",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "492",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "493",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "493",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "494",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "494",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "495",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "495",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "496",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "496",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "497",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "497",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "498",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "498",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "499",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "499",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "500",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "500",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "501",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "501",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "502",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "502",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "503",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "503",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "504",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "504",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "505",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "505",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "506",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "506",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "507",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "507",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "508",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "508",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "509",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "509",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "510",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "510",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "511",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "511",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    },
+    {
+      "id": "512",
+      "inflationAmount": "2580587.868640506516273055",
+      "sealedDay": "512",
+      "sharePrice": "0.000000000003319568",
+      "totalShares": "68021331.391929407681963431",
+      "totalStaked": "75495914.94",
+      "totalSupply": "2189043182.38463702469717576"
+    }
+  ]
+}

@@ -1,9 +1,32 @@
+import { useWeb3React } from "@web3-react/core";
+import dayjs from "dayjs";
+import { serializeError } from "eth-rpc-errors";
+import { ethers } from "ethers";
 import { Box, Text } from "grommet";
 import Tooltip from "rc-tooltip";
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import Loader from "react-loader-spinner";
+import { toast } from "react-toastify";
 import styled from "styled-components";
+import {
+  StakesDocument,
+  StakesQuery,
+  StakesQueryVariables,
+} from "./graphql/types";
+import { stakingClient } from "./shared/client";
 import { HoveredElement } from "./shared/hooks";
+import { ModalsContext } from "./shared/modals";
+import { SnapshotsInterest } from "./shared/snaphots-interest";
 import { ThemeContext } from "./shared/theme";
+import { useStakingContract, useTokenContract } from "./shared/useContract";
+import { _isFinite } from "./shared/utils";
+import {
+  CONTROLLED_APY,
+  DAYS_IN_ONE_YEAR,
+  deftShortCurrency,
+  getCurrentDay,
+  getSharesCountByStake,
+} from "./staking-system";
 
 const Input = styled.input`
   border: none;
@@ -115,9 +138,24 @@ const ArrowUp = ({ color }: { color: string }) => (
 </Box> */
 }
 
-const TooltipCalendar = ({ isDark }: { isDark: boolean }) => {
+const TooltipCalendar = ({
+  isDark,
+  onClick: _onClick,
+}: {
+  isDark: boolean;
+  onClick: (days: number) => void;
+}) => {
+  const [visible, onVisibleChange] = useState(false);
+
+  const onClick = (days: number) => {
+    _onClick(days);
+    onVisibleChange(false);
+  };
+
   return (
     <Tooltip
+      visible={visible}
+      onVisibleChange={v => onVisibleChange(v)}
       placement="bottom"
       trigger={["click"]}
       align={{
@@ -159,16 +197,18 @@ const TooltipCalendar = ({ isDark }: { isDark: boolean }) => {
               style={{
                 cursor: "pointer",
               }}
+              onClick={() => onClick(30)}
             >
               1 month
             </Text>
             <Box height="20px"></Box>
             <Text
               size="16px"
-              weight={600}
+              // weight={600}
               style={{
                 cursor: "pointer",
               }}
+              onClick={() => onClick(180)}
             >
               6 months
             </Text>
@@ -178,6 +218,7 @@ const TooltipCalendar = ({ isDark }: { isDark: boolean }) => {
               style={{
                 cursor: "pointer",
               }}
+              onClick={() => onClick(365)}
             >
               1 years
             </Text>
@@ -187,6 +228,7 @@ const TooltipCalendar = ({ isDark }: { isDark: boolean }) => {
               style={{
                 cursor: "pointer",
               }}
+              onClick={() => onClick(365 * 2)}
             >
               2 years
             </Text>
@@ -196,6 +238,7 @@ const TooltipCalendar = ({ isDark }: { isDark: boolean }) => {
               style={{
                 cursor: "pointer",
               }}
+              onClick={() => onClick(365 * 5)}
             >
               5 years
             </Text>
@@ -205,6 +248,7 @@ const TooltipCalendar = ({ isDark }: { isDark: boolean }) => {
               style={{
                 cursor: "pointer",
               }}
+              onClick={() => onClick(365 * 10)}
             >
               10 years
             </Text>
@@ -292,22 +336,190 @@ const CalendarIcon = ({ stroke }: { stroke: string }) => (
   </svg>
 );
 
+function dateEndOfStake(a: number) {
+  const nowDate = new Date(Date.now());
+  const newDate = nowDate.setDate(nowDate.getDate() + Number(a));
+
+  return dayjs(newDate).format("DD-MM-YYYY HH:mm A");
+}
+
 export const CreateStakeModal = () => {
   const { theme } = useContext(ThemeContext);
+
+  const { dailySnapshots } = useContext(SnapshotsInterest);
+
+  const sharePrice =
+    dailySnapshots.length > 0
+      ? dailySnapshots[dailySnapshots.length - 1].sharePrice
+      : 0;
+
+  const stakingContract = useStakingContract();
+
+  const { closeModal } = useContext(ModalsContext);
   const isDark = theme === "dark";
+
+  const { account, chainId } = useWeb3React();
+
+  const [balance, setBalance] = useState(0);
+  const [stakeDays, setStakeDays] = useState(100);
+  const changeStakeDays = (evt: any) => {
+    if (Number(evt.target.value) < 0) {
+      return;
+    }
+    setStakeDays(Number(evt.target.value));
+  };
+
+  const tokenContract = useTokenContract();
+
+  const [stakeAmount, setStakeAmount] = useState("");
+  const changeStakeAmountHandler = (evt: any) => {
+    if (Number(evt.target.value) > balance) {
+      return;
+    }
+    setStakeAmount(evt.target.value);
+  };
+
+  const diff = Math.floor(
+    (1 - Math.abs(balance - Number(stakeAmount)) / balance) * 100,
+  );
+
+  const [loader, setLoader] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const refetchBalance = async () => {
+    try {
+      const balance = await tokenContract.balanceOf(account!);
+
+      setBalance(Math.floor(Number(ethers.utils.formatEther(balance))));
+      console.log({
+        balance: ethers.utils.formatEther(balance),
+      });
+    } catch (error) {
+      setBalance(0);
+      console.log(error);
+    }
+  };
+
+  const createStake = async () => {
+    setErrorMessage("");
+
+    try {
+      setLoader(true);
+
+      const result = await stakingContract.startStake({
+        lockedForXDays: stakeDays,
+        stakedAmount: ethers.utils.parseEther(stakeAmount),
+      });
+      const result2 = await result.wait();
+
+      setLoader(false);
+
+      if (result2.status === 1) {
+        toast.success("Transaction successful");
+        closeModal();
+      } else {
+        toast.error("Transaction Canceled");
+      }
+
+      // TODO: update it locally ?client
+      // TODO: may not fetch in time if subgraph outdated
+      const resultQuery = await stakingClient.query<
+        StakesQuery,
+        StakesQueryVariables
+      >({
+        query: StakesDocument,
+        variables: {
+          address: account?.toLowerCase() || "",
+        },
+        fetchPolicy: "network-only",
+      });
+
+      // if (resultQuery.data.proofs[0]) {
+      //   proof = resultQuery.data.proofs[0];
+      //   break;
+      // }
+
+      console.log(result2.status);
+    } catch (error) {
+      setLoader(false);
+      const serializedError = serializeError(error);
+      const originalErrorMessage = (serializedError.data as any)?.originalError
+        ?.error?.message;
+
+      if (originalErrorMessage && originalErrorMessage.includes("SS: ")) {
+        const message = originalErrorMessage.split("SS: ")[1];
+
+        // @ts-ignore
+        const readableError = message || "Unknown error";
+        toast.error("Transaction failed");
+        setErrorMessage(readableError);
+      } else {
+        setErrorMessage("Transaction Canceled");
+      }
+    } finally {
+      refetchBalance();
+    }
+  };
+
+  useEffect(() => {
+    refetchBalance();
+  }, [account, chainId]);
+
+  let longerMult = 0.0006849;
+
+  if (stakeDays >= 365 * 10) {
+    longerMult = 2.5;
+  } else if (stakeDays >= 365) {
+    longerMult = 0.5;
+  }
+
+  const longerPaysBetter =
+    (Number(stakeAmount) * longerMult * stakeDays) / (DAYS_IN_ONE_YEAR * 10);
+
+  const effectiveDeft = Number(stakeAmount) + longerPaysBetter;
+
+  const stakeShare = effectiveDeft / sharePrice;
+
+  const stakeSharesCount = getSharesCountByStake(
+    dailySnapshots,
+    {
+      lockedForXDays: stakeDays,
+      stakedAmount: Number(stakeAmount),
+      startDay: getCurrentDay(),
+    },
+    0,
+  );
+
+  const stakeSharesCountMax = getSharesCountByStake(
+    dailySnapshots,
+    {
+      lockedForXDays: DAYS_IN_ONE_YEAR * 10,
+      stakedAmount: Number(stakeAmount),
+      startDay: getCurrentDay(),
+    },
+    0,
+  );
+
+  const minApy = (CONTROLLED_APY * stakeSharesCount) / stakeSharesCountMax;
+
   return (
     <Box
       pad="30px 30px 33px"
       width="510px"
       round="10px"
       className="bg-white dark:bg-black"
-      style={
-        isDark
+      style={{
+        ...(isDark
           ? {
               border: "1px solid #707070",
             }
-          : {}
-      }
+          : {}),
+        ...(loader
+          ? {
+              pointerEvents: "none",
+            }
+          : {}),
+      }}
     >
       <Text size="30px" color="text">
         Create Stake
@@ -319,7 +531,7 @@ export const CreateStakeModal = () => {
         </Text>
 
         <Text size="14px" color="#C4C4C4">
-          24.356 DEFT available
+          {balance.asCurrency(2)} DEFT available
         </Text>
       </Box>
       <Box height="13px"></Box>
@@ -327,6 +539,17 @@ export const CreateStakeModal = () => {
         style={{
           border: isDark ? "2px solid #707070" : "2px solid #c4c4c4",
           color: isDark ? "white" : "#29343E",
+        }}
+        onChange={changeStakeAmountHandler}
+        value={stakeAmount}
+        onKeyPress={e => {
+          if (
+            _isFinite(Number(e.key)) ||
+            (e.key === "." && !stakeAmount.includes("."))
+          ) {
+          } else {
+            e.preventDefault();
+          }
         }}
       />
 
@@ -341,12 +564,24 @@ export const CreateStakeModal = () => {
           type="range"
           min={0}
           max={100}
-          // onChange={e => console.log(e.target.value)}
+          value={diff}
+          onChange={e =>
+            setStakeAmount(
+              (balance * (Number(e.target.value) / 100)).toFixed(2),
+            )
+          }
         />
 
         <Box width="8px"></Box>
-        <Text size="16px" weight={500} color="#5294FF">
-          100%
+        <Text
+          size="16px"
+          weight={500}
+          color="#5294FF"
+          style={{
+            width: "35px",
+          }}
+        >
+          {diff}%
         </Text>
       </Box>
       <Box height="23px"></Box>
@@ -369,6 +604,14 @@ export const CreateStakeModal = () => {
               color: isDark ? "white" : "#29343E",
               width: "200px",
             }}
+            value={stakeDays}
+            onChange={changeStakeDays}
+            onKeyPress={e => {
+              if (_isFinite(Number(e.key))) {
+              } else {
+                e.preventDefault();
+              }
+            }}
           />
           <Box
             style={{
@@ -377,7 +620,10 @@ export const CreateStakeModal = () => {
               cursor: "pointer",
             }}
           >
-            <TooltipCalendar isDark={isDark} />
+            <TooltipCalendar
+              isDark={isDark}
+              onClick={days => setStakeDays(days)}
+            />
           </Box>
         </Box>
       </Box>
@@ -394,7 +640,7 @@ export const CreateStakeModal = () => {
         >
           <Text size="14px">Longer pays better</Text>
           <Text size="14px" weight={500}>
-            +16.48 DEFT
+            +{longerPaysBetter.asCurrency(2)} DEFT
           </Text>
         </Box>
         <Box
@@ -406,7 +652,7 @@ export const CreateStakeModal = () => {
         >
           <Text size="14px">Effective DEFT:</Text>
           <Text size="14px" weight={500}>
-            1,016 DEFT
+            {effectiveDeft.asCurrency(2)} DEFT
           </Text>
         </Box>
         <Box
@@ -418,7 +664,7 @@ export const CreateStakeModal = () => {
         >
           <Text size="14px">Share Price:</Text>
           <Text size="14px" weight={500}>
-            18,634 DEFT / T-share
+            {sharePrice.asCurrency(2)} DEFT / Share
           </Text>
         </Box>
         <Box
@@ -428,20 +674,41 @@ export const CreateStakeModal = () => {
             bottom: "13px",
           }}
         >
-          <Text size="14px">Stake T-Shares:</Text>
+          <Text size="14px">Stake Shares:</Text>
           <Text size="14px" weight={500}>
-            0.0545
+            {deftShortCurrency(stakeShare, "Shares")}
+          </Text>
+        </Box>
+        <Box
+          direction="row"
+          justify="between"
+          margin={{
+            bottom: "13px",
+          }}
+        >
+          <Text size="14px">Min APY:</Text>
+          <Text size="14px" weight={500}>
+            {(minApy || 0).toFixed(2)} %
           </Text>
         </Box>
         <Box direction="row" justify="between">
           <Text size="14px">Date end of stake</Text>
           <Text size="14px" weight={500}>
-            25.05.2020 5:00 AM
+            {dateEndOfStake(stakeDays)}
           </Text>
         </Box>
       </Box>
 
-      <Box height="20px"></Box>
+      <Box height={"10px"}></Box>
+      {errorMessage && (
+        <Box align="center" height="30px" justify="center">
+          <Text size="14px" color={"#FF5252"}>
+            {errorMessage}
+          </Text>
+        </Box>
+      )}
+      <Box height={"10px"}></Box>
+      {/* <Box height="20px"></Box> */}
       <Box direction="row" justify="between">
         <HoveredElement
           render={binder => (
@@ -457,6 +724,7 @@ export const CreateStakeModal = () => {
                 cursor: "pointer",
                 border: "1px solid #FF5252",
               }}
+              onClick={closeModal}
               {...binder.bind}
             >
               <Text
@@ -485,11 +753,17 @@ export const CreateStakeModal = () => {
                   ? "linear-gradient(91.86deg, #71A7FF 0%, #1F67DB 100%)"
                   : "#5294FF"
               }
+              onClick={() => {
+                createStake();
+              }}
               {...binder.bind}
             >
-              <Text size="14px" weight={500} color="white">
-                Create Stake
-              </Text>
+              {loader && <Loader type="ThreeDots" color="#fff" height={12} />}
+              {!loader && (
+                <Text size="14px" weight={500} color="white">
+                  Create Stake
+                </Text>
+              )}
             </Box>
           )}
         ></HoveredElement>

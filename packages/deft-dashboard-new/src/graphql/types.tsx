@@ -946,54 +946,176 @@ export type DirectiveResolvers<ContextType = any> = {
  * Use "DirectiveResolvers" root object instead. If you wish to get "IDirectiveResolvers", add "typesPrefix: I" to your config.
  */
 export type IDirectiveResolvers<ContextType = any> = DirectiveResolvers<ContextType>;
-export type StakesQueryQueryVariables = Exact<{ [key: string]: never; }>;
+export type StakesQueryVariables = Exact<{
+  address: Scalars['String'];
+}>;
 
 
-export type StakesQueryQuery = (
+export type StakesQuery = (
   { __typename?: 'Query' }
   & { stakes: Array<(
     { __typename?: 'Stake' }
-    & Pick<Stake, 'id' | 'startedAt' | 'canceledAt' | 'completedAt' | 'interest' | 'stakedAmount'>
+    & Pick<Stake, 'id' | 'startedAt' | 'canceledAt' | 'completedAt' | 'startDay' | 'lockDays' | 'endDay' | 'interest' | 'stakedAmount' | 'sharesCount'>
+    & { owner: (
+      { __typename?: 'User' }
+      & Pick<User, 'id'>
+    ) }
+  )> }
+);
+
+export type SnapshotsAndInterestQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type SnapshotsAndInterestQuery = (
+  { __typename?: 'Query' }
+  & { cachedInterestPerShares: Array<(
+    { __typename?: 'CachedInterestPerShare' }
+    & Pick<CachedInterestPerShare, 'id' | 'sealedDay' | 'sealedCachedDay' | 'cachedInterestPerShare'>
+  )>, dailySnapshots: Array<(
+    { __typename?: 'DailySnapshot' }
+    & Pick<DailySnapshot, 'id' | 'sealedDay' | 'inflationAmount' | 'totalShares' | 'sharePrice' | 'totalStaked' | 'totalSupply'>
+  )> }
+);
+
+export type StakeQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type StakeQuery = (
+  { __typename?: 'Query' }
+  & { stakes: Array<(
+    { __typename?: 'Stake' }
+    & Pick<Stake, 'id'>
   )> }
 );
 
 
-export const StakesQueryDocument = gql`
-    query StakesQuery {
-  stakes(orderBy: startedAt, orderDirection: desc) {
+export const StakesDocument = gql`
+    query Stakes($address: String!) {
+  stakes(orderBy: startedAt, orderDirection: desc, where: {owner: $address}) {
     id
     startedAt
     canceledAt
     completedAt
+    owner {
+      id
+    }
+    startDay
+    lockDays
+    endDay
     interest
     stakedAmount
+    sharesCount
   }
 }
     `;
 
 /**
- * __useStakesQueryQuery__
+ * __useStakesQuery__
  *
- * To run a query within a React component, call `useStakesQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useStakesQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useStakesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useStakesQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useStakesQueryQuery({
+ * const { data, loading, error } = useStakesQuery({
+ *   variables: {
+ *      address: // value for 'address'
+ *   },
+ * });
+ */
+export function useStakesQuery(baseOptions: Apollo.QueryHookOptions<StakesQuery, StakesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<StakesQuery, StakesQueryVariables>(StakesDocument, options);
+      }
+export function useStakesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<StakesQuery, StakesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<StakesQuery, StakesQueryVariables>(StakesDocument, options);
+        }
+export type StakesQueryHookResult = ReturnType<typeof useStakesQuery>;
+export type StakesLazyQueryHookResult = ReturnType<typeof useStakesLazyQuery>;
+export type StakesQueryResult = Apollo.QueryResult<StakesQuery, StakesQueryVariables>;
+export const SnapshotsAndInterestDocument = gql`
+    query SnapshotsAndInterest {
+  cachedInterestPerShares(first: 1000, orderDirection: asc, orderBy: sealedDay) {
+    id
+    sealedDay
+    sealedCachedDay
+    cachedInterestPerShare
+  }
+  dailySnapshots(first: 1000, orderDirection: asc, orderBy: sealedDay) {
+    id
+    sealedDay
+    inflationAmount
+    totalShares
+    sharePrice
+    totalStaked
+    totalSupply
+  }
+}
+    `;
+
+/**
+ * __useSnapshotsAndInterestQuery__
+ *
+ * To run a query within a React component, call `useSnapshotsAndInterestQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSnapshotsAndInterestQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSnapshotsAndInterestQuery({
  *   variables: {
  *   },
  * });
  */
-export function useStakesQueryQuery(baseOptions?: Apollo.QueryHookOptions<StakesQueryQuery, StakesQueryQueryVariables>) {
+export function useSnapshotsAndInterestQuery(baseOptions?: Apollo.QueryHookOptions<SnapshotsAndInterestQuery, SnapshotsAndInterestQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<StakesQueryQuery, StakesQueryQueryVariables>(StakesQueryDocument, options);
+        return Apollo.useQuery<SnapshotsAndInterestQuery, SnapshotsAndInterestQueryVariables>(SnapshotsAndInterestDocument, options);
       }
-export function useStakesQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<StakesQueryQuery, StakesQueryQueryVariables>) {
+export function useSnapshotsAndInterestLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SnapshotsAndInterestQuery, SnapshotsAndInterestQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<StakesQueryQuery, StakesQueryQueryVariables>(StakesQueryDocument, options);
+          return Apollo.useLazyQuery<SnapshotsAndInterestQuery, SnapshotsAndInterestQueryVariables>(SnapshotsAndInterestDocument, options);
         }
-export type StakesQueryQueryHookResult = ReturnType<typeof useStakesQueryQuery>;
-export type StakesQueryLazyQueryHookResult = ReturnType<typeof useStakesQueryLazyQuery>;
-export type StakesQueryQueryResult = Apollo.QueryResult<StakesQueryQuery, StakesQueryQueryVariables>;
+export type SnapshotsAndInterestQueryHookResult = ReturnType<typeof useSnapshotsAndInterestQuery>;
+export type SnapshotsAndInterestLazyQueryHookResult = ReturnType<typeof useSnapshotsAndInterestLazyQuery>;
+export type SnapshotsAndInterestQueryResult = Apollo.QueryResult<SnapshotsAndInterestQuery, SnapshotsAndInterestQueryVariables>;
+export const StakeDocument = gql`
+    query Stake($id: ID!) {
+  stakes(where: {id: $id}) {
+    id
+  }
+}
+    `;
+
+/**
+ * __useStakeQuery__
+ *
+ * To run a query within a React component, call `useStakeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useStakeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useStakeQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useStakeQuery(baseOptions: Apollo.QueryHookOptions<StakeQuery, StakeQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<StakeQuery, StakeQueryVariables>(StakeDocument, options);
+      }
+export function useStakeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<StakeQuery, StakeQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<StakeQuery, StakeQueryVariables>(StakeDocument, options);
+        }
+export type StakeQueryHookResult = ReturnType<typeof useStakeQuery>;
+export type StakeLazyQueryHookResult = ReturnType<typeof useStakeLazyQuery>;
+export type StakeQueryResult = Apollo.QueryResult<StakeQuery, StakeQueryVariables>;

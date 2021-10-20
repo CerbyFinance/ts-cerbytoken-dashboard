@@ -1,6 +1,10 @@
 import { JsonRpcSigner, Web3Provider } from "@ethersproject/providers";
 import { useWeb3React } from "@web3-react/core";
-import { PresaleFactory__factory } from "../types/ethers-contracts";
+import {
+  MintableBurnableToken__factory,
+  PresaleFactory__factory,
+  Staking__factory,
+} from "../types/ethers-contracts";
 
 export function getSigner(
   library: Web3Provider,
@@ -23,6 +27,33 @@ export function usePresaleContract(contractAddress: string) {
 
   const res = PresaleFactory__factory.connect(
     contractAddress,
+    providerOrSigner,
+  );
+
+  return res;
+}
+
+const STAKING_CONTRACT = "0xDB4351C6411B437D7594Dd1060Cd265a2e1c71Db";
+
+export function useStakingContract() {
+  const { account, library, connector } = useWeb3React();
+
+  const providerOrSigner = getProviderOrSigner(library, account);
+
+  const res = Staking__factory.connect(STAKING_CONTRACT, providerOrSigner);
+
+  return res;
+}
+
+const TOKEN_CONTRACT = "0x7A7492a8e888Ca3fe8e31cB2E34872FE0CE5309f";
+
+export function useTokenContract() {
+  const { account, library, connector } = useWeb3React();
+
+  const providerOrSigner = getProviderOrSigner(library, account);
+
+  const res = MintableBurnableToken__factory.connect(
+    TOKEN_CONTRACT,
     providerOrSigner,
   );
 

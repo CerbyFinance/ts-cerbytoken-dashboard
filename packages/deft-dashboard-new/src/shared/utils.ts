@@ -15,3 +15,7 @@ Number.prototype.asCurrency = function (this: number, fractionDigits?: number) {
     fractionDigits ? this.toFixed(fractionDigits) : this.toString()
   ).replace(/\d(?=(\d{3})+\.)/g, "$&,");
 };
+
+export function _isFinite(value: any): boolean {
+  return typeof value == "number" && isFinite(value);
+}

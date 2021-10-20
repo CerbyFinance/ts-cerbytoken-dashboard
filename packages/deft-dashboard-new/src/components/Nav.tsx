@@ -58,6 +58,11 @@ function Nav() {
       path: "/vesting",
     },
     {
+      icon: <VestingIcon className="" />,
+      name: "Staking",
+      path: "/staking",
+    },
+    {
       icon: <CrossChainBridgeIcon className="" />,
       name: "Cross-Chain Bridge",
       path: "https://bridge.defifactory.fi/",

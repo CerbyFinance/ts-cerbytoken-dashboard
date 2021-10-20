@@ -15,16 +15,40 @@ export type Modals =
   | "scrape-or-end-stakes-modal"
   | "create-stake-modal"
   | "transfer-stakes-modal";
-export type ModalPayloads = TransferStakesModalPayload | null;
+export type ModalPayloads = TransferStakesModalPayload | null | {};
 
-export type TransferStakesModalPayload = {};
+export type ActiveTemplate = {
+  count: number;
+  staked: number;
+  interest: number;
+  apy: number;
+  apy2: number;
+  tShares: number;
+  payout: number;
+  penalty: number;
+  ids: number[];
+};
+
+export type ScrapeOrEndStakesModalPayload = {
+  completed: ActiveTemplate;
+  inProgress: ActiveTemplate;
+  successCb: () => void;
+};
+
+export type TransferStakesModalPayload = {
+  totalStaked: number;
+  completedCount: number;
+  inProgressCount: number;
+  stakeIds: number[];
+  successCb: () => void;
+};
 
 const ModalsContext = createContext({
   activeModal: null as null | Modals,
   activeModalPayload: null as ModalPayloads,
   showTransferStakesModal: (payload: TransferStakesModalPayload) => {},
   createStakeModal: () => {},
-  showScrapeOrEndStakesModal: () => {},
+  showScrapeOrEndStakesModal: (payload: ScrapeOrEndStakesModalPayload) => {},
   closeModal: () => {},
 });
 
@@ -53,8 +77,8 @@ class ModalsState extends React.Component<
     this.showModal("create-stake-modal", {});
   };
 
-  showScrapeOrEndStakesModal = () => {
-    this.showModal("scrape-or-end-stakes-modal", {});
+  showScrapeOrEndStakesModal = (payload: any) => {
+    this.showModal("scrape-or-end-stakes-modal", payload);
   };
 
   closeModal = () => {

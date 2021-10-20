@@ -1,11 +1,36 @@
+import { useWeb3React } from "@web3-react/core";
+import dayjs from "dayjs";
 import { Box, Text } from "grommet";
-import React, { useContext, useState } from "react";
+import mergeWith from "lodash.mergewith";
+import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import useMedia from "use-media";
+import {
+  StakesDocument,
+  StakesQuery,
+  StakesQueryVariables,
+  useStakesQuery,
+} from "./graphql/types";
+import {
+  SelectedStakesDesktop,
+  SelectedStakesMobile,
+  SelectedStakesTablet,
+} from "./SelectedStakes";
+import { stakingClient } from "./shared/client";
 import { HoveredElement } from "./shared/hooks";
 import { ModalsContext } from "./shared/modals";
+import { makePages } from "./shared/shared";
+import { SnapshotsInterest } from "./shared/snaphots-interest";
 import { ThemeContext } from "./shared/theme";
-import stakes from "./stakes.json";
+import {
+  DAYS_IN_ONE_YEAR,
+  deftShortCurrency,
+  getCurrentDay,
+  getInterestByStake,
+  getPenaltyByStake,
+  getSharesCountByStake,
+  START_DATE,
+} from "./staking-system";
 
 const Check = () => (
   <svg
@@ -110,408 +135,98 @@ const BoxBorderBottom = styled(Box)`
   }
 `;
 
-const SelectedStakesMobile = ({
-  transferSelected,
-  scrapeOrEnd,
-  removeSelected,
+// -----------
+
+type OrderBy =
+  | "stakedId"
+  | "stakedAt"
+  | "stakeEnd"
+  // | "lockUp"
+  | "progress"
+  | "reward"
+  | "staked";
+
+type StakeOfList = StakesQuery["stakes"][number];
+
+// const currentBlock = 27601054
+// const launchBlock = 27272211
+
+function _daysDiff(_startDate: number, _endDate: number) {
+  return _startDate > _endDate ? 0 : _endDate - _startDate;
+}
+
+export function _daysLeft(finalDay: number) {
+  return _daysDiff(getCurrentDay(), finalDay);
+}
+
+function getRelativeDate(e: number, a: number) {
+  return dayjs(new Date(new Date(a).setDate(new Date(a).getDate() + e))).format(
+    "MMM D, YYYY",
+  );
+}
+
+const WithOrder = ({
+  title,
+  active,
+  direction,
+  onClick,
 }: {
-  transferSelected: () => void;
-  scrapeOrEnd: () => void;
-  removeSelected: () => void;
+  title: string;
+  active: boolean;
+  direction: "asc" | "desc";
+  onClick: () => void;
 }) => {
   return (
-    <Box
-      direction="row"
-      height="133px"
-      background="#101E33"
-      style={{
-        position: "fixed",
-        bottom: 0,
-        left: 0,
-        right: 0,
-        zIndex: 22,
-        boxShadow: "0px -4px 4px rgba(0, 0, 0, 0.15)",
-      }}
-    >
-      <Box
-        // align="center"
-        pad={"16px 16px 19px"}
-        width="100%"
-        // justify="between"
+    <Box direction="row" onClick={onClick}>
+      <Text
+        color={active ? "#5294FF" : undefined}
+        size="16px"
+        weight={500}
+        style={{
+          cursor: "pointer",
+          userSelect: "none",
+        }}
+        alignSelf="start"
       >
-        <Box direction="row" align="center">
-          <Text color="white" weight={500} size="16px">
-            Selected 2 Stakes
-          </Text>
-          <Box
-            margin={{
-              left: "auto",
-            }}
-          ></Box>
-          <Text
-            color="#EB5757"
-            size="14px"
-            style={{
-              cursor: "pointer",
-            }}
-            weight={500}
-            onClick={removeSelected}
-          >
-            Remove selection
-          </Text>
-        </Box>
-        <Box height="11px"></Box>
+        {title}
+      </Text>
+      <Box width="5px"></Box>
+      {active && (
         <Box
-          direction="row"
-          round="5px"
-          background="rgba(255, 255, 255, 0.1)"
-          align="center"
-          justify="center"
-          pad="0px 20px"
-          height="22px"
+          style={
+            direction === "asc"
+              ? {
+                  transform: "rotate(180deg)",
+                }
+              : {}
+          }
         >
-          <Box round="50%" height="6px" width="6px" background="#219653"></Box>
-          <Box width="5px"></Box>
-          <Text size="12px" color="white">
-            Completed: 1 Stake
-          </Text>
-          <Box width="40px"></Box>
-          <Box round="50%" height="6px" width="6px" background="#F2994A"></Box>
-          <Box width="5px"></Box>
-          <Text size="12px" color="white">
-            In Progress: 1 Stake
-          </Text>
+          <Order />
         </Box>
-        <Box height="16px"></Box>
-        <Box direction="row" justify="between">
-          <HoveredElement
-            render={binder => (
-              <Box
-                pad="9px 14px 8px"
-                background={
-                  binder.hovered
-                    ? "linear-gradient(133.2deg, #BD29E9 0%, #782AFF 97.05%)"
-                    : "linear-gradient(133.2deg, #782AFF 0%, #BD29E9 97.05%)"
-                }
-                round="5px"
-                style={{
-                  cursor: "pointer",
-                }}
-                align="center"
-                onClick={transferSelected}
-                {...binder.bind}
-              >
-                <Text size="14px" weight={500}>
-                  Transfer Selected
-                </Text>
-              </Box>
-            )}
-          ></HoveredElement>
-          <Box height="13px"></Box>
-          <HoveredElement
-            render={binder => (
-              <Box
-                pad="9px 14px 8px"
-                background={
-                  binder.hovered
-                    ? "linear-gradient(133.2deg, #29E994 0%, #5294FF 97.05%)"
-                    : "linear-gradient(133.2deg, #5294FF 0%, #29E994 97.05%)"
-                }
-                round="5px"
-                style={{
-                  cursor: "pointer",
-                }}
-                align="center"
-                onClick={scrapeOrEnd}
-                {...binder.bind}
-              >
-                <Text size="14px" weight={500}>
-                  Scrape Or End Selected
-                </Text>
-              </Box>
-            )}
-          ></HoveredElement>
-        </Box>
-      </Box>
+      )}
     </Box>
   );
 };
 
-const SelectedStakesTablet = ({
-  transferSelected,
-  scrapeOrEnd,
-  removeSelected,
-}: {
-  transferSelected: () => void;
-  scrapeOrEnd: () => void;
-  removeSelected: () => void;
+const activeTemplate = {
+  count: 0,
+  staked: 0,
+  interest: 0,
+  apy: 0,
+  apy2: 0,
+  tShares: 0,
+  payout: 0,
+  penalty: 0,
+  ids: [],
+};
+
+export const StakeList = ({
+  items,
+}: // inflations,
+{
+  items: StakesQuery["stakes"];
+  // inflations: number[];
 }) => {
-  return (
-    <Box
-      direction="row"
-      height="113px"
-      background="#101E33"
-      style={{
-        position: "fixed",
-        bottom: 0,
-        left: 0,
-        right: 0,
-        zIndex: 22,
-        boxShadow: "0px -4px 4px rgba(0, 0, 0, 0.15)",
-      }}
-    >
-      <Box
-        direction="row"
-        align="center"
-        pad={"0px 11px 0px 21px"}
-        width="100%"
-        justify="between"
-      >
-        <Box>
-          <Box direction="row">
-            <Text color="white" weight={500} size="16px">
-              Selected 2 Stakes
-            </Text>
-            <Box width="20px"></Box>
-            <Text
-              color="#EB5757"
-              size="14px"
-              style={{
-                cursor: "pointer",
-              }}
-              weight={500}
-              onClick={removeSelected}
-            >
-              Remove selection
-            </Text>
-          </Box>
-          <Box height="18px"></Box>
-          <Box
-            direction="row"
-            round="5px"
-            background="rgba(255, 255, 255, 0.1)"
-            align="center"
-            pad="0px 20px"
-            height="36px"
-          >
-            <Box
-              round="50%"
-              height="12px"
-              width="12px"
-              background="#219653"
-            ></Box>
-            <Box width="5px"></Box>
-            <Text size="12px" color="white">
-              Completed: 1 Stake
-            </Text>
-            <Box width="50px"></Box>
-            <Box
-              round="50%"
-              height="12px"
-              width="12px"
-              background="#F2994A"
-            ></Box>
-            <Box width="5px"></Box>
-            <Text size="12px" color="white">
-              In Progress: 1 Stake
-            </Text>
-          </Box>
-        </Box>
-        <Box>
-          <HoveredElement
-            render={binder => (
-              <Box
-                pad="9px 18px 8px"
-                background={
-                  binder.hovered
-                    ? "linear-gradient(133.2deg, #BD29E9 0%, #782AFF 97.05%)"
-                    : "linear-gradient(133.2deg, #782AFF 0%, #BD29E9 97.05%)"
-                }
-                round="5px"
-                style={{
-                  cursor: "pointer",
-                }}
-                align="center"
-                onClick={transferSelected}
-                {...binder.bind}
-              >
-                <Text size="14px" weight={500}>
-                  Transfer Selected
-                </Text>
-              </Box>
-            )}
-          ></HoveredElement>
-          <Box height="13px"></Box>
-          <HoveredElement
-            render={binder => (
-              <Box
-                pad="9px 18px 8px"
-                background={
-                  binder.hovered
-                    ? "linear-gradient(133.2deg, #29E994 0%, #5294FF 97.05%)"
-                    : "linear-gradient(133.2deg, #5294FF 0%, #29E994 97.05%)"
-                }
-                round="5px"
-                style={{
-                  cursor: "pointer",
-                }}
-                onClick={scrapeOrEnd}
-                align="center"
-                {...binder.bind}
-              >
-                <Text size="14px" weight={500}>
-                  Scrape Or End Selected
-                </Text>
-              </Box>
-            )}
-          ></HoveredElement>
-        </Box>
-      </Box>
-    </Box>
-  );
-};
-
-const SelectedStakesDesktop = ({
-  transferSelected,
-  scrapeOrEnd,
-  removeSelected,
-}: {
-  transferSelected: () => void;
-  scrapeOrEnd: () => void;
-  removeSelected: () => void;
-}) => {
-  return (
-    <Box
-      direction="row"
-      height="80px"
-      background="#101E33"
-      style={{
-        position: "fixed",
-        bottom: 0,
-        left: 0,
-        right: 0,
-        zIndex: 22,
-        boxShadow: "0px -4px 4px rgba(0, 0, 0, 0.15)",
-      }}
-      justify="center"
-    >
-      <Box
-        width={"1065px"}
-        direction="row"
-        align="center"
-        pad={"0px 11px 0px 21px"}
-      >
-        <Box>
-          <Text color="white" weight={500} size="16px">
-            Selected 2 Stakes
-          </Text>
-          <Box height="6px"></Box>
-          <Text
-            color="#EB5757"
-            size="14px"
-            style={{
-              cursor: "pointer",
-            }}
-            weight={500}
-            onClick={removeSelected}
-          >
-            Remove selection
-          </Text>
-        </Box>
-        <Box width="104px"></Box>
-        <Box
-          direction="row"
-          round="5px"
-          background="rgba(255, 255, 255, 0.1)"
-          align="center"
-          pad="0px 20px"
-          height="36px"
-        >
-          <Box
-            round="50%"
-            height="12px"
-            width="12px"
-            background="#219653"
-          ></Box>
-          <Box width="5px"></Box>
-          <Text size="12px" color="white">
-            Completed: 1 Stake
-          </Text>
-          <Box width="50px"></Box>
-          <Box
-            round="50%"
-            height="12px"
-            width="12px"
-            background="#F2994A"
-          ></Box>
-          <Box width="5px"></Box>
-          <Text size="12px" color="white">
-            In Progress: 1 Stake
-          </Text>
-        </Box>
-        <Box
-          margin={{
-            left: "auto",
-          }}
-        ></Box>
-        <HoveredElement
-          render={binder => (
-            <Box
-              pad="9px 18px 8px"
-              background={
-                binder.hovered
-                  ? "linear-gradient(133.2deg, #BD29E9 0%, #782AFF 97.05%)"
-                  : "linear-gradient(133.2deg, #782AFF 0%, #BD29E9 97.05%)"
-              }
-              round="5px"
-              style={{
-                cursor: "pointer",
-              }}
-              onClick={transferSelected}
-              {...binder.bind}
-            >
-              <Text size="14px" weight={500}>
-                Transfer Selected
-              </Text>
-            </Box>
-          )}
-        ></HoveredElement>
-        <Box width="12px"></Box>
-        <HoveredElement
-          render={binder => (
-            <Box
-              pad="9px 18px 8px"
-              background={
-                binder.hovered
-                  ? "linear-gradient(133.2deg, #29E994 0%, #5294FF 97.05%)"
-                  : "linear-gradient(133.2deg, #5294FF 0%, #29E994 97.05%)"
-              }
-              round="5px"
-              style={{
-                cursor: "pointer",
-              }}
-              onClick={scrapeOrEnd}
-              {...binder.bind}
-            >
-              <Text size="14px" weight={500}>
-                Scrape Or End Selected
-              </Text>
-            </Box>
-          )}
-        ></HoveredElement>
-      </Box>
-    </Box>
-  );
-};
-
-export const RootStaking = () => {
-  // const {
-  //   data: data1,
-  //   loading: loading1,
-  //   error: error1,
-  // } = useStakesQueryQuery();
-  // const stakes = data1?.stakes || [];
-
   const { theme, setTheme } = useContext(ThemeContext);
   const isDark = theme === "dark";
 
@@ -523,18 +238,233 @@ export const RootStaking = () => {
     maxWidth: "600px",
   });
 
+  const { cachedInterestPerShare, dailySnapshots } =
+    useContext(SnapshotsInterest);
+
+  const [maxRows, setMaxRows] = useState(10);
+  const [page, setPage] = useState(1);
+  const handleSetNextPage = () => {
+    const nextPage = page + 1;
+    if (nextPage <= pagesCount) {
+      setPage(nextPage);
+    }
+  };
+
+  const handleSetPrevPage = () => {
+    const prevPage = page - 1;
+    if (prevPage >= 1) {
+      setPage(prevPage);
+    }
+  };
+
   const {
     showTransferStakesModal,
     createStakeModal,
     showScrapeOrEndStakesModal,
   } = useContext(ModalsContext);
 
-  const transferSelected = () => showTransferStakesModal({});
-  const scrapeOrEnd = () => showScrapeOrEndStakesModal();
+  const allAllowedIds = items
+    .filter(item => item.endDay === 0)
+    .map(item => item.id);
 
-  const [active, setActive] = useState([] as number[]);
+  const [active, setActive] = useState([] as string[]);
+
+  const setActiveAll = () => {
+    if (active.length === allAllowedIds.length) {
+      setActive([]);
+    } else {
+      setActive(allAllowedIds);
+    }
+  };
 
   const removeSelected = () => setActive([]);
+
+  const { closeModal } = useContext(ModalsContext);
+
+  const scrapeOrEnd = () =>
+    showScrapeOrEndStakesModal({
+      completed,
+      inProgress,
+      successCb: () => {
+        removeSelected();
+        closeModal();
+      },
+    });
+
+  const activeItems = items.filter(item => active.includes(item.id));
+  const totalStaked = activeItems.reduce(
+    (acc, item) => acc + item.stakedAmount,
+    0,
+  );
+
+  const [completed, inProgress] = activeItems.reduce(
+    ([completed, inProgress], item) => {
+      const isCompleted = getCurrentDay() >= item.startDay + item.lockDays;
+
+      console.log({
+        startDay: item.startDay,
+        snaps: dailySnapshots.length - 1,
+      });
+
+      const startDay = item.startDay;
+
+      const stake = {
+        lockedForXDays: item.lockDays,
+        stakedAmount: Number(item.stakedAmount),
+        startDay,
+      };
+
+      // TODO: lift
+      const interest = getInterestByStake(
+        dailySnapshots,
+        cachedInterestPerShare,
+        stake,
+        getCurrentDay(),
+      );
+
+      const penalty = getPenaltyByStake(stake, getCurrentDay(), item.interest);
+
+      const tSharesA = getSharesCountByStake(
+        dailySnapshots,
+        stake,
+        getCurrentDay(),
+      );
+
+      const tSharesB = getSharesCountByStake(dailySnapshots, stake, 0);
+
+      const apy =
+        getCurrentDay() > item.startDay
+          ? (((interest - penalty) * DAYS_IN_ONE_YEAR) /
+              (item.stakedAmount * (getCurrentDay() - item.startDay))) *
+            100
+          : 0;
+
+      const apy2 =
+        getCurrentDay() > startDay
+          ? ((interest * DAYS_IN_ONE_YEAR) /
+              (item.stakedAmount * (getCurrentDay() - startDay))) *
+            100
+          : 0;
+
+      const addWith = {
+        count: 1,
+        staked: item.stakedAmount,
+        interest: interest,
+        apy,
+        apy2,
+        tShares: tSharesA - tSharesB,
+        payout: item.stakedAmount + interest - penalty,
+        penalty,
+        ids: [Number(item.id)],
+      };
+
+      const merged = mergeWith(
+        isCompleted ? completed : inProgress,
+        addWith,
+        (a, b) => (Array.isArray(a) ? [...a, ...b] : a + b),
+      );
+
+      if (isCompleted) {
+        return [merged, inProgress];
+      }
+
+      return [completed, merged];
+    },
+
+    [{ ...activeTemplate }, { ...activeTemplate }],
+  );
+
+  const transferSelected = () =>
+    showTransferStakesModal({
+      completedCount: completed.count,
+      inProgressCount: inProgress.count,
+      stakeIds: active.map(item => Number(item)),
+      totalStaked,
+      successCb: () => {
+        removeSelected();
+        closeModal();
+      },
+    });
+
+  const [order, setOrder] = useState({
+    orderBy: "stakedAt" as OrderBy,
+    direction: "desc" as "desc" | "asc",
+  });
+
+  const handleSetOrder = (newOrderBy: OrderBy) => {
+    if (newOrderBy !== order.orderBy) {
+      setOrder({
+        orderBy: newOrderBy,
+        direction: "desc",
+      });
+    } else {
+      setOrder({
+        orderBy: order.orderBy,
+        direction: order.direction === "asc" ? "desc" : "asc",
+      });
+    }
+  };
+
+  const sorts = {
+    stakedId: (a, b) => {
+      [a, b] = order.direction === "desc" ? [b, a] : [a, b];
+      return Number(a.id) - Number(b.id);
+    },
+    stakedAt: (a, b) => {
+      [a, b] = order.direction === "desc" ? [b, a] : [a, b];
+
+      return a.startedAt! - b.startedAt!;
+    },
+    stakeEnd: (a, b) => {
+      [a, b] = order.direction === "desc" ? [b, a] : [a, b];
+
+      return a.endDay - b.endDay;
+      // const endDayLeft = a.endDay > 0 ? a.endDay : a.startDay + a.lockDays;
+      // const endDayRight = b.endDay > 0 ? b.endDay : b.startDay + b.lockDays;
+
+      // return endDayLeft - endDayRight;
+    },
+
+    progress: (a, b) => {
+      [a, b] = order.direction === "desc" ? [b, a] : [a, b];
+
+      // TODO: handle if ended earlier
+      const daysLeftLeft = _daysLeft(a.startDay + a.lockDays);
+      const daysLeftRight = _daysLeft(b.startDay + b.lockDays);
+
+      const progressRateLeft = Math.max(
+        0,
+        100 - (daysLeftLeft * 100) / a.lockDays,
+      );
+
+      const progressRateRight = Math.max(
+        0,
+        100 - (daysLeftRight * 100) / b.lockDays,
+      );
+
+      return progressRateLeft - progressRateRight;
+    },
+    reward: (a, b) => {
+      [a, b] = order.direction === "desc" ? [b, a] : [a, b];
+
+      return a.interest - b.interest;
+    },
+    staked: (a, b) => {
+      [a, b] = order.direction === "desc" ? [b, a] : [a, b];
+
+      return a.stakedAmount - b.stakedAmount;
+    },
+  } as {
+    [key in OrderBy]: (a: StakeOfList, b: StakeOfList) => number;
+  };
+
+  const sort = sorts[order.orderBy];
+  const itemsCount = items.length;
+
+  const [sliceFrom, sliceTo] = [maxRows * (page - 1), maxRows * page];
+
+  const itemsSorted = items.slice().sort(sort).slice(sliceFrom, sliceTo);
+  const pagesCount = Math.ceil(itemsCount / maxRows);
 
   return (
     <Box
@@ -543,7 +473,8 @@ export const RootStaking = () => {
         minWidth: "1065px",
         width: "1065px",
       }}
-      pad="65px 0px"
+      pad="20px 0px"
+      // pad="65px 0px"
     >
       <Box direction="row">
         <Text size="30px">Staking</Text>
@@ -573,8 +504,8 @@ export const RootStaking = () => {
             </Box>
           )}
         ></HoveredElement>
-        <Box width="10px"></Box>
-        <Box
+        {/* <Box width="10px"></Box> */}
+        {/* <Box
           height="36px"
           align="center"
           justify="center"
@@ -589,23 +520,29 @@ export const RootStaking = () => {
           <Text size="14px" weight={500} color="white">
             Change theme
           </Text>
-        </Box>
+        </Box> */}
       </Box>
       {active.length > 0 ? (
         isMobile ? (
           <SelectedStakesMobile
+            completedCount={completed.count}
+            inProgressCount={inProgress.count}
             transferSelected={transferSelected}
             scrapeOrEnd={scrapeOrEnd}
             removeSelected={removeSelected}
           ></SelectedStakesMobile>
         ) : isTablet ? (
           <SelectedStakesTablet
+            completedCount={completed.count}
+            inProgressCount={inProgress.count}
             transferSelected={transferSelected}
             scrapeOrEnd={scrapeOrEnd}
             removeSelected={removeSelected}
           />
         ) : (
           <SelectedStakesDesktop
+            completedCount={completed.count}
+            inProgressCount={inProgress.count}
             transferSelected={transferSelected}
             scrapeOrEnd={scrapeOrEnd}
             removeSelected={removeSelected}
@@ -629,85 +566,119 @@ export const RootStaking = () => {
           isDark={isDark}
         >
           <Box width="10px"></Box>
-          <CheckBox onClick={() => {}} />
+          <CheckBox
+            checked={active.length === allAllowedIds.length}
+            onClick={() => setActiveAll()}
+          />
           <Box width="27px"></Box>
-          <Box width="146px" direction="row">
-            <Text
-              color="#5294FF"
-              size="16px"
-              weight={500}
-              style={{
-                cursor: "pointer",
+          <Box width="146px">
+            <WithOrder
+              active={order.orderBy === "stakedId"}
+              direction={order.direction}
+              title="Stake ID"
+              onClick={() => {
+                handleSetOrder("stakedId");
               }}
-              alignSelf="start"
-            >
-              Stake ID
-            </Text>
-            <Box width="5px"></Box>
-            <Order />
+            />
           </Box>
           <Box width="181px">
-            <Text
-              size="16px"
-              weight={500}
-              style={{
-                cursor: "pointer",
+            <WithOrder
+              active={order.orderBy === "stakedAt"}
+              direction={order.direction}
+              title="Start Date"
+              onClick={() => {
+                handleSetOrder("stakedAt");
               }}
-              alignSelf="start"
-            >
-              Start Date
-            </Text>
+            />
           </Box>
           <Box width="168px">
-            <Text
-              size="16px"
-              weight={500}
-              style={{
-                cursor: "pointer",
+            <WithOrder
+              active={order.orderBy === "stakeEnd"}
+              direction={order.direction}
+              title="Stake Ends"
+              onClick={() => {
+                handleSetOrder("stakeEnd");
               }}
-              alignSelf="start"
-            >
-              Stake End
-            </Text>
+            />
           </Box>
           <Box width="190px">
-            <Text
-              size="16px"
-              weight={500}
-              style={{
-                cursor: "pointer",
+            <WithOrder
+              active={order.orderBy === "progress"}
+              direction={order.direction}
+              title="Progress"
+              onClick={() => {
+                handleSetOrder("progress");
               }}
-              alignSelf="start"
-            >
-              Progress
-            </Text>
+            />
           </Box>
           <Box width="154px">
-            <Text
-              size="16px"
-              weight={500}
-              style={{
-                cursor: "pointer",
+            <WithOrder
+              active={order.orderBy === "reward"}
+              direction={order.direction}
+              title="Reward / APY"
+              onClick={() => {
+                handleSetOrder("reward");
               }}
-              alignSelf="start"
-            >
-              Reward / APY
-            </Text>
+            />
           </Box>
           <Box width="144px">
-            <Text
-              size="16px"
-              weight={500}
-              style={{
-                cursor: "pointer",
+            <WithOrder
+              active={order.orderBy === "staked"}
+              direction={order.direction}
+              title="Staked amount"
+              onClick={() => {
+                handleSetOrder("staked");
               }}
-              alignSelf="start"
-            >
-              Staked amount
-            </Text>
+            />
           </Box>
         </BoxBorderBottom>
-        {stakes.slice(0, 10).map(item => {
+        {itemsSorted.map(item => {
+          const startDay = item.startDay;
+          const finalDay = item.startDay + item.lockDays;
+          const lockDays = item.lockDays;
+          const endDay = item.endDay;
+
+          const daysLeft = _daysLeft(finalDay);
+          const progress = Math.max(0, 100 - (daysLeft * 100) / lockDays);
+
+          const startDayDate = getRelativeDate(startDay, START_DATE * 1000);
+          const stakeCreatedAgo = getCurrentDay() - startDay;
+
+          // const endDayDate = getRelativeDate(endDay, START_DATE * 1000)
+          // const endDayAgo = startDay - endDay
+
+          const endsDayDate =
+            endDay > 0
+              ? getRelativeDate(endDay, START_DATE * 1000)
+              : getRelativeDate(finalDay, START_DATE * 1000);
+
+          const endsDayAgo = daysLeft === 0 ? getCurrentDay() - finalDay : 0;
+          const endDayAgo = endDay > 0 ? getCurrentDay() - endDay : endsDayAgo;
+
+          // const endsIn = "";
+
+          const interestComputed = getInterestByStake(
+            dailySnapshots,
+            cachedInterestPerShare,
+            {
+              lockedForXDays: lockDays,
+              stakedAmount: Number(item.stakedAmount),
+              startDay: startDay,
+            },
+            getCurrentDay(),
+          );
+
+          const interest = deftShortCurrency(interestComputed);
+          const stakedAmount = deftShortCurrency(item.stakedAmount);
+          const sharesCount = deftShortCurrency(item.sharesCount, "Shares");
+
+          const apy =
+            getCurrentDay() > startDay
+              ? ((item.interest * DAYS_IN_ONE_YEAR) /
+                  (item.stakedAmount * (getCurrentDay() - startDay))) *
+                100
+              : 0;
+
           return (
             <BoxBorderBottom
               height="83px"
@@ -717,18 +688,8 @@ export const RootStaking = () => {
               className="hover:bg-staking-item dark:hover:bg-staking-item"
               isDark={isDark}
             >
-              {/* <Box
-                style={{
-                  position: "absolute",
-                  bottom: "0px",
-                  left: "11px",
-                  right: "10px",
-                  height: "1px",
-                }}
-                className="bg-staking-divider"
-              ></Box> */}
               <Box width="10px"></Box>
-              {[36, 37].includes(item.id) ? (
+              {endDay === 0 ? (
                 <CheckBox
                   checked={active.includes(item.id)}
                   onClick={() => {
@@ -744,67 +705,66 @@ export const RootStaking = () => {
               ) : (
                 <Box height="24px" width="24px"></Box>
               )}
+
               <Box width="27px"></Box>
               <Box width="146px">
-                <Text size="16px">12312451</Text>
+                <Text size="16px">{item.id}</Text>
               </Box>
               <Box width="181px">
-                <Text size="16px">March 18, 2021</Text>
+                <Text size="16px">{startDayDate}</Text>
                 <Box height="6px"></Box>
                 <Text color="#A9A9A9" size="14px">
-                  333 days ago
+                  {stakeCreatedAgo} days ago
                 </Text>
               </Box>
               <Box width="168px">
-                <Text size="16px">April 20, 2021</Text>
+                <Text size="16px">{endsDayDate}</Text>
                 <Box height="6px"></Box>
                 <Text color="#A9A9A9" size="14px">
-                  2 days ago
+                  {endDayAgo > 0
+                    ? `${endDayAgo} days ago`
+                    : `in ${daysLeft} days`}
                 </Text>
               </Box>
               <Box width="190px">
-                {item.id === 37 && (
+                {endDay === 0 && (
                   <>
-                    <Text color="#219653" size="16px">
-                      100%
-                    </Text>
-                    <Box height="7px"></Box>
-                    <Box
-                      width="150px"
-                      round="4px"
-                      background="#219653"
-                      height="15px"
-                    ></Box>
-                  </>
-                )}
-                {item.id === 36 && (
-                  <>
-                    <Text color="#F2994A" size="16px">
-                      80%
+                    <Text
+                      color={progress === 100 ? "#219653" : "#F2994A"}
+                      size="16px"
+                    >
+                      {Math.floor(progress)}%
                     </Text>
                     <Box height="7px"></Box>
                     <Box round="4px" background="#A9A9A9" width="150px">
                       <Box
-                        width="80%"
+                        width={progress + "%"}
                         round="4px"
-                        background="#F2994A"
+                        background={progress === 100 ? "#219653" : "#F2994A"}
                         height="15px"
                       ></Box>
                     </Box>
                   </>
                 )}
-
-                {item.id < 36 && <Text size="16px">Closed</Text>}
+                {endDay > 0 && (
+                  <>
+                    <Text size="16px">Closed</Text>
+                  </>
+                )}
               </Box>
               <Box width="154px">
-                <Text size="16px">+ 0.05 DEFT</Text>
+                <Text size="16px">+ {interest}</Text>
                 <Box height="6px"></Box>
                 <Text color="#A9A9A9" size="14px">
-                  3.44% APY
+                  {apy.asCurrency(2)}% APY
                 </Text>
               </Box>
               <Box width="144px">
-                <Text size="16px">12,350.00 DEFT</Text>
+                <Text size="16px">{stakedAmount}</Text>
+                <Box height="6px"></Box>
+                <Text color="#A9A9A9" size="14px">
+                  {sharesCount}
+                </Text>
               </Box>
             </BoxBorderBottom>
           );
@@ -828,8 +788,9 @@ export const RootStaking = () => {
                 <Box>
                   <Text
                     size="16px"
+                    onClick={() => setMaxRows(item)}
                     style={
-                      item === 10
+                      item === maxRows
                         ? {
                             // color: "#4F4F4F",
                             fontWeight: 500,
@@ -847,214 +808,157 @@ export const RootStaking = () => {
               ))}
             </Box>
           </Box>
-          <Box
-            width="200px"
-            height="36px"
-            round="5px"
-            align="center"
-            justify="center"
-            background="#E5E7EB"
-            style={
-              isDark
-                ? {
-                    background: "#101E33",
-                    color: "#5294FF",
-                    fontWeight: 500,
-                    cursor: "pointer",
-                  }
-                : {
-                    border: "2px solid #9CA3AF",
-                    cursor: "pointer",
-                  }
-            }
-          >
-            <Text color="29343E" size="14px" weight={500}>
-              Show more
-            </Text>
+          <Box width="100%" align="center">
+            <Box direction="row" align="center">
+              <Box
+                margin={{ right: "5px" }}
+                style={{
+                  cursor: "pointer",
+                }}
+                onClick={handleSetPrevPage}
+              >
+                <ArrowLeft />
+              </Box>
+              {makePages(pagesCount, page).map((item, i, __items) => {
+                const isEllips =
+                  item === "end-ellipsis" || item === "start-ellipsis";
+
+                const isActive = item === page;
+
+                if (isEllips) {
+                  return (
+                    <Box
+                      margin={{ right: "10px" }}
+                      width="24px"
+                      height="1px"
+                      background="#9CA3AF"
+                    ></Box>
+                  );
+                }
+
+                return (
+                  <Box
+                    height="50px"
+                    width="50px"
+                    align="center"
+                    justify="center"
+                    round="5px"
+                    margin={
+                      i === __items.length - 1
+                        ? {}
+                        : {
+                            right: "10px",
+                          }
+                    }
+                    style={{
+                      cursor: "pointer",
+                      ...(isActive
+                        ? {
+                            ...(isDark
+                              ? {
+                                  background: "#101E33",
+                                  color: "#5294FF",
+                                  fontWeight: 500,
+                                }
+                              : {
+                                  border: "2px solid #9CA3AF",
+                                }),
+                          }
+                        : {
+                            background: isDark ? "transparent" : "#F2F2F2",
+                            border: isDark ? "2px solid #707070" : "",
+                          }),
+                    }}
+                    onClick={() => setPage(item as number)}
+                  >
+                    <Text size="14px" color="#9CA3AF">
+                      {item}
+                    </Text>
+                  </Box>
+                );
+              })}
+
+              <Box
+                margin={{ left: "5px" }}
+                style={{
+                  transform: "rotate(180deg)",
+                  cursor: "pointer",
+                }}
+                onClick={handleSetNextPage}
+              >
+                <ArrowLeft />
+              </Box>
+            </Box>
+            <Box height="50px"></Box>
           </Box>
           <Box width="145px"></Box>
         </Box>
         <Box height="2px"></Box>
-        <Box width="100%" align="center">
-          <Box direction="row" align="center">
-            <Box
-              margin={{ right: "5px" }}
-              style={{
-                cursor: "pointer",
-              }}
-            >
-              <ArrowLeft />
-            </Box>
-            <Box
-              height="50px"
-              width="50px"
-              align="center"
-              justify="center"
-              round="5px"
-              margin={{
-                right: "10px",
-              }}
-              style={{
-                cursor: "pointer",
-                background: isDark ? "transparent" : "#F2F2F2",
-                border: isDark ? "2px solid #707070" : "",
-              }}
-            >
-              <Text size="14px" color="#9CA3AF">
-                1
-              </Text>
-            </Box>
-            <Box
-              margin={{ right: "10px" }}
-              width="24px"
-              height="1px"
-              background="#9CA3AF"
-            ></Box>
-            <Box
-              height="50px"
-              width="50px"
-              align="center"
-              justify="center"
-              round="5px"
-              background="#F2F2F2"
-              margin={{
-                right: "10px",
-              }}
-              style={{
-                cursor: "pointer",
-                background: isDark ? "transparent" : "#F2F2F2",
-                border: isDark ? "2px solid #707070" : "",
-              }}
-            >
-              <Text size="14px" color="#9CA3AF">
-                55
-              </Text>
-            </Box>
-            <Box
-              height="50px"
-              width="50px"
-              align="center"
-              justify="center"
-              round="5px"
-              background="#F2F2F2"
-              margin={{
-                right: "10px",
-              }}
-              style={{
-                cursor: "pointer",
-                background: isDark ? "transparent" : "#F2F2F2",
-                border: isDark ? "2px solid #707070" : "",
-              }}
-            >
-              <Text size="14px" color="#9CA3AF">
-                56
-              </Text>
-            </Box>
-            <Box
-              height="50px"
-              width="50px"
-              align="center"
-              justify="center"
-              round="5px"
-              background="#F2F2F2"
-              margin={{
-                right: "10px",
-              }}
-              style={
-                isDark
-                  ? {
-                      background: "#101E33",
-                      color: "#5294FF",
-                      fontWeight: 500,
-                      cursor: "pointer",
-                    }
-                  : {
-                      border: "2px solid #9CA3AF",
-                      cursor: "pointer",
-                    }
-              }
-            >
-              <Text size="14px" weight={500}>
-                57
-              </Text>
-            </Box>
-            <Box
-              height="50px"
-              width="50px"
-              align="center"
-              justify="center"
-              round="5px"
-              background="#F2F2F2"
-              margin={{
-                right: "10px",
-              }}
-              style={{
-                cursor: "pointer",
-                background: isDark ? "transparent" : "#F2F2F2",
-                border: isDark ? "2px solid #707070" : "",
-              }}
-            >
-              <Text size="14px" color="#9CA3AF">
-                58
-              </Text>
-            </Box>
-            <Box
-              height="50px"
-              width="50px"
-              align="center"
-              justify="center"
-              round="5px"
-              background="#F2F2F2"
-              margin={{
-                right: "10px",
-              }}
-              style={{
-                cursor: "pointer",
-                background: isDark ? "transparent" : "#F2F2F2",
-                border: isDark ? "2px solid #707070" : "",
-              }}
-            >
-              <Text size="14px" color="#9CA3AF">
-                59
-              </Text>
-            </Box>
-            <Box
-              margin={{ right: "10px" }}
-              width="24px"
-              height="1px"
-              background="#9CA3AF"
-            ></Box>
-            <Box
-              height="50px"
-              width="50px"
-              align="center"
-              justify="center"
-              round="5px"
-              background="#F2F2F2"
-              style={{
-                cursor: "pointer",
-                background: isDark ? "transparent" : "#F2F2F2",
-                border: isDark ? "2px solid #707070" : "",
-              }}
-            >
-              <Text size="14px" color="#9CA3AF">
-                356
-              </Text>
-            </Box>
-            <Box
-              margin={{ left: "5px" }}
-              style={{
-                transform: "rotate(180deg)",
-
-                cursor: "pointer",
-              }}
-            >
-              <ArrowLeft />
-            </Box>
-          </Box>
-          <Box height="50px"></Box>
-        </Box>
       </Box>
     </Box>
   );
+};
+
+export const RootStaking = () => {
+  const { account, chainId } = useWeb3React();
+
+  const {
+    data: data1,
+    loading: loading1,
+    error: error1,
+  } = useStakesQuery({
+    variables: {
+      address: account?.toLowerCase() || "",
+    },
+    fetchPolicy: "cache-and-network",
+    skip: !account,
+  });
+
+  const items = data1?.stakes || [];
+
+  const [interests, setInterests] = useState([] as number[]);
+
+  useEffect(() => {
+    const timer = setInterval(async () => {
+      const resultQuery = await stakingClient
+        .query<StakesQuery, StakesQueryVariables>({
+          query: StakesDocument,
+          variables: {
+            address: account?.toLowerCase() || "",
+          },
+          fetchPolicy: "network-only",
+        })
+        .catch(e => null);
+    }, 20000);
+
+    return () => clearInterval(timer);
+  }, [account, chainId]);
+
+  // get interest from contract
+  /*
+  const contract = useStakingContract();
+
+  useEffect(() => {
+    const start = async () => {
+      const interests = await Promise.all(
+        items.map(item => contract.getInterestById(item.id, getCurrentDay())),
+      ).catch(e => []);
+
+      if (interests.length > 0) {
+        setInterests(
+          interests.map(item => Number(ethers.utils.formatEther(item))),
+        );
+      }
+    };
+
+    start();
+  }, [items, contract.provider]);
+  
+  const itemsWithInterest = items.map((item, i) => {
+  const interest = interests[i] ? interests[i] : item.interest;
+    return { ...item, interest };
+  });
+  */
+
+  return <StakeList items={items} />;
 };
