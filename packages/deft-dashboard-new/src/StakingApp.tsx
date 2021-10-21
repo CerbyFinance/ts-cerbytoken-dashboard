@@ -338,7 +338,7 @@ export const StakeList = ({
 
       const decreaseShares = shareB - shareA;
 
-      let numDaysServed = getCurrentDay() - item.startDay;
+      let numDaysServed = dailySnapshots.length - 1 - item.startDay;
       numDaysServed =
         numDaysServed > item.lockDays ? item.lockDays : numDaysServed;
 
@@ -681,7 +681,7 @@ export const StakeList = ({
           const interest = deftShortCurrency(interestComputed);
           const stakedAmount = deftShortCurrency(item.stakedAmount);
 
-          let numDaysServed = getCurrentDay() - item.startDay;
+          let numDaysServed = dailySnapshots.length - 1 - item.startDay;
           numDaysServed =
             numDaysServed > item.lockDays ? item.lockDays : numDaysServed;
 
