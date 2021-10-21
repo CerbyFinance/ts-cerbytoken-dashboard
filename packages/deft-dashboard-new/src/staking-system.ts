@@ -79,6 +79,7 @@ export function getInterestByStake(
     lockedForXDays: number;
     startDay: number;
     stakedAmount: number;
+    sharesCount: number;
   },
   givenDay: number,
 ) {
@@ -88,8 +89,6 @@ export function getInterestByStake(
 
   let endDay = Math.min(givenDay, stake.startDay + stake.lockedForXDays);
   endDay = Math.min(endDay, dailySnapshots.length);
-
-  let sharesCount = getSharesCountByStake(dailySnapshots, stake, endDay);
 
   let startCachedDay = Math.floor(stake.startDay / CACHED_DAYS_INTEREST + 1);
   let endBeforeFirstCachedDay = Math.min(
@@ -101,14 +100,15 @@ export function getInterestByStake(
     if (dailySnapshots[i].totalShares == 0) continue;
 
     interest +=
-      (dailySnapshots[i].inflationAmount * sharesCount) /
+      (dailySnapshots[i].inflationAmount * stake.sharesCount) /
       dailySnapshots[i].totalShares;
   }
 
   // TODO: check first cached day = 0
   let endCachedDay = Math.floor(endDay / CACHED_DAYS_INTEREST);
   for (let i = startCachedDay; i < endCachedDay; i++) {
-    interest += cachedInterestPerShare[i].cachedInterestPerShare * sharesCount; // / INTEREST_PER_SHARE_DENORM;
+    interest +=
+      cachedInterestPerShare[i].cachedInterestPerShare * stake.sharesCount; // / INTEREST_PER_SHARE_DENORM;
   }
 
   let startAfterLastCachedDay = endDay - (endDay % CACHED_DAYS_INTEREST);
@@ -119,7 +119,7 @@ export function getInterestByStake(
       if (dailySnapshots[i].totalShares == 0) continue;
 
       interest +=
-        (dailySnapshots[i].inflationAmount * sharesCount) /
+        (dailySnapshots[i].inflationAmount * stake.sharesCount) /
         dailySnapshots[i].totalShares;
     }
   }

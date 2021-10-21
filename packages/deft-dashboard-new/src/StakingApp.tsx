@@ -312,6 +312,7 @@ export const StakeList = ({
         lockedForXDays: item.lockDays,
         stakedAmount: Number(item.stakedAmount),
         startDay,
+        sharesCount: item.sharesCount,
       };
 
       // TODO: lift
@@ -324,13 +325,18 @@ export const StakeList = ({
 
       const penalty = getPenaltyByStake(stake, getCurrentDay(), item.interest);
 
-      const tSharesA = getSharesCountByStake(
+      const shareA = item.sharesCount;
+      const shareB = getSharesCountByStake(
         dailySnapshots,
-        stake,
-        getCurrentDay(),
+        {
+          lockedForXDays: getCurrentDay() - item.startDay,
+          startDay: item.startDay,
+          stakedAmount: Number(item.stakedAmount),
+        },
+        0,
       );
 
-      const tSharesB = getSharesCountByStake(dailySnapshots, stake, 0);
+      const decreaseShares = shareB - shareA;
 
       const apy =
         getCurrentDay() > item.startDay
@@ -352,7 +358,7 @@ export const StakeList = ({
         interest: interest,
         apy,
         apy2,
-        tShares: tSharesA - tSharesB,
+        tShares: decreaseShares,
         payout: item.stakedAmount + interest - penalty,
         penalty,
         ids: [Number(item.id)],
@@ -664,6 +670,7 @@ export const StakeList = ({
               lockedForXDays: lockDays,
               stakedAmount: Number(item.stakedAmount),
               startDay: startDay,
+              sharesCount: item.sharesCount,
             },
             getCurrentDay(),
           );
