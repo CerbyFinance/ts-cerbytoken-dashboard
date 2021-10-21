@@ -292,6 +292,18 @@ export const StakeList = ({
     });
 
   const activeItems = items.filter(item => active.includes(item.id));
+  const [completedCount, inProgressCount] = items.reduce(
+    ([a, b], item) => {
+      const isCompleted = getCurrentDay() >= item.startDay + item.lockDays;
+
+      if (isCompleted) {
+        return [a + 1, b];
+      }
+
+      return [a, b + 1];
+    },
+    [0, 0],
+  );
   const totalStaked = activeItems.reduce(
     (acc, item) => acc + item.stakedAmount,
     0,
@@ -300,11 +312,6 @@ export const StakeList = ({
   const [completed, inProgress] = activeItems.reduce(
     ([completed, inProgress], item) => {
       const isCompleted = getCurrentDay() >= item.startDay + item.lockDays;
-
-      console.log({
-        startDay: item.startDay,
-        snaps: dailySnapshots.length - 1,
-      });
 
       const startDay = item.startDay;
 
@@ -338,30 +345,35 @@ export const StakeList = ({
 
       const decreaseShares = shareB - shareA;
 
-      let numDaysServed = dailySnapshots.length - 1 - item.startDay;
-      numDaysServed =
-        numDaysServed > item.lockDays ? item.lockDays : numDaysServed;
+      let numDaysServed = dailySnapshots.length - item.startDay;
+      if (numDaysServed > item.lockDays) {
+        numDaysServed = item.lockDays;
+      }
 
-      const apy =
-        getCurrentDay() > item.startDay
-          ? (((interest - penalty) * DAYS_IN_ONE_YEAR) /
-              (item.stakedAmount * numDaysServed)) *
-            100
-          : 0;
+      let apy = 0;
+      if (numDaysServed > 0 && getCurrentDay() > item.startDay) {
+        apy =
+          (((interest - penalty) * DAYS_IN_ONE_YEAR) /
+            (item.stakedAmount * numDaysServed)) *
+          100;
+      }
 
-      const apy2 =
-        getCurrentDay() > startDay
-          ? ((interest * DAYS_IN_ONE_YEAR) /
-              (item.stakedAmount * numDaysServed)) *
-            100
-          : 0;
+      let apy2 = 0;
+      if (numDaysServed > 0 && getCurrentDay() > item.startDay) {
+        apy2 =
+          ((interest * DAYS_IN_ONE_YEAR) /
+            (item.stakedAmount * numDaysServed)) *
+          100;
+      }
+
+      const divApyWith = isCompleted ? completedCount : inProgressCount;
 
       const addWith = {
         count: 1,
         staked: item.stakedAmount,
         interest: interest,
-        apy,
-        apy2,
+        apy: apy / divApyWith,
+        apy2: apy2 / divApyWith,
         tShares: decreaseShares,
         payout: item.stakedAmount + interest - penalty,
         penalty,
@@ -681,18 +693,20 @@ export const StakeList = ({
           const interest = deftShortCurrency(interestComputed);
           const stakedAmount = deftShortCurrency(item.stakedAmount);
 
-          let numDaysServed = dailySnapshots.length - 1 - item.startDay;
-          numDaysServed =
-            numDaysServed > item.lockDays ? item.lockDays : numDaysServed;
-
           const sharesCount = deftShortCurrency(item.sharesCount, "Shares");
 
-          const apy =
-            getCurrentDay() > startDay
-              ? ((interestComputed * DAYS_IN_ONE_YEAR) /
-                  (item.stakedAmount * numDaysServed)) *
-                100
-              : 0;
+          let numDaysServed = dailySnapshots.length - item.startDay;
+          if (numDaysServed > item.lockDays) {
+            numDaysServed = item.lockDays;
+          }
+
+          let apy = 0;
+          if (numDaysServed > 0 && getCurrentDay() > item.startDay) {
+            apy =
+              ((interestComputed * DAYS_IN_ONE_YEAR) /
+                (item.stakedAmount * numDaysServed)) *
+              100;
+          }
 
           return (
             <BoxBorderBottom
