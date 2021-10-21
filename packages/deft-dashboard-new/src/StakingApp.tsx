@@ -674,7 +674,6 @@ export const StakeList = ({
               lockedForXDays: lockDays,
               stakedAmount: Number(item.stakedAmount),
               startDay: startDay,
-              sharesCount: item.sharesCount,
             },
             getCurrentDay(),
           );
