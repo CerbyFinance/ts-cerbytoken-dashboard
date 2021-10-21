@@ -12,15 +12,14 @@ export const getCurrentDay = () => {
 };
 
 const MINIMUM_DAYS_FOR_HIGH_PENALTY = 0;
-export const DAYS_IN_ONE_YEAR = 10;
+export const DAYS_IN_ONE_YEAR = 365;
 export const CONTROLLED_APY = 40;
 
 const SHARE_PRICE_DENORM = 1e18;
-const SHARE_MULTIPLIER_NUMERATOR = 5;
-const SHARE_MULTIPLIER_DENOMINATOR = 2;
-const CACHED_DAYS_INTEREST = 10;
-const INTEREST_PER_SHARE_DENORM = 1e18;
-const END_STAKE_FROM = 7;
+const SHARE_MULTIPLIER_NUMERATOR = 300;
+const SHARE_MULTIPLIER_DENOMINATOR = 100;
+const CACHED_DAYS_INTEREST = 100;
+const END_STAKE_FROM = 30;
 const END_STAKE_TO = 2 * DAYS_IN_ONE_YEAR;
 
 export const deftShortCurrency = (amount: number, label: string = "DEFT") => {
@@ -60,20 +59,15 @@ export function getSharesCountByStake(
 
   numberOfDaysServed = Math.min(numberOfDaysServed, 10 * DAYS_IN_ONE_YEAR);
 
-  let dayBeforeStakeStart = Math.min(
-    stake.startDay - 1,
-    dailySnapshots.length - 1,
-  );
-
-  if (dailySnapshots.length === 0) {
+  if (stake.startDay > dailySnapshots.length - 1) {
     return 0;
   }
 
   // prettier-ignore
   let sharesCount =
-    (stake.stakedAmount * SHARE_PRICE_DENORM) /  dailySnapshots[dayBeforeStakeStart].sharePrice +
+    (stake.stakedAmount * SHARE_PRICE_DENORM) /  dailySnapshots[stake.startDay].sharePrice +
     (SHARE_MULTIPLIER_NUMERATOR * numberOfDaysServed * stake.stakedAmount * SHARE_PRICE_DENORM) /
-      (SHARE_MULTIPLIER_DENOMINATOR * 10 * DAYS_IN_ONE_YEAR * dailySnapshots[dayBeforeStakeStart].sharePrice);
+      (SHARE_MULTIPLIER_DENOMINATOR * 10 * DAYS_IN_ONE_YEAR * dailySnapshots[stake.startDay].sharePrice);
 
   return sharesCount / 1e18;
 }

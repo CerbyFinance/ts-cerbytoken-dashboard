@@ -53,7 +53,7 @@ const InjectUseReferrer = () => {
   return <></>;
 };
 
-function AppDev_() {
+function AppDev() {
   return (
     <Web3ReactProvider getLibrary={getLibrary}>
       <Web3ReactManager>

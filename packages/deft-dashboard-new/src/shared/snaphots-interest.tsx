@@ -40,7 +40,6 @@ export const SnapshotsInterestProvider = ({
 
   useEffect(() => {
     if (data2) {
-      console.log("foo111");
       setState({
         cachedInterestPerShare: data2.cachedInterestPerShares,
         dailySnapshots: data2.dailySnapshots,
