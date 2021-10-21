@@ -2,13 +2,17 @@
 
 import { CachedInterestPerShare, DailySnapshot } from "./graphql/types";
 
-export const START_DATE = 1634716660;
-const ONE_DAY = 600;
+export const START_DATE = 1634801104;
+const SECONDS_IN_ONE_DAY = 600;
 
 const now = () => Date.now() / 1000;
 
 export const getCurrentDay = () => {
-  return Math.floor((now() - START_DATE) / ONE_DAY);
+  return (
+    Math.floor(now() / SECONDS_IN_ONE_DAY) -
+    Math.floor(START_DATE / SECONDS_IN_ONE_DAY) +
+    1
+  );
 };
 
 const MINIMUM_DAYS_FOR_HIGH_PENALTY = 0;

@@ -338,17 +338,21 @@ export const StakeList = ({
 
       const decreaseShares = shareB - shareA;
 
+      let numDaysServed = getCurrentDay() - item.startDay;
+      numDaysServed =
+        numDaysServed > item.lockDays ? item.lockDays : numDaysServed;
+
       const apy =
         getCurrentDay() > item.startDay
           ? (((interest - penalty) * DAYS_IN_ONE_YEAR) /
-              (item.stakedAmount * (getCurrentDay() - item.startDay))) *
+              (item.stakedAmount * numDaysServed)) *
             100
           : 0;
 
       const apy2 =
         getCurrentDay() > startDay
           ? ((interest * DAYS_IN_ONE_YEAR) /
-              (item.stakedAmount * (getCurrentDay() - startDay))) *
+              (item.stakedAmount * numDaysServed)) *
             100
           : 0;
 
@@ -677,12 +681,17 @@ export const StakeList = ({
 
           const interest = deftShortCurrency(interestComputed);
           const stakedAmount = deftShortCurrency(item.stakedAmount);
+
+          let numDaysServed = getCurrentDay() - item.startDay;
+          numDaysServed =
+            numDaysServed > item.lockDays ? item.lockDays : numDaysServed;
+
           const sharesCount = deftShortCurrency(item.sharesCount, "Shares");
 
           const apy =
             getCurrentDay() > startDay
-              ? ((item.interest * DAYS_IN_ONE_YEAR) /
-                  (item.stakedAmount * (getCurrentDay() - startDay))) *
+              ? ((interestComputed * DAYS_IN_ONE_YEAR) /
+                  (item.stakedAmount * numDaysServed)) *
                 100
               : 0;
 
