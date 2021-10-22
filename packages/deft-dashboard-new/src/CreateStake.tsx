@@ -494,15 +494,18 @@ export const CreateStakeModal = () => {
     dailySnapshots,
     {
       lockedForXDays: DAYS_IN_ONE_YEAR * 10,
-      stakedAmount: Number(stakeAmount),
+      stakedAmount: Number(MAXIMUM_SMALLER_PAYS_BETTER),
       startDay: getCurrentDay(),
     },
     0,
   );
 
   const minApy =
-    ((CONTROLLED_APY / APY_DENORM) * 100 * stakeSharesCount) /
-    stakeSharesCountMax;
+    ((CONTROLLED_APY / APY_DENORM) *
+      100 *
+      stakeSharesCount *
+      MAXIMUM_SMALLER_PAYS_BETTER) /
+    (stakeSharesCountMax * Number(stakeAmount));
 
   let multiplier = 0;
   if (Number(stakeAmount) <= MINIMUM_SMALLER_PAYS_BETTER) {
