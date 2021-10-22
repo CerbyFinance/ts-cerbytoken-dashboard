@@ -2,7 +2,7 @@
 
 import { CachedInterestPerShare, DailySnapshot } from "./graphql/types";
 
-export const START_DATE = 1634806992;
+export const START_DATE = 1634903044;
 const SECONDS_IN_ONE_DAY = 600;
 
 const now = () => Date.now() / 1000;
@@ -15,16 +15,32 @@ export const getCurrentDay = () => {
   );
 };
 
-const MINIMUM_DAYS_FOR_HIGH_PENALTY = 0;
+// const MINIMUM_DAYS_FOR_HIGH_PENALTY = 0;
 export const DAYS_IN_ONE_YEAR = 365;
-export const CONTROLLED_APY = 40;
+// export const CONTROLLED_APY = 40;
+
+export const MINIMUM_SMALLER_PAYS_BETTER = 1000; // 1000 deft
+export const MAXIMUM_SMALLER_PAYS_BETTER = 1000000; // 1 million deft
+const INTEREST_PER_SHARE_DENORM = 1e18;
+// ---
 
 const SHARE_PRICE_DENORM = 1e18;
 const SHARE_MULTIPLIER_NUMERATOR = 300;
 const SHARE_MULTIPLIER_DENOMINATOR = 100;
 const CACHED_DAYS_INTEREST = 100;
+// const END_STAKE_FROM = 30;
+// const END_STAKE_TO = 2 * DAYS_IN_ONE_YEAR;
+
+export const APY_DENORM = 1e6;
+
+const MINIMUM_DAYS_FOR_HIGH_PENALTY = 0;
+export const CONTROLLED_APY = 4e5; // 40%
 const END_STAKE_FROM = 30;
-const END_STAKE_TO = 2 * DAYS_IN_ONE_YEAR;
+const END_STAKE_TO = 2 * DAYS_IN_ONE_YEAR; // TODO: 5% per month penalty
+const MINIMUM_STAKE_DAYS = 1;
+const MAXIMUM_STAKE_DAYS = 100 * DAYS_IN_ONE_YEAR;
+const LONGER_PAYS_BETTER_BONUS = 3e6; // 3e6/1e6 = 300% shares bonus max
+export const SMALLER_PAYS_BETTER_BONUS = 25e4; // 25e4/1e6 = 25% shares bonus max
 
 export const deftShortCurrency = (amount: number, label: string = "DEFT") => {
   let shortAmount = "";
@@ -73,10 +89,41 @@ export function getSharesCountByStake(
   }
 
   // prettier-ignore
+
+  let initialSharesCount = 
+            (stake.stakedAmount * SHARE_PRICE_DENORM) / dailySnapshots[dayBeforeStakeStart].sharePrice;
+  let longerPaysBetterSharesCount =
+    (LONGER_PAYS_BETTER_BONUS *
+      numberOfDaysServed *
+      stake.stakedAmount *
+      SHARE_PRICE_DENORM) /
+    (APY_DENORM *
+      10 *
+      DAYS_IN_ONE_YEAR *
+      dailySnapshots[dayBeforeStakeStart].sharePrice);
+
+  let smallerPaysBetterSharesCountMultiplier;
+  if (stake.stakedAmount <= MINIMUM_SMALLER_PAYS_BETTER) {
+    smallerPaysBetterSharesCountMultiplier =
+      APY_DENORM + SMALLER_PAYS_BETTER_BONUS;
+  } else if (
+    MINIMUM_SMALLER_PAYS_BETTER < stake.stakedAmount &&
+    stake.stakedAmount < MAXIMUM_SMALLER_PAYS_BETTER
+  ) {
+    smallerPaysBetterSharesCountMultiplier =
+      APY_DENORM +
+      (SMALLER_PAYS_BETTER_BONUS *
+        (MAXIMUM_SMALLER_PAYS_BETTER - stake.stakedAmount)) /
+        (MAXIMUM_SMALLER_PAYS_BETTER - MINIMUM_SMALLER_PAYS_BETTER);
+  } // MAXIMUM_SMALLER_PAYS_BETTER >= stake.stakedAmount
+  else {
+    smallerPaysBetterSharesCountMultiplier = APY_DENORM;
+  }
+
   let sharesCount =
-    (stake.stakedAmount * SHARE_PRICE_DENORM) /  dailySnapshots[dayBeforeStakeStart].sharePrice +
-    (SHARE_MULTIPLIER_NUMERATOR * numberOfDaysServed * stake.stakedAmount * SHARE_PRICE_DENORM) /
-      (SHARE_MULTIPLIER_DENOMINATOR * 10 * DAYS_IN_ONE_YEAR * dailySnapshots[dayBeforeStakeStart].sharePrice);
+    ((initialSharesCount + longerPaysBetterSharesCount) *
+      smallerPaysBetterSharesCountMultiplier) /
+    APY_DENORM;
 
   return sharesCount / 1e18;
 }

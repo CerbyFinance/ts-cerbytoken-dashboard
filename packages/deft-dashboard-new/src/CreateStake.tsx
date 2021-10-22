@@ -21,11 +21,15 @@ import { ThemeContext } from "./shared/theme";
 import { useStakingContract, useTokenContract } from "./shared/useContract";
 import { _isFinite } from "./shared/utils";
 import {
+  APY_DENORM,
   CONTROLLED_APY,
   DAYS_IN_ONE_YEAR,
   deftShortCurrency,
   getCurrentDay,
   getSharesCountByStake,
+  MAXIMUM_SMALLER_PAYS_BETTER,
+  MINIMUM_SMALLER_PAYS_BETTER,
+  SMALLER_PAYS_BETTER_BONUS,
 } from "./staking-system";
 
 const Input = styled.input`
@@ -476,10 +480,6 @@ export const CreateStakeModal = () => {
   const longerPaysBetter =
     (Number(stakeAmount) * longerMult * stakeDays) / (DAYS_IN_ONE_YEAR * 10);
 
-  const effectiveDeft = Number(stakeAmount) + longerPaysBetter;
-
-  const stakeShare = effectiveDeft / sharePrice;
-
   const stakeSharesCount = getSharesCountByStake(
     dailySnapshots,
     {
@@ -500,7 +500,34 @@ export const CreateStakeModal = () => {
     0,
   );
 
-  const minApy = (CONTROLLED_APY * stakeSharesCount) / stakeSharesCountMax;
+  const minApy =
+    ((CONTROLLED_APY / APY_DENORM) * 100 * stakeSharesCount) /
+    stakeSharesCountMax;
+
+  let multiplier = 0;
+  if (Number(stakeAmount) <= MINIMUM_SMALLER_PAYS_BETTER) {
+    multiplier = SMALLER_PAYS_BETTER_BONUS / APY_DENORM; /* 25% */
+  } else if (Number(stakeAmount) >= MAXIMUM_SMALLER_PAYS_BETTER) {
+    multiplier = 0;
+  } else if (
+    MINIMUM_SMALLER_PAYS_BETTER < Number(stakeAmount) &&
+    Number(stakeAmount) < MAXIMUM_SMALLER_PAYS_BETTER
+  ) {
+    multiplier =
+      (SMALLER_PAYS_BETTER_BONUS *
+        (MAXIMUM_SMALLER_PAYS_BETTER - Number(stakeAmount))) /
+      (APY_DENORM *
+        (MAXIMUM_SMALLER_PAYS_BETTER - MINIMUM_SMALLER_PAYS_BETTER));
+    /* 25% - 0% */
+  }
+
+  const smallerPaysBetter =
+    (Number(stakeAmount) + longerPaysBetter) * multiplier;
+
+  const effectiveDeft =
+    Number(stakeAmount) + longerPaysBetter + smallerPaysBetter;
+
+  const stakeShare = effectiveDeft / sharePrice;
 
   return (
     <Box
@@ -641,6 +668,18 @@ export const CreateStakeModal = () => {
           <Text size="14px">Longer pays better</Text>
           <Text size="14px" weight={500}>
             +{longerPaysBetter.asCurrency(2)} DEFT
+          </Text>
+        </Box>
+        <Box
+          direction="row"
+          justify="between"
+          margin={{
+            bottom: "13px",
+          }}
+        >
+          <Text size="14px">Smaller pays better</Text>
+          <Text size="14px" weight={500}>
+            +{smallerPaysBetter.asCurrency(2)} DEFT
           </Text>
         </Box>
         <Box

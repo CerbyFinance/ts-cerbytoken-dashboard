@@ -130,8 +130,6 @@ function App() {
                       <Route
                         path="/(staking)"
                         render={props => {
-                          const url = props.match.url;
-                          const isPresale = url === "/presale";
                           return (
                             <section
                               className={classNames(

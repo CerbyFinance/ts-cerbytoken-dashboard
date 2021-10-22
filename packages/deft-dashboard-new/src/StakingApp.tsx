@@ -678,7 +678,6 @@ export const StakeList = ({
           const endDayAgo = endDay > 0 ? getCurrentDay() - endDay : endsDayAgo;
 
           // const endsIn = "";
-
           const interestComputed = getInterestByStake(
             dailySnapshots,
             cachedInterestPerShare,
