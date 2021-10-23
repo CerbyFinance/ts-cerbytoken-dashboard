@@ -14,6 +14,7 @@ import LeftArrowIcon from "../icons/LeftArrowIcon";
 import MediumIcon from "../icons/MediumIcon";
 import NightModeIcon from "../icons/NightModeIcon";
 import RightArrowIcon from "../icons/RightArrowIcon";
+import StakingIcon from "../icons/StakingIcon";
 import TelegramIcon from "../icons/TelegramIcon";
 import TwitterIcon from "../icons/TwitterIcon";
 import VestingIcon from "../icons/VestingIcon";
@@ -58,7 +59,9 @@ function Nav() {
       path: "/vesting",
     },
     {
-      icon: <VestingIcon className="" />,
+      icon: <StakingIcon />,
+      // icon: <VestingIcon className="" />,
+
       name: "Staking",
       path: "/staking",
     },
