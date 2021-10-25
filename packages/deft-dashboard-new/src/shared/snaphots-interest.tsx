@@ -1,10 +1,12 @@
 import { useWeb3React } from "@web3-react/core";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect } from "react";
 import {
   CachedInterestPerShare,
   DailySnapshot,
+  SnapshotsAndInterestDocument,
   useSnapshotsAndInterestQuery,
 } from "../graphql/types";
+import { stakingClient } from "./client";
 
 type State = {
   dailySnapshots: DailySnapshot[];
@@ -23,11 +25,6 @@ export const SnapshotsInterestProvider = ({
 }) => {
   const { account, chainId } = useWeb3React();
 
-  const [state, setState] = useState({
-    cachedInterestPerShare: [],
-    dailySnapshots: [],
-  } as State);
-
   const {
     data: data2,
     loading: loading2,
@@ -39,16 +36,26 @@ export const SnapshotsInterestProvider = ({
   });
 
   useEffect(() => {
-    if (data2) {
-      setState({
-        cachedInterestPerShare: data2.cachedInterestPerShares,
-        dailySnapshots: data2.dailySnapshots,
-      });
-    }
-  }, [data2]);
+    const timer = setInterval(async () => {
+      const resultQuery = await stakingClient
+        .query({
+          query: SnapshotsAndInterestDocument,
+          variables: {},
+          fetchPolicy: "network-only",
+        })
+        .catch(e => null);
+    }, 60000);
+
+    return () => clearInterval(timer);
+  }, [account, chainId]);
 
   return (
-    <SnapshotsInterest.Provider value={state}>
+    <SnapshotsInterest.Provider
+      value={{
+        cachedInterestPerShare: data2?.cachedInterestPerShares || [],
+        dailySnapshots: data2?.dailySnapshots || [],
+      }}
+    >
       {children}
     </SnapshotsInterest.Provider>
   );

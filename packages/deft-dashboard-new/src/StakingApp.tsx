@@ -323,12 +323,7 @@ export const StakeList = ({
       };
 
       // TODO: lift
-      const interest = getInterestByStake(
-        dailySnapshots,
-        cachedInterestPerShare,
-        stake,
-        getCurrentDay(),
-      );
+      const interest = item.interest;
 
       const penalty = getPenaltyByStake(stake, getCurrentDay(), item.interest);
 
@@ -463,6 +458,10 @@ export const StakeList = ({
         0,
         100 - (daysLeftRight * 100) / b.lockDays,
       );
+
+      if (a.endDay > 0 || b.endDay > 0) {
+        return order.direction === "desc" ? 0 : -1;
+      }
 
       return progressRateLeft - progressRateRight;
     },
@@ -678,17 +677,7 @@ export const StakeList = ({
           const endDayAgo = endDay > 0 ? getCurrentDay() - endDay : endsDayAgo;
 
           // const endsIn = "";
-          const interestComputed = getInterestByStake(
-            dailySnapshots,
-            cachedInterestPerShare,
-            {
-              lockedForXDays: lockDays,
-              stakedAmount: Number(item.stakedAmount),
-              startDay: startDay,
-            },
-            getCurrentDay(),
-          );
-
+          const interestComputed = item.interest;
           const interest = deftShortCurrency(interestComputed);
           const stakedAmount = deftShortCurrency(item.stakedAmount);
 
@@ -944,7 +933,7 @@ export const RootStaking = () => {
 
   const items = data1?.stakes || [];
 
-  const [interests, setInterests] = useState([] as number[]);
+  // const [interests, setInterests] = useState([] as number[]);
 
   useEffect(() => {
     const timer = setInterval(async () => {
@@ -962,31 +951,25 @@ export const RootStaking = () => {
     return () => clearInterval(timer);
   }, [account, chainId]);
 
-  // get interest from contract
-  /*
-  const contract = useStakingContract();
+  const { cachedInterestPerShare, dailySnapshots } =
+    useContext(SnapshotsInterest);
 
-  useEffect(() => {
-    const start = async () => {
-      const interests = await Promise.all(
-        items.map(item => contract.getInterestById(item.id, getCurrentDay())),
-      ).catch(e => []);
-
-      if (interests.length > 0) {
-        setInterests(
-          interests.map(item => Number(ethers.utils.formatEther(item))),
-        );
-      }
-    };
-
-    start();
-  }, [items, contract.provider]);
-  
   const itemsWithInterest = items.map((item, i) => {
-  const interest = interests[i] ? interests[i] : item.interest;
+    const interest = item.interest
+      ? item.interest
+      : getInterestByStake(
+          dailySnapshots,
+          cachedInterestPerShare,
+          {
+            lockedForXDays: item.lockDays,
+            stakedAmount: item.stakedAmount,
+            startDay: item.startDay,
+          },
+          getCurrentDay(),
+        );
+
     return { ...item, interest };
   });
-  */
 
-  return <StakeList items={items} />;
+  return <StakeList items={itemsWithInterest} />;
 };

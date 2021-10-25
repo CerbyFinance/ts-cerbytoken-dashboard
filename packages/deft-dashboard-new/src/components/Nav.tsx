@@ -111,6 +111,8 @@ function Nav() {
     },
   ];
 
+  const isStaking = isActivePath("/staking", location.pathname);
+
   return (
     <nav
       className={classNames(
@@ -210,6 +212,22 @@ function Nav() {
             <span className="ml-3">Whitepaper</span>
           )}
         </div>
+
+        {isStaking && (
+          <div
+            onClick={() =>
+              window.open(
+                "https://defi-factory-token.gitbook.io/defifactory-staking-documentation/",
+              )
+            }
+            className="flex items-center justify-center mb-5 transition-all duration-200 cursor-pointer hover:text-activetext"
+          >
+            <WhitepaperIcon className="" />
+            {(sidebar || isTabletOrMobile) && (
+              <span className="ml-3">Staking Doc</span>
+            )}
+          </div>
+        )}
         <div className="flex justify-center my-3">
           {darkmode.map(({ icon, name, type }) => (
             <button

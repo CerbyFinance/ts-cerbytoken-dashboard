@@ -4,10 +4,11 @@ import { serializeError } from "eth-rpc-errors";
 import { ethers } from "ethers";
 import { Box, Text } from "grommet";
 import Tooltip from "rc-tooltip";
-import React, { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import Loader from "react-loader-spinner";
 import { toast } from "react-toastify";
 import styled from "styled-components";
+import { Calendar } from "./Calendar";
 import {
   StakesDocument,
   StakesQuery,
@@ -114,52 +115,42 @@ const ArrowUp = ({ color }: { color: string }) => (
   </svg>
 );
 
-{
-  /* <Box>
-<Grommet
-  theme={{
-    global: {
-      size: {
-        medium: "220px",
-      },
-    },
-    calendar: {
-      heading: {
-        level: "14px",
-      },
-      medium: {
-        daySize: "30px",
-      },
-    },
-  }}
->
-  <Calendar
-    size="medium"
-    date={undefined}
-    dates={["2019-11-12", "2019-11-17"]}
-  />
-</Grommet>
-</Box> */
-}
-
 const TooltipCalendar = ({
   isDark,
   onClick: _onClick,
+  days,
+  renderWith,
 }: {
   isDark: boolean;
   onClick: (days: number) => void;
+  days: number;
+  renderWith: JSX.Element;
 }) => {
   const [visible, onVisibleChange] = useState(false);
+  const [choosePeriod, setChoosePeriod] = useState(false);
 
   const onClick = (days: number) => {
     _onClick(days);
     onVisibleChange(false);
+    // setChoosePeriod(false);
   };
+
+  const [value, setValue] = useState();
+
+  const onChange = useCallback(
+    value => {
+      setValue(value);
+    },
+    [setValue],
+  );
 
   return (
     <Tooltip
       visible={visible}
-      onVisibleChange={v => onVisibleChange(v)}
+      onVisibleChange={v => {
+        onVisibleChange(v);
+        setChoosePeriod(false);
+      }}
       placement="bottom"
       trigger={["click"]}
       align={{
@@ -190,108 +181,114 @@ const TooltipCalendar = ({
                   }
                 : {}
             }
-            width="190px"
+            // width="190px"
+            // width="580px"
             pad="20px 20px 23px"
             round="5px"
             // alignSelf="start"
             align="start"
+            direction="row"
           >
-            <Text
-              size="16px"
-              style={{
-                cursor: "pointer",
-              }}
-              onClick={() => onClick(30)}
-            >
-              1 month
-            </Text>
-            <Box height="20px"></Box>
-            <Text
-              size="16px"
-              // weight={600}
-              style={{
-                cursor: "pointer",
-              }}
-              onClick={() => onClick(180)}
-            >
-              6 months
-            </Text>
-            <Box height="20px"></Box>
-            <Text
-              size="16px"
-              style={{
-                cursor: "pointer",
-              }}
-              onClick={() => onClick(365)}
-            >
-              1 years
-            </Text>
-            <Box height="20px"></Box>
-            <Text
-              size="16px"
-              style={{
-                cursor: "pointer",
-              }}
-              onClick={() => onClick(365 * 2)}
-            >
-              2 years
-            </Text>
-            <Box height="20px"></Box>
-            <Text
-              size="16px"
-              style={{
-                cursor: "pointer",
-              }}
-              onClick={() => onClick(365 * 5)}
-            >
-              5 years
-            </Text>
-            <Box height="20px"></Box>
-            <Text
-              size="16px"
-              style={{
-                cursor: "pointer",
-              }}
-              onClick={() => onClick(365 * 10)}
-            >
-              10 years
-            </Text>
-            <Box height="20px"></Box>
-            <Text
-              size="16px"
-              style={{
-                cursor: "pointer",
-              }}
-            >
-              Choose period
-            </Text>
-            <Box height="20px"></Box>
-
-            <HoveredElement
-              render={binder => (
+            <Box>
+              <Text
+                size="16px"
+                style={{
+                  cursor: "pointer",
+                  lineHeight: "21px",
+                }}
+                weight={days === 30 ? 500 : 400}
+                onClick={() => onClick(30)}
+              >
+                1 month
+              </Text>
+              <Box height="20px"></Box>
+              <Text
+                size="16px"
+                // weight={600}
+                style={{
+                  cursor: "pointer",
+                  lineHeight: "21px",
+                }}
+                weight={days === 180 ? 500 : 400}
+                onClick={() => onClick(180)}
+              >
+                6 months
+              </Text>
+              <Box height="20px"></Box>
+              <Text
+                size="16px"
+                style={{
+                  cursor: "pointer",
+                  lineHeight: "21px",
+                }}
+                weight={days === 365 ? 500 : 400}
+                onClick={() => onClick(365)}
+              >
+                1 years
+              </Text>
+              <Box height="20px"></Box>
+              <Text
+                size="16px"
+                style={{
+                  cursor: "pointer",
+                  lineHeight: "21px",
+                }}
+                weight={days === 365 * 2 ? 500 : 400}
+                onClick={() => onClick(365 * 2)}
+              >
+                2 years
+              </Text>
+              <Box height="20px"></Box>
+              <Text
+                size="16px"
+                style={{
+                  cursor: "pointer",
+                  lineHeight: "21px",
+                }}
+                weight={days === 365 * 5 ? 500 : 400}
+                onClick={() => onClick(365 * 5)}
+              >
+                5 years
+              </Text>
+              <Box height="20px"></Box>
+              <Text
+                size="16px"
+                style={{
+                  cursor: "pointer",
+                  lineHeight: "21px",
+                }}
+                weight={days === 365 * 10 ? 500 : 400}
+                onClick={() => onClick(365 * 10)}
+              >
+                10 years
+              </Text>
+              <Box height="20px"></Box>
+              <Text
+                onClick={() => setChoosePeriod(prev => !prev)}
+                size="16px"
+                weight={choosePeriod ? 500 : 400}
+                style={{
+                  cursor: "pointer",
+                  lineHeight: "21px",
+                }}
+              >
+                Choose period
+              </Text>
+            </Box>
+            {choosePeriod && (
+              <>
                 <Box
-                  height="36px"
-                  align="center"
-                  pad="0px 18px"
-                  justify="center"
-                  round="5px"
-                  style={{
-                    cursor: "pointer",
+                  margin={{
+                    left: "29px",
+                    right: "30px",
                   }}
-                  background={
-                    binder.hovered
-                      ? "linear-gradient(91.86deg, #71A7FF 0%, #1F67DB 100%)"
-                      : "#5294FF"
-                  }
-                  onClick={() => {}}
-                  {...binder.bind}
-                >
-                  <Text size="14px" weight={500} color="white">
-                    Continue
-                  </Text>
-                </Box>
-              )}
-            ></HoveredElement>
+                  height="267px"
+                  width="1px"
+                  background="#E5E7EB"
+                ></Box>
+                <Box>{renderWith}</Box>
+              </>
+            )}
           </Box>
         </Box>
       }
@@ -652,7 +649,16 @@ export const CreateStakeModal = () => {
           >
             <TooltipCalendar
               isDark={isDark}
+              days={stakeDays}
               onClick={days => setStakeDays(days)}
+              renderWith={
+                <Calendar
+                  days={stakeDays}
+                  onChangeDays={days => {
+                    setStakeDays(days);
+                  }}
+                />
+              }
             />
           </Box>
         </Box>
