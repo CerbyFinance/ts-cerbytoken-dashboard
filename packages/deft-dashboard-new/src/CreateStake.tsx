@@ -1,4 +1,5 @@
 import { useWeb3React } from "@web3-react/core";
+import * as dateFns from "date-fns";
 import dayjs from "dayjs";
 import { serializeError } from "eth-rpc-errors";
 import { ethers } from "ethers";
@@ -359,7 +360,7 @@ export const CreateStakeModal = () => {
   const { account, chainId } = useWeb3React();
 
   const [balance, setBalance] = useState(0);
-  const [stakeDays, setStakeDays] = useState(100);
+  const [stakeDays, setStakeDays] = useState(1);
   const changeStakeDays = (evt: any) => {
     if (Number(evt.target.value) < 0) {
       return;
@@ -526,6 +527,11 @@ export const CreateStakeModal = () => {
 
   const stakeShare = effectiveDeft / sharePrice;
 
+  const now = new Date();
+  const date = dateFns.addDays(now, stakeDays);
+
+  const formatedDate = dateFns.format(date, "d/MM/yyyy").split(" ");
+
   return (
     <Box
       pad="30px 30px 33px"
@@ -612,7 +618,7 @@ export const CreateStakeModal = () => {
 
       <Box direction="row" align="center" justify="between">
         <Text size="14px" color="text">
-          Stake length in days
+          Stake ending date
         </Text>
 
         <Box
@@ -628,14 +634,15 @@ export const CreateStakeModal = () => {
               color: isDark ? "white" : "#29343E",
               width: "200px",
             }}
-            value={stakeDays}
-            onChange={changeStakeDays}
-            onKeyPress={e => {
-              if (_isFinite(Number(e.key))) {
-              } else {
-                e.preventDefault();
-              }
-            }}
+            value={formatedDate}
+            // value={stakeDays}
+            // onChange={changeStakeDays}
+            // onKeyPress={e => {
+            //   if (_isFinite(Number(e.key))) {
+            //   } else {
+            //     e.preventDefault();
+            //   }
+            // }}
           />
           <Box
             style={{
@@ -736,10 +743,22 @@ export const CreateStakeModal = () => {
             {(minApy || 0).toFixed(2)} %
           </Text>
         </Box>
-        <Box direction="row" justify="between">
+        <Box
+          direction="row"
+          justify="between"
+          margin={{
+            bottom: "13px",
+          }}
+        >
           <Text size="14px">Date end of stake</Text>
           <Text size="14px" weight={500}>
             {dateEndOfStake(stakeDays)}
+          </Text>
+        </Box>
+        <Box direction="row" justify="between">
+          <Text size="14px">Stake length in days</Text>
+          <Text size="14px" weight={500}>
+            {stakeDays} days
           </Text>
         </Box>
       </Box>
