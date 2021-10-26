@@ -127,7 +127,7 @@ const TooltipCalendar = ({
   renderWith: JSX.Element;
 }) => {
   const [visible, onVisibleChange] = useState(false);
-  const [choosePeriod, setChoosePeriod] = useState(false);
+  // const [choosePeriod, setChoosePeriod] = useState(false);
 
   const onClick = (days: number) => {
     _onClick(days);
@@ -149,7 +149,7 @@ const TooltipCalendar = ({
       visible={visible}
       onVisibleChange={v => {
         onVisibleChange(v);
-        setChoosePeriod(false);
+        // setChoosePeriod(false);
       }}
       placement="bottom"
       trigger={["click"]}
@@ -189,7 +189,7 @@ const TooltipCalendar = ({
             align="start"
             direction="row"
           >
-            <Box>
+            {/* <Box>
               <Text
                 size="16px"
                 style={{
@@ -204,7 +204,6 @@ const TooltipCalendar = ({
               <Box height="20px"></Box>
               <Text
                 size="16px"
-                // weight={600}
                 style={{
                   cursor: "pointer",
                   lineHeight: "21px",
@@ -274,10 +273,9 @@ const TooltipCalendar = ({
               >
                 Choose period
               </Text>
-            </Box>
-            {choosePeriod && (
-              <>
-                <Box
+            </Box> */}
+            <>
+              {/* <Box
                   margin={{
                     left: "29px",
                     right: "30px",
@@ -285,10 +283,9 @@ const TooltipCalendar = ({
                   height="267px"
                   width="1px"
                   background="#E5E7EB"
-                ></Box>
-                <Box>{renderWith}</Box>
-              </>
-            )}
+                ></Box> */}
+              <Box>{renderWith}</Box>
+            </>
           </Box>
         </Box>
       }

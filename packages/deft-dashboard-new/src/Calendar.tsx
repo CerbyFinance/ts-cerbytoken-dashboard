@@ -105,14 +105,16 @@ const Calendar = ({
   const renderHeader = () => {
     const dateFormat = "d MMMM yyyy";
 
-    const dateTo = dateFns.addDays(dateFrom, days);
+    // const dateTo = dateFns.addDays(dateFrom, days);
 
     // console.log({
     //   dateTo,
     //   sas:
     // });
 
-    const [day, month, year] = dateFns.format(dateTo, dateFormat).split(" ");
+    const [day, month, year] = dateFns
+      .format(currentMonth, dateFormat)
+      .split(" ");
 
     function bindKey(up: (up: boolean) => void) {
       return function checkKey(e: any) {
@@ -142,7 +144,7 @@ const Calendar = ({
         height="50px"
         direction="row"
       >
-        <Input
+        {/* <Input
           value={day}
           onKeyDown={bindKey(up => {
             const value = dateFns.getDate(dateTo) + (up ? 1 : -1);
@@ -161,19 +163,23 @@ const Calendar = ({
             width: "60px",
           }}
         />
-        <Box width="7px"></Box>
+        <Box width="7px"></Box> */}
         <Input
           value={month}
           onKeyDown={bindKey(up => {
-            const value = dateFns.getMonth(dateTo) + (up ? 1 : -1);
+            const value = dateFns.getMonth(currentMonth) + (up ? 1 : -1);
 
-            if (value < 0 || value > 32) {
-              return;
-            }
+            // if (value < 0 || value > 32) {
+            //   return;
+            // }
 
-            const newDate = dateFns.setMonth(dateTo, value);
+            // const newDate = dateFns.setMonth(dateTo, value);
+            // onDateClick(newDate);
 
-            onDateClick(newDate);
+            setState(prev => ({
+              ...prev,
+              currentMonth: dateFns.setMonth(prev.currentMonth, value),
+            }));
           })}
           style={{
             border: isDark ? "2px solid #707070" : "2px solid #c4c4c4",
@@ -185,13 +191,18 @@ const Calendar = ({
         <Input
           value={year}
           onKeyDown={bindKey(up => {
-            const value = dateFns.getYear(dateTo) + (up ? 1 : -1);
+            const value = dateFns.getYear(currentMonth) + (up ? 1 : -1);
 
             if (value < dateFns.getYear(now) || value > 2042) {
               return;
             }
-            const newDate = dateFns.setYear(dateTo, value);
-            onDateClick(newDate);
+
+            setState(prev => ({
+              ...prev,
+              currentMonth: dateFns.setYear(prev.currentMonth, value),
+            }));
+            // const newDate = dateFns.setYear(dateTo, value);
+            // onDateClick(newDate);
           })}
           style={{
             border: isDark ? "2px solid #707070" : "2px solid #c4c4c4",
