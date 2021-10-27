@@ -15,6 +15,11 @@ export const scalarTypePolicies = {
       cachedInterestPerShare: numberTypePolicy,
     },
   },
+  MaxSharePrice: {
+    fields: {
+      sharePrice: numberTypePolicy,
+    },
+  },
   DailySnapshot: {
     fields: {
       sealedDay: numberTypePolicy,

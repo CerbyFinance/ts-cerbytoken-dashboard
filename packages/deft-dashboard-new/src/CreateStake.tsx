@@ -14,6 +14,7 @@ import {
   StakesDocument,
   StakesQuery,
   StakesQueryVariables,
+  useMaxSharePriceQuery,
 } from "./graphql/types";
 import { stakingClient } from "./shared/client";
 import { HoveredElement } from "./shared/hooks";
@@ -347,10 +348,17 @@ export const CreateStakeModal = () => {
 
   const { dailySnapshots } = useContext(SnapshotsInterest);
 
-  const sharePrice =
-    dailySnapshots.length > 0
-      ? dailySnapshots[dailySnapshots.length - 1].sharePrice
-      : 0;
+  const { data: data1, loading: loading1, refetch } = useMaxSharePriceQuery({});
+
+  const sharePrice = data1?.maxSharePrice?.sharePrice || 0;
+
+  useEffect(() => {
+    const timer = setInterval(async () => {
+      refetch();
+    }, 5000);
+
+    return () => clearInterval(timer);
+  }, []);
 
   const stakingContract = useStakingContract();
 

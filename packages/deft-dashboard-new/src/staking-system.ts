@@ -2,8 +2,8 @@
 
 import { CachedInterestPerShare, DailySnapshot } from "./graphql/types";
 
-export const START_DATE = 1634903044;
-const SECONDS_IN_ONE_DAY = 600;
+export const START_DATE = 1635333756;
+const SECONDS_IN_ONE_DAY = 60 * 3; // 600;
 
 const now = () => Date.now() / 1000;
 
@@ -79,10 +79,14 @@ export function getSharesCountByStake(
 
   numberOfDaysServed = Math.min(numberOfDaysServed, 10 * DAYS_IN_ONE_YEAR);
 
-  let dayBeforeStakeStart = Math.min(
-    stake.startDay - 1,
-    dailySnapshots.length - 1,
-  );
+  // let startDay = stake.startDay;
+
+  let startDay = Math.min(stake.startDay, dailySnapshots.length - 1);
+
+  // let dayBeforeStakeStart = Math.min(
+  //   stake.startDay - 1,
+  //   dailySnapshots.length - 1,
+  // );
 
   if (dailySnapshots.length === 0) {
     return 0;
@@ -91,16 +95,13 @@ export function getSharesCountByStake(
   // prettier-ignore
 
   let initialSharesCount = 
-            (stake.stakedAmount * SHARE_PRICE_DENORM) / dailySnapshots[dayBeforeStakeStart].sharePrice;
+            (stake.stakedAmount * SHARE_PRICE_DENORM) / dailySnapshots[startDay].sharePrice;
   let longerPaysBetterSharesCount =
     (LONGER_PAYS_BETTER_BONUS *
       numberOfDaysServed *
       stake.stakedAmount *
       SHARE_PRICE_DENORM) /
-    (APY_DENORM *
-      10 *
-      DAYS_IN_ONE_YEAR *
-      dailySnapshots[dayBeforeStakeStart].sharePrice);
+    (APY_DENORM * 10 * DAYS_IN_ONE_YEAR * dailySnapshots[startDay].sharePrice);
 
   let smallerPaysBetterSharesCountMultiplier;
   if (stake.stakedAmount <= MINIMUM_SMALLER_PAYS_BETTER) {

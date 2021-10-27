@@ -10,6 +10,8 @@ export const stakesQuery = gql`
       startedAt
       canceledAt
       completedAt
+      startTx
+      endTx
       owner {
         id
       }
@@ -20,6 +22,15 @@ export const stakesQuery = gql`
       interest
       stakedAmount
       sharesCount
+    }
+  }
+`;
+
+export const maxSharePriceQuery = gql`
+  query maxSharePrice {
+    maxSharePrice(id: 0) {
+      id
+      sharePrice
     }
   }
 `;

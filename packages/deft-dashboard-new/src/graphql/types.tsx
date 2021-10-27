@@ -210,6 +210,36 @@ export enum Global_OrderBy {
   StakerCount = 'stakerCount'
 }
 
+export type MaxSharePrice = {
+  __typename?: 'MaxSharePrice';
+  id: Scalars['ID'];
+  sharePrice: Scalars['BigDecimal'];
+};
+
+export type MaxSharePrice_Filter = {
+  id?: Maybe<Scalars['ID']>;
+  id_not?: Maybe<Scalars['ID']>;
+  id_gt?: Maybe<Scalars['ID']>;
+  id_lt?: Maybe<Scalars['ID']>;
+  id_gte?: Maybe<Scalars['ID']>;
+  id_lte?: Maybe<Scalars['ID']>;
+  id_in?: Maybe<Array<Scalars['ID']>>;
+  id_not_in?: Maybe<Array<Scalars['ID']>>;
+  sharePrice?: Maybe<Scalars['BigDecimal']>;
+  sharePrice_not?: Maybe<Scalars['BigDecimal']>;
+  sharePrice_gt?: Maybe<Scalars['BigDecimal']>;
+  sharePrice_lt?: Maybe<Scalars['BigDecimal']>;
+  sharePrice_gte?: Maybe<Scalars['BigDecimal']>;
+  sharePrice_lte?: Maybe<Scalars['BigDecimal']>;
+  sharePrice_in?: Maybe<Array<Scalars['BigDecimal']>>;
+  sharePrice_not_in?: Maybe<Array<Scalars['BigDecimal']>>;
+};
+
+export enum MaxSharePrice_OrderBy {
+  Id = 'id',
+  SharePrice = 'sharePrice'
+}
+
 export enum OrderDirection {
   Asc = 'asc',
   Desc = 'desc'
@@ -221,6 +251,8 @@ export type Query = {
   users: Array<User>;
   global?: Maybe<Global>;
   globals: Array<Global>;
+  maxSharePrice?: Maybe<MaxSharePrice>;
+  maxSharePrices: Array<MaxSharePrice>;
   dailySnapshot?: Maybe<DailySnapshot>;
   dailySnapshots: Array<DailySnapshot>;
   cachedInterestPerShare?: Maybe<CachedInterestPerShare>;
@@ -260,6 +292,22 @@ export type QueryGlobalsArgs = {
   orderBy?: Maybe<Global_OrderBy>;
   orderDirection?: Maybe<OrderDirection>;
   where?: Maybe<Global_Filter>;
+  block?: Maybe<Block_Height>;
+};
+
+
+export type QueryMaxSharePriceArgs = {
+  id: Scalars['ID'];
+  block?: Maybe<Block_Height>;
+};
+
+
+export type QueryMaxSharePricesArgs = {
+  skip?: Maybe<Scalars['Int']>;
+  first?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<MaxSharePrice_OrderBy>;
+  orderDirection?: Maybe<OrderDirection>;
+  where?: Maybe<MaxSharePrice_Filter>;
   block?: Maybe<Block_Height>;
 };
 
@@ -327,6 +375,8 @@ export type Stake = {
   interest: Scalars['BigDecimal'];
   penalty: Scalars['BigDecimal'];
   sharesCount: Scalars['BigDecimal'];
+  startTx?: Maybe<Scalars['Bytes']>;
+  endTx?: Maybe<Scalars['Bytes']>;
   startedAt?: Maybe<Scalars['BigInt']>;
   completedAt?: Maybe<Scalars['BigInt']>;
   canceledAt?: Maybe<Scalars['BigInt']>;
@@ -415,6 +465,18 @@ export type Stake_Filter = {
   sharesCount_lte?: Maybe<Scalars['BigDecimal']>;
   sharesCount_in?: Maybe<Array<Scalars['BigDecimal']>>;
   sharesCount_not_in?: Maybe<Array<Scalars['BigDecimal']>>;
+  startTx?: Maybe<Scalars['Bytes']>;
+  startTx_not?: Maybe<Scalars['Bytes']>;
+  startTx_in?: Maybe<Array<Scalars['Bytes']>>;
+  startTx_not_in?: Maybe<Array<Scalars['Bytes']>>;
+  startTx_contains?: Maybe<Scalars['Bytes']>;
+  startTx_not_contains?: Maybe<Scalars['Bytes']>;
+  endTx?: Maybe<Scalars['Bytes']>;
+  endTx_not?: Maybe<Scalars['Bytes']>;
+  endTx_in?: Maybe<Array<Scalars['Bytes']>>;
+  endTx_not_in?: Maybe<Array<Scalars['Bytes']>>;
+  endTx_contains?: Maybe<Scalars['Bytes']>;
+  endTx_not_contains?: Maybe<Scalars['Bytes']>;
   startedAt?: Maybe<Scalars['BigInt']>;
   startedAt_not?: Maybe<Scalars['BigInt']>;
   startedAt_gt?: Maybe<Scalars['BigInt']>;
@@ -483,6 +545,8 @@ export enum Stake_OrderBy {
   Interest = 'interest',
   Penalty = 'penalty',
   SharesCount = 'sharesCount',
+  StartTx = 'startTx',
+  EndTx = 'endTx',
   StartedAt = 'startedAt',
   CompletedAt = 'completedAt',
   CanceledAt = 'canceledAt',
@@ -498,6 +562,8 @@ export type Subscription = {
   users: Array<User>;
   global?: Maybe<Global>;
   globals: Array<Global>;
+  maxSharePrice?: Maybe<MaxSharePrice>;
+  maxSharePrices: Array<MaxSharePrice>;
   dailySnapshot?: Maybe<DailySnapshot>;
   dailySnapshots: Array<DailySnapshot>;
   cachedInterestPerShare?: Maybe<CachedInterestPerShare>;
@@ -537,6 +603,22 @@ export type SubscriptionGlobalsArgs = {
   orderBy?: Maybe<Global_OrderBy>;
   orderDirection?: Maybe<OrderDirection>;
   where?: Maybe<Global_Filter>;
+  block?: Maybe<Block_Height>;
+};
+
+
+export type SubscriptionMaxSharePriceArgs = {
+  id: Scalars['ID'];
+  block?: Maybe<Block_Height>;
+};
+
+
+export type SubscriptionMaxSharePricesArgs = {
+  skip?: Maybe<Scalars['Int']>;
+  first?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<MaxSharePrice_OrderBy>;
+  orderDirection?: Maybe<OrderDirection>;
+  where?: Maybe<MaxSharePrice_Filter>;
   block?: Maybe<Block_Height>;
 };
 
@@ -753,6 +835,9 @@ export type ResolversTypes = {
   Global: ResolverTypeWrapper<Global>;
   Global_filter: Global_Filter;
   Global_orderBy: Global_OrderBy;
+  MaxSharePrice: ResolverTypeWrapper<MaxSharePrice>;
+  MaxSharePrice_filter: MaxSharePrice_Filter;
+  MaxSharePrice_orderBy: MaxSharePrice_OrderBy;
   OrderDirection: OrderDirection;
   Query: ResolverTypeWrapper<{}>;
   Stake: ResolverTypeWrapper<Stake>;
@@ -783,6 +868,8 @@ export type ResolversParentTypes = {
   DailySnapshot_filter: DailySnapshot_Filter;
   Global: Global;
   Global_filter: Global_Filter;
+  MaxSharePrice: MaxSharePrice;
+  MaxSharePrice_filter: MaxSharePrice_Filter;
   Query: {};
   Stake: Stake;
   Stake_filter: Stake_Filter;
@@ -846,11 +933,19 @@ export type GlobalResolvers<ContextType = any, ParentType extends ResolversParen
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type MaxSharePriceResolvers<ContextType = any, ParentType extends ResolversParentTypes['MaxSharePrice'] = ResolversParentTypes['MaxSharePrice']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  sharePrice?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserArgs, 'id'>>;
   users?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUsersArgs, 'skip' | 'first'>>;
   global?: Resolver<Maybe<ResolversTypes['Global']>, ParentType, ContextType, RequireFields<QueryGlobalArgs, 'id'>>;
   globals?: Resolver<Array<ResolversTypes['Global']>, ParentType, ContextType, RequireFields<QueryGlobalsArgs, 'skip' | 'first'>>;
+  maxSharePrice?: Resolver<Maybe<ResolversTypes['MaxSharePrice']>, ParentType, ContextType, RequireFields<QueryMaxSharePriceArgs, 'id'>>;
+  maxSharePrices?: Resolver<Array<ResolversTypes['MaxSharePrice']>, ParentType, ContextType, RequireFields<QueryMaxSharePricesArgs, 'skip' | 'first'>>;
   dailySnapshot?: Resolver<Maybe<ResolversTypes['DailySnapshot']>, ParentType, ContextType, RequireFields<QueryDailySnapshotArgs, 'id'>>;
   dailySnapshots?: Resolver<Array<ResolversTypes['DailySnapshot']>, ParentType, ContextType, RequireFields<QueryDailySnapshotsArgs, 'skip' | 'first'>>;
   cachedInterestPerShare?: Resolver<Maybe<ResolversTypes['CachedInterestPerShare']>, ParentType, ContextType, RequireFields<QueryCachedInterestPerShareArgs, 'id'>>;
@@ -870,6 +965,8 @@ export type StakeResolvers<ContextType = any, ParentType extends ResolversParent
   interest?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
   penalty?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
   sharesCount?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
+  startTx?: Resolver<Maybe<ResolversTypes['Bytes']>, ParentType, ContextType>;
+  endTx?: Resolver<Maybe<ResolversTypes['Bytes']>, ParentType, ContextType>;
   startedAt?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
   completedAt?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
   canceledAt?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
@@ -885,6 +982,8 @@ export type SubscriptionResolvers<ContextType = any, ParentType extends Resolver
   users?: SubscriptionResolver<Array<ResolversTypes['User']>, "users", ParentType, ContextType, RequireFields<SubscriptionUsersArgs, 'skip' | 'first'>>;
   global?: SubscriptionResolver<Maybe<ResolversTypes['Global']>, "global", ParentType, ContextType, RequireFields<SubscriptionGlobalArgs, 'id'>>;
   globals?: SubscriptionResolver<Array<ResolversTypes['Global']>, "globals", ParentType, ContextType, RequireFields<SubscriptionGlobalsArgs, 'skip' | 'first'>>;
+  maxSharePrice?: SubscriptionResolver<Maybe<ResolversTypes['MaxSharePrice']>, "maxSharePrice", ParentType, ContextType, RequireFields<SubscriptionMaxSharePriceArgs, 'id'>>;
+  maxSharePrices?: SubscriptionResolver<Array<ResolversTypes['MaxSharePrice']>, "maxSharePrices", ParentType, ContextType, RequireFields<SubscriptionMaxSharePricesArgs, 'skip' | 'first'>>;
   dailySnapshot?: SubscriptionResolver<Maybe<ResolversTypes['DailySnapshot']>, "dailySnapshot", ParentType, ContextType, RequireFields<SubscriptionDailySnapshotArgs, 'id'>>;
   dailySnapshots?: SubscriptionResolver<Array<ResolversTypes['DailySnapshot']>, "dailySnapshots", ParentType, ContextType, RequireFields<SubscriptionDailySnapshotsArgs, 'skip' | 'first'>>;
   cachedInterestPerShare?: SubscriptionResolver<Maybe<ResolversTypes['CachedInterestPerShare']>, "cachedInterestPerShare", ParentType, ContextType, RequireFields<SubscriptionCachedInterestPerShareArgs, 'id'>>;
@@ -920,6 +1019,7 @@ export type Resolvers<ContextType = any> = {
   CachedInterestPerShare?: CachedInterestPerShareResolvers<ContextType>;
   DailySnapshot?: DailySnapshotResolvers<ContextType>;
   Global?: GlobalResolvers<ContextType>;
+  MaxSharePrice?: MaxSharePriceResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Stake?: StakeResolvers<ContextType>;
   Subscription?: SubscriptionResolvers<ContextType>;
@@ -955,11 +1055,22 @@ export type StakesQuery = (
   { __typename?: 'Query' }
   & { stakes: Array<(
     { __typename?: 'Stake' }
-    & Pick<Stake, 'id' | 'startedAt' | 'canceledAt' | 'completedAt' | 'startDay' | 'lockDays' | 'endDay' | 'interest' | 'stakedAmount' | 'sharesCount'>
+    & Pick<Stake, 'id' | 'startedAt' | 'canceledAt' | 'completedAt' | 'startTx' | 'endTx' | 'startDay' | 'lockDays' | 'endDay' | 'interest' | 'stakedAmount' | 'sharesCount'>
     & { owner: (
       { __typename?: 'User' }
       & Pick<User, 'id'>
     ) }
+  )> }
+);
+
+export type MaxSharePriceQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MaxSharePriceQuery = (
+  { __typename?: 'Query' }
+  & { maxSharePrice?: Maybe<(
+    { __typename?: 'MaxSharePrice' }
+    & Pick<MaxSharePrice, 'id' | 'sharePrice'>
   )> }
 );
 
@@ -998,6 +1109,8 @@ export const StakesDocument = gql`
     startedAt
     canceledAt
     completedAt
+    startTx
+    endTx
     owner {
       id
     }
@@ -1038,6 +1151,41 @@ export function useStakesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Sta
 export type StakesQueryHookResult = ReturnType<typeof useStakesQuery>;
 export type StakesLazyQueryHookResult = ReturnType<typeof useStakesLazyQuery>;
 export type StakesQueryResult = Apollo.QueryResult<StakesQuery, StakesQueryVariables>;
+export const MaxSharePriceDocument = gql`
+    query maxSharePrice {
+  maxSharePrice(id: 0) {
+    id
+    sharePrice
+  }
+}
+    `;
+
+/**
+ * __useMaxSharePriceQuery__
+ *
+ * To run a query within a React component, call `useMaxSharePriceQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMaxSharePriceQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMaxSharePriceQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useMaxSharePriceQuery(baseOptions?: Apollo.QueryHookOptions<MaxSharePriceQuery, MaxSharePriceQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<MaxSharePriceQuery, MaxSharePriceQueryVariables>(MaxSharePriceDocument, options);
+      }
+export function useMaxSharePriceLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MaxSharePriceQuery, MaxSharePriceQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<MaxSharePriceQuery, MaxSharePriceQueryVariables>(MaxSharePriceDocument, options);
+        }
+export type MaxSharePriceQueryHookResult = ReturnType<typeof useMaxSharePriceQuery>;
+export type MaxSharePriceLazyQueryHookResult = ReturnType<typeof useMaxSharePriceLazyQuery>;
+export type MaxSharePriceQueryResult = Apollo.QueryResult<MaxSharePriceQuery, MaxSharePriceQueryVariables>;
 export const SnapshotsAndInterestDocument = gql`
     query SnapshotsAndInterest {
   cachedInterestPerShares(first: 1000, orderDirection: asc, orderBy: sealedDay) {

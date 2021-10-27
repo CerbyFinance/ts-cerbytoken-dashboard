@@ -11,6 +11,7 @@ import {
   StakesQueryVariables,
   useStakesQuery,
 } from "./graphql/types";
+import LinkIcon from "./icons/LinkIcon";
 import {
   SelectedStakesDesktop,
   SelectedStakesMobile,
@@ -724,8 +725,23 @@ export const StakeList = ({
               )}
 
               <Box width="27px"></Box>
-              <Box width="146px">
+              <Box width="146px" direction="row">
                 <Text size="16px">{item.id}</Text>
+                <Box
+                  height="18px"
+                  margin={{
+                    left: "8px",
+                  }}
+                  style={{
+                    cursor: "pointer",
+                  }}
+                  onClick={() => {
+                    const tx: string = item.endTx ? item.endTx : item.startTx;
+                    window.open("https://kovan.etherscan.io/tx/" + tx);
+                  }}
+                >
+                  <LinkIcon />
+                </Box>
               </Box>
               <Box width="181px">
                 <Text size="16px">{startDayDate}</Text>

@@ -186,4 +186,4 @@ function App() {
   );
 }
 
-export { App as App };
+export { AppDev as App };
