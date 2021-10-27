@@ -6,7 +6,7 @@ dataSources:
     name: Staking
     network: kovan
     source:
-      address: "0x53E81A1B3fa6ACA9e45Dc3ec8540ec18DC03b75e"
+      address: "0xd0efe1119526c8dcddea8cf82a08629da5fe2f8c"
       abi: Staking
       startBlock: 27955100
     mapping:

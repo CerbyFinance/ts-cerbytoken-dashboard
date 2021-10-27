@@ -46,6 +46,9 @@ type Stake @entity {
 
   sharesCount: BigDecimal!
 
+  startTx: Bytes
+  endTx: Bytes
+
   startedAt: BigInt
   completedAt: BigInt
   canceledAt: BigInt

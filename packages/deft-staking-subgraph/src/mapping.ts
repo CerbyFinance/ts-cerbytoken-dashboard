@@ -42,6 +42,8 @@ export function handleStakeStarted(event: StakeStarted): void {
   stake.startedAt = event.block.timestamp;
   stake.completedAt = null;
   stake.canceledAt = null;
+  stake.startTx = event.transaction.hash;
+  stake.endTx = null;
   stake.timestamp = event.block.timestamp;
   stake.blockNumber = event.block.number;
   stake.gasPrice = event.transaction.gasPrice;
@@ -59,6 +61,7 @@ export function handleStakeEnded(event: StakeEnded): void {
   } else {
     stake.canceledAt = event.block.timestamp;
   }
+  stake.endTx = event.transaction.hash;
   stake.interest = convertTokenToDecimal(event.params.interest, BI_18);
   stake.save();
 }
