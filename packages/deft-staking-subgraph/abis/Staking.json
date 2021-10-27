@@ -78,6 +78,149 @@
       {
         "indexed": false,
         "internalType": "uint256",
+        "name": "newSharePrice",
+        "type": "uint256"
+      }
+    ],
+    "name": "NewMaxSharePriceReached",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "role",
+        "type": "bytes32"
+      },
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "previousAdminRole",
+        "type": "bytes32"
+      },
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "newAdminRole",
+        "type": "bytes32"
+      }
+    ],
+    "name": "RoleAdminChanged",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "role",
+        "type": "bytes32"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "sender",
+        "type": "address"
+      }
+    ],
+    "name": "RoleGranted",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "role",
+        "type": "bytes32"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "sender",
+        "type": "address"
+      }
+    ],
+    "name": "RoleRevoked",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "MINIMUM_DAYS_FOR_HIGH_PENALTY",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "CONTROLLED_APY",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "SMALLER_PAYS_BETTER_BONUS",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "LONGER_PAYS_BETTER_BONUS",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "END_STAKE_FROM",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "END_STAKE_TO",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "MINIMUM_STAKE_DAYS",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "MAXIMUM_STAKE_DAYS",
+            "type": "uint256"
+          }
+        ],
+        "indexed": false,
+        "internalType": "struct Settings",
+        "name": "Settings",
+        "type": "tuple"
+      }
+    ],
+    "name": "SettingsUpdated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
         "name": "stakeId",
         "type": "uint256"
       },
@@ -191,6 +334,118 @@
     "type": "event"
   },
   {
+    "inputs": [],
+    "name": "ROLE_ADMIN",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "fromAddr",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amountToBurn",
+        "type": "uint256"
+      }
+    ],
+    "name": "adminBurnAndAddToStakersInflation",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "MINIMUM_DAYS_FOR_HIGH_PENALTY",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "CONTROLLED_APY",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "SMALLER_PAYS_BETTER_BONUS",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "LONGER_PAYS_BETTER_BONUS",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "END_STAKE_FROM",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "END_STAKE_TO",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "MINIMUM_STAKE_DAYS",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "MAXIMUM_STAKE_DAYS",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct Settings",
+        "name": "_settings",
+        "type": "tuple"
+      }
+    ],
+    "name": "adminUpdateSettings",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256[]",
+        "name": "stakeIds",
+        "type": "uint256[]"
+      }
+    ],
+    "name": "bulkEndStake",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256[]",
+        "name": "stakeIds",
+        "type": "uint256[]"
+      }
+    ],
+    "name": "bulkScrapeStake",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "components": [
@@ -206,7 +461,7 @@
           }
         ],
         "internalType": "struct StartStake[]",
-        "name": "_startStakes",
+        "name": "startStakes",
         "type": "tuple[]"
       }
     ],
@@ -218,12 +473,17 @@
   {
     "inputs": [
       {
-        "internalType": "uint256",
-        "name": "numDays",
-        "type": "uint256"
+        "internalType": "uint256[]",
+        "name": "stakeIds",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
       }
     ],
-    "name": "bumpDays",
+    "name": "bulkTransferOwnership",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -282,11 +542,6 @@
         "internalType": "uint256",
         "name": "stakeId",
         "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_bumpDays",
-        "type": "uint256"
       }
     ],
     "name": "endStake",
@@ -296,7 +551,7 @@
   },
   {
     "inputs": [],
-    "name": "getCurrentHundredDay",
+    "name": "getCachedInterestPerShareLength",
     "outputs": [
       {
         "internalType": "uint256",
@@ -309,7 +564,20 @@
   },
   {
     "inputs": [],
-    "name": "getCurrentOneDay",
+    "name": "getCurrentCachedPerShareDay",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getCurrentDaySinceLaunch",
     "outputs": [
       {
         "internalType": "uint256",
@@ -346,7 +614,215 @@
         "type": "uint256"
       }
     ],
-    "name": "getInterest",
+    "name": "getInterestById",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "owner",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "stakedAmount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "startDay",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "lockedForXDays",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "endDay",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "maxSharesCountOnStartStake",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct Stake",
+        "name": "stake",
+        "type": "tuple"
+      },
+      {
+        "internalType": "uint256",
+        "name": "givenDay",
+        "type": "uint256"
+      }
+    ],
+    "name": "getInterestByStake",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "stakeId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "givenDay",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "interest",
+        "type": "uint256"
+      }
+    ],
+    "name": "getPenaltyById",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "owner",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "stakedAmount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "startDay",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "lockedForXDays",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "endDay",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "maxSharesCountOnStartStake",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct Stake",
+        "name": "stake",
+        "type": "tuple"
+      },
+      {
+        "internalType": "uint256",
+        "name": "givenDay",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "interest",
+        "type": "uint256"
+      }
+    ],
+    "name": "getPenaltyByStake",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "role",
+        "type": "bytes32"
+      }
+    ],
+    "name": "getRoleAdmin",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "role",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "uint256",
+        "name": "index",
+        "type": "uint256"
+      }
+    ],
+    "name": "getRoleMember",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "role",
+        "type": "bytes32"
+      }
+    ],
+    "name": "getRoleMemberCount",
     "outputs": [
       {
         "internalType": "uint256",
@@ -370,7 +846,7 @@
         "type": "uint256"
       }
     ],
-    "name": "getPenalty",
+    "name": "getSharesCountById",
     "outputs": [
       {
         "internalType": "uint256",
@@ -384,9 +860,41 @@
   {
     "inputs": [
       {
-        "internalType": "uint256",
-        "name": "stakeId",
-        "type": "uint256"
+        "components": [
+          {
+            "internalType": "address",
+            "name": "owner",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "stakedAmount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "startDay",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "lockedForXDays",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "endDay",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "maxSharesCountOnStartStake",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct Stake",
+        "name": "stake",
+        "type": "tuple"
       },
       {
         "internalType": "uint256",
@@ -394,7 +902,7 @@
         "type": "uint256"
       }
     ],
-    "name": "getSharesCount",
+    "name": "getSharesCountByStake",
     "outputs": [
       {
         "internalType": "uint256",
@@ -403,6 +911,148 @@
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getStakesLength",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getTotalTokensStaked",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "role",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "grantRole",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "bytes32",
+            "name": "role",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "address",
+            "name": "addr",
+            "type": "address"
+          }
+        ],
+        "internalType": "struct RoleAccess[]",
+        "name": "roles",
+        "type": "tuple[]"
+      }
+    ],
+    "name": "grantRolesBulk",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "role",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "hasRole",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "launchTimestamp",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "role",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "renounceRole",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "role",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "revokeRole",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -416,6 +1066,54 @@
     "name": "scrapeStake",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "settings",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "MINIMUM_DAYS_FOR_HIGH_PENALTY",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "CONTROLLED_APY",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "SMALLER_PAYS_BETTER_BONUS",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "LONGER_PAYS_BETTER_BONUS",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "END_STAKE_FROM",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "END_STAKE_TO",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "MINIMUM_STAKE_DAYS",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "MAXIMUM_STAKE_DAYS",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -452,6 +1150,11 @@
         "internalType": "uint256",
         "name": "endDay",
         "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "maxSharesCountOnStartStake",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -478,18 +1181,30 @@
       }
     ],
     "name": "startStake",
-    "outputs": [],
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "stakeId",
+        "type": "uint256"
+      }
+    ],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "totalStaked",
+    "inputs": [
+      {
+        "internalType": "bytes4",
+        "name": "interfaceId",
+        "type": "bytes4"
+      }
+    ],
+    "name": "supportsInterface",
     "outputs": [
       {
-        "internalType": "uint256",
+        "internalType": "bool",
         "name": "",
-        "type": "uint256"
+        "type": "bool"
       }
     ],
     "stateMutability": "view",

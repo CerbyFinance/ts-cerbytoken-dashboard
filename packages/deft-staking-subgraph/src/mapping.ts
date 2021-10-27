@@ -1,12 +1,14 @@
 import {
   CachedInterestPerShare,
   DailySnapshot,
+  MaxSharePrice,
   Stake,
   User,
 } from "../generated/schema";
 import {
   CachedInterestPerShareSealed,
   DailySnapshotSealed,
+  NewMaxSharePriceReached,
   StakeEnded,
   StakeOwnerChanged,
   StakeStarted,
@@ -76,6 +78,17 @@ export function handleStakeUpdated(event: StakeUpdated): void {
   stake.sharesCount = convertTokenToDecimal(event.params.sharesCount, BI_18);
   stake.lockDays = event.params.lockedForXDays;
   stake.save();
+}
+
+export function handleNewMaxSharePriceReached(
+  event: NewMaxSharePriceReached,
+): void {
+  let share = MaxSharePrice.load("0");
+  if (share == null) {
+    share = new MaxSharePrice("0");
+  }
+  share.sharePrice = convertTokenToDecimal(event.params.newSharePrice, BI_18);
+  share.save();
 }
 
 export function handleCachedInterestPerShareSealed(

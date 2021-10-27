@@ -4,6 +4,5 @@ node_modules/
 .idea/
 build/
 generated/
-subgraph.yaml
 thegraph-access-token.txt
 

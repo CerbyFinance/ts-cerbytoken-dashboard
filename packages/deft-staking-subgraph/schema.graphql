@@ -10,6 +10,11 @@ type Global @entity {
   stakerCount: BigInt!
 }
 
+type MaxSharePrice @entity {
+  id: ID!
+  sharePrice: BigDecimal!
+}
+
 type DailySnapshot @entity {
   id: ID! # day
   sealedDay: BigInt!
