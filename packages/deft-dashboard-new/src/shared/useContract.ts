@@ -33,7 +33,7 @@ export function usePresaleContract(contractAddress: string) {
   return res;
 }
 
-const STAKING_CONTRACT = "0xd0efe1119526c8dcddea8cf82a08629da5fe2f8c";
+const STAKING_CONTRACT = "0xdef1fafc79cd01cf6797b9d7f51411bef486262a";
 
 export function useStakingContract() {
   const { account, library, connector } = useWeb3React();
@@ -45,7 +45,7 @@ export function useStakingContract() {
   return res;
 }
 
-const TOKEN_CONTRACT = "0xe4DFe0FC73A9B9105Ed0422ba66084b47A32499F";
+const TOKEN_CONTRACT = "0xdef1fac7Bf08f173D286BbBDcBeeADe695129840";
 
 export function useTokenContract() {
   const { account, library, connector } = useWeb3React();

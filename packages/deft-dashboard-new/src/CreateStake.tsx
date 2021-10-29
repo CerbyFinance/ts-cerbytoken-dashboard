@@ -1,3 +1,4 @@
+import { useApolloClient } from "@apollo/client";
 import { useWeb3React } from "@web3-react/core";
 import * as dateFns from "date-fns";
 import dayjs from "dayjs";
@@ -16,7 +17,7 @@ import {
   StakesQueryVariables,
   useMaxSharePriceQuery,
 } from "./graphql/types";
-import { stakingClient } from "./shared/client";
+// import { stakingClient } from "./shared/client";
 import { HoveredElement } from "./shared/hooks";
 import { ModalsContext } from "./shared/modals";
 import { SnapshotsInterest } from "./shared/snaphots-interest";
@@ -361,6 +362,7 @@ export const CreateStakeModal = () => {
   }, []);
 
   const stakingContract = useStakingContract();
+  const stakingClient = useApolloClient();
 
   const { closeModal } = useContext(ModalsContext);
   const isDark = theme === "dark";

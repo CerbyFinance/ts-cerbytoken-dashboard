@@ -1,3 +1,4 @@
+import { useApolloClient } from "@apollo/client";
 import { useWeb3React } from "@web3-react/core";
 import { createContext, useEffect } from "react";
 import {
@@ -6,7 +7,6 @@ import {
   SnapshotsAndInterestDocument,
   useSnapshotsAndInterestQuery,
 } from "../graphql/types";
-import { stakingClient } from "./client";
 
 type State = {
   dailySnapshots: DailySnapshot[];
@@ -34,6 +34,8 @@ export const SnapshotsInterestProvider = ({
     fetchPolicy: "cache-and-network",
     skip: !account, // can be fetched in parallel
   });
+
+  const stakingClient = useApolloClient();
 
   useEffect(() => {
     const timer = setInterval(async () => {

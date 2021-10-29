@@ -1,3 +1,4 @@
+import { useApolloClient } from "@apollo/client";
 import { useWeb3React } from "@web3-react/core";
 import dayjs from "dayjs";
 import { Box, Text } from "grommet";
@@ -5,6 +6,7 @@ import mergeWith from "lodash.mergewith";
 import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import useMedia from "use-media";
+import { Chains } from "./chains";
 import {
   StakesDocument,
   StakesQuery,
@@ -17,12 +19,13 @@ import {
   SelectedStakesMobile,
   SelectedStakesTablet,
 } from "./SelectedStakes";
-import { stakingClient } from "./shared/client";
+// import { stakingClient } from "./shared/client";
 import { HoveredElement } from "./shared/hooks";
 import { ModalsContext } from "./shared/modals";
 import { makePages } from "./shared/shared";
 import { SnapshotsInterest } from "./shared/snaphots-interest";
 import { ThemeContext } from "./shared/theme";
+import { getEtherscanLink } from "./shared/utils";
 import {
   DAYS_IN_ONE_YEAR,
   deftShortCurrency,
@@ -228,6 +231,8 @@ export const StakeList = ({
   items: StakesQuery["stakes"];
   // inflations: number[];
 }) => {
+  const { chainId } = useWeb3React();
+
   const { theme, setTheme } = useContext(ThemeContext);
   const isDark = theme === "dark";
 
@@ -526,6 +531,47 @@ export const StakeList = ({
             </Box>
           )}
         ></HoveredElement>
+        <Box width="16px"></Box>
+        <HoveredElement
+          render={binder => (
+            <Box
+              height="36px"
+              width="100px"
+              align="center"
+              justify="center"
+              round="5px"
+              style={{
+                cursor: "pointer",
+              }}
+              background={
+                binder.hovered
+                  ? "linear-gradient(91.86deg, #71A7FF 0%, #1F67DB 100%)"
+                  : "#5294FF"
+              }
+              onClick={() => {
+                let link = "";
+
+                if (chainId === 1) {
+                  link =
+                    "https://app.uniswap.org/#/swap?inputCurrency=ETH&outputCurrency=0xdef1fac7bf08f173d286bbbdcbeeade695129840";
+                } else if (chainId === 56) {
+                  link =
+                    "https://pancakeswap.finance/swap?inputCurrency=BNB&outputCurrency=0xdef1fac7bf08f173d286bbbdcbeeade695129840";
+                } else if (chainId === 137) {
+                  link =
+                    "https://quickswap.exchange/#/swap?inputCurrency=Matic&outputCurrency=0xdef1fac7Bf08f173D286BbBDcBeeADe695129840";
+                }
+
+                window.open(link);
+              }}
+              {...binder.bind}
+            >
+              <Text size="14px" weight={500} color="white">
+                Buy DEFT
+              </Text>
+            </Box>
+          )}
+        ></HoveredElement>
         {/* <Box width="10px"></Box> */}
         {/* <Box
           height="36px"
@@ -737,7 +783,8 @@ export const StakeList = ({
                   }}
                   onClick={() => {
                     const tx: string = item.endTx ? item.endTx : item.startTx;
-                    window.open("https://kovan.etherscan.io/tx/" + tx);
+                    const link = getEtherscanLink(chainId as Chains, tx, "tx");
+                    window.open(link);
                   }}
                 >
                   <LinkIcon />
@@ -950,6 +997,8 @@ export const RootStaking = () => {
   const items = data1?.stakes || [];
 
   // const [interests, setInterests] = useState([] as number[]);
+
+  const stakingClient = useApolloClient();
 
   useEffect(() => {
     const timer = setInterval(async () => {

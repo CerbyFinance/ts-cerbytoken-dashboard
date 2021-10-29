@@ -1,3 +1,4 @@
+import { useApolloClient } from "@apollo/client";
 import { useWeb3React } from "@web3-react/core";
 import { serializeError } from "eth-rpc-errors";
 import { ContractTransaction } from "ethers";
@@ -10,7 +11,6 @@ import {
   StakesQuery,
   StakesQueryVariables,
 } from "./graphql/types";
-import { stakingClient } from "./shared/client";
 import { HoveredElement } from "./shared/hooks";
 import { ActiveTemplate, ScrapeOrEndStakesModalPayload } from "./shared/modals";
 import { ThemeContext } from "./shared/theme";
@@ -431,6 +431,8 @@ export const ScrapeOrEndModal = ({
   const [errorMessage, setErrorMessage] = useState("");
 
   const stakingContract = useStakingContract();
+
+  const stakingClient = useApolloClient();
 
   const fireWith = async (
     action: Action,

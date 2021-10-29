@@ -1,3 +1,4 @@
+import { useApolloClient } from "@apollo/client";
 import { useWeb3React } from "@web3-react/core";
 import { serializeError } from "eth-rpc-errors";
 import { Box, Text } from "grommet";
@@ -10,7 +11,6 @@ import {
   StakesQuery,
   StakesQueryVariables,
 } from "./graphql/types";
-import { stakingClient } from "./shared/client";
 import { HoveredElement } from "./shared/hooks";
 import { ModalsContext, TransferStakesModalPayload } from "./shared/modals";
 import { ThemeContext } from "./shared/theme";
@@ -61,6 +61,7 @@ export const TransferStakesModal = ({
   const { closeModal } = useContext(ModalsContext);
 
   const stakingContract = useStakingContract();
+  const stakingClient = useApolloClient();
 
   const [loader, setLoader] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");

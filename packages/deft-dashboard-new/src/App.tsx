@@ -1,6 +1,6 @@
-import { ApolloProvider } from "@apollo/react-hooks";
+import { ApolloClient, ApolloProvider } from "@apollo/react-hooks";
 import { Web3Provider } from "@ethersproject/providers";
-import { Web3ReactProvider } from "@web3-react/core";
+import { useWeb3React, Web3ReactProvider } from "@web3-react/core";
 import { Grommet } from "grommet";
 import React, { useContext } from "react";
 import { BrowserRouter as Router, Redirect, Route } from "react-router-dom";
@@ -11,7 +11,7 @@ import { Footer } from "./components/Footer";
 import { Header } from "./components/Header";
 import { Nav } from "./components/Nav";
 import { Results } from "./components/Results";
-import { stakingClient } from "./shared/client";
+import { clientByChain, noopApollo } from "./shared/client";
 import { ModalsCreatedApp, ModalsState } from "./shared/modals";
 import { NavContext, NavProvider } from "./shared/nav";
 import { PresaleProvider } from "./shared/presale";
@@ -53,11 +53,25 @@ const InjectUseReferrer = () => {
   return <></>;
 };
 
+const InjectApolloClient = ({ children }: { children: JSX.Element }) => {
+  const { chainId } = useWeb3React();
+
+  let stakingClient: ApolloClient<any> = noopApollo;
+
+  if (chainId === 56) {
+    stakingClient = clientByChain["binance"];
+  } else if (chainId === 137) {
+    stakingClient = clientByChain["polygon"];
+  }
+
+  return <ApolloProvider client={stakingClient}>{children} </ApolloProvider>;
+};
+
 function AppDev() {
   return (
     <Web3ReactProvider getLibrary={getLibrary}>
       <Web3ReactManager>
-        <ApolloProvider client={stakingClient}>
+        <InjectApolloClient>
           <ThemeProvider>
             <InjectTheme>
               <SnapshotsInterestProvider>
@@ -79,7 +93,7 @@ function AppDev() {
               </SnapshotsInterestProvider>
             </InjectTheme>
           </ThemeProvider>
-        </ApolloProvider>
+        </InjectApolloClient>
       </Web3ReactManager>
     </Web3ReactProvider>
   );
@@ -89,48 +103,48 @@ function App() {
   return (
     <Web3ReactProvider getLibrary={getLibrary}>
       <Web3ReactManager>
-        <ApolloProvider client={stakingClient}>
-          <ThemeProvider>
-            <InjectTheme>
-              <NavProvider>
-                <PresaleProvider>
-                  <Router>
-                    <InjectUseReferrer />
-                    {/* root route */}
-                    <Route exact path="/">
-                      <Redirect to="/presale" />
-                    </Route>
-                    <Nav />
-                    <main className="flex flex-col h-screen">
-                      <Route
-                        path="/(presale|vesting)"
-                        render={props => {
-                          const url = props.match.url;
-                          const isPresale = url === "/presale";
-                          return (
-                            <section
-                              className={classNames(
-                                "w-full transform-all duration-200 px-4 flex flex-col",
-                              )}
-                            >
-                              <SectionWrapper>
-                                <>
-                                  <Header />
-                                  <Filter
-                                    title={isPresale ? "Presale" : "Vesting"}
-                                  />
-                                  <div className="inset-x-0 -mx-4 top-0 pb-3 border-b-2 shadow-md transform-all duration-200  lg:border-gray-300 dark:border-gray-500 dark:bg-black dark:text-gray-300"></div>
-                                  <Results isPresale={isPresale} />
-                                </>
-                              </SectionWrapper>
-                            </section>
-                          );
-                        }}
-                      ></Route>
-                      <Route
-                        path="/(staking)"
-                        render={props => {
-                          return (
+        <ThemeProvider>
+          <InjectTheme>
+            <NavProvider>
+              <PresaleProvider>
+                <Router>
+                  <InjectUseReferrer />
+                  {/* root route */}
+                  <Route exact path="/">
+                    <Redirect to="/presale" />
+                  </Route>
+                  <Nav />
+                  <main className="flex flex-col h-screen">
+                    <Route
+                      path="/(presale|vesting)"
+                      render={props => {
+                        const url = props.match.url;
+                        const isPresale = url === "/presale";
+                        return (
+                          <section
+                            className={classNames(
+                              "w-full transform-all duration-200 px-4 flex flex-col",
+                            )}
+                          >
+                            <SectionWrapper>
+                              <>
+                                <Header />
+                                <Filter
+                                  title={isPresale ? "Presale" : "Vesting"}
+                                />
+                                <div className="inset-x-0 -mx-4 top-0 pb-3 border-b-2 shadow-md transform-all duration-200  lg:border-gray-300 dark:border-gray-500 dark:bg-black dark:text-gray-300"></div>
+                                <Results isPresale={isPresale} />
+                              </>
+                            </SectionWrapper>
+                          </section>
+                        );
+                      }}
+                    ></Route>
+                    <Route
+                      path="/(staking)"
+                      render={props => {
+                        return (
+                          <InjectApolloClient>
                             <section
                               className={classNames(
                                 "w-full transform-all duration-200 px-4 flex flex-col",
@@ -159,31 +173,31 @@ function App() {
                                 </>
                               </SectionWrapper>
                             </section>
-                          );
-                        }}
-                      ></Route>
-                      <Footer />
-                    </main>
-                    <ToastContainer
-                      position="top-right"
-                      autoClose={5000}
-                      hideProgressBar={false}
-                      newestOnTop={false}
-                      closeOnClick
-                      rtl={false}
-                      pauseOnFocusLoss
-                      draggable
-                      pauseOnHover
-                    />
-                  </Router>
-                </PresaleProvider>
-              </NavProvider>
-            </InjectTheme>
-          </ThemeProvider>
-        </ApolloProvider>
+                          </InjectApolloClient>
+                        );
+                      }}
+                    ></Route>
+                    <Footer />
+                  </main>
+                  <ToastContainer
+                    position="top-right"
+                    autoClose={5000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                  />
+                </Router>
+              </PresaleProvider>
+            </NavProvider>
+          </InjectTheme>
+        </ThemeProvider>
       </Web3ReactManager>
     </Web3ReactProvider>
   );
 }
 
-export { AppDev as App };
+export { App as App };
