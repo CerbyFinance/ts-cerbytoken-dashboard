@@ -8,13 +8,11 @@ const SECONDS_IN_ONE_DAY = 86400; // 600;
 const now = () => Date.now() / 1000;
 
 export const getCurrentDay = () => {
-  return 1 + now() / SECONDS_IN_ONE_DAY - START_DATE / SECONDS_IN_ONE_DAY;
-
-  // return (
-  //   Math.floor(now() / SECONDS_IN_ONE_DAY) -
-  //   Math.floor(START_DATE / SECONDS_IN_ONE_DAY) +
-  //   1
-  // );
+  return (
+    Math.floor(now() / SECONDS_IN_ONE_DAY) -
+    Math.floor(START_DATE / SECONDS_IN_ONE_DAY) +
+    1
+  );
 };
 
 // const MINIMUM_DAYS_FOR_HIGH_PENALTY = 0;
