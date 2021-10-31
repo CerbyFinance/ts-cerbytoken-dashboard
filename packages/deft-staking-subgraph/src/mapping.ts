@@ -20,6 +20,7 @@ function getOrCreateUser(id: string): User | null {
   let user = User.load(id);
   if (user == null) {
     user = new User(id);
+    user.stakedAmount = ZERO_BD;
     user.save();
   }
   return user;
@@ -27,12 +28,13 @@ function getOrCreateUser(id: string): User | null {
 
 export function handleStakeStarted(event: StakeStarted): void {
   let ownerId = event.params.owner.toHexString();
-  let owner = getOrCreateUser(ownerId);
+
+  let stakedAmount = convertTokenToDecimal(event.params.stakedAmount, BI_18);
 
   let stakeId = event.params.stakeId.toString();
   let stake = new Stake(stakeId);
   stake.owner = ownerId;
-  stake.stakedAmount = convertTokenToDecimal(event.params.stakedAmount, BI_18);
+  stake.stakedAmount = stakedAmount;
   stake.startDay = event.params.startDay;
   stake.lockDays = event.params.lockedForXDays;
   stake.endDay = ZERO_BI;
@@ -49,10 +51,16 @@ export function handleStakeStarted(event: StakeStarted): void {
   stake.gasPrice = event.transaction.gasPrice;
   stake.gasUsed = event.transaction.gasUsed;
   stake.save();
+
+  let owner = getOrCreateUser(ownerId);
+  owner.stakedAmount = owner.stakedAmount.plus(stakedAmount);
+  owner.save();
 }
 
 export function handleStakeEnded(event: StakeEnded): void {
   let stake = Stake.load(event.params.stakeId.toString());
+  let ownerId = stake.owner;
+  let stakedAmount = stake.stakedAmount;
 
   stake.endDay = event.params.endDay;
   stake.penalty = convertTokenToDecimal(event.params.penalty, BI_18);
@@ -64,15 +72,28 @@ export function handleStakeEnded(event: StakeEnded): void {
   stake.endTx = event.transaction.hash;
   stake.interest = convertTokenToDecimal(event.params.interest, BI_18);
   stake.save();
+
+  let owner = getOrCreateUser(ownerId);
+  owner.stakedAmount = owner.stakedAmount.minus(stakedAmount);
+  owner.save();
 }
 
-export function handleStakeOwnerSchanged(event: StakeOwnerChanged): void {
+export function handleStakeOwnerChanged(event: StakeOwnerChanged): void {
   let newOwnerId = event.params.newOwner.toHexString();
   let newOwner = getOrCreateUser(newOwnerId);
 
   let stake = Stake.load(event.params.stakeId.toString());
+  let oldOwnerId = stake.owner;
+  let stakedAmount = stake.stakedAmount;
   stake.owner = newOwnerId;
   stake.save();
+
+  let oldOwner = getOrCreateUser(oldOwnerId);
+  oldOwner.stakedAmount = oldOwner.stakedAmount.minus(stakedAmount);
+  newOwner.stakedAmount = newOwner.stakedAmount.plus(stakedAmount);
+
+  oldOwner.save();
+  newOwner.save();
 }
 
 export function handleStakeUpdated(event: StakeUpdated): void {

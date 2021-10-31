@@ -1,5 +1,6 @@
 type User @entity {
   id: ID!
+  stakedAmount: BigDecimal!
   stakes: [Stake!]! @derivedFrom(field: "owner")
 }
 
