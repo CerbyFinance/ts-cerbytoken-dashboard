@@ -2,7 +2,7 @@
 
 import { CachedInterestPerShare, DailySnapshot } from "./graphql/types";
 
-export const START_DATE = 1635604537;
+export const START_DATE = 1635552000;
 const SECONDS_IN_ONE_DAY = 86400; // 600;
 
 const now = () => Date.now() / 1000;

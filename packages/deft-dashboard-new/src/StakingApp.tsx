@@ -1,6 +1,7 @@
 import { useApolloClient } from "@apollo/client";
 import { useWeb3React } from "@web3-react/core";
 import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
 import { Box, Text } from "grommet";
 import mergeWith from "lodash.mergewith";
 import React, { useContext, useEffect, useState } from "react";
@@ -163,10 +164,12 @@ export function _daysLeft(finalDay: number) {
   return _daysDiff(getCurrentDay(), finalDay);
 }
 
+dayjs.extend(utc);
+
 function getRelativeDate(e: number, a: number) {
-  return dayjs(new Date(new Date(a).setDate(new Date(a).getDate() + e))).format(
-    "MMM D, YYYY",
-  );
+  return dayjs
+    .utc(new Date(new Date(a).setDate(new Date(a).getDate() + e)))
+    .format("MMM D, YYYY");
 }
 
 const WithOrder = ({
@@ -516,6 +519,12 @@ export const StakeList = ({
               round="5px"
               style={{
                 cursor: "pointer",
+                ...(chainId === 56 || chainId === 137
+                  ? {}
+                  : {
+                      pointerEvents: "none",
+                      opacity: 0.5,
+                    }),
               }}
               background={
                 binder.hovered
