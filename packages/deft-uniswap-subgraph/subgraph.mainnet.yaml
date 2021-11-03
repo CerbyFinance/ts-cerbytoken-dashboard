@@ -6,9 +6,9 @@ dataSources:
     name: UniswapDeft
     network: mainnet
     source:
-      address: "0xFa6687922BF40FF51Bcd45F9FD339215a4869D82"
-      abi: UniswapPair
-      startBlock: 12495000
+      address: "0x81489b0e7c7a515799c89374e23ac9295088551d"
+      abi: UniswapV3PoolEvents
+      startBlock: 13424500
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -17,21 +17,19 @@ dataSources:
         - Token
         - Swap
       abis:
-        - name: UniswapPair
-          file: ./abis/UniswapPair.json
+        - name: UniswapV3PoolEvents
+          file: ./abis/UniswapV3PoolEvents.json
       eventHandlers:
-        - event: Sync(uint112,uint112)
-          handler: handleSync
-        - event: Swap(indexed address,uint256,uint256,uint256,uint256,indexed address)
+        - event: Swap(indexed address,indexed address,int256,int256,uint160,uint128,int24)
           handler: handleSwap
       file: ./src/mapping-uniswapDeft.ts
   - kind: ethereum/contract
     name: UniswapUsdt
     network: mainnet
     source:
-      address: "0x0d4a11d5EEaaC28EC3F61d100daF4d40471f1852"
+      address: "0x0d4a11d5eeaac28ec3f61d100daf4d40471f1852"
       abi: UniswapPair
-      startBlock: 12495000
+      startBlock: 13424500
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4

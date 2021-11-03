@@ -3,27 +3,27 @@ import {
   Sync,
 } from "../generated/PancakeswapDeft/PancakeswapPair";
 import { Swap, Token } from "../generated/schema";
-import { BI_18, convertTokenToDecimal, ZERO_BD } from "./helpers";
+import { BI_18, BI_6, convertTokenToDecimal, ZERO_BD } from "./helpers";
 
 export function handleSync(event: Sync): void {
-  let bnbInUsd = Token.load("bnbInUsd");
+  let maticInUsd = Token.load("maticInUsd");
   let deftInUsd = Token.load("deftInUsd");
 
-  if (bnbInUsd === null) {
-    bnbInUsd = new Token("bnbInUsd");
+  if (maticInUsd === null) {
+    maticInUsd = new Token("maticInUsd");
   }
 
   if (deftInUsd === null) {
     deftInUsd = new Token("deftInUsd");
   }
 
-  let deftReserve = convertTokenToDecimal(event.params.reserve0, BI_18);
-  let usdcReserve = convertTokenToDecimal(event.params.reserve1, BI_18);
+  let usdcReserve = convertTokenToDecimal(event.params.reserve0, BI_6);
+  let deftReserve = convertTokenToDecimal(event.params.reserve1, BI_18);
 
   if (usdcReserve > ZERO_BD) {
-    bnbInUsd.price = deftReserve.div(usdcReserve);
+    maticInUsd.price = deftReserve.div(usdcReserve);
   } else {
-    bnbInUsd.price = ZERO_BD;
+    maticInUsd.price = ZERO_BD;
   }
 
   if (deftReserve > ZERO_BD) {
@@ -32,48 +32,49 @@ export function handleSync(event: Sync): void {
     deftInUsd.price = ZERO_BD;
   }
 
-  bnbInUsd.save();
+  maticInUsd.save();
   deftInUsd.save();
 }
 
 export function handleSwap(event: SwapEvent): void {
-  let amount0In = convertTokenToDecimal(event.params.amount0In, BI_18);
+  let amount0In = convertTokenToDecimal(event.params.amount0In, BI_6);
   let amount1In = convertTokenToDecimal(event.params.amount1In, BI_18);
-  let amount0Out = convertTokenToDecimal(event.params.amount0Out, BI_18);
+  let amount0Out = convertTokenToDecimal(event.params.amount0Out, BI_6);
   let amount1Out = convertTokenToDecimal(event.params.amount1Out, BI_18);
 
-  let bnbInUsd = Token.load("bnbInUsd");
-  let usdInBnb = Token.load("usdInBnb");
+  let maticInUsd = Token.load("maticInUsd");
+  let usdInMatic = Token.load("usdInMatic");
 
   let feedType = "";
 
   if (amount0In > ZERO_BD) {
-    feedType = "sell";
-  } else {
     feedType = "buy";
+  } else {
+    feedType = "sell";
   }
 
   let deftInUsd = ZERO_BD;
   let amountDeft = ZERO_BD;
   let amountDeftInUsd = ZERO_BD;
+  // let amountDeftInMatic = ZERO_BD;
 
   if (amount1In > ZERO_BD && amount0Out > ZERO_BD) {
-    deftInUsd = amount1In.div(amount0Out);
+    deftInUsd = amount0Out.div(amount1In);
 
-    amountDeft = amount0Out;
-    amountDeftInUsd = amount1In;
+    amountDeft = amount1In;
+    amountDeftInUsd = amount0Out;
   } else if (amount1Out > ZERO_BD && amount0In > ZERO_BD) {
-    deftInUsd = amount1Out.div(amount0In);
+    deftInUsd = amount0In.div(amount1Out);
 
-    amountDeft = amount0In;
-    amountDeftInUsd = amount1Out;
+    amountDeft = amount1Out;
+    amountDeftInUsd = amount0In;
   }
 
-  // let deftInUsd = deftInBnb.times(bnbInUsd.price);
-  let deftInBnb = deftInUsd.times(usdInBnb.price);
-  // let amountDeftInUsd = amountDeftInBnb.times(bnbInUsd.price);
+  // let deftInUsd = deftInMatic.times(maticInUsd.price);
+  let deftInMatic = deftInUsd.times(usdInMatic.price);
+  // let amountDeftInUsd = amountDeftInMatic.times(maticInUsd.price);
 
-  let amountDeftInBnb = amountDeftInUsd.times(usdInBnb.price);
+  let amountDeftInMatic = amountDeftInUsd.times(usdInMatic.price);
 
   let swap = new Swap(
     event.block.hash.toHexString() +
@@ -86,12 +87,12 @@ export function handleSwap(event: SwapEvent): void {
   let gasPrice = event.transaction.gasPrice;
   let gasUsed = event.transaction.gasUsed;
 
-  let transactionFeeInBnb = convertTokenToDecimal(
+  let transactionFeeInMatic = convertTokenToDecimal(
     gasPrice.times(gasUsed),
     BI_18,
   );
 
-  let transactionFeeInUsd = transactionFeeInBnb.div(bnbInUsd.price);
+  let transactionFeeInUsd = transactionFeeInMatic.times(maticInUsd.price);
 
   swap.feedType = feedType;
   swap.txHash = event.transaction.hash;
@@ -100,14 +101,14 @@ export function handleSwap(event: SwapEvent): void {
   swap.from = event.transaction.from;
   swap.to = event.params.to;
 
-  swap.deftInBnb = deftInBnb;
+  swap.deftInMatic = deftInMatic;
   swap.deftInUsd = deftInUsd;
 
   swap.amountDeft = amountDeft;
-  swap.amountDeftInBnb = amountDeftInBnb;
+  swap.amountDeftInMatic = amountDeftInMatic;
   swap.amountDeftInUsd = amountDeftInUsd;
 
-  swap.transactionFeeInBnb = transactionFeeInBnb;
+  swap.transactionFeeInMatic = transactionFeeInMatic;
   swap.transactionFeeInUsd = transactionFeeInUsd;
 
   swap.logIndex = event.logIndex;

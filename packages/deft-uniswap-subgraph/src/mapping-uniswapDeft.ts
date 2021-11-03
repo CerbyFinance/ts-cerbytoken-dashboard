@@ -1,84 +1,35 @@
-import { Swap, Token } from "../generated/schema";
-import { Swap as SwapEvent, Sync } from "../generated/UniswapDeft/UniswapPair";
-import { BI_18, convertTokenToDecimal, ZERO_BD } from "./helpers";
+import { BigDecimal } from "@graphprotocol/graph-ts";
+import { Swap } from "../generated/schema";
+import { Swap as SwapEvent } from "../generated/UniswapDeft/UniswapV3PoolEvents";
+import { BI_18, BI_6, convertTokenToDecimal, ZERO_BD } from "./helpers";
 
-export function handleSync(event: Sync): void {
-  let deftInEth = Token.load("deftInEth");
-  let ethInDeft = Token.load("ethInDeft");
-
-  if (deftInEth === null) {
-    deftInEth = new Token("deftInEth");
-  }
-  if (ethInDeft === null) {
-    ethInDeft = new Token("ethInDeft");
+function abs(a: BigDecimal): BigDecimal {
+  if (a.ge(ZERO_BD)) {
+    return a;
   }
 
-  let wethReserve = convertTokenToDecimal(event.params.reserve0, BI_18);
-  let deftReserve = convertTokenToDecimal(event.params.reserve1, BI_18);
-
-  // eth in deft
-  if (wethReserve > ZERO_BD) {
-    ethInDeft.price = deftReserve.div(wethReserve);
-  } else {
-    ethInDeft.price = ZERO_BD;
-  }
-
-  // deft in eth
-  if (deftReserve > ZERO_BD) {
-    deftInEth.price = wethReserve.div(deftReserve);
-  } else {
-    deftInEth.price = ZERO_BD;
-  }
-
-  let ethInUsd = Token.load("ethInUsd");
-
-  let deftInUsd = Token.load("deftInUsd");
-
-  if (deftInUsd === null) {
-    deftInUsd = new Token("deftInUsd");
-  }
-
-  deftInUsd.price = deftInEth.price.times(ethInUsd.price);
-
-  deftInEth.save();
-  ethInDeft.save();
-  deftInUsd.save();
+  return a.neg();
 }
 
 export function handleSwap(event: SwapEvent): void {
-  let amount0In = convertTokenToDecimal(event.params.amount0In, BI_18);
-  let amount1In = convertTokenToDecimal(event.params.amount1In, BI_18);
-  let amount0Out = convertTokenToDecimal(event.params.amount0Out, BI_18);
-  let amount1Out = convertTokenToDecimal(event.params.amount1Out, BI_18);
+  let sender = event.params.sender;
+  let recipient = event.params.recipient;
 
-  // ETH/USD prices
-  let usdt = Token.load("ethInUsd");
+  // usdc
+  let amount0 = convertTokenToDecimal(event.params.amount0, BI_6);
+  // deft
+  let amount1 = convertTokenToDecimal(event.params.amount1, BI_18);
 
   let feedType = "";
-
-  if (amount0In > ZERO_BD) {
+  if (amount0 > ZERO_BD) {
     feedType = "buy";
   } else {
     feedType = "sell";
   }
 
-  let deftInEth = ZERO_BD;
-  let amountDeft = ZERO_BD;
-  let amountDeftInEth = ZERO_BD;
-  if (amount1In > ZERO_BD && amount0Out > ZERO_BD) {
-    deftInEth = amount0Out.div(amount1In);
+  let amountDeft = abs(amount1);
 
-    amountDeft = amount1In;
-    amountDeftInEth = amount0Out;
-  } else if (amount1Out > ZERO_BD && amount0In > ZERO_BD) {
-    deftInEth = amount0In.div(amount1Out);
-
-    amountDeft = amount1Out;
-    amountDeftInEth = amount0In;
-  }
-
-  let deftInUsd = deftInEth.times(usdt.price);
-  let amountDeftInUsd = amountDeftInEth.times(usdt.price);
+  let amountDeftInUsd = abs(amount0);
 
   let swap = new Swap(
     event.block.hash.toHexString() +
@@ -96,24 +47,17 @@ export function handleSwap(event: SwapEvent): void {
     BI_18,
   );
 
-  let transactionFeeInUsd = transactionFeeInEth.times(usdt.price);
-
   swap.feedType = feedType;
   swap.txHash = event.transaction.hash;
   swap.timestamp = event.block.timestamp;
   swap.sender = event.params.sender;
   swap.from = event.transaction.from;
-  swap.to = event.params.to;
-
-  swap.deftInEth = deftInEth;
-  swap.deftInUsd = deftInUsd;
+  swap.to = event.params.recipient;
 
   swap.amountDeft = amountDeft;
-  swap.amountDeftInEth = amountDeftInEth;
   swap.amountDeftInUsd = amountDeftInUsd;
 
   swap.transactionFeeInEth = transactionFeeInEth;
-  swap.transactionFeeInUsd = transactionFeeInUsd;
 
   swap.logIndex = event.logIndex;
   swap.blockNumber = event.block.number;

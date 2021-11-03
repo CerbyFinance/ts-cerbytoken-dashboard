@@ -4,4 +4,4 @@
 # create
 # remove
 
-graph $1 --node http://server.wisetoken.me:8020/ --ipfs http://server.wisetoken.me:5001/ deft/deft-uniswap-v2-$2 ./subgraph.$2.yaml
+graph $1 --node   http://nodes2.valar-solutions.com:8020/ --ipfs http://nodes2.valar-solutions.com:5001/ deft/deft-pancakeswap-v2-$2 ./subgraph.$2.yaml

@@ -9,15 +9,15 @@ type Swap @entity {
   from: Bytes!
   to: Bytes!
 
-  # deftInEth: BigDecimal!
-  # deftInUsd: BigDecimal!
+  deftInMatic: BigDecimal!
+  deftInUsd: BigDecimal!
 
   amountDeft: BigDecimal!
-  # amountDeftInEth: BigDecimal!
+  amountDeftInMatic: BigDecimal!
   amountDeftInUsd: BigDecimal!
 
-  transactionFeeInEth: BigDecimal!
-  # transactionFeeInUsd: BigDecimal!
+  transactionFeeInMatic: BigDecimal!
+  transactionFeeInUsd: BigDecimal!
 
   logIndex: BigInt!
   blockNumber: BigInt!
