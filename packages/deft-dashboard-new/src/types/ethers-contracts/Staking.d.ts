@@ -21,47 +21,69 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface StakingInterface extends ethers.utils.Interface {
   functions: {
+    "ROLE_ADMIN()": FunctionFragment;
     "adminBurnAndAddToStakersInflation(address,uint256)": FunctionFragment;
+    "adminUpdateSettings((uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256))": FunctionFragment;
     "bulkEndStake(uint256[])": FunctionFragment;
     "bulkScrapeStake(uint256[])": FunctionFragment;
     "bulkStartStake(tuple[])": FunctionFragment;
     "bulkTransferOwnership(uint256[],address)": FunctionFragment;
-    "endStake(uint256)": FunctionFragment;
-    "grantRole(bytes32,address)": FunctionFragment;
-    "grantRolesBulk(tuple[])": FunctionFragment;
-    "renounceRole(bytes32,address)": FunctionFragment;
-    "revokeRole(bytes32,address)": FunctionFragment;
-    "scrapeStake(uint256)": FunctionFragment;
-    "startStake(tuple)": FunctionFragment;
-    "transferOwnership(uint256,address)": FunctionFragment;
-    "updateAllSnapshots()": FunctionFragment;
-    "updateSnapshots(uint256)": FunctionFragment;
     "cachedInterestPerShare(uint256)": FunctionFragment;
     "dailySnapshots(uint256)": FunctionFragment;
+    "endStake(uint256)": FunctionFragment;
     "getCachedInterestPerShareLength()": FunctionFragment;
     "getCurrentCachedPerShareDay()": FunctionFragment;
-    "getCurrentOneDay()": FunctionFragment;
+    "getCurrentDaySinceLaunch()": FunctionFragment;
     "getDailySnapshotsLength()": FunctionFragment;
     "getInterestById(uint256,uint256)": FunctionFragment;
-    "getInterestByStake(tuple,uint256)": FunctionFragment;
+    "getInterestByStake((address,uint256,uint256,uint256,uint256,uint256),uint256)": FunctionFragment;
     "getPenaltyById(uint256,uint256,uint256)": FunctionFragment;
-    "getPenaltyByStake(tuple,uint256,uint256)": FunctionFragment;
+    "getPenaltyByStake((address,uint256,uint256,uint256,uint256,uint256),uint256,uint256)": FunctionFragment;
     "getRoleAdmin(bytes32)": FunctionFragment;
     "getRoleMember(bytes32,uint256)": FunctionFragment;
     "getRoleMemberCount(bytes32)": FunctionFragment;
     "getSharesCountById(uint256,uint256)": FunctionFragment;
-    "getSharesCountByStake(tuple,uint256)": FunctionFragment;
+    "getSharesCountByStake((address,uint256,uint256,uint256,uint256,uint256),uint256)": FunctionFragment;
+    "getStakesLength()": FunctionFragment;
+    "getTotalTokensStaked()": FunctionFragment;
+    "grantRole(bytes32,address)": FunctionFragment;
+    "grantRolesBulk(tuple[])": FunctionFragment;
     "hasRole(bytes32,address)": FunctionFragment;
     "launchTimestamp()": FunctionFragment;
-    "ROLE_ADMIN()": FunctionFragment;
+    "renounceRole(bytes32,address)": FunctionFragment;
+    "revokeRole(bytes32,address)": FunctionFragment;
+    "scrapeStake(uint256)": FunctionFragment;
+    "settings()": FunctionFragment;
     "stakes(uint256)": FunctionFragment;
+    "startStake((uint256,uint256))": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
-    "totalStaked()": FunctionFragment;
+    "transferOwnership(uint256,address)": FunctionFragment;
+    "updateAllSnapshots()": FunctionFragment;
+    "updateSnapshots(uint256)": FunctionFragment;
   };
 
   encodeFunctionData(
+    functionFragment: "ROLE_ADMIN",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "adminBurnAndAddToStakersInflation",
     values: [string, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "adminUpdateSettings",
+    values: [
+      {
+        MINIMUM_DAYS_FOR_HIGH_PENALTY: BigNumberish;
+        CONTROLLED_APY: BigNumberish;
+        SMALLER_PAYS_BETTER_BONUS: BigNumberish;
+        LONGER_PAYS_BETTER_BONUS: BigNumberish;
+        END_STAKE_FROM: BigNumberish;
+        END_STAKE_TO: BigNumberish;
+        MINIMUM_STAKE_DAYS: BigNumberish;
+        MAXIMUM_STAKE_DAYS: BigNumberish;
+      }
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: "bulkEndStake",
@@ -80,51 +102,15 @@ interface StakingInterface extends ethers.utils.Interface {
     values: [BigNumberish[], string]
   ): string;
   encodeFunctionData(
-    functionFragment: "endStake",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "grantRole",
-    values: [BytesLike, string]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "grantRolesBulk",
-    values: [{ role: BytesLike; addr: string }[]]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "renounceRole",
-    values: [BytesLike, string]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "revokeRole",
-    values: [BytesLike, string]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "scrapeStake",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "startStake",
-    values: [{ stakedAmount: BigNumberish; lockedForXDays: BigNumberish }]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "transferOwnership",
-    values: [BigNumberish, string]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "updateAllSnapshots",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "updateSnapshots",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
     functionFragment: "cachedInterestPerShare",
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "dailySnapshots",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "endStake",
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
@@ -136,7 +122,7 @@ interface StakingInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "getCurrentOneDay",
+    functionFragment: "getCurrentDaySinceLaunch",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -156,6 +142,7 @@ interface StakingInterface extends ethers.utils.Interface {
         startDay: BigNumberish;
         lockedForXDays: BigNumberish;
         endDay: BigNumberish;
+        maxSharesCountOnStartStake: BigNumberish;
       },
       BigNumberish
     ]
@@ -173,6 +160,7 @@ interface StakingInterface extends ethers.utils.Interface {
         startDay: BigNumberish;
         lockedForXDays: BigNumberish;
         endDay: BigNumberish;
+        maxSharesCountOnStartStake: BigNumberish;
       },
       BigNumberish,
       BigNumberish
@@ -203,9 +191,26 @@ interface StakingInterface extends ethers.utils.Interface {
         startDay: BigNumberish;
         lockedForXDays: BigNumberish;
         endDay: BigNumberish;
+        maxSharesCountOnStartStake: BigNumberish;
       },
       BigNumberish
     ]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getStakesLength",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getTotalTokensStaked",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "grantRole",
+    values: [BytesLike, string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "grantRolesBulk",
+    values: [{ role: BytesLike; addr: string }[]]
   ): string;
   encodeFunctionData(
     functionFragment: "hasRole",
@@ -216,24 +221,50 @@ interface StakingInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "ROLE_ADMIN",
-    values?: undefined
+    functionFragment: "renounceRole",
+    values: [BytesLike, string]
   ): string;
+  encodeFunctionData(
+    functionFragment: "revokeRole",
+    values: [BytesLike, string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "scrapeStake",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(functionFragment: "settings", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "stakes",
     values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "startStake",
+    values: [{ stakedAmount: BigNumberish; lockedForXDays: BigNumberish }]
   ): string;
   encodeFunctionData(
     functionFragment: "supportsInterface",
     values: [BytesLike]
   ): string;
   encodeFunctionData(
-    functionFragment: "totalStaked",
+    functionFragment: "transferOwnership",
+    values: [BigNumberish, string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "updateAllSnapshots",
     values?: undefined
   ): string;
+  encodeFunctionData(
+    functionFragment: "updateSnapshots",
+    values: [BigNumberish]
+  ): string;
 
+  decodeFunctionResult(functionFragment: "ROLE_ADMIN", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "adminBurnAndAddToStakersInflation",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "adminUpdateSettings",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -252,34 +283,6 @@ interface StakingInterface extends ethers.utils.Interface {
     functionFragment: "bulkTransferOwnership",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "endStake", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "grantRole", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "grantRolesBulk",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "renounceRole",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "revokeRole", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "scrapeStake",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "startStake", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "transferOwnership",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "updateAllSnapshots",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "updateSnapshots",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(
     functionFragment: "cachedInterestPerShare",
     data: BytesLike
@@ -288,6 +291,7 @@ interface StakingInterface extends ethers.utils.Interface {
     functionFragment: "dailySnapshots",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "endStake", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getCachedInterestPerShareLength",
     data: BytesLike
@@ -297,7 +301,7 @@ interface StakingInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "getCurrentOneDay",
+    functionFragment: "getCurrentDaySinceLaunch",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -340,28 +344,61 @@ interface StakingInterface extends ethers.utils.Interface {
     functionFragment: "getSharesCountByStake",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "getStakesLength",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getTotalTokensStaked",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "grantRole", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "grantRolesBulk",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "hasRole", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "launchTimestamp",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "ROLE_ADMIN", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "renounceRole",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "revokeRole", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "scrapeStake",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "settings", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "stakes", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "startStake", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "supportsInterface",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "totalStaked",
+    functionFragment: "transferOwnership",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "updateAllSnapshots",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "updateSnapshots",
     data: BytesLike
   ): Result;
 
   events: {
     "CachedInterestPerShareSealed(uint256,uint256,uint256)": EventFragment;
     "DailySnapshotSealed(uint256,uint256,uint256,uint256,uint256,uint256)": EventFragment;
+    "NewMaxSharePriceReached(uint256)": EventFragment;
     "RoleAdminChanged(bytes32,bytes32,bytes32)": EventFragment;
     "RoleGranted(bytes32,address,address)": EventFragment;
     "RoleRevoked(bytes32,address,address)": EventFragment;
+    "SettingsUpdated(tuple)": EventFragment;
     "StakeEnded(uint256,uint256,uint256,uint256)": EventFragment;
     "StakeOwnerChanged(uint256,address)": EventFragment;
     "StakeStarted(uint256,address,uint256,uint256,uint256,uint256)": EventFragment;
@@ -372,9 +409,11 @@ interface StakingInterface extends ethers.utils.Interface {
     nameOrSignatureOrTopic: "CachedInterestPerShareSealed"
   ): EventFragment;
   getEvent(nameOrSignatureOrTopic: "DailySnapshotSealed"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "NewMaxSharePriceReached"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "RoleAdminChanged"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "RoleGranted"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "RoleRevoked"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "SettingsUpdated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "StakeEnded"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "StakeOwnerChanged"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "StakeStarted"): EventFragment;
@@ -400,6 +439,10 @@ export type DailySnapshotSealedEvent = TypedEvent<
   }
 >;
 
+export type NewMaxSharePriceReachedEvent = TypedEvent<
+  [BigNumber] & { newSharePrice: BigNumber }
+>;
+
 export type RoleAdminChangedEvent = TypedEvent<
   [string, string, string] & {
     role: string;
@@ -414,6 +457,50 @@ export type RoleGrantedEvent = TypedEvent<
 
 export type RoleRevokedEvent = TypedEvent<
   [string, string, string] & { role: string; account: string; sender: string }
+>;
+
+export type SettingsUpdatedEvent = TypedEvent<
+  [
+    [
+      BigNumber,
+      BigNumber,
+      BigNumber,
+      BigNumber,
+      BigNumber,
+      BigNumber,
+      BigNumber,
+      BigNumber
+    ] & {
+      MINIMUM_DAYS_FOR_HIGH_PENALTY: BigNumber;
+      CONTROLLED_APY: BigNumber;
+      SMALLER_PAYS_BETTER_BONUS: BigNumber;
+      LONGER_PAYS_BETTER_BONUS: BigNumber;
+      END_STAKE_FROM: BigNumber;
+      END_STAKE_TO: BigNumber;
+      MINIMUM_STAKE_DAYS: BigNumber;
+      MAXIMUM_STAKE_DAYS: BigNumber;
+    }
+  ] & {
+    Settings: [
+      BigNumber,
+      BigNumber,
+      BigNumber,
+      BigNumber,
+      BigNumber,
+      BigNumber,
+      BigNumber,
+      BigNumber
+    ] & {
+      MINIMUM_DAYS_FOR_HIGH_PENALTY: BigNumber;
+      CONTROLLED_APY: BigNumber;
+      SMALLER_PAYS_BETTER_BONUS: BigNumber;
+      LONGER_PAYS_BETTER_BONUS: BigNumber;
+      END_STAKE_FROM: BigNumber;
+      END_STAKE_TO: BigNumber;
+      MINIMUM_STAKE_DAYS: BigNumber;
+      MAXIMUM_STAKE_DAYS: BigNumber;
+    };
+  }
 >;
 
 export type StakeEndedEvent = TypedEvent<
@@ -492,9 +579,25 @@ export class Staking extends BaseContract {
   interface: StakingInterface;
 
   functions: {
+    ROLE_ADMIN(overrides?: CallOverrides): Promise<[string]>;
+
     adminBurnAndAddToStakersInflation(
       fromAddr: string,
       amountToBurn: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    adminUpdateSettings(
+      _settings: {
+        MINIMUM_DAYS_FOR_HIGH_PENALTY: BigNumberish;
+        CONTROLLED_APY: BigNumberish;
+        SMALLER_PAYS_BETTER_BONUS: BigNumberish;
+        LONGER_PAYS_BETTER_BONUS: BigNumberish;
+        END_STAKE_FROM: BigNumberish;
+        END_STAKE_TO: BigNumberish;
+        MINIMUM_STAKE_DAYS: BigNumberish;
+        MAXIMUM_STAKE_DAYS: BigNumberish;
+      },
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -522,59 +625,6 @@ export class Staking extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    endStake(
-      stakeId: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    grantRole(
-      role: BytesLike,
-      account: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    grantRolesBulk(
-      roles: { role: BytesLike; addr: string }[],
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    renounceRole(
-      role: BytesLike,
-      account: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    revokeRole(
-      role: BytesLike,
-      account: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    scrapeStake(
-      stakeId: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    startStake(
-      _startStake: { stakedAmount: BigNumberish; lockedForXDays: BigNumberish },
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    transferOwnership(
-      stakeId: BigNumberish,
-      newOwner: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    updateAllSnapshots(
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    updateSnapshots(
-      givenDay: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
     cachedInterestPerShare(
       arg0: BigNumberish,
       overrides?: CallOverrides
@@ -591,6 +641,11 @@ export class Staking extends BaseContract {
       }
     >;
 
+    endStake(
+      stakeId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     getCachedInterestPerShareLength(
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
@@ -599,7 +654,7 @@ export class Staking extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
-    getCurrentOneDay(overrides?: CallOverrides): Promise<[BigNumber]>;
+    getCurrentDaySinceLaunch(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     getDailySnapshotsLength(overrides?: CallOverrides): Promise<[BigNumber]>;
 
@@ -616,6 +671,7 @@ export class Staking extends BaseContract {
         startDay: BigNumberish;
         lockedForXDays: BigNumberish;
         endDay: BigNumberish;
+        maxSharesCountOnStartStake: BigNumberish;
       },
       givenDay: BigNumberish,
       overrides?: CallOverrides
@@ -635,6 +691,7 @@ export class Staking extends BaseContract {
         startDay: BigNumberish;
         lockedForXDays: BigNumberish;
         endDay: BigNumberish;
+        maxSharesCountOnStartStake: BigNumberish;
       },
       givenDay: BigNumberish,
       interest: BigNumberish,
@@ -667,10 +724,26 @@ export class Staking extends BaseContract {
         startDay: BigNumberish;
         lockedForXDays: BigNumberish;
         endDay: BigNumberish;
+        maxSharesCountOnStartStake: BigNumberish;
       },
       givenDay: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
+
+    getStakesLength(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    getTotalTokensStaked(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    grantRole(
+      role: BytesLike,
+      account: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    grantRolesBulk(
+      roles: { role: BytesLike; addr: string }[],
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
 
     hasRole(
       role: BytesLike,
@@ -680,32 +753,106 @@ export class Staking extends BaseContract {
 
     launchTimestamp(overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    ROLE_ADMIN(overrides?: CallOverrides): Promise<[string]>;
+    renounceRole(
+      role: BytesLike,
+      account: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    revokeRole(
+      role: BytesLike,
+      account: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    scrapeStake(
+      stakeId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    settings(
+      overrides?: CallOverrides
+    ): Promise<
+      [
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber
+      ] & {
+        MINIMUM_DAYS_FOR_HIGH_PENALTY: BigNumber;
+        CONTROLLED_APY: BigNumber;
+        SMALLER_PAYS_BETTER_BONUS: BigNumber;
+        LONGER_PAYS_BETTER_BONUS: BigNumber;
+        END_STAKE_FROM: BigNumber;
+        END_STAKE_TO: BigNumber;
+        MINIMUM_STAKE_DAYS: BigNumber;
+        MAXIMUM_STAKE_DAYS: BigNumber;
+      }
+    >;
 
     stakes(
       arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
-      [string, BigNumber, BigNumber, BigNumber, BigNumber] & {
+      [string, BigNumber, BigNumber, BigNumber, BigNumber, BigNumber] & {
         owner: string;
         stakedAmount: BigNumber;
         startDay: BigNumber;
         lockedForXDays: BigNumber;
         endDay: BigNumber;
+        maxSharesCountOnStartStake: BigNumber;
       }
     >;
+
+    startStake(
+      _startStake: { stakedAmount: BigNumberish; lockedForXDays: BigNumberish },
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
 
     supportsInterface(
       interfaceId: BytesLike,
       overrides?: CallOverrides
     ): Promise<[boolean]>;
 
-    totalStaked(overrides?: CallOverrides): Promise<[BigNumber]>;
+    transferOwnership(
+      stakeId: BigNumberish,
+      newOwner: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    updateAllSnapshots(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    updateSnapshots(
+      givenDay: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
   };
+
+  ROLE_ADMIN(overrides?: CallOverrides): Promise<string>;
 
   adminBurnAndAddToStakersInflation(
     fromAddr: string,
     amountToBurn: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  adminUpdateSettings(
+    _settings: {
+      MINIMUM_DAYS_FOR_HIGH_PENALTY: BigNumberish;
+      CONTROLLED_APY: BigNumberish;
+      SMALLER_PAYS_BETTER_BONUS: BigNumberish;
+      LONGER_PAYS_BETTER_BONUS: BigNumberish;
+      END_STAKE_FROM: BigNumberish;
+      END_STAKE_TO: BigNumberish;
+      MINIMUM_STAKE_DAYS: BigNumberish;
+      MAXIMUM_STAKE_DAYS: BigNumberish;
+    },
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -730,59 +877,6 @@ export class Staking extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  endStake(
-    stakeId: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  grantRole(
-    role: BytesLike,
-    account: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  grantRolesBulk(
-    roles: { role: BytesLike; addr: string }[],
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  renounceRole(
-    role: BytesLike,
-    account: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  revokeRole(
-    role: BytesLike,
-    account: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  scrapeStake(
-    stakeId: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  startStake(
-    _startStake: { stakedAmount: BigNumberish; lockedForXDays: BigNumberish },
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  transferOwnership(
-    stakeId: BigNumberish,
-    newOwner: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  updateAllSnapshots(
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  updateSnapshots(
-    givenDay: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
   cachedInterestPerShare(
     arg0: BigNumberish,
     overrides?: CallOverrides
@@ -799,13 +893,18 @@ export class Staking extends BaseContract {
     }
   >;
 
+  endStake(
+    stakeId: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   getCachedInterestPerShareLength(
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
   getCurrentCachedPerShareDay(overrides?: CallOverrides): Promise<BigNumber>;
 
-  getCurrentOneDay(overrides?: CallOverrides): Promise<BigNumber>;
+  getCurrentDaySinceLaunch(overrides?: CallOverrides): Promise<BigNumber>;
 
   getDailySnapshotsLength(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -822,6 +921,7 @@ export class Staking extends BaseContract {
       startDay: BigNumberish;
       lockedForXDays: BigNumberish;
       endDay: BigNumberish;
+      maxSharesCountOnStartStake: BigNumberish;
     },
     givenDay: BigNumberish,
     overrides?: CallOverrides
@@ -841,6 +941,7 @@ export class Staking extends BaseContract {
       startDay: BigNumberish;
       lockedForXDays: BigNumberish;
       endDay: BigNumberish;
+      maxSharesCountOnStartStake: BigNumberish;
     },
     givenDay: BigNumberish,
     interest: BigNumberish,
@@ -873,10 +974,26 @@ export class Staking extends BaseContract {
       startDay: BigNumberish;
       lockedForXDays: BigNumberish;
       endDay: BigNumberish;
+      maxSharesCountOnStartStake: BigNumberish;
     },
     givenDay: BigNumberish,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
+
+  getStakesLength(overrides?: CallOverrides): Promise<BigNumber>;
+
+  getTotalTokensStaked(overrides?: CallOverrides): Promise<BigNumber>;
+
+  grantRole(
+    role: BytesLike,
+    account: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  grantRolesBulk(
+    roles: { role: BytesLike; addr: string }[],
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
   hasRole(
     role: BytesLike,
@@ -886,32 +1003,106 @@ export class Staking extends BaseContract {
 
   launchTimestamp(overrides?: CallOverrides): Promise<BigNumber>;
 
-  ROLE_ADMIN(overrides?: CallOverrides): Promise<string>;
+  renounceRole(
+    role: BytesLike,
+    account: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  revokeRole(
+    role: BytesLike,
+    account: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  scrapeStake(
+    stakeId: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  settings(
+    overrides?: CallOverrides
+  ): Promise<
+    [
+      BigNumber,
+      BigNumber,
+      BigNumber,
+      BigNumber,
+      BigNumber,
+      BigNumber,
+      BigNumber,
+      BigNumber
+    ] & {
+      MINIMUM_DAYS_FOR_HIGH_PENALTY: BigNumber;
+      CONTROLLED_APY: BigNumber;
+      SMALLER_PAYS_BETTER_BONUS: BigNumber;
+      LONGER_PAYS_BETTER_BONUS: BigNumber;
+      END_STAKE_FROM: BigNumber;
+      END_STAKE_TO: BigNumber;
+      MINIMUM_STAKE_DAYS: BigNumber;
+      MAXIMUM_STAKE_DAYS: BigNumber;
+    }
+  >;
 
   stakes(
     arg0: BigNumberish,
     overrides?: CallOverrides
   ): Promise<
-    [string, BigNumber, BigNumber, BigNumber, BigNumber] & {
+    [string, BigNumber, BigNumber, BigNumber, BigNumber, BigNumber] & {
       owner: string;
       stakedAmount: BigNumber;
       startDay: BigNumber;
       lockedForXDays: BigNumber;
       endDay: BigNumber;
+      maxSharesCountOnStartStake: BigNumber;
     }
   >;
+
+  startStake(
+    _startStake: { stakedAmount: BigNumberish; lockedForXDays: BigNumberish },
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
   supportsInterface(
     interfaceId: BytesLike,
     overrides?: CallOverrides
   ): Promise<boolean>;
 
-  totalStaked(overrides?: CallOverrides): Promise<BigNumber>;
+  transferOwnership(
+    stakeId: BigNumberish,
+    newOwner: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  updateAllSnapshots(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  updateSnapshots(
+    givenDay: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
   callStatic: {
+    ROLE_ADMIN(overrides?: CallOverrides): Promise<string>;
+
     adminBurnAndAddToStakersInflation(
       fromAddr: string,
       amountToBurn: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    adminUpdateSettings(
+      _settings: {
+        MINIMUM_DAYS_FOR_HIGH_PENALTY: BigNumberish;
+        CONTROLLED_APY: BigNumberish;
+        SMALLER_PAYS_BETTER_BONUS: BigNumberish;
+        LONGER_PAYS_BETTER_BONUS: BigNumberish;
+        END_STAKE_FROM: BigNumberish;
+        END_STAKE_TO: BigNumberish;
+        MINIMUM_STAKE_DAYS: BigNumberish;
+        MAXIMUM_STAKE_DAYS: BigNumberish;
+      },
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -939,54 +1130,6 @@ export class Staking extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    endStake(stakeId: BigNumberish, overrides?: CallOverrides): Promise<void>;
-
-    grantRole(
-      role: BytesLike,
-      account: string,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    grantRolesBulk(
-      roles: { role: BytesLike; addr: string }[],
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    renounceRole(
-      role: BytesLike,
-      account: string,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    revokeRole(
-      role: BytesLike,
-      account: string,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    scrapeStake(
-      stakeId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    startStake(
-      _startStake: { stakedAmount: BigNumberish; lockedForXDays: BigNumberish },
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    transferOwnership(
-      stakeId: BigNumberish,
-      newOwner: string,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    updateAllSnapshots(overrides?: CallOverrides): Promise<void>;
-
-    updateSnapshots(
-      givenDay: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
     cachedInterestPerShare(
       arg0: BigNumberish,
       overrides?: CallOverrides
@@ -1003,13 +1146,15 @@ export class Staking extends BaseContract {
       }
     >;
 
+    endStake(stakeId: BigNumberish, overrides?: CallOverrides): Promise<void>;
+
     getCachedInterestPerShareLength(
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     getCurrentCachedPerShareDay(overrides?: CallOverrides): Promise<BigNumber>;
 
-    getCurrentOneDay(overrides?: CallOverrides): Promise<BigNumber>;
+    getCurrentDaySinceLaunch(overrides?: CallOverrides): Promise<BigNumber>;
 
     getDailySnapshotsLength(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1026,6 +1171,7 @@ export class Staking extends BaseContract {
         startDay: BigNumberish;
         lockedForXDays: BigNumberish;
         endDay: BigNumberish;
+        maxSharesCountOnStartStake: BigNumberish;
       },
       givenDay: BigNumberish,
       overrides?: CallOverrides
@@ -1045,6 +1191,7 @@ export class Staking extends BaseContract {
         startDay: BigNumberish;
         lockedForXDays: BigNumberish;
         endDay: BigNumberish;
+        maxSharesCountOnStartStake: BigNumberish;
       },
       givenDay: BigNumberish,
       interest: BigNumberish,
@@ -1077,10 +1224,26 @@ export class Staking extends BaseContract {
         startDay: BigNumberish;
         lockedForXDays: BigNumberish;
         endDay: BigNumberish;
+        maxSharesCountOnStartStake: BigNumberish;
       },
       givenDay: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    getStakesLength(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getTotalTokensStaked(overrides?: CallOverrides): Promise<BigNumber>;
+
+    grantRole(
+      role: BytesLike,
+      account: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    grantRolesBulk(
+      roles: { role: BytesLike; addr: string }[],
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     hasRole(
       role: BytesLike,
@@ -1090,27 +1253,83 @@ export class Staking extends BaseContract {
 
     launchTimestamp(overrides?: CallOverrides): Promise<BigNumber>;
 
-    ROLE_ADMIN(overrides?: CallOverrides): Promise<string>;
+    renounceRole(
+      role: BytesLike,
+      account: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    revokeRole(
+      role: BytesLike,
+      account: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    scrapeStake(
+      stakeId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    settings(
+      overrides?: CallOverrides
+    ): Promise<
+      [
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber
+      ] & {
+        MINIMUM_DAYS_FOR_HIGH_PENALTY: BigNumber;
+        CONTROLLED_APY: BigNumber;
+        SMALLER_PAYS_BETTER_BONUS: BigNumber;
+        LONGER_PAYS_BETTER_BONUS: BigNumber;
+        END_STAKE_FROM: BigNumber;
+        END_STAKE_TO: BigNumber;
+        MINIMUM_STAKE_DAYS: BigNumber;
+        MAXIMUM_STAKE_DAYS: BigNumber;
+      }
+    >;
 
     stakes(
       arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
-      [string, BigNumber, BigNumber, BigNumber, BigNumber] & {
+      [string, BigNumber, BigNumber, BigNumber, BigNumber, BigNumber] & {
         owner: string;
         stakedAmount: BigNumber;
         startDay: BigNumber;
         lockedForXDays: BigNumber;
         endDay: BigNumber;
+        maxSharesCountOnStartStake: BigNumber;
       }
     >;
+
+    startStake(
+      _startStake: { stakedAmount: BigNumberish; lockedForXDays: BigNumberish },
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     supportsInterface(
       interfaceId: BytesLike,
       overrides?: CallOverrides
     ): Promise<boolean>;
 
-    totalStaked(overrides?: CallOverrides): Promise<BigNumber>;
+    transferOwnership(
+      stakeId: BigNumberish,
+      newOwner: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    updateAllSnapshots(overrides?: CallOverrides): Promise<void>;
+
+    updateSnapshots(
+      givenDay: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
   };
 
   filters: {
@@ -1178,6 +1397,14 @@ export class Staking extends BaseContract {
       }
     >;
 
+    "NewMaxSharePriceReached(uint256)"(
+      newSharePrice?: null
+    ): TypedEventFilter<[BigNumber], { newSharePrice: BigNumber }>;
+
+    NewMaxSharePriceReached(
+      newSharePrice?: null
+    ): TypedEventFilter<[BigNumber], { newSharePrice: BigNumber }>;
+
     "RoleAdminChanged(bytes32,bytes32,bytes32)"(
       role?: BytesLike | null,
       previousAdminRole?: BytesLike | null,
@@ -1230,6 +1457,100 @@ export class Staking extends BaseContract {
     ): TypedEventFilter<
       [string, string, string],
       { role: string; account: string; sender: string }
+    >;
+
+    "SettingsUpdated(tuple)"(
+      Settings?: null
+    ): TypedEventFilter<
+      [
+        [
+          BigNumber,
+          BigNumber,
+          BigNumber,
+          BigNumber,
+          BigNumber,
+          BigNumber,
+          BigNumber,
+          BigNumber
+        ] & {
+          MINIMUM_DAYS_FOR_HIGH_PENALTY: BigNumber;
+          CONTROLLED_APY: BigNumber;
+          SMALLER_PAYS_BETTER_BONUS: BigNumber;
+          LONGER_PAYS_BETTER_BONUS: BigNumber;
+          END_STAKE_FROM: BigNumber;
+          END_STAKE_TO: BigNumber;
+          MINIMUM_STAKE_DAYS: BigNumber;
+          MAXIMUM_STAKE_DAYS: BigNumber;
+        }
+      ],
+      {
+        Settings: [
+          BigNumber,
+          BigNumber,
+          BigNumber,
+          BigNumber,
+          BigNumber,
+          BigNumber,
+          BigNumber,
+          BigNumber
+        ] & {
+          MINIMUM_DAYS_FOR_HIGH_PENALTY: BigNumber;
+          CONTROLLED_APY: BigNumber;
+          SMALLER_PAYS_BETTER_BONUS: BigNumber;
+          LONGER_PAYS_BETTER_BONUS: BigNumber;
+          END_STAKE_FROM: BigNumber;
+          END_STAKE_TO: BigNumber;
+          MINIMUM_STAKE_DAYS: BigNumber;
+          MAXIMUM_STAKE_DAYS: BigNumber;
+        };
+      }
+    >;
+
+    SettingsUpdated(
+      Settings?: null
+    ): TypedEventFilter<
+      [
+        [
+          BigNumber,
+          BigNumber,
+          BigNumber,
+          BigNumber,
+          BigNumber,
+          BigNumber,
+          BigNumber,
+          BigNumber
+        ] & {
+          MINIMUM_DAYS_FOR_HIGH_PENALTY: BigNumber;
+          CONTROLLED_APY: BigNumber;
+          SMALLER_PAYS_BETTER_BONUS: BigNumber;
+          LONGER_PAYS_BETTER_BONUS: BigNumber;
+          END_STAKE_FROM: BigNumber;
+          END_STAKE_TO: BigNumber;
+          MINIMUM_STAKE_DAYS: BigNumber;
+          MAXIMUM_STAKE_DAYS: BigNumber;
+        }
+      ],
+      {
+        Settings: [
+          BigNumber,
+          BigNumber,
+          BigNumber,
+          BigNumber,
+          BigNumber,
+          BigNumber,
+          BigNumber,
+          BigNumber
+        ] & {
+          MINIMUM_DAYS_FOR_HIGH_PENALTY: BigNumber;
+          CONTROLLED_APY: BigNumber;
+          SMALLER_PAYS_BETTER_BONUS: BigNumber;
+          LONGER_PAYS_BETTER_BONUS: BigNumber;
+          END_STAKE_FROM: BigNumber;
+          END_STAKE_TO: BigNumber;
+          MINIMUM_STAKE_DAYS: BigNumber;
+          MAXIMUM_STAKE_DAYS: BigNumber;
+        };
+      }
     >;
 
     "StakeEnded(uint256,uint256,uint256,uint256)"(
@@ -1336,9 +1657,25 @@ export class Staking extends BaseContract {
   };
 
   estimateGas: {
+    ROLE_ADMIN(overrides?: CallOverrides): Promise<BigNumber>;
+
     adminBurnAndAddToStakersInflation(
       fromAddr: string,
       amountToBurn: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    adminUpdateSettings(
+      _settings: {
+        MINIMUM_DAYS_FOR_HIGH_PENALTY: BigNumberish;
+        CONTROLLED_APY: BigNumberish;
+        SMALLER_PAYS_BETTER_BONUS: BigNumberish;
+        LONGER_PAYS_BETTER_BONUS: BigNumberish;
+        END_STAKE_FROM: BigNumberish;
+        END_STAKE_TO: BigNumberish;
+        MINIMUM_STAKE_DAYS: BigNumberish;
+        MAXIMUM_STAKE_DAYS: BigNumberish;
+      },
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1366,59 +1703,6 @@ export class Staking extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    endStake(
-      stakeId: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    grantRole(
-      role: BytesLike,
-      account: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    grantRolesBulk(
-      roles: { role: BytesLike; addr: string }[],
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    renounceRole(
-      role: BytesLike,
-      account: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    revokeRole(
-      role: BytesLike,
-      account: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    scrapeStake(
-      stakeId: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    startStake(
-      _startStake: { stakedAmount: BigNumberish; lockedForXDays: BigNumberish },
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    transferOwnership(
-      stakeId: BigNumberish,
-      newOwner: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    updateAllSnapshots(
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    updateSnapshots(
-      givenDay: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
     cachedInterestPerShare(
       arg0: BigNumberish,
       overrides?: CallOverrides
@@ -1429,13 +1713,18 @@ export class Staking extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    endStake(
+      stakeId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     getCachedInterestPerShareLength(
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     getCurrentCachedPerShareDay(overrides?: CallOverrides): Promise<BigNumber>;
 
-    getCurrentOneDay(overrides?: CallOverrides): Promise<BigNumber>;
+    getCurrentDaySinceLaunch(overrides?: CallOverrides): Promise<BigNumber>;
 
     getDailySnapshotsLength(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1452,6 +1741,7 @@ export class Staking extends BaseContract {
         startDay: BigNumberish;
         lockedForXDays: BigNumberish;
         endDay: BigNumberish;
+        maxSharesCountOnStartStake: BigNumberish;
       },
       givenDay: BigNumberish,
       overrides?: CallOverrides
@@ -1471,6 +1761,7 @@ export class Staking extends BaseContract {
         startDay: BigNumberish;
         lockedForXDays: BigNumberish;
         endDay: BigNumberish;
+        maxSharesCountOnStartStake: BigNumberish;
       },
       givenDay: BigNumberish,
       interest: BigNumberish,
@@ -1506,9 +1797,25 @@ export class Staking extends BaseContract {
         startDay: BigNumberish;
         lockedForXDays: BigNumberish;
         endDay: BigNumberish;
+        maxSharesCountOnStartStake: BigNumberish;
       },
       givenDay: BigNumberish,
       overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getStakesLength(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getTotalTokensStaked(overrides?: CallOverrides): Promise<BigNumber>;
+
+    grantRole(
+      role: BytesLike,
+      account: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    grantRolesBulk(
+      roles: { role: BytesLike; addr: string }[],
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     hasRole(
@@ -1519,22 +1826,73 @@ export class Staking extends BaseContract {
 
     launchTimestamp(overrides?: CallOverrides): Promise<BigNumber>;
 
-    ROLE_ADMIN(overrides?: CallOverrides): Promise<BigNumber>;
+    renounceRole(
+      role: BytesLike,
+      account: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    revokeRole(
+      role: BytesLike,
+      account: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    scrapeStake(
+      stakeId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    settings(overrides?: CallOverrides): Promise<BigNumber>;
 
     stakes(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+
+    startStake(
+      _startStake: { stakedAmount: BigNumberish; lockedForXDays: BigNumberish },
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
 
     supportsInterface(
       interfaceId: BytesLike,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    totalStaked(overrides?: CallOverrides): Promise<BigNumber>;
+    transferOwnership(
+      stakeId: BigNumberish,
+      newOwner: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    updateAllSnapshots(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    updateSnapshots(
+      givenDay: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
   };
 
   populateTransaction: {
+    ROLE_ADMIN(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     adminBurnAndAddToStakersInflation(
       fromAddr: string,
       amountToBurn: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    adminUpdateSettings(
+      _settings: {
+        MINIMUM_DAYS_FOR_HIGH_PENALTY: BigNumberish;
+        CONTROLLED_APY: BigNumberish;
+        SMALLER_PAYS_BETTER_BONUS: BigNumberish;
+        LONGER_PAYS_BETTER_BONUS: BigNumberish;
+        END_STAKE_FROM: BigNumberish;
+        END_STAKE_TO: BigNumberish;
+        MINIMUM_STAKE_DAYS: BigNumberish;
+        MAXIMUM_STAKE_DAYS: BigNumberish;
+      },
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -1562,59 +1920,6 @@ export class Staking extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    endStake(
-      stakeId: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    grantRole(
-      role: BytesLike,
-      account: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    grantRolesBulk(
-      roles: { role: BytesLike; addr: string }[],
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    renounceRole(
-      role: BytesLike,
-      account: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    revokeRole(
-      role: BytesLike,
-      account: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    scrapeStake(
-      stakeId: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    startStake(
-      _startStake: { stakedAmount: BigNumberish; lockedForXDays: BigNumberish },
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    transferOwnership(
-      stakeId: BigNumberish,
-      newOwner: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    updateAllSnapshots(
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    updateSnapshots(
-      givenDay: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
     cachedInterestPerShare(
       arg0: BigNumberish,
       overrides?: CallOverrides
@@ -1625,6 +1930,11 @@ export class Staking extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    endStake(
+      stakeId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
     getCachedInterestPerShareLength(
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
@@ -1633,7 +1943,9 @@ export class Staking extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    getCurrentOneDay(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    getCurrentDaySinceLaunch(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     getDailySnapshotsLength(
       overrides?: CallOverrides
@@ -1652,6 +1964,7 @@ export class Staking extends BaseContract {
         startDay: BigNumberish;
         lockedForXDays: BigNumberish;
         endDay: BigNumberish;
+        maxSharesCountOnStartStake: BigNumberish;
       },
       givenDay: BigNumberish,
       overrides?: CallOverrides
@@ -1671,6 +1984,7 @@ export class Staking extends BaseContract {
         startDay: BigNumberish;
         lockedForXDays: BigNumberish;
         endDay: BigNumberish;
+        maxSharesCountOnStartStake: BigNumberish;
       },
       givenDay: BigNumberish,
       interest: BigNumberish,
@@ -1706,9 +2020,27 @@ export class Staking extends BaseContract {
         startDay: BigNumberish;
         lockedForXDays: BigNumberish;
         endDay: BigNumberish;
+        maxSharesCountOnStartStake: BigNumberish;
       },
       givenDay: BigNumberish,
       overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getStakesLength(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    getTotalTokensStaked(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    grantRole(
+      role: BytesLike,
+      account: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    grantRolesBulk(
+      roles: { role: BytesLike; addr: string }[],
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     hasRole(
@@ -1719,11 +2051,33 @@ export class Staking extends BaseContract {
 
     launchTimestamp(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    ROLE_ADMIN(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    renounceRole(
+      role: BytesLike,
+      account: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    revokeRole(
+      role: BytesLike,
+      account: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    scrapeStake(
+      stakeId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    settings(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     stakes(
       arg0: BigNumberish,
       overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    startStake(
+      _startStake: { stakedAmount: BigNumberish; lockedForXDays: BigNumberish },
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     supportsInterface(
@@ -1731,6 +2085,19 @@ export class Staking extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    totalStaked(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    transferOwnership(
+      stakeId: BigNumberish,
+      newOwner: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    updateAllSnapshots(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    updateSnapshots(
+      givenDay: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
   };
 }

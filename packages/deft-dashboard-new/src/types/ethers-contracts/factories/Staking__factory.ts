@@ -8,6 +8,11 @@ import type { Staking, StakingInterface } from "../Staking";
 
 const _abi = [
   {
+    inputs: [],
+    stateMutability: "nonpayable",
+    type: "constructor",
+  },
+  {
     anonymous: false,
     inputs: [
       {
@@ -73,6 +78,19 @@ const _abi = [
       },
     ],
     name: "DailySnapshotSealed",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "newSharePrice",
+        type: "uint256",
+      },
+    ],
+    name: "NewMaxSharePriceReached",
     type: "event",
   },
   {
@@ -148,6 +166,61 @@ const _abi = [
       },
     ],
     name: "RoleRevoked",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "MINIMUM_DAYS_FOR_HIGH_PENALTY",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "CONTROLLED_APY",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "SMALLER_PAYS_BETTER_BONUS",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "LONGER_PAYS_BETTER_BONUS",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "END_STAKE_FROM",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "END_STAKE_TO",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "MINIMUM_STAKE_DAYS",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "MAXIMUM_STAKE_DAYS",
+            type: "uint256",
+          },
+        ],
+        indexed: false,
+        internalType: "struct Settings",
+        name: "Settings",
+        type: "tuple",
+      },
+    ],
+    name: "SettingsUpdated",
     type: "event",
   },
   {
@@ -269,6 +342,19 @@ const _abi = [
     type: "event",
   },
   {
+    inputs: [],
+    name: "ROLE_ADMIN",
+    outputs: [
+      {
+        internalType: "bytes32",
+        name: "",
+        type: "bytes32",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [
       {
         internalType: "address",
@@ -282,6 +368,61 @@ const _abi = [
       },
     ],
     name: "adminBurnAndAddToStakersInflation",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "MINIMUM_DAYS_FOR_HIGH_PENALTY",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "CONTROLLED_APY",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "SMALLER_PAYS_BETTER_BONUS",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "LONGER_PAYS_BETTER_BONUS",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "END_STAKE_FROM",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "END_STAKE_TO",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "MINIMUM_STAKE_DAYS",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "MAXIMUM_STAKE_DAYS",
+            type: "uint256",
+          },
+        ],
+        internalType: "struct Settings",
+        name: "_settings",
+        type: "tuple",
+      },
+    ],
+    name: "adminUpdateSettings",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -359,179 +500,6 @@ const _abi = [
     inputs: [
       {
         internalType: "uint256",
-        name: "stakeId",
-        type: "uint256",
-      },
-    ],
-    name: "endStake",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bytes32",
-        name: "role",
-        type: "bytes32",
-      },
-      {
-        internalType: "address",
-        name: "account",
-        type: "address",
-      },
-    ],
-    name: "grantRole",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        components: [
-          {
-            internalType: "bytes32",
-            name: "role",
-            type: "bytes32",
-          },
-          {
-            internalType: "address",
-            name: "addr",
-            type: "address",
-          },
-        ],
-        internalType: "struct RoleAccess[]",
-        name: "roles",
-        type: "tuple[]",
-      },
-    ],
-    name: "grantRolesBulk",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bytes32",
-        name: "role",
-        type: "bytes32",
-      },
-      {
-        internalType: "address",
-        name: "account",
-        type: "address",
-      },
-    ],
-    name: "renounceRole",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bytes32",
-        name: "role",
-        type: "bytes32",
-      },
-      {
-        internalType: "address",
-        name: "account",
-        type: "address",
-      },
-    ],
-    name: "revokeRole",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "stakeId",
-        type: "uint256",
-      },
-    ],
-    name: "scrapeStake",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        components: [
-          {
-            internalType: "uint256",
-            name: "stakedAmount",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "lockedForXDays",
-            type: "uint256",
-          },
-        ],
-        internalType: "struct StartStake",
-        name: "_startStake",
-        type: "tuple",
-      },
-    ],
-    name: "startStake",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "stakeId",
-        type: "uint256",
-      },
-      {
-        internalType: "address",
-        name: "newOwner",
-        type: "address",
-      },
-    ],
-    name: "transferOwnership",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "updateAllSnapshots",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "givenDay",
-        type: "uint256",
-      },
-    ],
-    name: "updateSnapshots",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    stateMutability: "nonpayable",
-    type: "constructor",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
         name: "",
         type: "uint256",
       },
@@ -577,6 +545,19 @@ const _abi = [
     type: "function",
   },
   {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "stakeId",
+        type: "uint256",
+      },
+    ],
+    name: "endStake",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
     inputs: [],
     name: "getCachedInterestPerShareLength",
     outputs: [
@@ -604,7 +585,7 @@ const _abi = [
   },
   {
     inputs: [],
-    name: "getCurrentOneDay",
+    name: "getCurrentDaySinceLaunch",
     outputs: [
       {
         internalType: "uint256",
@@ -679,6 +660,11 @@ const _abi = [
           {
             internalType: "uint256",
             name: "endDay",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "maxSharesCountOnStartStake",
             type: "uint256",
           },
         ],
@@ -761,6 +747,11 @@ const _abi = [
             name: "endDay",
             type: "uint256",
           },
+          {
+            internalType: "uint256",
+            name: "maxSharesCountOnStartStake",
+            type: "uint256",
+          },
         ],
         internalType: "struct Stake",
         name: "stake",
@@ -785,7 +776,7 @@ const _abi = [
         type: "uint256",
       },
     ],
-    stateMutability: "pure",
+    stateMutability: "view",
     type: "function",
   },
   {
@@ -903,6 +894,11 @@ const _abi = [
             name: "endDay",
             type: "uint256",
           },
+          {
+            internalType: "uint256",
+            name: "maxSharesCountOnStartStake",
+            type: "uint256",
+          },
         ],
         internalType: "struct Stake",
         name: "stake",
@@ -923,6 +919,75 @@ const _abi = [
       },
     ],
     stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getStakesLength",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getTotalTokensStaked",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "role",
+        type: "bytes32",
+      },
+      {
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+    ],
+    name: "grantRole",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        components: [
+          {
+            internalType: "bytes32",
+            name: "role",
+            type: "bytes32",
+          },
+          {
+            internalType: "address",
+            name: "addr",
+            type: "address",
+          },
+        ],
+        internalType: "struct RoleAccess[]",
+        name: "roles",
+        type: "tuple[]",
+      },
+    ],
+    name: "grantRolesBulk",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
   {
@@ -963,13 +1028,97 @@ const _abi = [
     type: "function",
   },
   {
-    inputs: [],
-    name: "ROLE_ADMIN",
-    outputs: [
+    inputs: [
       {
         internalType: "bytes32",
-        name: "",
+        name: "role",
         type: "bytes32",
+      },
+      {
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+    ],
+    name: "renounceRole",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "role",
+        type: "bytes32",
+      },
+      {
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+    ],
+    name: "revokeRole",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "stakeId",
+        type: "uint256",
+      },
+    ],
+    name: "scrapeStake",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "settings",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "MINIMUM_DAYS_FOR_HIGH_PENALTY",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "CONTROLLED_APY",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "SMALLER_PAYS_BETTER_BONUS",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "LONGER_PAYS_BETTER_BONUS",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "END_STAKE_FROM",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "END_STAKE_TO",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "MINIMUM_STAKE_DAYS",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "MAXIMUM_STAKE_DAYS",
+        type: "uint256",
       },
     ],
     stateMutability: "view",
@@ -1010,8 +1159,44 @@ const _abi = [
         name: "endDay",
         type: "uint256",
       },
+      {
+        internalType: "uint256",
+        name: "maxSharesCountOnStartStake",
+        type: "uint256",
+      },
     ],
     stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "stakedAmount",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "lockedForXDays",
+            type: "uint256",
+          },
+        ],
+        internalType: "struct StartStake",
+        name: "_startStake",
+        type: "tuple",
+      },
+    ],
+    name: "startStake",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "stakeId",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "nonpayable",
     type: "function",
   },
   {
@@ -1034,16 +1219,41 @@ const _abi = [
     type: "function",
   },
   {
-    inputs: [],
-    name: "totalStaked",
-    outputs: [
+    inputs: [
       {
         internalType: "uint256",
-        name: "",
+        name: "stakeId",
+        type: "uint256",
+      },
+      {
+        internalType: "address",
+        name: "newOwner",
+        type: "address",
+      },
+    ],
+    name: "transferOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "updateAllSnapshots",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "givenDay",
         type: "uint256",
       },
     ],
-    stateMutability: "view",
+    name: "updateSnapshots",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
 ];

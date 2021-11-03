@@ -1104,7 +1104,12 @@ export type StakeQuery = (
 
 export const StakesDocument = gql`
     query Stakes($address: String!) {
-  stakes(orderBy: startedAt, orderDirection: desc, where: {owner: $address}) {
+  stakes(
+    orderBy: startedAt
+    orderDirection: desc
+    where: {owner: $address}
+    first: 555
+  ) {
     id
     startedAt
     canceledAt

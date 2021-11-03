@@ -48,7 +48,7 @@ interface PresaleFactoryInterface extends ethers.utils.Interface {
     "state()": FunctionFragment;
     "totalTokenSupply()": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
-    "updateSettings(tuple)": FunctionFragment;
+    "updateSettings((address,string,string,string,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256))": FunctionFragment;
   };
 
   encodeFunctionData(
