@@ -444,11 +444,11 @@ export const StakeList = ({
     stakeEnd: (a, b) => {
       [a, b] = order.direction === "desc" ? [b, a] : [a, b];
 
-      return a.endDay - b.endDay;
-      // const endDayLeft = a.endDay > 0 ? a.endDay : a.startDay + a.lockDays;
-      // const endDayRight = b.endDay > 0 ? b.endDay : b.startDay + b.lockDays;
+      // return a.endDay - b.endDay;
+      const endDayLeft = a.endDay > 0 ? a.endDay : a.startDay + a.lockDays;
+      const endDayRight = b.endDay > 0 ? b.endDay : b.startDay + b.lockDays;
 
-      // return endDayLeft - endDayRight;
+      return endDayLeft - endDayRight;
     },
 
     progress: (a, b) => {
