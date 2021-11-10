@@ -6,12 +6,7 @@ import { Swap, Token } from "../generated/schema";
 import { BI_18, BI_6, convertTokenToDecimal, ZERO_BD } from "./helpers";
 
 export function handleSync(event: Sync): void {
-  let maticInUsd = Token.load("maticInUsd");
   let deftInUsd = Token.load("deftInUsd");
-
-  if (maticInUsd === null) {
-    maticInUsd = new Token("maticInUsd");
-  }
 
   if (deftInUsd === null) {
     deftInUsd = new Token("deftInUsd");
@@ -20,19 +15,12 @@ export function handleSync(event: Sync): void {
   let usdcReserve = convertTokenToDecimal(event.params.reserve0, BI_6);
   let deftReserve = convertTokenToDecimal(event.params.reserve1, BI_18);
 
-  if (usdcReserve > ZERO_BD) {
-    maticInUsd.price = deftReserve.div(usdcReserve);
-  } else {
-    maticInUsd.price = ZERO_BD;
-  }
-
   if (deftReserve > ZERO_BD) {
     deftInUsd.price = usdcReserve.div(deftReserve);
   } else {
     deftInUsd.price = ZERO_BD;
   }
 
-  maticInUsd.save();
   deftInUsd.save();
 }
 

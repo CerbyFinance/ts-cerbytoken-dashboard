@@ -1,5 +1,5 @@
 import { BigDecimal } from "@graphprotocol/graph-ts";
-import { Swap } from "../generated/schema";
+import { Swap, Token } from "../generated/schema";
 import { Swap as SwapEvent } from "../generated/UniswapDeft/UniswapV3PoolEvents";
 import { BI_18, BI_6, convertTokenToDecimal, ZERO_BD } from "./helpers";
 
@@ -28,8 +28,19 @@ export function handleSwap(event: SwapEvent): void {
   }
 
   let amountDeft = abs(amount1);
-
   let amountDeftInUsd = abs(amount0);
+
+  let deftInUsd = Token.load("deftInUsd");
+  if (deftInUsd === null) {
+    deftInUsd = new Token("deftInUsd");
+  }
+
+  if (amountDeft > ZERO_BD) {
+    deftInUsd.price = amountDeftInUsd.div(amountDeft);
+  } else {
+    deftInUsd.price = ZERO_BD;
+  }
+  deftInUsd.save();
 
   let swap = new Swap(
     event.block.hash.toHexString() +

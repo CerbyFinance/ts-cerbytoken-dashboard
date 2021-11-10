@@ -1,14 +1,14 @@
 specVersion: 0.0.2
 schema:
-  file: schema-binance.graphql
+  file: schema-polygon.graphql
 dataSources:
   - kind: ethereum/contract
     name: PancakeswapDeft
-    network: binance
+    network: polygon
     source:
-      address: "0x493e990ccc67f59a3000effa9d5b1417d54b6f99"
-      abi: PancakeswapPair
-      startBlock: 11802500
+      address: "0xf92b726b10956ff95ebabdd6fd92d180d1e920da"
+      abi: QuickswapPair
+      startBlock: 20270000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -17,8 +17,8 @@ dataSources:
         - Token
         - Swap
       abis:
-        - name: PancakeswapPair
-          file: PancakeswapDeft/abis/PancakeswapPair.json
+        - name: QuickswapPair
+          file: PancakeswapDeft/abis/QuickswapPair.json
       eventHandlers:
         - event: Sync(uint112,uint112)
           handler: handleSync
@@ -27,11 +27,11 @@ dataSources:
       file: PancakeswapDeft/PancakeswapDeft.wasm
   - kind: ethereum/contract
     name: PancakeswapUsdt
-    network: binance
+    network: polygon
     source:
-      address: "0x58F876857a02D6762E0101bb5C46A8c1ED44Dc16"
-      abi: PancakeswapPair
-      startBlock: 11802500
+      address: "0xf7bc741b2086ca344e78225d06224ffdcd86d110"
+      abi: QuickswapPair
+      startBlock: 20270000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -39,8 +39,8 @@ dataSources:
       entities:
         - Token
       abis:
-        - name: PancakeswapPair
-          file: PancakeswapUsdt/abis/PancakeswapPair.json
+        - name: QuickswapPair
+          file: PancakeswapUsdt/abis/QuickswapPair.json
       eventHandlers:
         - event: Sync(uint112,uint112)
           handler: handleSync
