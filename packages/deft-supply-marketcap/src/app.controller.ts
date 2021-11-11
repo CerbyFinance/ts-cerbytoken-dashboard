@@ -70,8 +70,8 @@ const supplyAndMarketCap = async () => {
 
   return {
     ...supplies,
-    priceOnBsc: prices[0],
-    priceOnEth: prices[1],
+    priceOnEth: prices[0],
+    priceOnBsc: prices[1],
     priceOnPolygon: prices[2],
 
     currentWeightedPrice,
