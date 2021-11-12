@@ -156,7 +156,7 @@ function Nav() {
                     sidebar ? "min-w-min" : "w-0"
                   }  ml-3 overflow-hidden  text-black dark:text-white whitespace-nowrap`}
                 >
-                  Defi Factory
+                  Cerby
                 </span>
               )}
             </div>
