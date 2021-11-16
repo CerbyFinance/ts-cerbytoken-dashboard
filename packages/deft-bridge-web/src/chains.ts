@@ -42,10 +42,10 @@ export const chains = [
   },
   {
     chainId: 137,
-    explorer: "https://bscscan.com",
+    explorer: "https://polygonscan.com/",
     label: "Matic",
     nativeCurrency: { name: "MATIC", symbol: "MATIC", decimals: 18 },
-    rpcUrls: ["https://rpc-mainnet.matic.network"],
+    rpcUrls: ["https://polygon-rpc.com/"],
   },
   {
     chainId: 42,
