@@ -6,24 +6,26 @@ import { ethers } from "ethers";
 import { Box, Grommet, Text } from "grommet";
 import Tooltip from "rc-tooltip";
 import React, {
-  createContext,
   CSSProperties,
   useContext,
   useEffect,
+  useRef,
   useState,
 } from "react";
 import AutosizeInput from "react-input-autosize";
 import {
   BrowserRouter as Router,
+  Redirect,
   Route,
   useHistory,
   useParams,
 } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
+import useMeasure from "react-use-measure";
 import styled from "styled-components";
 import useMedia from "use-media";
-import { Chains, supportedChainIds } from "./chains";
+import { Chains, supportedChainIdsBridge, switchToNetwork } from "./chains";
 import { Hint } from "./components/Hint";
 import {
   BridgeTransferDocument,
@@ -35,13 +37,9 @@ import {
   MyLastProofDocument,
   MyLastProofQuery,
   MyLastProofQueryVariables,
-  Proof,
   ProofByIdDocument,
   ProofByIdQuery,
   ProofByIdQueryVariables,
-  ProofByTxHashDocument,
-  ProofByTxHashQuery,
-  ProofByTxHashQueryVariables,
   ProofType,
 } from "./graphql/types";
 import {
@@ -51,16 +49,25 @@ import {
   EthereumLogo,
   PolygonLogo,
   QuestionIcon,
+  RecoverIcon,
   TelegramIcon,
 } from "./Icons";
 import { Logo } from "./logo";
+import {
+  BridgeContext,
+  BridgeState,
+  IsActivePath,
+  WrapContext,
+  WrapState,
+} from "./Shared";
 import { clientByChain, noopApollo } from "./shared/client";
 import { injected } from "./shared/connectors";
 import { HoveredElement } from "./shared/hooks";
-import { useBridgeContract, useTokenContract } from "./shared/useContract";
-import { dynamicTemplate, formatNum } from "./shared/utils";
+import { BURN_TOPIC, useBridgeContract } from "./shared/useContract";
+import { chunkSubstr, dynamicTemplate, formatNum } from "./shared/utils";
 import Web3ReactManager from "./shared/Web3Manager";
 import { txnToast } from "./toaster";
+import { WrapWidget } from "./Wrap";
 
 const Input = styled(AutosizeInput)`
   input {
@@ -197,8 +204,9 @@ const getProof = async (
   return result.data.proofs[0];
 };
 
-const BridgeWidgetProcess = () => {
-  const { account, activate, chainId, connector, error } = useWeb3React();
+export const BridgeWidgetProcess = () => {
+  const { account, activate, chainId, library, connector, error } =
+    useWeb3React();
 
   const {
     src: srcChainId,
@@ -217,7 +225,7 @@ const BridgeWidgetProcess = () => {
   const [nonce, setNonce] = useState<number>(0);
 
   const { balance, fee, setFee, token, tokenAddress, refetchBalance } =
-    useContext(GlobalContext);
+    useContext(BridgeContext);
 
   // const [currentProofId, setCurrentProofId] = useState<string>("");
   // const [path, setPath] = useState([0, 0] as unknown as [Chains, Chains]);
@@ -472,7 +480,12 @@ const BridgeWidgetProcess = () => {
     } else {
       actionButton = {
         text: "Switch to " + dest,
-        onClick: () => {},
+        onClick: () => {
+          switchToNetwork({
+            library,
+            chainId: path[1],
+          });
+        },
         style: {
           background: "#F83245",
           boxShadow: "none",
@@ -482,7 +495,12 @@ const BridgeWidgetProcess = () => {
   } else if (unsupportedNetwork) {
     actionButton = {
       text: "Switch to " + dest,
-      onClick: () => {},
+      onClick: () => {
+        switchToNetwork({
+          library,
+          chainId: path[1],
+        });
+      },
       style: {
         background: "#F83245",
         boxShadow: "none",
@@ -815,7 +833,7 @@ const HoveredColor = styled(Box)`
 
 const tokens = [
   {
-    name: "DEFT",
+    name: "CERBY",
     address: "0xdef1fac7Bf08f173D286BbBDcBeeADe695129840",
   },
   // {
@@ -824,13 +842,45 @@ const tokens = [
   // },
 ];
 
+const Input2 = styled.input`
+  border: none;
+  height: 36px;
+  border-radius: 4px;
+  font-size: 14px;
+  text-align: center;
+
+  padding: 0px 15px 0px 15px;
+  outline: none;
+
+  background: transparent;
+
+  /* background: #f6f2e9; */
+
+  color: #414141;
+
+  &::placeholder {
+    color: #c1c1c1;
+  }
+
+  border: 2px solid transparent !important;
+
+  &:active,
+  &:focus {
+    border: 2px solid #abcfff !important;
+  }
+
+  transition: none;
+`;
+
 const ChooseChain = ({
   chain,
   filter,
+  directon,
   onChange,
 }: {
   chain: Chains;
   filter: Chains;
+  directon: "from" | "to";
 
   onChange: (chainId: Chains) => void;
 }) => {
@@ -853,7 +903,7 @@ const ChooseChain = ({
           }}
           round="6px"
         >
-          {supportedChainIds
+          {supportedChainIdsBridge
             .filter(item => item !== filter)
             .map(item => (
               <HoveredColor
@@ -882,7 +932,7 @@ const ChooseChain = ({
                     size="13px"
                     color="#818181"
                   >
-                    From
+                    {directon}
                   </Text>
                   <Box height="2px"></Box>
                   <Text weight={600} size="15px" color="#414141">
@@ -917,7 +967,7 @@ const ChooseChain = ({
             size="13px"
             color="#818181"
           >
-            From
+            {directon}
           </Text>
           <Box height="2px"></Box>
           <Text weight={600} size="15px" color="#414141">
@@ -930,7 +980,7 @@ const ChooseChain = ({
   );
 };
 
-const BridgeWidget = () => {
+export const BridgeWidget = () => {
   const { account, activate, chainId, library, connector, error } =
     useWeb3React();
 
@@ -962,7 +1012,7 @@ const BridgeWidget = () => {
     token,
     tokenAddress,
     refetchBalance,
-  } = useContext(GlobalContext);
+  } = useContext(BridgeContext);
 
   const [transferAmount, setTransferAmount] = useState("");
   const [isPopular, setPopular] = useState(true);
@@ -1044,7 +1094,7 @@ const BridgeWidget = () => {
   const amountEntered = Number(transferAmount) > 0;
   const sufficientBalance = Number(transferAmount) <= Number(balance);
 
-  const areInSync = Math.abs(graphBlockNumber - blockNumber) <= 5;
+  const areInSync = Math.abs(graphBlockNumber - blockNumber) <= 200;
 
   const src = chainIdToShort[path[0]] || "...";
   const dest = chainIdToShort[path[1]] || "...";
@@ -1069,39 +1119,32 @@ const BridgeWidget = () => {
 
       await refetchBalance(account);
 
-      let proof: Pick<Proof, "id" | "src" | "dest">;
-      // TODO: update it locally ?
-      let i = 99999;
-      while (true) {
-        const resultQuery = await client.query<
-          ProofByTxHashQuery,
-          ProofByTxHashQueryVariables
-        >({
-          query: ProofByTxHashDocument,
-          variables: {
-            txHash: result2.transactionHash,
-          },
-          fetchPolicy: "network-only",
-        });
+      const burnEvent = result2.logs.find(
+        item => item.topics[0] === BURN_TOPIC,
+      )!;
 
-        if (resultQuery.data.proofs[0]) {
-          proof = resultQuery.data.proofs[0];
-          break;
-        }
+      let [
+        _sender,
+        _token,
+        _amount,
+        _amountAsFee,
+        _nonce,
+        _src,
+        _dest,
+        transactionHash,
+      ] = chunkSubstr(burnEvent.data.slice(2), 64);
 
-        i--;
+      let proof = {
+        src: Number("0x" + _src),
+        dest: Number("0x" + _dest),
+        id: "0x" + transactionHash,
+      };
 
-        if (i === 0) {
-          break;
-        }
-
-        await new Promise(r => setTimeout(r, 300));
-      }
       // redirect to process
 
       // @ts-ignore
-      if (proof) {
-        history.push(`/p/${proof.src}/${proof.dest}/${proof.id}`);
+      if (proof.id) {
+        history.push(`/bridge/p/${proof.src}/${proof.dest}/${proof.id}`);
       }
 
       setLoader(false);
@@ -1196,7 +1239,12 @@ const BridgeWidget = () => {
     } else {
       actionButton = {
         text: "Switch to " + src,
-        onClick: () => {},
+        onClick: () => {
+          switchToNetwork({
+            library,
+            chainId: path[0],
+          });
+        },
         style: {
           background: "#F83245",
         },
@@ -1205,7 +1253,12 @@ const BridgeWidget = () => {
   } else if (unsupportedNetwork) {
     actionButton = {
       text: "Switch to " + src,
-      onClick: () => {},
+      onClick: () => {
+        switchToNetwork({
+          library,
+          chainId: path[0],
+        });
+      },
       style: {
         background: "#F83245",
       },
@@ -1218,363 +1271,489 @@ const BridgeWidget = () => {
   }
 
   return (
-    <Box
-      style={{
-        width: "405px",
-        boxShadow:
-          "0px 8px 16px 2px rgba(97, 97, 97, 0.1), 0px 16px 32px 2px rgba(97, 97, 97, 0.1)",
-        position: "relative",
-        alignSelf: "center",
-
-        // margin: "40px 20px 0px 0px",
-      }}
-      background="white"
-      round="12px"
-      pad="20px 22px 20px"
-    >
-      <Text
-        textAlign="center"
-        weight={800}
-        size="20px"
-        color="#414141"
-        style={{
-          lineHeight: "150%",
-        }}
-      >
-        Cross-Chain Bridge
-      </Text>
-      <Box height="15px" />
+    <React.Fragment>
       <Box
-        width="360px"
         style={{
-          border: "1px solid #C0C0C0",
+          width: "405px",
+          boxShadow:
+            "0px 8px 16px 2px rgba(97, 97, 97, 0.1), 0px 16px 32px 2px rgba(97, 97, 97, 0.1)",
+          position: "relative",
+          alignSelf: "center",
+
+          // margin: "40px 20px 0px 0px",
         }}
-        round="8px"
-        height="73px"
-        pad="10px 12px 0px"
+        background="white"
+        round="12px"
+        pad="20px 22px 20px"
       >
-        {/* <Input onChange={changeHandler} /> */}
-        <Box direction="row">
-          {/* <Box direction="row"> */}
-          <Text
-            size="13px"
-            weight={500}
-            color="#818181"
-            style={{
-              lineHeight: "132%",
-            }}
-          >
-            Transfer amount
-          </Text>
-          <Box
-            margin={{
-              left: "auto",
-            }}
-          />
-          <Text
-            size="13px"
-            weight={500}
-            color="#818181"
-            style={{
-              lineHeight: "132%",
-              marginRight: "4px",
-            }}
-          >
-            Balance:
-          </Text>
-          <Text
-            size="13px"
-            weight={500}
-            color="#414141"
-            style={{
-              lineHeight: "132%",
-            }}
-          >
-            {formatNum(Number(balance.toFixed(0)))} {token}
-          </Text>
-        </Box>
-        <Box height="6px" />
-        <Box direction="row" align="center">
-          <Input
-            // injectStyles={false}
-            minWidth={30}
-            placeholder="0.0"
-            value={transferAmount}
-            onChange={changeHandler}
-            onKeyPress={e => {
-              console.log(e.key);
-              if (
-                _isFinite(Number(e.key)) ||
-                (e.key === "." && !transferAmount.includes("."))
-              ) {
-              } else {
-                e.preventDefault();
-              }
-            }}
-          />
-          {/* <Box>
+        <Text
+          textAlign="center"
+          weight={800}
+          size="20px"
+          color="#414141"
+          style={{
+            lineHeight: "150%",
+          }}
+        >
+          Cross-Chain Bridge
+        </Text>
+        <Box height="15px" />
+        <Box
+          width="360px"
+          style={{
+            border: "1px solid #C0C0C0",
+          }}
+          round="8px"
+          height="73px"
+          pad="10px 12px 0px"
+        >
+          {/* <Input onChange={changeHandler} /> */}
+          <Box direction="row">
+            {/* <Box direction="row"> */}
+            <Text
+              size="13px"
+              weight={500}
+              color="#818181"
+              style={{
+                lineHeight: "132%",
+              }}
+            >
+              Transfer amount
+            </Text>
+            <Box
+              margin={{
+                left: "auto",
+              }}
+            />
+            <Text
+              size="13px"
+              weight={500}
+              color="#818181"
+              style={{
+                lineHeight: "132%",
+                marginRight: "4px",
+              }}
+            >
+              Balance:
+            </Text>
+            <Text
+              size="13px"
+              weight={500}
+              color="#414141"
+              style={{
+                lineHeight: "132%",
+              }}
+            >
+              {formatNum(Number(balance.toFixed(0)))} {token}
+            </Text>
+          </Box>
+          <Box height="6px" />
+          <Box direction="row" align="center">
+            <Input
+              // injectStyles={false}
+              minWidth={30}
+              placeholder="0.0"
+              value={transferAmount}
+              onChange={changeHandler}
+              onKeyPress={e => {
+                console.log(e.key);
+                if (
+                  _isFinite(Number(e.key)) ||
+                  (e.key === "." && !transferAmount.includes("."))
+                ) {
+                } else {
+                  e.preventDefault();
+                }
+              }}
+            />
+            {/* <Box>
             <Text size="18px" weight={400} color="#414141">
               DEFT
             </Text>
           </Box> */}
-          <Tooltip
-            placement="bottomRight"
-            align={{
-              offset: [0, -35],
-            }}
-            trigger={["click"]}
-            overlay={
-              <Box
-                background="white"
-                style={{
-                  width: "120px",
-                  height: "44px",
-                  boxShadow: "rgba(0,0,0, 0.12) 0px 3px 14px 3px",
-                  border: "1px solid rgb(192, 192, 192)",
+            <Tooltip
+              placement="bottomRight"
+              align={{
+                offset: [0, -35],
+              }}
+              trigger={["click"]}
+              overlay={
+                <Box
+                  background="white"
+                  style={{
+                    width: "120px",
+                    height: "44px",
+                    boxShadow: "rgba(0,0,0, 0.12) 0px 3px 14px 3px",
+                    border: "1px solid rgb(192, 192, 192)",
 
-                  // border: "1px solid #f2f2f2",
-                  // 1px solid rgb(192, 192, 192)
-                }}
-                round="6px"
-              >
-                <Box height="2px"></Box>
-                {tokens.map((token2, i) => {
-                  const isLast = tokens.length === i + 1;
-                  const isActive = token2.name === token;
+                    // border: "1px solid #f2f2f2",
+                    // 1px solid rgb(192, 192, 192)
+                  }}
+                  round="6px"
+                >
+                  <Box height="2px"></Box>
+                  {tokens.map((token2, i) => {
+                    const isLast = tokens.length === i + 1;
+                    const isActive = token2.name === token;
 
-                  return (
-                    <HoveredColor
-                      height="40px"
-                      pad="0px 10px"
-                      align="center"
-                      direction="row"
-                      style={{
-                        cursor: "pointer",
-                        ...(isLast
-                          ? {}
-                          : {
-                              borderBottom: "1px solid #cecece",
-                            }),
-                      }}
-                      onClick={() => {
-                        setToken(token2.name);
-                        onVisibleTokenChange(false);
-                      }}
-                    >
-                      <Text
-                        size="16px"
-                        {...(isActive
-                          ? {
-                              weight: 600,
-                              color: "#414141",
-                            }
-                          : {
-                              weight: 500,
-                              color: "#818181",
-                            })}
+                    return (
+                      <HoveredColor
+                        height="40px"
+                        pad="0px 10px"
+                        align="center"
+                        direction="row"
+                        style={{
+                          cursor: "pointer",
+                          ...(isLast
+                            ? {}
+                            : {
+                                borderBottom: "1px solid #cecece",
+                              }),
+                        }}
+                        onClick={() => {
+                          setToken(token2.name);
+                          onVisibleTokenChange(false);
+                        }}
                       >
-                        {token2.name}
-                      </Text>
-                    </HoveredColor>
-                  );
-                })}
+                        <Text
+                          size="16px"
+                          {...(isActive
+                            ? {
+                                weight: 600,
+                                color: "#414141",
+                              }
+                            : {
+                                weight: 500,
+                                color: "#818181",
+                              })}
+                        >
+                          {token2.name}
+                        </Text>
+                      </HoveredColor>
+                    );
+                  })}
 
-                <Box height="2px"></Box>
-              </Box>
-            }
-            visible={visibleToken}
-            onVisibleChange={v => onVisibleTokenChange(v)}
+                  <Box height="2px"></Box>
+                </Box>
+              }
+              visible={visibleToken}
+              onVisibleChange={v => onVisibleTokenChange(v)}
+            >
+              <HoverScale
+                margin={{
+                  left: "auto",
+                }}
+                style={{
+                  // border: "1px solid #007eff",
+                  border: "1px solid rgb(192, 192, 192)",
+                  boxShadow: "rgba(97,97,97,0.10) 0px 2px 1px 0px",
+                  cursor: "pointer",
+                }}
+                round="8px"
+                align="center"
+                justify="center"
+                pad={"3px 7px 3px 11px"}
+                direction="row"
+              >
+                <Text weight={600} color="#414141" size="14px">
+                  {token}
+                </Text>
+                <Angle />
+              </HoverScale>
+            </Tooltip>
+          </Box>
+        </Box>
+        <Box height="12px" />
+
+        <Box direction="row" justify="between" align="center">
+          <ChooseChain
+            chain={path[0]}
+            filter={path[1]}
+            directon="from"
+            onChange={chainId => {
+              setPath(oldPath => [chainId, oldPath[1]]);
+            }}
+          />
+
+          <Box
+            height="40px"
+            width="40px"
+            align="center"
+            justify="center"
+            style={{
+              cursor: "pointer",
+              userSelect: "none",
+            }}
+            onClick={() => changeDirection()}
           >
-            <HoverScale
+            <Direction />
+          </Box>
+          <ChooseChain
+            chain={path[1]}
+            filter={path[0]}
+            directon="to"
+            onChange={chainId => {
+              setPath(oldPath => [oldPath[0], chainId]);
+            }}
+          />
+        </Box>
+
+        <Box height="15px" />
+        <Divider />
+        <Box
+          margin={{
+            vertical: "6px",
+          }}
+        >
+          <Box direction="row" align="center" height="36px">
+            <Text size="14px" color="#818181" weight={500}>
+              Bridge Fee
+            </Text>
+            <Box margin={{ left: "6px" }}>
+              <Hint
+                description={
+                  <Text
+                    size="13px"
+                    style={{
+                      lineHeight: "22px",
+                    }}
+                    textAlign="center"
+                  >
+                    Fixed fee
+                  </Text>
+                }
+              >
+                <Box>
+                  <QuestionIcon />
+                </Box>
+              </Hint>
+            </Box>
+            <Box
               margin={{
                 left: "auto",
               }}
-              style={{
-                // border: "1px solid #007eff",
-                border: "1px solid rgb(192, 192, 192)",
-                boxShadow: "rgba(97,97,97,0.10) 0px 2px 1px 0px",
-                cursor: "pointer",
-              }}
-              round="8px"
-              align="center"
-              justify="center"
-              pad={"3px 7px 3px 11px"}
-              direction="row"
-            >
-              <Text weight={600} color="#414141" size="14px">
-                {token}
-              </Text>
-              <Angle />
-            </HoverScale>
-          </Tooltip>
-        </Box>
-      </Box>
-      <Box height="12px" />
-
-      <Box direction="row" justify="between" align="center">
-        <ChooseChain
-          chain={path[0]}
-          filter={path[1]}
-          onChange={chainId => {
-            setPath(oldPath => [chainId, oldPath[1]]);
-          }}
-        />
-
-        <Box
-          height="40px"
-          width="40px"
-          align="center"
-          justify="center"
-          style={{
-            cursor: "pointer",
-            userSelect: "none",
-          }}
-          onClick={() => changeDirection()}
-        >
-          <Direction />
-        </Box>
-        <ChooseChain
-          chain={path[1]}
-          filter={path[0]}
-          onChange={chainId => {
-            setPath(oldPath => [oldPath[0], chainId]);
-          }}
-        />
-      </Box>
-
-      <Box height="15px" />
-      <Divider />
-      <Box
-        margin={{
-          vertical: "6px",
-        }}
-      >
-        <Box direction="row" align="center" height="36px">
-          <Text size="14px" color="#818181" weight={500}>
-            Bridge Fee
-          </Text>
-          <Box margin={{ left: "6px" }}>
-            <Hint
-              description={
-                <Text
-                  size="13px"
-                  style={{
-                    lineHeight: "22px",
-                  }}
-                  textAlign="center"
-                >
-                  Fixed fee
-                </Text>
-              }
-            >
-              <Box>
-                <QuestionIcon />
-              </Box>
-            </Hint>
+            ></Box>
+            <Text size="14px" color="#414141" weight={700}>
+              {formatNum(Number(fee.toFixed(0)))} {token}
+            </Text>
           </Box>
-          <Box
-            margin={{
-              left: "auto",
-            }}
-          ></Box>
-          <Text size="14px" color="#414141" weight={700}>
-            {formatNum(Number(fee.toFixed(0)))} {token}
-          </Text>
-        </Box>
-        <Box direction="row" align="center" height="36px">
-          <Text size="14px" color="#818181" weight={500}>
-            You will get
-          </Text>
-          <Box margin={{ left: "6px" }}>
-            <Hint
-              description={
-                <Text
-                  size="13px"
-                  style={{
-                    lineHeight: "22px",
-                  }}
-                  textAlign="center"
-                >
-                  transferAmount - bridgeFee
-                </Text>
-              }
-            >
-              <Box>
-                <QuestionIcon />
-              </Box>
-            </Hint>
-          </Box>
-          <Box
-            margin={{
-              left: "auto",
-            }}
-          ></Box>
-          <Text size="14px" color="#414141" weight={700}>
-            {formatNum(
-              Number(
-                (Number(transferAmount) > fee
-                  ? Number(transferAmount) - fee
-                  : 0
-                ).toFixed(0),
-              ),
-            )}{" "}
-            {token}
-          </Text>
-        </Box>
-      </Box>
-      <HoveredElement
-        render={binder => {
-          return (
-            <Box
-              {...binder.bind}
-              width="100%"
-              height="48px"
-              round="8px"
-              background={binder.hovered ? "#4d9aff" : "#2B86FF"}
-              // background={
-              //   binder.hovered ? actionButton.bgHover : actionButton.bg
-              // }
-              align="center"
-              justify="center"
-              style={{
-                ...(binder.hovered
-                  ? {
-                      transform: "scale(1.01)",
-                    }
-                  : {}),
-                ...actionButton.style,
-
-                cursor: "pointer",
-                boxShadow:
-                  "0px 1px 2px rgba(97, 97, 97, 0.2), 0px 2px 4px rgba(97, 97, 97, 0.2)",
-                ...(loader
-                  ? {
-                      pointerEvents: "none",
-                    }
-                  : {}),
-              }}
-              pad="0px 16px"
-              onClick={() => actionButton.onClick()}
-            >
-              {loader && <div className="loader"></div>}
-
-              {!loader && (
-                <Text
-                  size="16px"
-                  color="white"
-                  style={{
-                    letterSpacing: "0.05em",
-                  }}
-                  weight={600}
-                >
-                  {actionButton.text}
-                </Text>
-              )}
+          <Box direction="row" align="center" height="36px">
+            <Text size="14px" color="#818181" weight={500}>
+              You will get
+            </Text>
+            <Box margin={{ left: "6px" }}>
+              <Hint
+                description={
+                  <Text
+                    size="13px"
+                    style={{
+                      lineHeight: "22px",
+                    }}
+                    textAlign="center"
+                  >
+                    transferAmount - bridgeFee
+                  </Text>
+                }
+              >
+                <Box>
+                  <QuestionIcon />
+                </Box>
+              </Hint>
             </Box>
-          );
-        }}
+            <Box
+              margin={{
+                left: "auto",
+              }}
+            ></Box>
+            <Text size="14px" color="#414141" weight={700}>
+              {formatNum(
+                Number(
+                  (Number(transferAmount) > fee
+                    ? Number(transferAmount) - fee
+                    : 0
+                  ).toFixed(0),
+                ),
+              )}{" "}
+              {token}
+            </Text>
+          </Box>
+        </Box>
+        <HoveredElement
+          render={binder => {
+            return (
+              <Box
+                {...binder.bind}
+                width="100%"
+                height="48px"
+                round="8px"
+                background={binder.hovered ? "#4d9aff" : "#2B86FF"}
+                // background={
+                //   binder.hovered ? actionButton.bgHover : actionButton.bg
+                // }
+                align="center"
+                justify="center"
+                style={{
+                  ...(binder.hovered
+                    ? {
+                        transform: "scale(1.01)",
+                      }
+                    : {}),
+                  ...actionButton.style,
+
+                  cursor: "pointer",
+                  boxShadow:
+                    "0px 1px 2px rgba(97, 97, 97, 0.2), 0px 2px 4px rgba(97, 97, 97, 0.2)",
+                  ...(loader
+                    ? {
+                        pointerEvents: "none",
+                      }
+                    : {}),
+                }}
+                pad="0px 16px"
+                onClick={() => actionButton.onClick()}
+              >
+                {loader && <div className="loader"></div>}
+
+                {!loader && (
+                  <Text
+                    size="16px"
+                    color="white"
+                    style={{
+                      letterSpacing: "0.05em",
+                    }}
+                    weight={600}
+                  >
+                    {actionButton.text}
+                  </Text>
+                )}
+              </Box>
+            );
+          }}
+        />
+      </Box>
+      <Box height="12px"></Box>
+      <Hint
+        placement="bottom"
+        description={
+          <Text
+            size="13px"
+            style={{
+              lineHeight: "22px",
+              maxWidth: "300px",
+            }}
+            textAlign="center"
+          >
+            Be sure to switch to appropriate network.
+          </Text>
+        }
+      >
+        <Box>
+          <RecoverTransfer />
+        </Box>
+      </Hint>
+    </React.Fragment>
+  );
+};
+
+const TX_REGEX = /^0x([A-Fa-f0-9]{64})$/;
+
+const RecoverTransfer = () => {
+  const history = useHistory();
+
+  const { chainId, library } = useWeb3React();
+
+  const [isEnter, setEnter] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [tx, setTx] = useState("");
+
+  const changeHandler = (evt: any) => {
+    setTx(evt.target.value);
+  };
+
+  useEffect(() => {
+    const fire = async (txHash: string) => {
+      const result = await (library as Web3Provider).getTransactionReceipt(
+        txHash,
+      );
+
+      console.log("12312312");
+      console.log(result);
+
+      const burnEvent = result.logs.find(
+        item => item.topics[0] === BURN_TOPIC,
+      )!;
+
+      let [
+        _sender,
+        _token,
+        _amount,
+        _amountAsFee,
+        _nonce,
+        _src,
+        _dest,
+        transactionHash,
+      ] = chunkSubstr(burnEvent.data.slice(2), 64);
+
+      let proof = {
+        src: Number("0x" + _src),
+        dest: Number("0x" + _dest),
+        id: "0x" + transactionHash,
+      };
+
+      console.log(proof);
+
+      // redirect to process
+      if (proof.id) {
+        history.push(`/bridge/p/${proof.src}/${proof.dest}/${proof.id}`);
+      }
+    };
+
+    const matches = tx.match(TX_REGEX);
+    if (matches && matches[1]) {
+      fire(tx).catch(e => null);
+    }
+  }, [tx, chainId]);
+
+  if (isEnter) {
+    return (
+      <Input2
+        placeholder="Enter transaction hash"
+        onChange={changeHandler}
+        value={tx}
+        // @ts-ignore
       />
-    </Box>
+    );
+  }
+
+  return (
+    <HoveredElement
+      render={binder => {
+        return (
+          <Box
+            height="40px"
+            onClick={() => setEnter(true)}
+            direction="row"
+            align="center"
+            style={{
+              cursor: "pointer",
+              userSelect: "none",
+              ...(binder.hovered
+                ? {}
+                : {
+                    opacity: 0.3,
+                  }),
+            }}
+            {...binder.bind}
+          >
+            <RecoverIcon />
+            <Box width="10px"></Box>
+            <Text size="14px" color="#414141">
+              Recover transfer
+            </Text>
+          </Box>
+        );
+      }}
+    />
   );
 };
 
@@ -1621,74 +1800,6 @@ const BoxHoveredScale = styled(Box)`
   }
 `;
 
-const GlobalContext = createContext({
-  token: "DEFT",
-  tokenAddress: "",
-  balance: 0,
-  fee: 0,
-  // minAmount: 0,
-  setToken: (token: string) => {},
-  setFee: (fee: number) => {},
-  setBalance: (balance: number) => {},
-  refetchBalance: async (account: string) => {},
-});
-
-const GlobalState = ({ children }: { children: React.ReactNode }) => {
-  const { account, chainId } = useWeb3React();
-
-  const [balance, setBalance] = useState(0);
-  const [fee, setFee] = useState(0);
-  // const [minAmount, setMinAmount] = useState(0);
-
-  const [token, setToken] = useState("DEFT");
-
-  const tokenAddress = tokens.find(item => item.name === token)?.address!;
-
-  const tokenContract = useTokenContract(tokenAddress);
-  const bridgeContract = useBridgeContract();
-
-  console.log({
-    fee,
-  });
-
-  const refetchBalance = async (account: string) => {
-    try {
-      const balance = await tokenContract.balanceOf(account);
-
-      setBalance(Math.floor(Number(ethers.utils.formatEther(balance))));
-      console.log({
-        balance: ethers.utils.formatEther(balance),
-      });
-    } catch (error) {
-      setBalance(0);
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    if (account) {
-      refetchBalance(account);
-    }
-  }, [account, tokenAddress, chainId]);
-
-  return (
-    <GlobalContext.Provider
-      value={{
-        token,
-        tokenAddress,
-        setToken,
-        balance,
-        fee,
-        setFee,
-        setBalance,
-        refetchBalance,
-      }}
-    >
-      {children}
-    </GlobalContext.Provider>
-  );
-};
-
 export const AccountBalance = ({
   account,
   balance,
@@ -1732,12 +1843,106 @@ export const AccountBalance = ({
         width="24px"
         style={{
           color: "#25a3e2",
+          minWidth: "24px",
         }}
         onClick={() => window.open("https://t.me/DefiFactory", "_blank")}
       >
         <TelegramIcon />
       </BoxHoveredScale>
     </React.Fragment>
+  );
+};
+
+const Navi = () => {
+  const history = useHistory();
+
+  const isBridge = IsActivePath("/bridge");
+  const isWrap = IsActivePath("/wrap");
+
+  return (
+    <Box direction="row">
+      <Box
+        // pad={"3px 10px 3px 10px"}
+        pad="4px 4px"
+        background="#ebebeb"
+        round="8px"
+        direction="row"
+        align="center"
+      >
+        <Box
+          background={isBridge ? "#5d5d5d" : "white"}
+          pad="3px 10px 3px 10px"
+          round="6px"
+          style={{
+            cursor: "pointer",
+          }}
+          onClick={() => history.push("/")}
+        >
+          <Text size="15px" color={isBridge ? "white" : "#414141"} weight={600}>
+            Bridge
+          </Text>
+        </Box>
+        <Box width="10px"></Box>
+        <Box
+          background={isWrap ? "#5d5d5d" : "white"}
+          pad="3px 10px 3px 10px"
+          round="6px"
+          style={{
+            cursor: "pointer",
+          }}
+          onClick={() => history.push("/wrap")}
+        >
+          <Text size="15px" color={isWrap ? "white" : "#414141"} weight={600}>
+            Wrap
+          </Text>
+        </Box>
+        {/* <Box
+          background="white"
+          pad="3px 8px"
+          round="6px"
+          margin={{ left: "10px" }}
+        >
+          <Text size="14px" weight={600} color="#414141">
+            123213123
+          </Text>
+        </Box> */}
+      </Box>
+    </Box>
+  );
+};
+
+export const TopNav = () => {
+  return (
+    <Box
+      direction="row"
+      align="center"
+      height="75px"
+      pad="16px"
+      margin={{
+        bottom: "45px",
+      }}
+      // display: grid;
+
+      justify="center"
+    >
+      <Navi />
+    </Box>
+  );
+};
+
+export const Top2 = () => {
+  const isMobileOrTablet = useMedia({ maxWidth: "600px" });
+
+  return (
+    <Box
+      direction="row"
+      align="center"
+      height="75px"
+      pad="16px"
+      justify="center"
+    >
+      {isMobileOrTablet && <Navi />}
+    </Box>
   );
 };
 
@@ -1750,9 +1955,18 @@ export const Top = () => {
 
   const history = useHistory();
 
-  const { balance, token } = useContext(GlobalContext);
+  const isBridge = IsActivePath("/bridge");
+  const context = isBridge ? BridgeContext : WrapContext;
 
-  const isMobileOrTablet = useMedia({ maxWidth: "500px" });
+  const { balance, token } = useContext(context);
+
+  const isMobileOrTablet = useMedia({ maxWidth: "600px" });
+  const isMobileOrTablet2 = useMedia({ maxWidth: "1000px" });
+
+  const elementRef = useRef<HTMLDivElement>();
+
+  const [ref, bounds] = useMeasure();
+  const placeholderWidth = bounds.width || 300;
 
   return (
     <Box
@@ -1760,38 +1974,71 @@ export const Top = () => {
       align="center"
       height="75px"
       pad="16px"
-      margin={{
-        bottom: "85px",
+      // display: grid;
+      style={{
+        marginBottom: "85px",
       }}
+      className="app-top"
+      justify="between"
     >
       <Box
         style={{
           cursor: "pointer",
+          ...(isMobileOrTablet2
+            ? {}
+            : {
+                width: placeholderWidth + "px",
+              }),
         }}
         onClick={() => history.push("/")}
       >
         <Logo />
       </Box>
+
+      {!isMobileOrTablet &&
+        (isMobileOrTablet2 ? (
+          <React.Fragment>
+            <Box width="10px" />
+            <Navi />
+            <Box
+              margin={{
+                left: "auto",
+              }}
+            />
+          </React.Fragment>
+        ) : (
+          <Navi />
+        ))}
+
       <Box
-        margin={{
-          left: "auto",
+        direction="row"
+        align="center"
+        style={{
+          justifySelf: "flex-end",
+          maxWidth: "none",
         }}
-      ></Box>
-      <Text size="15px" color="#414141" weight={600}>
-        {chain}
-      </Text>
-      {!isMobileOrTablet && (
-        <AccountBalance account={account!} balance={balance} token={token} />
-      )}
+        ref={ref}
+      >
+        <Text size="15px" color="#414141" weight={600}>
+          {chain}
+        </Text>
+        {!isMobileOrTablet && (
+          <AccountBalance account={account!} balance={balance} token={token} />
+        )}
+      </Box>
     </Box>
   );
 };
 
 export const Bottom = () => {
   const { account } = useWeb3React();
-  const { balance, token } = useContext(GlobalContext);
 
-  const isMobileOrTablet = useMedia({ maxWidth: "500px" });
+  const isBridge = IsActivePath("/bridge");
+  const context = isBridge ? BridgeContext : WrapContext;
+
+  const { balance, token } = useContext(context);
+
+  const isMobileOrTablet = useMedia({ maxWidth: "600px" });
 
   if (!isMobileOrTablet) {
     return null;
@@ -1829,31 +2076,38 @@ function App() {
             },
           }}
         >
-          <GlobalState>
-            <Router>
-              <ToastContainer position={"bottom-left"} />
-              <Top />
-              <Box
-                direction="column"
-                // justify="center"
-                align="center"
-                style={{
-                  // margin: "0 auto",
-                  width: "100%",
-                  // TODO: for iphone pad-top 60px
-                  padding: "0px 10px",
-                }}
-              >
-                <Route exact path="/" component={BridgeWidget} />
-                <Route
-                  exact
-                  path="/p/:src/:dest/:id"
-                  component={BridgeWidgetProcess}
-                />
-              </Box>
-              <Bottom />
-            </Router>
-          </GlobalState>
+          <BridgeState>
+            <WrapState>
+              <Router>
+                <ToastContainer position={"bottom-left"} />
+                <Top />
+                <Top2 />
+                <Box
+                  direction="column"
+                  // justify="center"
+                  align="center"
+                  style={{
+                    // margin: "0 auto",
+                    width: "100%",
+                    // TODO: for iphone pad-top 60px
+                    padding: "0px 10px",
+                  }}
+                >
+                  <Route exact path="/">
+                    <Redirect to="/bridge" />
+                  </Route>
+                  <Route exact path="/bridge" component={BridgeWidget} />
+                  <Route exact path="/wrap" component={WrapWidget} />
+                  <Route
+                    exact
+                    path="/bridge/p/:src/:dest/:id"
+                    component={BridgeWidgetProcess}
+                  />
+                </Box>
+                <Bottom />
+              </Router>
+            </WrapState>
+          </BridgeState>
         </Grommet>
       </Web3ReactManager>
     </Web3ReactProvider>

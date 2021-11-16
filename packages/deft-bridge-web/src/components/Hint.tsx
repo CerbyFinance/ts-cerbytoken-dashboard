@@ -2,10 +2,10 @@ import { Box } from "grommet";
 import Tooltip from "rc-tooltip";
 import React from "react";
 
-export const Hint = ({ children, description }: any) => {
+export const Hint = ({ children, description, placement }: any) => {
   return (
     <Tooltip
-      placement="right"
+      placement={placement || "right"}
       mouseLeaveDelay={0}
       mouseEnterDelay={0}
       trigger={["hover"]}
