@@ -103,7 +103,7 @@ function PresaleCard({
           <div className="z-10 p-3 text-white transform -translate-x-56 translate-y-full rounded-md pointer-events-none bg-icons tooltip w-80 dark:bg-darksecondary">
             <div className="flex justify-between">
               <p>Listing Price:</p>
-              <p>{`${listingPrice.asCurrency(4)} DEFT`}</p>
+              <p>{`${listingPrice.asCurrency(4)} Cerby`}</p>
             </div>
             {tokenomics.map(element => {
               return (

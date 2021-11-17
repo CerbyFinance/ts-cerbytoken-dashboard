@@ -576,7 +576,7 @@ export const StakeList = ({
               {...binder.bind}
             >
               <Text size="14px" weight={500} color="white">
-                Buy DEFT
+                Buy Cerby
               </Text>
             </Box>
           )}

@@ -42,7 +42,7 @@ const MAXIMUM_STAKE_DAYS = 100 * DAYS_IN_ONE_YEAR;
 const LONGER_PAYS_BETTER_BONUS = 3e6; // 3e6/1e6 = 300% shares bonus max
 export const SMALLER_PAYS_BETTER_BONUS = 25e4; // 25e4/1e6 = 25% shares bonus max
 
-export const deftShortCurrency = (amount: number, label: string = "DEFT") => {
+export const deftShortCurrency = (amount: number, label: string = "Cerby") => {
   let shortAmount = "";
   let absAmount = Math.abs(amount);
   if (absAmount > 1e9) {

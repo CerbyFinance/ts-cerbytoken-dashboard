@@ -176,7 +176,7 @@ export const TransferStakesModal = ({
         )}
         <Box height="15px"></Box>
         <Text size="16px" weight={500}>
-          Total staked: {totalStaked.asCurrency(2)} DEFT
+          Total staked: {totalStaked.asCurrency(2)} Cerby
         </Text>
       </Box>
       <Box height="23px"></Box>

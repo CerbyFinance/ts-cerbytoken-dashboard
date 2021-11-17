@@ -211,7 +211,7 @@ const Item = ({
                       lineHeight: "130%",
                     }}
                   >
-                    Total Payout & APY:
+                    Total Payout & APR:
                   </Text>
 
                   <Text
@@ -223,7 +223,7 @@ const Item = ({
                     {isCompleted
                       ? deftShortCurrency(template.payout)
                       : deftShortCurrency(template.interest)}{" "}
-                    (APY: {Math.floor(template.apy2)}%)
+                    (APR: {Math.floor(template.apy2)}%)
                   </Text>
                 </Box>
               </Box>
@@ -348,7 +348,7 @@ const Item = ({
                           lineHeight: "130%",
                         }}
                       >
-                        Total Payout & APY:
+                        Total Payout & APR:
                       </Text>
 
                       <Text
@@ -357,7 +357,7 @@ const Item = ({
                           lineHeight: "130%",
                         }}
                       >
-                        {deftShortCurrency(template.payout)} (APY:{" "}
+                        {deftShortCurrency(template.payout)} (APR:{" "}
                         {Math.floor(template.apy)}%)
                       </Text>
                     </Box>

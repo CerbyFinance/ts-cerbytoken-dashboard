@@ -419,6 +419,7 @@ export const CreateStakeModal = () => {
         lockedForXDays: stakeDays,
         stakedAmount: ethers.utils.parseEther(stakeAmount),
       });
+
       const result2 = await result.wait();
 
       setLoader(false);
@@ -532,10 +533,10 @@ export const CreateStakeModal = () => {
   const smallerPaysBetter =
     (Number(stakeAmount) + longerPaysBetter) * multiplier;
 
-  const effectiveDeft =
+  const effectiveCerby =
     Number(stakeAmount) + longerPaysBetter + smallerPaysBetter;
 
-  const stakeShare = effectiveDeft / sharePrice;
+  const stakeShare = effectiveCerby / sharePrice;
 
   const now = new Date();
   const date = dateFns.addDays(now, stakeDays);
@@ -567,11 +568,11 @@ export const CreateStakeModal = () => {
       <Box height="36px"></Box>
       <Box direction="row" justify="between">
         <Text size="14px" color="text">
-          Stake Amount in DEFT
+          Stake Amount in Cerby
         </Text>
 
         <Text size="14px" color="#C4C4C4">
-          {balance.asCurrency(2)} DEFT available
+          {balance.asCurrency(2)} Cerby available
         </Text>
       </Box>
       <Box height="13px"></Box>
@@ -690,7 +691,7 @@ export const CreateStakeModal = () => {
         >
           <Text size="14px">Longer pays better</Text>
           <Text size="14px" weight={500}>
-            +{longerPaysBetter.asCurrency(2)} DEFT
+            +{longerPaysBetter.asCurrency(2)} Cerby
           </Text>
         </Box>
         <Box
@@ -702,7 +703,7 @@ export const CreateStakeModal = () => {
         >
           <Text size="14px">Smaller pays better</Text>
           <Text size="14px" weight={500}>
-            +{smallerPaysBetter.asCurrency(2)} DEFT
+            +{smallerPaysBetter.asCurrency(2)} Cerby
           </Text>
         </Box>
         <Box
@@ -712,9 +713,9 @@ export const CreateStakeModal = () => {
             bottom: "13px",
           }}
         >
-          <Text size="14px">Effective DEFT:</Text>
+          <Text size="14px">Effective Cerby:</Text>
           <Text size="14px" weight={500}>
-            {effectiveDeft.asCurrency(2)} DEFT
+            {effectiveCerby.asCurrency(2)} Cerby
           </Text>
         </Box>
         <Box
@@ -726,7 +727,7 @@ export const CreateStakeModal = () => {
         >
           <Text size="14px">Share Price:</Text>
           <Text size="14px" weight={500}>
-            {sharePrice.asCurrency(2)} DEFT / Share
+            {sharePrice.asCurrency(2)} Cerby / Share
           </Text>
         </Box>
         <Box
@@ -748,7 +749,7 @@ export const CreateStakeModal = () => {
             bottom: "13px",
           }}
         >
-          <Text size="14px">Min APY:</Text>
+          <Text size="14px">Min APR:</Text>
           <Text size="14px" weight={500}>
             {(minApy || 0).toFixed(2)} %
           </Text>
