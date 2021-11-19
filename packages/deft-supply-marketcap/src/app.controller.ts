@@ -54,7 +54,7 @@ const supplyAndMarketCap = async () => {
 
   const supplies = JSON.parse(suppliesStr) as Supplies;
   const prices = JSON.parse(pricesStr) as number[];
-  const balances = JSON.parse(pricesStr) as number[];
+  const balances = JSON.parse(pairBalances) as number[];
 
   const numerator = prices
     .map((price, i) => price * balances[i])
