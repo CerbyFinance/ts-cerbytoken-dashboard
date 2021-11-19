@@ -14,7 +14,7 @@ const ESTIMATE_MULT = 1.2;
 const BASEFEE_MULT = 1.3;
 
 const makeRemoteUrl = (chain: string) =>
-  `https://bridge.defifactory.fi/subgraphs/name/deft/deft-bridge-${chain}`;
+  `https://graph.cerby.fi/subgraphs/name/deft/deft-bridge-${chain}`;
 
 // const makeRemoteUrl = (chain: string) =>
 //   `http://localhost:8000/subgraphs/name/deft/deft-bridge-${chain}`;
