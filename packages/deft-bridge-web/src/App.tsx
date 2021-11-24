@@ -1094,7 +1094,7 @@ export const BridgeWidget = () => {
   const amountEntered = Number(transferAmount) > 0;
   const sufficientBalance = Number(transferAmount) <= Number(balance);
 
-  const areInSync = Math.abs(graphBlockNumber - blockNumber) <= 200;
+  const areInSync = Math.abs(graphBlockNumber - blockNumber) <= 500;
 
   const src = chainIdToShort[path[0]] || "...";
   const dest = chainIdToShort[path[1]] || "...";
@@ -1676,7 +1676,6 @@ const RecoverTransfer = () => {
         txHash,
       );
 
-      console.log("12312312");
       console.log(result);
 
       const burnEvent = result.logs.find(
@@ -2035,8 +2034,8 @@ export const Bottom = () => {
 
   const isBridge = IsActivePath("/bridge");
   const context = isBridge ? BridgeContext : WrapContext;
-
-  const { balance, token } = useContext(context);
+  //polygon-rpc.com/
+  https: const { balance, token } = useContext(context);
 
   const isMobileOrTablet = useMedia({ maxWidth: "600px" });
 
