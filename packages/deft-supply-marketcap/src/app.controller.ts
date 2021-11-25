@@ -97,4 +97,19 @@ export class AppController {
       status: "ok",
     };
   }
+
+  @Get("total-supply")
+  @ApiResponse({
+    status: 200,
+    type: ApiAnyResponse,
+  })
+  async totalSupply(): Promise<IApiResponse<AnyResponse>> {
+    const result = await supplyAndMarketCap();
+
+    return {
+      data: result.totalDilutedSupply,
+      message: "",
+      status: "ok",
+    };
+  }
 }
