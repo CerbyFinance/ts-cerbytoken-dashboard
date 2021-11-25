@@ -108,4 +108,15 @@ export class AppController {
 
     return result.totalDilutedSupply;
   }
+
+  @Get("circulating-supply")
+  @ApiResponse({
+    status: 200,
+    type: ApiAnyResponse,
+  })
+  async circulatingSupply(): Promise<AnyResponse> {
+    const result = await supplyAndMarketCap();
+
+    return result.circulatingSupply;
+  }
 }
