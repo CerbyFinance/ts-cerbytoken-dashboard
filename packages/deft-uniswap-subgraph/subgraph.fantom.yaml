@@ -1,6 +1,6 @@
 specVersion: 0.0.2
 schema:
-  file: schema-fantom.graphql
+  file: ./schema-fantom.graphql
 dataSources:
   - kind: ethereum/contract
     name: TraderJoeCerby
@@ -18,13 +18,13 @@ dataSources:
         - Swap
       abis:
         - name: SpookySwapPair
-          file: TraderJoeCerby/abis/SpookySwapPair.json
+          file: ./abis/SpookySwapPair.json
       eventHandlers:
         - event: Sync(uint112,uint112)
           handler: handleSync
         - event: Swap(indexed address,uint256,uint256,uint256,uint256,indexed address)
           handler: handleSwap
-      file: TraderJoeCerby/TraderJoeCerby.wasm
+      file: ./src/mapping-spookySwapCerby.ts
   - kind: ethereum/contract
     name: TraderJoeUsdc
     network: fantom
@@ -40,8 +40,8 @@ dataSources:
         - Token
       abis:
         - name: SpookySwapPair
-          file: TraderJoeUsdc/abis/SpookySwapPair.json
+          file: ./abis/SpookySwapPair.json
       eventHandlers:
         - event: Sync(uint112,uint112)
           handler: handleSync
-      file: TraderJoeUsdc/TraderJoeUsdc.wasm
+      file: ./src/mapping-traderJoeUsdc.ts

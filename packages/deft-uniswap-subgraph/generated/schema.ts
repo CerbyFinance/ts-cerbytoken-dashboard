@@ -96,58 +96,58 @@ export class Swap extends Entity {
     this.set("to", Value.fromBytes(value));
   }
 
-  get deftInMatic(): BigDecimal {
-    let value = this.get("deftInMatic");
+  get cerbyInFtm(): BigDecimal {
+    let value = this.get("cerbyInFtm");
     return value.toBigDecimal();
   }
 
-  set deftInMatic(value: BigDecimal) {
-    this.set("deftInMatic", Value.fromBigDecimal(value));
+  set cerbyInFtm(value: BigDecimal) {
+    this.set("cerbyInFtm", Value.fromBigDecimal(value));
   }
 
-  get deftInUsd(): BigDecimal {
-    let value = this.get("deftInUsd");
+  get cerbyInUsd(): BigDecimal {
+    let value = this.get("cerbyInUsd");
     return value.toBigDecimal();
   }
 
-  set deftInUsd(value: BigDecimal) {
-    this.set("deftInUsd", Value.fromBigDecimal(value));
+  set cerbyInUsd(value: BigDecimal) {
+    this.set("cerbyInUsd", Value.fromBigDecimal(value));
   }
 
-  get amountDeft(): BigDecimal {
-    let value = this.get("amountDeft");
+  get amountCerby(): BigDecimal {
+    let value = this.get("amountCerby");
     return value.toBigDecimal();
   }
 
-  set amountDeft(value: BigDecimal) {
-    this.set("amountDeft", Value.fromBigDecimal(value));
+  set amountCerby(value: BigDecimal) {
+    this.set("amountCerby", Value.fromBigDecimal(value));
   }
 
-  get amountDeftInMatic(): BigDecimal {
-    let value = this.get("amountDeftInMatic");
+  get amountCerbyInFtm(): BigDecimal {
+    let value = this.get("amountCerbyInFtm");
     return value.toBigDecimal();
   }
 
-  set amountDeftInMatic(value: BigDecimal) {
-    this.set("amountDeftInMatic", Value.fromBigDecimal(value));
+  set amountCerbyInFtm(value: BigDecimal) {
+    this.set("amountCerbyInFtm", Value.fromBigDecimal(value));
   }
 
-  get amountDeftInUsd(): BigDecimal {
-    let value = this.get("amountDeftInUsd");
+  get amountCerbyInUsd(): BigDecimal {
+    let value = this.get("amountCerbyInUsd");
     return value.toBigDecimal();
   }
 
-  set amountDeftInUsd(value: BigDecimal) {
-    this.set("amountDeftInUsd", Value.fromBigDecimal(value));
+  set amountCerbyInUsd(value: BigDecimal) {
+    this.set("amountCerbyInUsd", Value.fromBigDecimal(value));
   }
 
-  get transactionFeeInMatic(): BigDecimal {
-    let value = this.get("transactionFeeInMatic");
+  get transactionFeeInFtm(): BigDecimal {
+    let value = this.get("transactionFeeInFtm");
     return value.toBigDecimal();
   }
 
-  set transactionFeeInMatic(value: BigDecimal) {
-    this.set("transactionFeeInMatic", Value.fromBigDecimal(value));
+  set transactionFeeInFtm(value: BigDecimal) {
+    this.set("transactionFeeInFtm", Value.fromBigDecimal(value));
   }
 
   get transactionFeeInUsd(): BigDecimal {
