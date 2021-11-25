@@ -22,25 +22,31 @@ const makeRemoteUrl = (chain: string) =>
 const { PRIVATE_KEY } = process.env;
 
 // const chains = ["kovan", "binance-test"];
-const chains = ["binance", "ethereum", "polygon"];
+const chains = ["binance", "ethereum", "polygon", "avalanche", "fantom"];
 
 const nodeUrlByChain = {
   ethereum: "https://secret:X4gDeGtfQy2M@eth-node.valar-solutions.com", // 1
   binance: "https://secret:X4gDeGtfQy2M@bsc-node.valar-solutions.com", // 56
+  avalanche: "https://secret:X4gDeGtfQy2M@avalanche-node.valar-solutions.com", // 43114
+  fantom: "https://secret:X4gDeGtfQy2M@fantom-node.valar-solutions.com", // 250
+  polygon: "https://secret:X4gDeGtfQy2M@polygon-node.valar-solutions.com", // 137
+  //
   ropsten: "https://ropsten.infura.io/v3/6af3a6f4302246e8bbd4e69b5bfc9e33", // 3
   kovan: "https://secret:X4gDeGtfQy2M@eth-node-kovan.valar-solutions.com", // 42
   ["binance-test"]:
     "https://secret:X4gDeGtfQy2M@bsc-node-testnet.valar-solutions.com", // 97
-  ["polygon"]: "https://secret:X4gDeGtfQy2M@polygon-node.valar-solutions.com", // 137
 };
 
 const contractByChain = {
   ethereum: "0xa5df69790ba509c511e2a0a31ceeffecc4d156c7",
   binance: "0xa5df69790ba509c511e2a0a31ceeffecc4d156c7",
+  polygon: "0xa5df69790ba509c511e2a0a31ceeffecc4d156c7",
+  avalanche: "0xa5df69790ba509c511e2a0a31ceeffecc4d156c7",
+  fantom: "0xa5df69790ba509c511e2a0a31ceeffecc4d156c7",
+  //
   ropsten: "0xa5df69790ba509c511e2a0a31ceeffecc4d156c7",
   kovan: "0xa5df69790ba509c511e2a0a31ceeffecc4d156c7",
   ["binance-test"]: "0xa5df69790ba509c511e2a0a31ceeffecc4d156c7",
-  ["polygon"]: "0xa5df69790ba509c511e2a0a31ceeffecc4d156c7",
 };
 
 const chainToId = {
@@ -60,10 +66,24 @@ const allowedPaths = [
   ...[
     ["binance", "ethereum"],
     ["binance", "polygon"],
+    ["binance", "avalanche"],
+    ["binance", "fantom"],
     ["ethereum", "binance"],
     ["ethereum", "polygon"],
+    ["ethereum", "avalanche"],
+    ["ethereum", "fantom"],
     ["polygon", "binance"],
     ["polygon", "ethereum"],
+    ["polygon", "avalanche"],
+    ["polygon", "fantom"],
+    ["avalanche", "binance"],
+    ["avalanche", "ethereum"],
+    ["avalanche", "polygon"],
+    ["avalanche", "fantom"],
+    ["fantom", "binance"],
+    ["fantom", "ethereum"],
+    ["fantom", "polygon"],
+    ["fantom", "avalanche"],
   ],
 ] as [string, string][];
 
