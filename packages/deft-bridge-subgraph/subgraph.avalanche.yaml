@@ -1,14 +1,14 @@
 specVersion: 0.0.2
 schema:
-  file: schema.graphql
+  file: ./schema.graphql
 dataSources:
   - kind: ethereum/contract
     name: SourceChain
-    network: fantom
+    network: avalanche
     source:
       address: "0xa5df69790ba509c511e2a0a31ceeffecc4d156c7"
       abi: CrossChainBridge
-      startBlock: 23076700
+      startBlock: 7404000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -18,7 +18,7 @@ dataSources:
         - Global
       abis:
         - name: CrossChainBridge
-          file: SourceChain/abis/CrossChainBridge.json
+          file: ./abis/CrossChainBridge.json
       eventHandlers:
         - event: ProofOfBurn(address,address,uint256,uint256,uint256,uint256,uint256,bytes32)
           handler: handleProofOfBurn
@@ -28,4 +28,4 @@ dataSources:
           handler: handleApprovedTransaction
         - event: BulkApprovedTransactions(bytes32[])
           handler: handleBulkApprovedTransaction
-      file: SourceChain/SourceChain.wasm
+      file: ./src/mapping-source-chain.ts
