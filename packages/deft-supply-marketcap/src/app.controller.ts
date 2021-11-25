@@ -103,13 +103,9 @@ export class AppController {
     status: 200,
     type: ApiAnyResponse,
   })
-  async totalSupply(): Promise<IApiResponse<AnyResponse>> {
+  async totalSupply(): Promise<AnyResponse> {
     const result = await supplyAndMarketCap();
 
-    return {
-      data: result.totalDilutedSupply,
-      message: "",
-      status: "ok",
-    };
+    return result.totalDilutedSupply;
   }
 }
