@@ -283,7 +283,17 @@ export const BridgeWidgetProcess = () => {
     };
 
     fire(srcClient);
-  }, []);
+
+    const timer = setInterval(() => {
+      if (transferAmount) {
+        return;
+      }
+
+      fire(srcClient);
+    }, 3500);
+
+    return () => clearInterval(timer);
+  }, [transferAmount]);
 
   // validator
   useEffect(() => {
