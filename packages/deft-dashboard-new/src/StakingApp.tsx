@@ -569,6 +569,12 @@ export const StakeList = ({
                 } else if (chainId === 137) {
                   link =
                     "https://quickswap.exchange/#/swap?inputCurrency=Matic&outputCurrency=0xdef1fac7Bf08f173D286BbBDcBeeADe695129840";
+                } else if (chainId === 43114) {
+                  link =
+                    "https://traderjoexyz.com/#/trade?inputCurrency=AVAX&outputCurrency=0xdef1fac7bf08f173d286bbbdcbeeade695129840";
+                } else if (chainId === 250) {
+                  link =
+                    "https://spookyswap.finance/swap?inputCurrency=FTM&outputCurrency=0xdef1fac7bf08f173d286bbbdcbeeade695129840";
                 }
 
                 window.open(link);
