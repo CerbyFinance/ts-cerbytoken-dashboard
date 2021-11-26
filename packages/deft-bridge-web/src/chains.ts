@@ -4,8 +4,8 @@ import { Web3Provider } from "@ethersproject/providers";
 // export const supportedChainIds = [1, 56, 137] as const;
 // export const supportedChainIds = [42, 97] as const;
 
-export const supportedChainIds = [1, 56, 137, 42, 97] as const;
-export const supportedChainIdsBridge = [1, 56, 137] as const;
+export const supportedChainIds = [1, 56, 137, 42, 97, 43114, 250] as const;
+export const supportedChainIdsBridge = [1, 56, 137, 43114, 250] as const;
 
 export type Chains = typeof supportedChainIds[number];
 
@@ -39,6 +39,20 @@ export const chains = [
     label: "Binance",
     nativeCurrency: { name: "BNB", symbol: "BNB", decimals: 18 },
     rpcUrls: ["https://bsc-dataseed.binance.org/"],
+  },
+  {
+    chainId: 43114,
+    explorer: "https://snowtrace.io",
+    label: "Avalanche Mainnet",
+    nativeCurrency: { name: "AVAX", symbol: "AVAX", decimals: 18 },
+    rpcUrls: ["https://api.avax.network/ext/bc/C/rpc"],
+  },
+  {
+    chainId: 250,
+    explorer: "https://ftmscan.com",
+    label: "Fantom Opera",
+    nativeCurrency: { name: "FTM", symbol: "FTM", decimals: 18 },
+    rpcUrls: ["https://rpc.ftm.tools"],
   },
   {
     chainId: 137,

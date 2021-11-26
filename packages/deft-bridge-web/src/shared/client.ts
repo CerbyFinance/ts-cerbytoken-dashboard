@@ -10,7 +10,7 @@ export const noopApollo = new ApolloClient({
 
 export const clientByChain = Object.fromEntries(
   // ["kovan", "binance-test"].map(chain => {
-  ["ethereum", "binance", "polygon"].map(chain => {
+  ["ethereum", "binance", "polygon", "avalanche", "fantom"].map(chain => {
     const client = new ApolloClient({
       link: new HttpLink({
         uri: `/subgraphs/name/deft/deft-bridge-${chain}`,

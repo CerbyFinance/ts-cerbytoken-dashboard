@@ -5,9 +5,10 @@ import { Chains } from "./chains";
 
 // type ChainId = 1 | 3 | 4 | 5 | 42;
 
-// TODO: add bsc
 const ETHERSCAN_PREFIXES: { [chainId in Chains]: string } = {
   1: "etherscan.io",
+  43114: "snowtrace.io",
+  250: "ftmscan.com",
   // 3: "ropsten.etherscan.io",
   // 4: "rinkeby.etherscan.io",
   // 5: "goerli.etherscan.io",

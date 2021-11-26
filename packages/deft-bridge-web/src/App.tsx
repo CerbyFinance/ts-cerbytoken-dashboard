@@ -43,10 +43,12 @@ import {
   ProofType,
 } from "./graphql/types";
 import {
+  AvaxLogo,
   BinanceLogo,
   CheckLg,
   Direction,
   EthereumLogo,
+  FantomLogo,
   PolygonLogo,
   QuestionIcon,
   RecoverIcon,
@@ -768,6 +770,8 @@ export const BridgeWidgetProcess = () => {
 const idToChain = {
   1: "ethereum",
   56: "binance",
+  43114: "avalanche",
+  250: "fantom",
   3: "ropsten",
   42: "kovan",
   97: "binance-test",
@@ -780,6 +784,8 @@ const chainIdToShort = {
   1: "ETH",
   56: "BSC",
   137: "Polygon",
+  43114: "AVAX",
+  250: "FTM",
 
   3: "ETH (ROP)",
   42: "ETH (KOV)",
@@ -791,6 +797,9 @@ const chainIdToShort = {
 const chainIdToIcon = {
   1: <EthereumLogo />,
   56: <BinanceLogo />,
+  43114: <AvaxLogo />,
+  250: <FantomLogo />,
+
   137: <PolygonLogo />,
 
   3: <EthereumLogo />,
@@ -2034,8 +2043,7 @@ export const Bottom = () => {
 
   const isBridge = IsActivePath("/bridge");
   const context = isBridge ? BridgeContext : WrapContext;
-  //polygon-rpc.com/
-  https: const { balance, token } = useContext(context);
+  const { balance, token } = useContext(context);
 
   const isMobileOrTablet = useMedia({ maxWidth: "600px" });
 

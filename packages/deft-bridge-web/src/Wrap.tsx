@@ -9,7 +9,14 @@ import { useHistory } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.min.css";
 import styled from "styled-components";
 import { Chains, switchToNetwork } from "./chains";
-import { BinanceLogo, Direction, EthereumLogo, PolygonLogo } from "./Icons";
+import {
+  AvaxLogo,
+  BinanceLogo,
+  Direction,
+  EthereumLogo,
+  FantomLogo,
+  PolygonLogo,
+} from "./Icons";
 import { WrapContext } from "./Shared";
 import { noopApollo } from "./shared/client";
 import { injected } from "./shared/connectors";
@@ -66,6 +73,8 @@ const chainIdToShort = {
   1: "ETH",
   56: "BSC",
   137: "Polygon",
+  43114: "AVAX",
+  250: "FTM",
 
   3: "ETH (ROP)",
   42: "ETH (KOV)",
@@ -77,6 +86,9 @@ const chainIdToShort = {
 const chainIdToIcon = {
   1: <EthereumLogo />,
   56: <BinanceLogo />,
+  43114: <AvaxLogo />,
+  250: <FantomLogo />,
+
   137: <PolygonLogo />,
 
   3: <EthereumLogo />,
@@ -85,7 +97,6 @@ const chainIdToIcon = {
 } as {
   [key in Chains]: JSX.Element;
 };
-
 function _isFinite(value: any): boolean {
   return typeof value == "number" && isFinite(value);
 }
