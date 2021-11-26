@@ -15,7 +15,14 @@ export const createAgent = (proxy: string) => {
   });
 };
 
-export const namedChains = ["eth", "bsc", "polygon"] as const;
+export const namedChains = [
+  "eth",
+  "bsc",
+  "polygon",
+  "avalanche",
+  "fantom",
+] as const;
+
 export type NamedChains = typeof namedChains[number];
 
 export const web3Map = Object.fromEntries(

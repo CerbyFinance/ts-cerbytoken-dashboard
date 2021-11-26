@@ -35,16 +35,18 @@ const getOrUpdateSupplies = async () => {
   const totalDilutedSupply = totalSupplies.reduce((acc, val) => acc + val, 0);
 
   const stakedSupplies = await Promise.all(
-    (["polygon", "bsc"] as NamedChains[]).map(async item => {
-      const web3 = web3Map[item];
-      const contract = defiFactoryTokenContract(web3);
-      const stakedSupply = await contract.methods
-        .balanceOf(STAKING_CONTRACT)
-        .call()
-        .then(some => Number(Web3.utils.fromWei(some)));
+    (["polygon", "bsc", "avalanche", "fantom"] as NamedChains[]).map(
+      async item => {
+        const web3 = web3Map[item];
+        const contract = defiFactoryTokenContract(web3);
+        const stakedSupply = await contract.methods
+          .balanceOf(STAKING_CONTRACT)
+          .call()
+          .then(some => Number(Web3.utils.fromWei(some)));
 
-      return stakedSupply;
-    }),
+        return stakedSupply;
+      },
+    ),
   );
 
   const stakedSupply = stakedSupplies.reduce((acc, val) => acc + val, 0);
@@ -82,9 +84,7 @@ const makePriceReq = (graphName: string) => {
   return request<PriceRes>(
     {
       method: "POST",
-      url:
-        "http://nodes2.valar-solutions.com:8000/subgraphs/name/deft/" +
-        graphName,
+      url: "http://nodes2.valar-solutions.com:8000/subgraphs/name/" + graphName,
       headers: {
         "Content-Type": "application/json",
       },
@@ -105,9 +105,13 @@ const makePriceReq = (graphName: string) => {
 
 const getOrUpdatePrices = async () => {
   const results = await Promise.all(
-    ["deft-uniswap-v3", "deft-pancakeswap-v2", "deft-quickswap-v2"].map(item =>
-      makePriceReq(item),
-    ),
+    [
+      "deft/deft-uniswap-v3",
+      "deft/deft-pancakeswap-v2",
+      "deft/deft-quickswap-v2",
+      "cerby/cerby-traderjoe-v2",
+      "cerby/cerby-spookyswap-v2",
+    ].map(item => makePriceReq(item)),
   );
 
   const ifThereIsError = results.find(item => item instanceof Error);
@@ -118,7 +122,9 @@ const getOrUpdatePrices = async () => {
 
   const prices = (results as Response<PriceRes>[]).map(item => {
     const tokens = item.body.data.tokens;
-    const priceDeftInUsd = tokens.find(item => item.id === "deftInUsd");
+    const priceDeftInUsd = tokens.find(
+      item => item.id === "deftInUsd" || item.id === "cerbyInUsd",
+    );
     return Number(priceDeftInUsd!.price);
   });
 
@@ -132,6 +138,8 @@ const getOrUpdatePairBalances = async () => {
     "0x81489b0e7c7a515799c89374e23ac9295088551d",
     "0x493e990ccc67f59a3000effa9d5b1417d54b6f99",
     "0xf92b726b10956ff95ebabdd6fd92d180d1e920da",
+    "0x4e2d00526ae280d5aa296c321a8d32cd2486a737",
+    "0xD450c27c7024f5813449CA30f0D7c4F9d0a19c77",
   ];
   const pairBalances = await Promise.all(
     namedChains.map(async (item, i) => {

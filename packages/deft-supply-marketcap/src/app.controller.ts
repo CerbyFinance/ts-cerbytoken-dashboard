@@ -22,6 +22,8 @@ type Prices = {
   priceOnBsc: number;
   priceOnEth: number;
   priceOnPolygon: number;
+  priceOnAvalanche: number;
+  priceOnFantom: number;
   currentWeightedPrice: number;
 };
 
@@ -38,6 +40,8 @@ const zero = {
   priceOnBsc: 0,
   priceOnEth: 0,
   priceOnPolygon: 0,
+  priceOnAvalanche: 0,
+  priceOnFantom: 0,
   stakedSupply: 0,
   totalDilutedSupply: 0,
   vestedSupply: 0,
@@ -73,6 +77,8 @@ const supplyAndMarketCap = async () => {
     priceOnEth: prices[0],
     priceOnBsc: prices[1],
     priceOnPolygon: prices[2],
+    priceOnAvalanche: prices[3],
+    priceOnFantom: prices[4],
 
     currentWeightedPrice,
     circulatingMarketCap,
