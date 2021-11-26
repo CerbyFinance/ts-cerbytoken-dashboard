@@ -25,16 +25,15 @@ const { PRIVATE_KEY } = process.env;
 const chains = ["binance", "ethereum", "polygon", "avalanche", "fantom"];
 
 const nodeUrlByChain = {
-  ethereum: "https://secret:X4gDeGtfQy2M@eth-node.valar-solutions.com", // 1
-  binance: "https://secret:X4gDeGtfQy2M@bsc-node.valar-solutions.com", // 56
-  avalanche: "https://secret:X4gDeGtfQy2M@avalanche-node.valar-solutions.com", // 43114
-  fantom: "https://secret:X4gDeGtfQy2M@fantom-node.valar-solutions.com", // 250
-  polygon: "https://secret:X4gDeGtfQy2M@polygon-node.valar-solutions.com", // 137
+  ethereum: "https://secret:X4gDeGtfQy2M@eth-node.cerby.fi", // 1
+  binance: "https://secret:X4gDeGtfQy2M@bsc-node.cerby.fi", // 56
+  polygon: "https://secret:X4gDeGtfQy2M@polygon-node.cerby.fi", // 137
+  avalanche: "https://secret:X4gDeGtfQy2M@avalanche-node.cerby.fi", // 43114
+  fantom: "https://secret:X4gDeGtfQy2M@fantom-node.cerby.fi", // 250
   //
   ropsten: "https://ropsten.infura.io/v3/6af3a6f4302246e8bbd4e69b5bfc9e33", // 3
-  kovan: "https://secret:X4gDeGtfQy2M@eth-node-kovan.valar-solutions.com", // 42
-  ["binance-test"]:
-    "https://secret:X4gDeGtfQy2M@bsc-node-testnet.valar-solutions.com", // 97
+  kovan: "https://secret:X4gDeGtfQy2M@eth-node-kovan.cerby.fi", // 42
+  ["binance-test"]: "https://secret:X4gDeGtfQy2M@bsc-node-testnet.cerby.fi", // 97
 };
 
 const contractByChain = {
@@ -52,10 +51,14 @@ const contractByChain = {
 const chainToId = {
   ethereum: 1,
   binance: 56,
+  polygon: 137,
+  avalanche: 43114,
+  fantom: 43114,
+
+  //
   ropsten: 3,
   kovan: 42,
   ["binance-test"]: 97,
-  ["polygon"]: 137,
 };
 
 const allowedPaths = [
