@@ -53,7 +53,7 @@ const chainToId = {
   binance: 56,
   polygon: 137,
   avalanche: 43114,
-  fantom: 43114,
+  fantom: 250,
 
   //
   ropsten: 3,
@@ -132,12 +132,23 @@ const sdkAndWeb3ByChain = Object.fromEntries(
   }),
 );
 
+const chainIdToMaxGwei = {
+  1: 200000000000,
+  137: 500000000000,
+  56: 100000000000,
+  43114: 200000000000,
+  250: 500000000000,
+} as {
+  [key: number]: number;
+};
+
 const approveOne = async (
   contract: CrossChainBridge,
   web3: Web3,
   from: string,
   proofHash: string,
-  isMain: boolean,
+  // isMain: boolean,
+  chainId: number,
 ) => {
   const preparedMethod = contract.methods.markTransactionAsApproved(proofHash);
 
@@ -166,7 +177,13 @@ const approveOne = async (
 
   const whichGas = block.baseFeePerGas ? fees.maxFeePerGas : fees.gasPrice;
 
-  if (Number(whichGas) > 200000000000) {
+  const maxGwei = chainIdToMaxGwei[chainId];
+
+  if (!maxGwei) {
+    return new Error("gwei not found");
+  }
+
+  if (Number(whichGas) > maxGwei) {
     return new Error("too high gwei");
   }
 
@@ -338,7 +355,8 @@ const approver = async ([srcChain, destChain]: [string, string]) => {
         dest.web3,
         from,
         proofsHashes[0],
-        destChain === "ethereum",
+        destChainId,
+        // destChain === "ethereum",
       );
 
       if (approveRes instanceof Error) {
