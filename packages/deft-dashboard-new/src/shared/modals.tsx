@@ -1,6 +1,7 @@
 import { Box } from "grommet";
 import Dialog from "rc-dialog";
 import React, { createContext, useContext } from "react";
+import { ConnectWallet } from "../ConnectWallet";
 import { CreateStakeModal } from "../CreateStake";
 import { ScrapeOrEndModal } from "../ScrapeOrEnd";
 import { TransferStakesModal } from "../TransferStakes";
@@ -14,7 +15,9 @@ const InitialState = {
 export type Modals =
   | "scrape-or-end-stakes-modal"
   | "create-stake-modal"
-  | "transfer-stakes-modal";
+  | "transfer-stakes-modal"
+  | "connect-wallet";
+
 export type ModalPayloads = TransferStakesModalPayload | null | {};
 
 export type ActiveTemplate = {
@@ -49,6 +52,7 @@ const ModalsContext = createContext({
   showTransferStakesModal: (payload: TransferStakesModalPayload) => {},
   createStakeModal: () => {},
   showScrapeOrEndStakesModal: (payload: ScrapeOrEndStakesModalPayload) => {},
+  showConnectWalletModal: () => {},
   closeModal: () => {},
 });
 
@@ -85,6 +89,10 @@ class ModalsState extends React.Component<
     this.setState({ activeModal: null });
   };
 
+  showConnectWalletModal = () => {
+    this.setState({ activeModal: "connect-wallet" });
+  };
+
   render() {
     const { children } = this.props;
     const { activeModal, activeModalPayload } = this.state;
@@ -98,6 +106,7 @@ class ModalsState extends React.Component<
           showTransferStakesModal: this.showTransferStakesModal,
           createStakeModal: this.createStakeModal,
           showScrapeOrEndStakesModal: this.showScrapeOrEndStakesModal,
+          showConnectWalletModal: this.showConnectWalletModal,
         }}
       >
         {children}
@@ -135,13 +144,18 @@ export const ModalDialog = (props: {
   visible: boolean;
   closeModal: () => void;
   children: React.ReactNode;
+  closeOutside?: boolean;
 }) => {
-  const { closeModal, visible } = props;
+  const { closeModal, visible, closeOutside } = props;
 
   return (
     <Dialog
       visible={visible}
-      // onClose={closeModal}
+      {...(closeOutside
+        ? {
+            onClose: closeModal,
+          }
+        : {})}
       wrapClassName="dialog-center"
       bodyStyle={{
         padding: "0px",
@@ -154,16 +168,18 @@ export const ModalDialog = (props: {
       }}
       closable={false}
     >
-      <Box
-        style={{
-          position: "absolute",
-          right: "-60px",
-          cursor: "pointer",
-        }}
-        onClick={closeModal}
-      >
-        <X />
-      </Box>
+      {!closeOutside && (
+        <Box
+          style={{
+            position: "absolute",
+            right: "-60px",
+            cursor: "pointer",
+          }}
+          onClick={closeModal}
+        >
+          <X />
+        </Box>
+      )}
       {props.children}
     </Dialog>
   );
@@ -244,6 +260,20 @@ export const ModalsCreatedApp = () => {
                 visible={props.visible}
               >
                 <ScrapeOrEndModal {...props.payload} />
+              </ModalDialog>
+            );
+          },
+        },
+        {
+          name: "connect-wallet",
+          element: props => {
+            return (
+              <ModalDialog
+                closeModal={props.closeModal}
+                visible={props.visible}
+                closeOutside
+              >
+                <ConnectWallet {...props.payload} />
               </ModalDialog>
             );
           },

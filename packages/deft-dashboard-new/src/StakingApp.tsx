@@ -692,7 +692,7 @@ export const StakeList = ({
             <WithOrder
               active={order.orderBy === "reward"}
               direction={order.direction}
-              title="Reward / APY"
+              title="Reward / APR"
               onClick={() => {
                 handleSetOrder("reward");
               }}
@@ -845,7 +845,7 @@ export const StakeList = ({
                 <Text size="16px">+ {interest}</Text>
                 <Box height="6px"></Box>
                 <Text color="#A9A9A9" size="14px">
-                  {apy.asCurrency(2)}% APY
+                  {apy.asCurrency(2)}% APR
                 </Text>
               </Box>
               <Box width="144px">

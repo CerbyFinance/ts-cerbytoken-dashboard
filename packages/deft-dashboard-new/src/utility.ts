@@ -3,6 +3,8 @@ export const chainCodeName = {
   42: "Kovan Testnet",
   3: "Ropsten Testnet",
   56: "Binance",
+  250: "Fantom",
+  43114: "Avalanche",
   97: "Binance Testnet",
   137: "Polygon",
   80001: "Polygon Testnet",
@@ -13,7 +15,9 @@ export const chainCodeSymbol = {
   97: "tBNB",
   1: "ETH",
   80001: "MATIC",
-  57: "BNB",
+  250: "FTM",
+  43114: "AVAX",
+  56: "BNB",
   42: "kETH",
   3: "rETH",
 } as { [key: number]: string };
@@ -23,7 +27,7 @@ export const networkChainButton = {
   97: "bscbtn",
   1: "ethbtn",
   80001: "polybtn",
-  57: "",
+  56: "",
   42: "ethbtn",
   3: "polybtn",
 } as { [key: number]: string };
@@ -33,7 +37,7 @@ export const progressGradientColor = {
   97: ["#ffb300", "#ff6f00"],
   1: ["#5294ff", "#29e994"],
   80001: ["#782aff", "#bd29e9"],
-  57: ["", ""],
+  56: ["", ""],
   42: ["#5294ff", "#29e994"],
   3: ["#782aff", "#bd29e9"],
 } as { [key: number]: [string, string] };

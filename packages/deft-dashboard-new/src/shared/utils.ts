@@ -24,6 +24,8 @@ export function _isFinite(value: any): boolean {
 
 const ETHERSCAN_PREFIXES: { [chainId in PossibleChains]: string } = {
   1: "etherscan.io",
+  43114: "snowtrace.io",
+  250: "ftmscan.com",
   3: "ropsten.etherscan.io",
   4: "rinkeby.etherscan.io",
   5: "goerli.etherscan.io",

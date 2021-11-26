@@ -113,3 +113,40 @@
   position: absolute;
   z-index: 1600;
 }
+
+.loader {
+  width: 22px;
+  height: 22px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  border: 4px solid transparent;
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: spin 1s ease infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0turn);
+  }
+
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+.hover-blue:hover {
+  border-color: #5294ff !important;
+  cursor: pointer;
+}
+
+.-walletlink-css-reset .-walletlink-extension-dialog-box-top-description-text {
+  background: transparent;
+}
+
+.-walletlink-css-reset .-walletlink-extension-dialog-box-bottom-description {
+  background: transparent;
+}

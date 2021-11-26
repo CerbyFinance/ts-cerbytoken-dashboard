@@ -2,15 +2,13 @@ import { useWeb3React } from "@web3-react/core";
 import "rc-dialog/assets/index.css";
 import { useEffect } from "react";
 import { injected } from "./connectors";
-import { useEagerConnect, useInactiveListener } from "./hooks";
+import { useEagerConnect } from "./hooks";
 
 export default function Web3ReactManager({
   children,
 }: {
   children: JSX.Element;
 }) {
-  const { active } = useWeb3React();
-
   const {
     active: networkActive,
     error: networkError,
@@ -22,13 +20,18 @@ export default function Web3ReactManager({
 
   // after eagerly trying injected, if the network connect ever isn't active or in an error state, activate itd
   useEffect(() => {
-    if (triedEager && !networkActive && !networkError && !active) {
+    if (triedEager && !networkActive && !networkError) {
       activateNetwork(injected);
     }
-  }, [triedEager, networkActive, networkError, activateNetwork, active]);
+  }, []);
+  // useEffect(() => {
+  //   if (triedEager && !networkActive && !networkError && !active) {
+  //     activateNetwork(injected);
+  //   }
+  // }, [triedEager, networkActive, networkError, activateNetwork, active]);
 
   // handle logic to connect in reaction to certain events on the injected ethereum provider, if it exists
-  useInactiveListener(!triedEager);
+  // useInactiveListener(!triedEager);
 
   return children;
 }

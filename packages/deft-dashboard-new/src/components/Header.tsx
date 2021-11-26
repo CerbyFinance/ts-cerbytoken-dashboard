@@ -5,13 +5,16 @@ import BurgerMenuIcon from "../icons/BurgerMenuIcon";
 import ETHIcon from "../icons/ETHIcon";
 import PolygonIcon from "../icons/PolygonIcon";
 import WalletIcon from "../icons/WalletIcon";
-import { injected } from "../shared/connectors";
+import { HoveredElement } from "../shared/hooks";
+import { ModalsContext } from "../shared/modals";
 import { NavContext } from "../shared/nav";
 import { chainCodeName } from "../utility";
 
 function Header() {
   const { setMobileNav } = useContext(NavContext);
   const { active, account, activate, chainId } = useWeb3React();
+
+  const { showConnectWalletModal } = useContext(ModalsContext);
 
   return (
     <div className="flex items-center justify-between mt-4 lg:mx-auto md:w-full lg:max-w-screen-lg">
@@ -33,24 +36,41 @@ function Header() {
             {(chainId === 137 || chainId === 80001) && (
               <PolygonIcon className={"h-4"} />
             )}
+            {(chainId === 250 || chainId === 43114) && (
+              <ETHIcon className={"h-4"} />
+            )}
+
             <span className="text-xs md:text-sm">{chainCodeName[chainId]}</span>
           </div>
         )}
 
         {active ? (
-          <div className="flex items-center space-x-2 text-xs font-medium bg-gray-200 border-2 border-gray-400 rounded-md text-icons dark:border-gray-500 dark:bg-black dark:text-iconsdark md:text-sm ">
-            <div className="flex items-center h-full px-5 border-gray-400 dark:border-gray-500">
-              <p>
-                {account && `${account?.slice(0, 8)}...${account?.slice(-4)}`}
-              </p>
-            </div>
-          </div>
+          <HoveredElement
+            render={binder => (
+              <div
+                {...binder.bind}
+                onClick={() => {
+                  // activate(injected);
+                  showConnectWalletModal();
+                }}
+                className="flex items-center space-x-2 text-xs font-medium bg-gray-200 border-2 border-gray-400 rounded-md text-icons dark:border-gray-500 dark:bg-black dark:text-iconsdark md:text-sm hover-blue"
+              >
+                <div className="flex items-center h-full px-5 border-gray-400 dark:border-gray-500">
+                  <p>
+                    {account &&
+                      `${account?.slice(0, 8)}...${account?.slice(-4)}`}
+                  </p>
+                </div>
+              </div>
+            )}
+          />
         ) : (
           <button
             type="button"
             className="space-x-2 text-xs btn md:text-sm w-28 from-blue-500 md:w-min to-green-500 hover:from-blue-700 hover:to-green-700"
             onClick={() => {
-              activate(injected);
+              // activate(injected);
+              showConnectWalletModal();
             }}
           >
             <WalletIcon className="" />

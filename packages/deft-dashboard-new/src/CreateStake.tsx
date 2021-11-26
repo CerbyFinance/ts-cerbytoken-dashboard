@@ -451,6 +451,7 @@ export const CreateStakeModal = () => {
 
       console.log(result2.status);
     } catch (error) {
+      console.log(error);
       setLoader(false);
       const serializedError = serializeError(error);
       const originalErrorMessage = (serializedError.data as any)?.originalError
