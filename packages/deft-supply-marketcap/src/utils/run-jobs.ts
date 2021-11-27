@@ -125,7 +125,8 @@ const getOrUpdatePrices = async () => {
     const priceDeftInUsd = tokens.find(
       item => item.id === "deftInUsd" || item.id === "cerbyInUsd",
     );
-    return Number(priceDeftInUsd!.price);
+
+    return priceDeftInUsd ? Number(priceDeftInUsd!.price) : 0;
   });
 
   const result2 = await globalRedis.set("prices", JSON.stringify(prices));
@@ -186,7 +187,7 @@ const fire1 = async () => {
       await getOrUpdatePrices();
       console.log(new Date().toLocaleString(), " ", "prices update");
     } catch (error) {
-      console.log("wise days syncing error:");
+      console.log("syncing error:");
       console.log(error);
     }
     await new Promise(r => setTimeout(r, 1 * 1000));
@@ -200,7 +201,7 @@ const fire2 = async () => {
       await getOrUpdatePairBalances();
       console.log(new Date().toLocaleString(), " ", "prices update");
     } catch (error) {
-      console.log("wise days syncing error:");
+      console.log("syncing error:");
       console.log(error);
     }
     await new Promise(r => setTimeout(r, 1 * 1000));
