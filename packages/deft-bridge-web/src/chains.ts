@@ -144,6 +144,10 @@ export async function switchToNetwork({
       method: "wallet_switchEthereumChain",
       params: [{ chainId: "0x" + Number(chainId).toString(16) }],
     });
+    if (chainId === 43114) {
+      // avalanche bug
+      window.location.reload();
+    }
   } catch (error) {
     // 4902 is the error code for attempting to switch to an unrecognized chainId
     // @ts-ignore
