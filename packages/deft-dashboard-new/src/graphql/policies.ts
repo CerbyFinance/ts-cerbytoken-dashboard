@@ -37,6 +37,11 @@ export const scalarTypePolicies = {
       stakerCount: numberTypePolicy,
     },
   },
+  User: {
+    fields: {
+      stakedAmount: numberTypePolicy,
+    },
+  },
   Stake: {
     fields: {
       stakedAmount: numberTypePolicy,

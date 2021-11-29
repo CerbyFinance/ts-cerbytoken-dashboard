@@ -1,4 +1,14 @@
 import gql from "graphql-tag";
+
+export const stakedAmountQuery = gql`
+  query StakedAmount($address: ID!) {
+    user(id: $address) {
+      id
+      stakedAmount
+    }
+  }
+`;
+
 export const stakesQuery = gql`
   query Stakes($address: String!) {
     stakes(

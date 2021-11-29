@@ -63,6 +63,10 @@ const InjectApolloClient = ({ children }: { children: JSX.Element }) => {
     stakingClient = clientByChain["binance"];
   } else if (chainId === 137) {
     stakingClient = clientByChain["polygon"];
+  } else if (chainId === 250) {
+    stakingClient = clientByChain["fantom"];
+  } else if (chainId === 43114) {
+    stakingClient = clientByChain["avalanche"];
   }
 
   return <ApolloProvider client={stakingClient}>{children} </ApolloProvider>;

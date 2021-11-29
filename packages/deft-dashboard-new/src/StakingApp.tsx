@@ -9,9 +9,13 @@ import styled from "styled-components";
 import useMedia from "use-media";
 import { Chains } from "./chains";
 import {
+  StakedAmountDocument,
+  StakedAmountQuery,
+  StakedAmountQueryVariables,
   StakesDocument,
   StakesQuery,
   StakesQueryVariables,
+  useStakedAmountQuery,
   useStakesQuery,
 } from "./graphql/types";
 import LinkIcon from "./icons/LinkIcon";
@@ -229,9 +233,11 @@ const activeTemplate = {
 
 export const StakeList = ({
   items,
+  stakedAmount,
 }: // inflations,
 {
   items: StakesQuery["stakes"];
+  stakedAmount: number | undefined;
   // inflations: number[];
 }) => {
   const { chainId } = useWeb3React();
@@ -249,6 +255,11 @@ export const StakeList = ({
 
   const { cachedInterestPerShare, dailySnapshots } =
     useContext(SnapshotsInterest);
+
+  const allUsersStaked =
+    dailySnapshots.length > 0
+      ? dailySnapshots[dailySnapshots.length - 1].totalStaked
+      : 0;
 
   const [maxRows, setMaxRows] = useState(10);
   const [page, setPage] = useState(1);
@@ -519,7 +530,10 @@ export const StakeList = ({
               round="5px"
               style={{
                 cursor: "pointer",
-                ...(chainId === 56 || chainId === 137
+                ...(chainId === 56 ||
+                chainId === 137 ||
+                chainId === 250 ||
+                chainId === 43114
                   ? {}
                   : {
                       pointerEvents: "none",
@@ -587,6 +601,39 @@ export const StakeList = ({
             </Box>
           )}
         ></HoveredElement>
+        <Box
+          margin={{
+            left: "auto",
+          }}
+        ></Box>
+        <Box
+          margin={{
+            right: "20px",
+          }}
+        >
+          <Text size="14px" alignSelf="end" color="#A9A9A9">
+            All Users Staked:
+          </Text>
+          <Box height="3px"></Box>
+          <Text alignSelf="end" size="14px">
+            {deftShortCurrency(allUsersStaked || 0, "Cerby")}
+          </Text>
+        </Box>
+        <Box
+          margin={{
+            right: "20px",
+          }}
+        >
+          <Text size="14px" alignSelf="end" color="#A9A9A9">
+            You Staked:
+          </Text>
+          <Box height="3px"></Box>
+          <Text alignSelf="end" size="14px">
+            {deftShortCurrency(stakedAmount || 0, "Cerby")}
+          </Text>
+        </Box>
+        {/* <Text> {stakedAmount ? stakedAmount?.asCurrency(2) : "..."}</Text> */}
+
         {/* <Box width="10px"></Box> */}
         {/* <Box
           height="36px"
@@ -998,6 +1045,18 @@ export const RootStaking = () => {
   const { account, chainId } = useWeb3React();
 
   const {
+    data: data2,
+    loading: loading2,
+    error: error2,
+  } = useStakedAmountQuery({
+    variables: {
+      address: account?.toLowerCase() || "",
+    },
+    fetchPolicy: "cache-and-network",
+    skip: !account,
+  });
+
+  const {
     data: data1,
     loading: loading1,
     error: error1,
@@ -1020,6 +1079,16 @@ export const RootStaking = () => {
       const resultQuery = await stakingClient
         .query<StakesQuery, StakesQueryVariables>({
           query: StakesDocument,
+          variables: {
+            address: account?.toLowerCase() || "",
+          },
+          fetchPolicy: "network-only",
+        })
+        .catch(e => null);
+
+      const resultQuery2 = await stakingClient
+        .query<StakedAmountQuery, StakedAmountQueryVariables>({
+          query: StakedAmountDocument,
           variables: {
             address: account?.toLowerCase() || "",
           },
@@ -1051,5 +1120,10 @@ export const RootStaking = () => {
     return { ...item, interest };
   });
 
-  return <StakeList items={itemsWithInterest} />;
+  return (
+    <StakeList
+      items={itemsWithInterest}
+      stakedAmount={data2?.user?.stakedAmount}
+    />
+  );
 };

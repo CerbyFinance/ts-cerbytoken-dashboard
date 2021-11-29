@@ -8,13 +8,17 @@ export const noopApollo = new ApolloClient({
   cache: new InMemoryCache({}),
 });
 
+const cerbies = ["avalanche", "fantom"];
+
 export const clientByChain = Object.fromEntries(
   // ["kovan", "binance-test"].map(chain => {
-  ["binance", "polygon"].map(chain => {
+  ["binance", "polygon", "avalanche", "fantom"].map(chain => {
     const client = new ApolloClient({
       link: new HttpLink({
-        // uri: `/subgraphs/name/deft/staking-${chain}`,
-        uri: `https://app.cerby.fi/subgraphs/name/deft/staking-${chain}`,
+        uri: `/subgraphs/name/${
+          cerbies.includes(chain) ? "cerby" : "deft"
+        }/staking-${chain}`,
+        // uri: `https://app.cerby.fi/subgraphs/name/deft/staking-${chain}`,
         // uri: `https://bridge.defifactory.fi/subgraphs/name/deft/deft-bridge-${chain}`,
         // uri: `http://localhost:8000/subgraphs/name/deft/deft-bridge-${chain}`,
         // uri: `http://localhost:8000/subgraphs/name/deft/deft-bridge-${chain}`,

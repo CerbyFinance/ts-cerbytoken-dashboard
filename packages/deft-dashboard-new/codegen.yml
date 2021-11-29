@@ -1,6 +1,6 @@
 overwrite: true
 schema:
-  - http://localhost:8000/subgraphs/name/deft/staking
+  - http://nodes2.valar-solutions.com:8000/subgraphs/name/cerby/staking-fantom
 documents: "src/graphql/**/*.ts"
 generates:
   src/graphql/types.tsx:

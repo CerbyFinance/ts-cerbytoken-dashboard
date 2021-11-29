@@ -678,6 +678,7 @@ export type Subscription_MetaArgs = {
 export type User = {
   __typename?: 'User';
   id: Scalars['ID'];
+  stakedAmount: Scalars['BigDecimal'];
   stakes: Array<Stake>;
 };
 
@@ -699,10 +700,19 @@ export type User_Filter = {
   id_lte?: Maybe<Scalars['ID']>;
   id_in?: Maybe<Array<Scalars['ID']>>;
   id_not_in?: Maybe<Array<Scalars['ID']>>;
+  stakedAmount?: Maybe<Scalars['BigDecimal']>;
+  stakedAmount_not?: Maybe<Scalars['BigDecimal']>;
+  stakedAmount_gt?: Maybe<Scalars['BigDecimal']>;
+  stakedAmount_lt?: Maybe<Scalars['BigDecimal']>;
+  stakedAmount_gte?: Maybe<Scalars['BigDecimal']>;
+  stakedAmount_lte?: Maybe<Scalars['BigDecimal']>;
+  stakedAmount_in?: Maybe<Array<Scalars['BigDecimal']>>;
+  stakedAmount_not_in?: Maybe<Array<Scalars['BigDecimal']>>;
 };
 
 export enum User_OrderBy {
   Id = 'id',
+  StakedAmount = 'stakedAmount',
   Stakes = 'stakes'
 }
 
@@ -995,6 +1005,7 @@ export type SubscriptionResolvers<ContextType = any, ParentType extends Resolver
 
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  stakedAmount?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
   stakes?: Resolver<Array<ResolversTypes['Stake']>, ParentType, ContextType, RequireFields<UserStakesArgs, 'skip' | 'first'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -1046,6 +1057,19 @@ export type DirectiveResolvers<ContextType = any> = {
  * Use "DirectiveResolvers" root object instead. If you wish to get "IDirectiveResolvers", add "typesPrefix: I" to your config.
  */
 export type IDirectiveResolvers<ContextType = any> = DirectiveResolvers<ContextType>;
+export type StakedAmountQueryVariables = Exact<{
+  address: Scalars['ID'];
+}>;
+
+
+export type StakedAmountQuery = (
+  { __typename?: 'Query' }
+  & { user?: Maybe<(
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'stakedAmount'>
+  )> }
+);
+
 export type StakesQueryVariables = Exact<{
   address: Scalars['String'];
 }>;
@@ -1102,6 +1126,42 @@ export type StakeQuery = (
 );
 
 
+export const StakedAmountDocument = gql`
+    query StakedAmount($address: ID!) {
+  user(id: $address) {
+    id
+    stakedAmount
+  }
+}
+    `;
+
+/**
+ * __useStakedAmountQuery__
+ *
+ * To run a query within a React component, call `useStakedAmountQuery` and pass it any options that fit your needs.
+ * When your component renders, `useStakedAmountQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useStakedAmountQuery({
+ *   variables: {
+ *      address: // value for 'address'
+ *   },
+ * });
+ */
+export function useStakedAmountQuery(baseOptions: Apollo.QueryHookOptions<StakedAmountQuery, StakedAmountQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<StakedAmountQuery, StakedAmountQueryVariables>(StakedAmountDocument, options);
+      }
+export function useStakedAmountLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<StakedAmountQuery, StakedAmountQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<StakedAmountQuery, StakedAmountQueryVariables>(StakedAmountDocument, options);
+        }
+export type StakedAmountQueryHookResult = ReturnType<typeof useStakedAmountQuery>;
+export type StakedAmountLazyQueryHookResult = ReturnType<typeof useStakedAmountLazyQuery>;
+export type StakedAmountQueryResult = Apollo.QueryResult<StakedAmountQuery, StakedAmountQueryVariables>;
 export const StakesDocument = gql`
     query Stakes($address: String!) {
   stakes(
