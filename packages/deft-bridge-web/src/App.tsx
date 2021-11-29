@@ -496,6 +496,7 @@ export const BridgeWidgetProcess = () => {
           switchToNetwork({
             library,
             chainId: path[1],
+            receive: true,
           });
         },
         style: {
@@ -511,6 +512,7 @@ export const BridgeWidgetProcess = () => {
         switchToNetwork({
           library,
           chainId: path[1],
+          receive: true,
         });
       },
       style: {

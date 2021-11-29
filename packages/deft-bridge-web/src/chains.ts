@@ -125,11 +125,13 @@ export async function addNetwork({
 interface SwitchNetworkInput {
   library: Web3Provider;
   chainId: Chains;
+  receive?: boolean;
 }
 
 export async function switchToNetwork({
   library,
   chainId,
+  receive,
 }: SwitchNetworkInput): Promise<null | void> {
   if (!library?.provider?.request) {
     return;
@@ -144,7 +146,7 @@ export async function switchToNetwork({
       method: "wallet_switchEthereumChain",
       params: [{ chainId: "0x" + Number(chainId).toString(16) }],
     });
-    if (chainId === 43114) {
+    if (receive) {
       // avalanche bug
       window.location.reload();
     }
