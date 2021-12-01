@@ -68,7 +68,7 @@ function Nav() {
     {
       icon: <CrossChainBridgeIcon className="" />,
       name: "Cross-Chain Bridge",
-      path: "https://bridge.defifactory.fi/",
+      path: "https://bridge.cerby.fi/",
       isExternal: true,
     },
   ];
@@ -202,7 +202,7 @@ function Nav() {
         <div
           onClick={() =>
             window.open(
-              "https://defifactory.finance/wp-content/uploads/sites/10/2021/05/DeFT_whitepaper.pdf",
+              "https://cerby.fi/wp-content/uploads/sites/10/2021/05/DeFT_whitepaper.pdf",
             )
           }
           className="flex items-center justify-center mb-5 transition-all duration-200 cursor-pointer hover:text-activetext"
@@ -217,7 +217,8 @@ function Nav() {
           <div
             onClick={() =>
               window.open(
-                "https://defi-factory-token.gitbook.io/defifactory-staking-documentation/",
+                // "https://defi-factory-token.gitbook.io/defifactory-staking-documentation/",
+                "https://docs.cerby.fi/cerby-staking-system/what-is-certificate-of-deposit",
               )
             }
             className="flex items-center justify-center mb-5 transition-all duration-200 cursor-pointer hover:text-activetext"
