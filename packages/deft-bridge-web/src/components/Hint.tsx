@@ -2,7 +2,7 @@ import { Box } from "grommet";
 import Tooltip from "rc-tooltip";
 import React from "react";
 
-export const Hint = ({ children, description, placement }: any) => {
+export const Hint = ({ children, description, placement, offset }: any) => {
   return (
     <Tooltip
       placement={placement || "right"}
@@ -10,7 +10,7 @@ export const Hint = ({ children, description, placement }: any) => {
       mouseEnterDelay={0}
       trigger={["hover"]}
       align={{
-        offset: [8, 0],
+        offset: offset ? offset : [8, 0],
       }}
       overlay={
         <HintOverlay>

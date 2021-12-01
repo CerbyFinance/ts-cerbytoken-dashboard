@@ -25,6 +25,7 @@ import "react-toastify/dist/ReactToastify.min.css";
 import useMeasure from "react-use-measure";
 import styled from "styled-components";
 import useMedia from "use-media";
+import { Arbitrage } from "./Arbitrage";
 import { Chains, supportedChainIdsBridge, switchToNetwork } from "./chains";
 import { Hint } from "./components/Hint";
 import {
@@ -47,6 +48,7 @@ import {
   BinanceLogo,
   CheckLg,
   Direction,
+  DollarIcon,
   EthereumLogo,
   FantomLogo,
   PolygonLogo,
@@ -1294,384 +1296,429 @@ export const BridgeWidget = () => {
   return (
     <React.Fragment>
       <Box
+        direction="row"
         style={{
           width: "405px",
-          boxShadow:
-            "0px 8px 16px 2px rgba(97, 97, 97, 0.1), 0px 16px 32px 2px rgba(97, 97, 97, 0.1)",
-          position: "relative",
-          alignSelf: "center",
-
-          // margin: "40px 20px 0px 0px",
         }}
-        background="white"
-        round="12px"
-        pad="20px 22px 20px"
       >
-        <Text
-          textAlign="center"
-          weight={800}
-          size="20px"
-          color="#414141"
-          style={{
-            lineHeight: "150%",
-          }}
-        >
-          Cross-Chain Bridge
-        </Text>
-        <Box height="15px" />
-        <Box
-          width="360px"
-          style={{
-            border: "1px solid #C0C0C0",
-          }}
-          round="8px"
-          height="73px"
-          pad="10px 12px 0px"
-        >
-          {/* <Input onChange={changeHandler} /> */}
-          <Box direction="row">
-            {/* <Box direction="row"> */}
-            <Text
-              size="13px"
-              weight={500}
-              color="#818181"
-              style={{
-                lineHeight: "132%",
-              }}
-            >
-              Transfer amount
-            </Text>
-            <Box
-              margin={{
-                left: "auto",
-              }}
-            />
-            <Text
-              size="13px"
-              weight={500}
-              color="#818181"
-              style={{
-                lineHeight: "132%",
-                marginRight: "4px",
-              }}
-            >
-              Balance:
-            </Text>
-            <Text
-              size="13px"
-              weight={500}
-              color="#414141"
-              style={{
-                lineHeight: "132%",
-              }}
-            >
-              {formatNum(Number(balance.toFixed(0)))} {token}
-            </Text>
-          </Box>
-          <Box height="6px" />
-          <Box direction="row" align="center">
-            <Input
-              // injectStyles={false}
-              minWidth={30}
-              placeholder="0.0"
-              value={transferAmount}
-              onChange={changeHandler}
-              onKeyPress={e => {
-                console.log(e.key);
-                if (
-                  _isFinite(Number(e.key)) ||
-                  (e.key === "." && !transferAmount.includes("."))
-                ) {
-                } else {
-                  e.preventDefault();
-                }
-              }}
-            />
-            {/* <Box>
-            <Text size="18px" weight={400} color="#414141">
-              DEFT
-            </Text>
-          </Box> */}
-            <Tooltip
-              placement="bottomRight"
-              align={{
-                offset: [0, -35],
-              }}
-              trigger={["click"]}
-              overlay={
-                <Box
-                  background="white"
-                  style={{
-                    width: "120px",
-                    height: "44px",
-                    boxShadow: "rgba(0,0,0, 0.12) 0px 3px 14px 3px",
-                    border: "1px solid rgb(192, 192, 192)",
-
-                    // border: "1px solid #f2f2f2",
-                    // 1px solid rgb(192, 192, 192)
-                  }}
-                  round="6px"
-                >
-                  <Box height="2px"></Box>
-                  {tokens.map((token2, i) => {
-                    const isLast = tokens.length === i + 1;
-                    const isActive = token2.name === token;
-
-                    return (
-                      <HoveredColor
-                        height="40px"
-                        pad="0px 10px"
-                        align="center"
-                        direction="row"
-                        style={{
-                          cursor: "pointer",
-                          ...(isLast
-                            ? {}
-                            : {
-                                borderBottom: "1px solid #cecece",
-                              }),
-                        }}
-                        onClick={() => {
-                          setToken(token2.name);
-                          onVisibleTokenChange(false);
-                        }}
-                      >
-                        <Text
-                          size="16px"
-                          {...(isActive
-                            ? {
-                                weight: 600,
-                                color: "#414141",
-                              }
-                            : {
-                                weight: 500,
-                                color: "#818181",
-                              })}
-                        >
-                          {token2.name}
-                        </Text>
-                      </HoveredColor>
-                    );
-                  })}
-
-                  <Box height="2px"></Box>
-                </Box>
-              }
-              visible={visibleToken}
-              onVisibleChange={v => onVisibleTokenChange(v)}
-            >
-              <HoverScale
-                margin={{
-                  left: "auto",
-                }}
-                style={{
-                  // border: "1px solid #007eff",
-                  border: "1px solid rgb(192, 192, 192)",
-                  boxShadow: "rgba(97,97,97,0.10) 0px 2px 1px 0px",
-                  cursor: "pointer",
-                }}
-                round="8px"
-                align="center"
-                justify="center"
-                pad={"3px 7px 3px 11px"}
-                direction="row"
-              >
-                <Text weight={600} color="#414141" size="14px">
-                  {token}
-                </Text>
-                <Angle />
-              </HoverScale>
-            </Tooltip>
-          </Box>
-        </Box>
-        <Box height="12px" />
-
-        <Box direction="row" justify="between" align="center">
-          <ChooseChain
-            chain={path[0]}
-            filter={path[1]}
-            directon="from"
-            onChange={chainId => {
-              setPath(oldPath => [chainId, oldPath[1]]);
-            }}
-          />
-
-          <Box
-            height="40px"
-            width="40px"
-            align="center"
-            justify="center"
-            style={{
-              cursor: "pointer",
-              userSelect: "none",
-            }}
-            onClick={() => changeDirection()}
-          >
-            <Direction />
-          </Box>
-          <ChooseChain
-            chain={path[1]}
-            filter={path[0]}
-            directon="to"
-            onChange={chainId => {
-              setPath(oldPath => [oldPath[0], chainId]);
-            }}
-          />
-        </Box>
-
-        <Box height="15px" />
-        <Divider />
         <Box
           margin={{
-            vertical: "6px",
+            left: "auto",
           }}
-        >
-          <Box direction="row" align="center" height="36px">
-            <Text size="14px" color="#818181" weight={500}>
-              Bridge Fee
-            </Text>
-            <Box margin={{ left: "6px" }}>
-              <Hint
-                description={
-                  <Text
-                    size="13px"
-                    style={{
-                      lineHeight: "22px",
-                    }}
-                    textAlign="center"
-                  >
-                    Fixed fee
-                  </Text>
-                }
-              >
-                <Box>
-                  <QuestionIcon />
-                </Box>
-              </Hint>
-            </Box>
-            <Box
-              margin={{
-                left: "auto",
-              }}
-            ></Box>
-            <Text size="14px" color="#414141" weight={700}>
-              {formatNum(Number(fee.toFixed(0)))} {token}
-            </Text>
-          </Box>
-          <Box direction="row" align="center" height="36px">
-            <Text size="14px" color="#818181" weight={500}>
-              You will get
-            </Text>
-            <Box margin={{ left: "6px" }}>
-              <Hint
-                description={
-                  <Text
-                    size="13px"
-                    style={{
-                      lineHeight: "22px",
-                    }}
-                    textAlign="center"
-                  >
-                    transferAmount - bridgeFee
-                  </Text>
-                }
-              >
-                <Box>
-                  <QuestionIcon />
-                </Box>
-              </Hint>
-            </Box>
-            <Box
-              margin={{
-                left: "auto",
-              }}
-            ></Box>
-            <Text size="14px" color="#414141" weight={700}>
-              {formatNum(
-                Number(
-                  (Number(transferAmount) > fee
-                    ? Number(transferAmount) - fee
-                    : 0
-                  ).toFixed(0),
-                ),
-              )}{" "}
-              {token}
-            </Text>
-          </Box>
-        </Box>
+        ></Box>
         <HoveredElement
           render={binder => {
             return (
               <Box
-                {...binder.bind}
-                width="100%"
-                height="48px"
-                round="8px"
-                background={binder.hovered ? "#4d9aff" : "#2B86FF"}
-                // background={
-                //   binder.hovered ? actionButton.bgHover : actionButton.bg
-                // }
+                height="40px"
+                onClick={() => history.push("/arbitrage")}
+                direction="row"
                 align="center"
-                justify="center"
-                style={{
-                  ...(binder.hovered
-                    ? {
-                        transform: "scale(1.01)",
-                      }
-                    : {}),
-                  ...actionButton.style,
-
-                  cursor: "pointer",
-                  boxShadow:
-                    "0px 1px 2px rgba(97, 97, 97, 0.2), 0px 2px 4px rgba(97, 97, 97, 0.2)",
-                  ...(loader
-                    ? {
-                        pointerEvents: "none",
-                      }
-                    : {}),
+                margin={{
+                  right: "10px",
                 }}
-                pad="0px 16px"
-                onClick={() => actionButton.onClick()}
+                style={{
+                  cursor: "pointer",
+                  userSelect: "none",
+                  ...(binder.hovered
+                    ? {}
+                    : {
+                        opacity: 0.3,
+                      }),
+                }}
+                {...binder.bind}
               >
-                {loader && <div className="loader"></div>}
-
-                {!loader && (
-                  <Text
-                    size="16px"
-                    color="white"
-                    style={{
-                      letterSpacing: "0.05em",
-                    }}
-                    weight={600}
-                  >
-                    {actionButton.text}
-                  </Text>
-                )}
+                <DollarIcon />
+                <Box width="10px"></Box>
+                <Text size="14px" color="#414141">
+                  Arbitrage
+                </Text>
               </Box>
             );
           }}
-        />
+        />{" "}
       </Box>
-      <Box height="12px"></Box>
-      <Hint
-        placement="bottom"
-        description={
+      <React.Fragment>
+        <Box
+          style={{
+            width: "405px",
+            boxShadow:
+              "0px 8px 16px 2px rgba(97, 97, 97, 0.1), 0px 16px 32px 2px rgba(97, 97, 97, 0.1)",
+            position: "relative",
+            alignSelf: "center",
+
+            // margin: "40px 20px 0px 0px",
+          }}
+          background="white"
+          round="12px"
+          pad="20px 22px 20px"
+        >
           <Text
-            size="13px"
-            style={{
-              lineHeight: "22px",
-              maxWidth: "300px",
-            }}
             textAlign="center"
+            weight={800}
+            size="20px"
+            color="#414141"
+            style={{
+              lineHeight: "150%",
+            }}
           >
-            Be sure to switch to appropriate network.
+            Cross-Chain Bridge
           </Text>
-        }
-      >
-        <Box>
-          <RecoverTransfer />
+          <Box height="15px" />
+          <Box
+            width="360px"
+            style={{
+              border: "1px solid #C0C0C0",
+            }}
+            round="8px"
+            height="73px"
+            pad="10px 12px 0px"
+          >
+            {/* <Input onChange={changeHandler} /> */}
+            <Box direction="row">
+              {/* <Box direction="row"> */}
+              <Text
+                size="13px"
+                weight={500}
+                color="#818181"
+                style={{
+                  lineHeight: "132%",
+                }}
+              >
+                Transfer amount
+              </Text>
+              <Box
+                margin={{
+                  left: "auto",
+                }}
+              />
+              <Text
+                size="13px"
+                weight={500}
+                color="#818181"
+                style={{
+                  lineHeight: "132%",
+                  marginRight: "4px",
+                }}
+              >
+                Balance:
+              </Text>
+              <Text
+                size="13px"
+                weight={500}
+                color="#414141"
+                style={{
+                  lineHeight: "132%",
+                }}
+              >
+                {formatNum(Number(balance.toFixed(0)))} {token}
+              </Text>
+            </Box>
+            <Box height="6px" />
+            <Box direction="row" align="center">
+              <Input
+                // injectStyles={false}
+                minWidth={30}
+                placeholder="0.0"
+                value={transferAmount}
+                onChange={changeHandler}
+                onKeyPress={e => {
+                  console.log(e.key);
+                  if (
+                    _isFinite(Number(e.key)) ||
+                    (e.key === "." && !transferAmount.includes("."))
+                  ) {
+                  } else {
+                    e.preventDefault();
+                  }
+                }}
+              />
+              {/* <Box>
+            <Text size="18px" weight={400} color="#414141">
+              DEFT
+            </Text>
+          </Box> */}
+              <Tooltip
+                placement="bottomRight"
+                align={{
+                  offset: [0, -35],
+                }}
+                trigger={["click"]}
+                overlay={
+                  <Box
+                    background="white"
+                    style={{
+                      width: "120px",
+                      height: "44px",
+                      boxShadow: "rgba(0,0,0, 0.12) 0px 3px 14px 3px",
+                      border: "1px solid rgb(192, 192, 192)",
+
+                      // border: "1px solid #f2f2f2",
+                      // 1px solid rgb(192, 192, 192)
+                    }}
+                    round="6px"
+                  >
+                    <Box height="2px"></Box>
+                    {tokens.map((token2, i) => {
+                      const isLast = tokens.length === i + 1;
+                      const isActive = token2.name === token;
+
+                      return (
+                        <HoveredColor
+                          height="40px"
+                          pad="0px 10px"
+                          align="center"
+                          direction="row"
+                          style={{
+                            cursor: "pointer",
+                            ...(isLast
+                              ? {}
+                              : {
+                                  borderBottom: "1px solid #cecece",
+                                }),
+                          }}
+                          onClick={() => {
+                            setToken(token2.name);
+                            onVisibleTokenChange(false);
+                          }}
+                        >
+                          <Text
+                            size="16px"
+                            {...(isActive
+                              ? {
+                                  weight: 600,
+                                  color: "#414141",
+                                }
+                              : {
+                                  weight: 500,
+                                  color: "#818181",
+                                })}
+                          >
+                            {token2.name}
+                          </Text>
+                        </HoveredColor>
+                      );
+                    })}
+
+                    <Box height="2px"></Box>
+                  </Box>
+                }
+                visible={visibleToken}
+                onVisibleChange={v => onVisibleTokenChange(v)}
+              >
+                <HoverScale
+                  margin={{
+                    left: "auto",
+                  }}
+                  style={{
+                    // border: "1px solid #007eff",
+                    border: "1px solid rgb(192, 192, 192)",
+                    boxShadow: "rgba(97,97,97,0.10) 0px 2px 1px 0px",
+                    cursor: "pointer",
+                  }}
+                  round="8px"
+                  align="center"
+                  justify="center"
+                  pad={"3px 7px 3px 11px"}
+                  direction="row"
+                >
+                  <Text weight={600} color="#414141" size="14px">
+                    {token}
+                  </Text>
+                  <Angle />
+                </HoverScale>
+              </Tooltip>
+            </Box>
+          </Box>
+          <Box height="12px" />
+
+          <Box direction="row" justify="between" align="center">
+            <ChooseChain
+              chain={path[0]}
+              filter={path[1]}
+              directon="from"
+              onChange={chainId => {
+                setPath(oldPath => [chainId, oldPath[1]]);
+              }}
+            />
+
+            <Box
+              height="40px"
+              width="40px"
+              align="center"
+              justify="center"
+              style={{
+                cursor: "pointer",
+                userSelect: "none",
+              }}
+              onClick={() => changeDirection()}
+            >
+              <Direction />
+            </Box>
+            <ChooseChain
+              chain={path[1]}
+              filter={path[0]}
+              directon="to"
+              onChange={chainId => {
+                setPath(oldPath => [oldPath[0], chainId]);
+              }}
+            />
+          </Box>
+
+          <Box height="15px" />
+          <Divider />
+          <Box
+            margin={{
+              vertical: "6px",
+            }}
+          >
+            <Box direction="row" align="center" height="36px">
+              <Text size="14px" color="#818181" weight={500}>
+                Bridge Fee
+              </Text>
+              <Box margin={{ left: "6px" }}>
+                <Hint
+                  description={
+                    <Text
+                      size="13px"
+                      style={{
+                        lineHeight: "22px",
+                      }}
+                      textAlign="center"
+                    >
+                      Fixed fee
+                    </Text>
+                  }
+                >
+                  <Box>
+                    <QuestionIcon />
+                  </Box>
+                </Hint>
+              </Box>
+              <Box
+                margin={{
+                  left: "auto",
+                }}
+              ></Box>
+              <Text size="14px" color="#414141" weight={700}>
+                {formatNum(Number(fee.toFixed(0)))} {token}
+              </Text>
+            </Box>
+            <Box direction="row" align="center" height="36px">
+              <Text size="14px" color="#818181" weight={500}>
+                You will get
+              </Text>
+              <Box margin={{ left: "6px" }}>
+                <Hint
+                  description={
+                    <Text
+                      size="13px"
+                      style={{
+                        lineHeight: "22px",
+                      }}
+                      textAlign="center"
+                    >
+                      transferAmount - bridgeFee
+                    </Text>
+                  }
+                >
+                  <Box>
+                    <QuestionIcon />
+                  </Box>
+                </Hint>
+              </Box>
+              <Box
+                margin={{
+                  left: "auto",
+                }}
+              ></Box>
+              <Text size="14px" color="#414141" weight={700}>
+                {formatNum(
+                  Number(
+                    (Number(transferAmount) > fee
+                      ? Number(transferAmount) - fee
+                      : 0
+                    ).toFixed(0),
+                  ),
+                )}{" "}
+                {token}
+              </Text>
+            </Box>
+          </Box>
+          <HoveredElement
+            render={binder => {
+              return (
+                <Box
+                  {...binder.bind}
+                  width="100%"
+                  height="48px"
+                  round="8px"
+                  background={binder.hovered ? "#4d9aff" : "#2B86FF"}
+                  // background={
+                  //   binder.hovered ? actionButton.bgHover : actionButton.bg
+                  // }
+                  align="center"
+                  justify="center"
+                  style={{
+                    ...(binder.hovered
+                      ? {
+                          transform: "scale(1.01)",
+                        }
+                      : {}),
+                    ...actionButton.style,
+
+                    cursor: "pointer",
+                    boxShadow:
+                      "0px 1px 2px rgba(97, 97, 97, 0.2), 0px 2px 4px rgba(97, 97, 97, 0.2)",
+                    ...(loader
+                      ? {
+                          pointerEvents: "none",
+                        }
+                      : {}),
+                  }}
+                  pad="0px 16px"
+                  onClick={() => actionButton.onClick()}
+                >
+                  {loader && <div className="loader"></div>}
+
+                  {!loader && (
+                    <Text
+                      size="16px"
+                      color="white"
+                      style={{
+                        letterSpacing: "0.05em",
+                      }}
+                      weight={600}
+                    >
+                      {actionButton.text}
+                    </Text>
+                  )}
+                </Box>
+              );
+            }}
+          />
         </Box>
-      </Hint>
+        <Box height="12px"></Box>
+        <Hint
+          placement="bottom"
+          description={
+            <Text
+              size="13px"
+              style={{
+                lineHeight: "22px",
+                maxWidth: "300px",
+              }}
+              textAlign="center"
+            >
+              Be sure to switch to appropriate network.
+            </Text>
+          }
+        >
+          <Box>
+            <RecoverTransfer />
+          </Box>
+        </Hint>
+      </React.Fragment>
     </React.Fragment>
   );
 };
@@ -1996,7 +2043,7 @@ export const Top = () => {
       pad="16px"
       // display: grid;
       style={{
-        marginBottom: "85px",
+        marginBottom: "35px",
       }}
       className="app-top"
       justify="between"
@@ -2116,6 +2163,7 @@ function App() {
                     <Redirect to="/bridge" />
                   </Route>
                   <Route exact path="/bridge" component={BridgeWidget} />
+                  <Route exact path="/arbitrage" component={Arbitrage} />
                   <Route exact path="/wrap" component={WrapWidget} />
                   <Route
                     exact
