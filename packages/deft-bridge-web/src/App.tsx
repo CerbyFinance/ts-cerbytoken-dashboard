@@ -48,6 +48,7 @@ import {
   BinanceLogo,
   CheckLg,
   Direction,
+  DocIcon,
   DollarIcon,
   EthereumLogo,
   FantomLogo,
@@ -1915,6 +1916,23 @@ export const AccountBalance = ({
         onClick={() => window.open("https://t.me/CerbyToken", "_blank")}
       >
         <TelegramIcon />
+      </BoxHoveredScale>
+      <Box width="12px"></Box>
+      <BoxHoveredScale
+        height="24px"
+        width="24px"
+        style={{
+          color: "#25a3e2",
+          minWidth: "24px",
+        }}
+        onClick={() =>
+          window.open(
+            "https://docs.cerby.fi/cerby-cross-chain-bridge/introduction",
+            "_blank",
+          )
+        }
+      >
+        <DocIcon />
       </BoxHoveredScale>
     </React.Fragment>
   );
