@@ -174,13 +174,6 @@ const arbitrage = async () => {
 
   const balances = JSON.parse(pairBalances!) as number[];
 
-  const numerator = prices
-    .map((price, i) => price * balances[i])
-    .reduce((acc, item) => acc + item, 0);
-  const denominator = balances.reduce((acc, val) => acc + val, 0);
-
-  const currentWeightedPrice = numerator / denominator;
-
   const usdBalances = balances.map((item, i) => item * prices[i]);
 
   const chains = [0, 1, 2, 3, 4];
@@ -190,12 +183,7 @@ const arbitrage = async () => {
 
   const combos = chains
     .flatMap(item => chains.map(item2 => [item, item2] as [number, number]))
-    .filter(
-      item =>
-        item[0] !== item[1] &&
-        prices[item[0]] < currentWeightedPrice &&
-        currentWeightedPrice < prices[item[1]],
-    )
+    .filter(item => item[0] !== item[1] && prices[item[0]] < prices[item[1]])
     .map(item => {
       const [Ua, Ca] = [usdBalances[item[0]], balances[item[0]]];
 
