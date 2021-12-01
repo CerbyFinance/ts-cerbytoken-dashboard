@@ -1912,7 +1912,7 @@ export const AccountBalance = ({
           color: "#25a3e2",
           minWidth: "24px",
         }}
-        onClick={() => window.open("https://t.me/DefiFactory", "_blank")}
+        onClick={() => window.open("https://t.me/CerbyToken", "_blank")}
       >
         <TelegramIcon />
       </BoxHoveredScale>
