@@ -136,11 +136,11 @@ const getOrUpdatePrices = async () => {
 
 const getOrUpdatePairBalances = async () => {
   const addresses = [
-    "0x81489b0e7c7a515799c89374e23ac9295088551d",
-    "0x493e990ccc67f59a3000effa9d5b1417d54b6f99",
-    "0xf92b726b10956ff95ebabdd6fd92d180d1e920da",
-    "0x4e2d00526ae280d5aa296c321a8d32cd2486a737",
-    "0xD450c27c7024f5813449CA30f0D7c4F9d0a19c77",
+    "0x81489b0e7c7a515799c89374e23ac9295088551d", // eth
+    "0x493e990ccc67f59a3000effa9d5b1417d54b6f99", // bsc
+    "0xf92b726b10956ff95ebabdd6fd92d180d1e920da", // poly
+    "0x4e2d00526ae280d5aa296c321a8d32cd2486a737", // avax
+    "0xD450c27c7024f5813449CA30f0D7c4F9d0a19c77", // ftm
   ];
   const pairBalances = await Promise.all(
     namedChains.map(async (item, i) => {
@@ -161,6 +161,68 @@ const getOrUpdatePairBalances = async () => {
   const result2 = await globalRedis.set(
     "pairBalances",
     JSON.stringify(pairBalances),
+  );
+
+  return result2 === "OK";
+};
+
+const arbitrage = async () => {
+  const pricesStr = await globalRedis.get("prices");
+  const pairBalances = await globalRedis.get("pairBalances");
+
+  const prices = JSON.parse(pricesStr!) as number[];
+
+  const balances = JSON.parse(pairBalances!) as number[];
+
+  const numerator = prices
+    .map((price, i) => price * balances[i])
+    .reduce((acc, item) => acc + item, 0);
+  const denominator = balances.reduce((acc, val) => acc + val, 0);
+
+  const currentWeightedPrice = numerator / denominator;
+
+  const usdBalances = balances.map((item, i) => item * prices[i]);
+
+  const chains = [0, 1, 2, 3, 4];
+  const namedChains = ["eth", "bsc", "poly", "avax", "ftm"];
+
+  const fee = 0.997;
+
+  const combos = chains
+    .flatMap(item => chains.map(item2 => [item, item2] as [number, number]))
+    .filter(
+      item =>
+        item[0] !== item[1] &&
+        prices[item[0]] < currentWeightedPrice &&
+        currentWeightedPrice < prices[item[1]],
+    )
+    .map(item => {
+      const [Ua, Ca] = [usdBalances[item[0]], balances[item[0]]];
+
+      const [Ub, Cb] = [usdBalances[item[1]], balances[item[1]]];
+
+      const K = Math.sqrt((Ua * Ca) / (Ub * Cb));
+
+      const BuyAmountOnChainA =
+        (Ua * (Ca - Cb * K)) / (fee * K * (Cb + Ca * fee));
+      const SellAmountOnChainB = (Ub * fee * (Ca - Cb * K)) / (Cb + Ca * fee);
+
+      const Profit = SellAmountOnChainB - BuyAmountOnChainA;
+
+      return {
+        from: namedChains[item[0]],
+        to: namedChains[item[1]],
+        buyAmount: BuyAmountOnChainA,
+        sellAmount: SellAmountOnChainB,
+        profit: Profit,
+      };
+    })
+    .filter(item => item.profit > 0)
+    .sort((a, b) => b.profit - a.profit);
+
+  const result2 = await globalRedis.set(
+    "arbitrageCombos",
+    JSON.stringify(combos),
   );
 
   return result2 === "OK";
@@ -208,8 +270,20 @@ const fire2 = async () => {
   }
 };
 
+const fire3 = async () => {
+  while (true) {
+    try {
+      await arbitrage();
+    } catch (error) {
+      console.log("error:");
+      console.log(error);
+    }
+    await new Promise(r => setTimeout(r, 1 * 1000));
+  }
+};
+
 const fireAll = async () => {
-  await Promise.all([fire0(), fire1(), fire2()]);
+  await Promise.all([fire0(), fire1(), fire2(), fire3()]);
 };
 
 export const triggerRunJobs = () => {

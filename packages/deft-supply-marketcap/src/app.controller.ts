@@ -7,6 +7,14 @@ import {
 } from "./utils/nestjs.utils";
 import { globalRedis } from "./utils/redis";
 
+type Combo = {
+  from: string;
+  to: string;
+  buyAmount: number;
+  sellAmount: number;
+  profit: number;
+};
+
 type Supplies = {
   // totalSupply: number;
   // lockedSupply: number;
@@ -47,6 +55,18 @@ const zero = {
   vestedSupply: 0,
   circulatingMarketCap: 0,
 } as SupplyAndMarketCapResult;
+
+const arbitrageCombos = async () => {
+  const arbitrageCombosStr = await globalRedis.get("arbitrageCombos");
+
+  if (!arbitrageCombosStr) {
+    return [];
+  }
+
+  const parsed = JSON.parse(arbitrageCombosStr) as Combo[];
+
+  return parsed;
+};
 
 const supplyAndMarketCap = async () => {
   const suppliesStr = await globalRedis.get("supplies");
@@ -124,5 +144,19 @@ export class AppController {
     const result = await supplyAndMarketCap();
 
     return result.circulatingSupply;
+  }
+  @Get("arbitrage-opportunities")
+  @ApiResponse({
+    status: 200,
+    type: ApiAnyResponse,
+  })
+  async arbitrage(): Promise<AnyResponse> {
+    const result = await arbitrageCombos();
+
+    return {
+      data: result,
+      message: "",
+      status: "ok",
+    };
   }
 }
