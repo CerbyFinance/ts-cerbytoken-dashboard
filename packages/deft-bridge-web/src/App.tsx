@@ -2140,8 +2140,8 @@ export const Top = () => {
 
   const history = useHistory();
 
-  const isBridge = IsActivePath("/bridge");
-  const context = isBridge ? BridgeContext : WrapContext;
+  const isWrap = IsActivePath("/wrap");
+  const context = isWrap ? WrapContext : BridgeContext;
 
   const { balance, token } = useContext(context);
 
@@ -2216,8 +2216,9 @@ export const Top = () => {
 export const Bottom = () => {
   const { account } = useWeb3React();
 
-  const isBridge = IsActivePath("/bridge");
-  const context = isBridge ? BridgeContext : WrapContext;
+  const isWrap = IsActivePath("/wrap");
+  const context = isWrap ? WrapContext : BridgeContext;
+
   const { balance, token } = useContext(context);
 
   const isMobileOrTablet = useMedia({ maxWidth: "600px" });
