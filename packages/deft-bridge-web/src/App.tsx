@@ -55,6 +55,7 @@ import {
   PolygonLogo,
   QuestionIcon,
   RecoverIcon,
+  SmLogo,
   TelegramIcon,
 } from "./Icons";
 import { Logo } from "./logo";
@@ -1337,7 +1338,7 @@ export const BridgeWidget = () => {
               </Box>
             );
           }}
-        />{" "}
+        />
       </Box>
       <React.Fragment>
         <Box
@@ -2031,6 +2032,106 @@ export const Top2 = () => {
   );
 };
 
+const addToMetamask = async (provider: any) => {
+  const tokenAddress = "0xdef1fac7bf08f173d286bbbdcbeeade695129840";
+  const tokenSymbol = "CERBY";
+  const tokenDecimals = 18;
+  const tokenImage = "https://data.cerby.fi/imgs/logo/128.png";
+
+  try {
+    // wasAdded is a boolean. Like any RPC method, an error may be thrown.
+    const wasAdded = await provider.request({
+      method: "wallet_watchAsset",
+      params: {
+        type: "ERC20", // Initially only supports ERC20, but eventually more!
+        options: {
+          address: tokenAddress, // The address that the token is at.
+          symbol: tokenSymbol, // A ticker symbol or shorthand, up to 5 chars.
+          decimals: tokenDecimals, // The number of decimals in the token
+          image: tokenImage, // A string url of the token logo
+        },
+      },
+    });
+
+    if (wasAdded) {
+      console.log("Thanks for your interest!");
+    } else {
+      console.log("Your loss!");
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const Top1 = () => {
+  const { account, activate, chainId, library, connector, error } =
+    useWeb3React();
+
+  return (
+    <HoveredElement
+      render={binder => (
+        <Box
+          height="45px"
+          margin={{
+            top: "-10px",
+          }}
+          direction="row"
+          pad="0px 16px"
+        >
+          <Box
+            margin={{
+              left: "auto",
+            }}
+          ></Box>
+
+          <Hint
+            offset={[-8, 0]}
+            placement="left"
+            description={
+              <Text
+                size="13px"
+                style={{
+                  lineHeight: "22px",
+                }}
+                textAlign="center"
+              >
+                Add Cerby to Metamask
+              </Text>
+            }
+          >
+            <Box
+              {...binder.bind}
+              height="26px"
+              width="26px"
+              background="white"
+              round="50%"
+              onClick={() => addToMetamask(library.provider)}
+              style={{
+                boxShadow: binder.hovered
+                  ? "0px 0px 0px 2px #25a3e2"
+                  : "0px 0px 0px 2px #888888",
+
+                ...(binder.hovered
+                  ? {
+                      transform: "scale(1.1)",
+                    }
+                  : {}),
+
+                // boxShadow: "0px 0px 0px 2px #25a3e2",
+
+                cursor: "pointer",
+              }}
+            >
+              <SmLogo />
+            </Box>
+          </Hint>
+          {/* <Text>123</Text> */}
+        </Box>
+      )}
+    />
+  );
+};
+
 export const Top = () => {
   const { account, activate, chainId, library, connector, error } =
     useWeb3React();
@@ -2060,9 +2161,7 @@ export const Top = () => {
       height="75px"
       pad="16px"
       // display: grid;
-      style={{
-        marginBottom: "35px",
-      }}
+
       className="app-top"
       justify="between"
     >
@@ -2165,6 +2264,7 @@ function App() {
               <Router>
                 <ToastContainer position={"bottom-left"} />
                 <Top />
+                <Top1 />
                 <Top2 />
                 <Box
                   direction="column"

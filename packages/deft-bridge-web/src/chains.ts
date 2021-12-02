@@ -146,8 +146,8 @@ export async function switchToNetwork({
       method: "wallet_switchEthereumChain",
       params: [{ chainId: "0x" + Number(chainId).toString(16) }],
     });
+
     if (receive) {
-      // avalanche bug
       window.location.reload();
     }
   } catch (error) {
