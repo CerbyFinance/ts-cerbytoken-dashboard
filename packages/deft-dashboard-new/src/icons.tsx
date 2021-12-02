@@ -1,5 +1,159 @@
 import React from "react";
 
+export const SmLogo = () => (
+  <svg
+    // width="1114"
+    height="26px"
+    viewBox="0 0 1114 1118"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <mask
+      id="mask0_101_53"
+      maskUnits="userSpaceOnUse"
+      x="0"
+      y="-32"
+      width="1150"
+      height="1150"
+    >
+      <circle cx="575" cy="543" r="575" fill="white" />
+    </mask>
+    <g mask="url(#mask0_101_53)"></g>
+    <mask
+      id="mask1_101_53"
+      maskUnits="userSpaceOnUse"
+      x="0"
+      y="-32"
+      width="1150"
+      height="1150"
+    >
+      <circle cx="575" cy="543" r="575" fill="white" />
+    </mask>
+    <g mask="url(#mask1_101_53)">
+      <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M1101.47 571.371L765.664 482.826L641.765 575.851L1101.47 571.371"
+        fill="#183368"
+      />
+      <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M495.839 45L222.52 335.388L474.295 279.224L495.839 45Z"
+        fill="#183368"
+      />
+      <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M662.738 575.039L767.55 485.809L403.161 575.039H662.738Z"
+        fill="#00122F"
+      />
+      <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M767.551 485.81L410.834 253.807L403.159 575.039L768.287 485.969L767.551 485.81"
+        fill="#00122F"
+      />
+      <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M-56.1787 548.269L410.834 253.807L403.613 575.039L-56.1787 548.269"
+        fill="#183368"
+      />
+      <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M-56.1782 547.93L177.65 1051.99L403.81 574.714L-56.1782 547.93Z"
+        fill="#00122F"
+      />
+      <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M349.233 1181L177.549 1051.99L403.617 575.037L349.233 1181Z"
+        fill="#829BD0"
+      />
+      <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M-56.1782 548.267L177.549 1051.99L-156 692.999L-56.1782 548.267Z"
+        fill="#829BD0"
+      />
+      <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M-56.1787 548.269L410.834 253.807L142.241 369.311L-56.1787 548.269Z"
+        fill="#4C7AD2"
+      />
+      <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M767.551 485.81L410.834 253.807L767.551 396.676V485.81Z"
+        fill="#274794"
+      />
+      <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M1103 571.199L801.144 574.295L729.236 692.587L1103 571.199Z"
+        fill="#4C7AD2"
+      />
+      <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M1101.47 571.372L726.441 692.588L1012.23 736.298L1101.47 571.372"
+        fill="#829BD0"
+      />
+      <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M700.874 748.632L729.237 692.586L1012.9 736.297L700.874 748.632"
+        fill="#183368"
+      />
+      <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M803.259 574.227L700.869 748.634L403.614 575.039L803.259 574.227Z"
+        fill="#829BD0"
+      />
+      <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M453.262 815.151L701.003 748.361L403.615 575.035L453.262 815.151Z"
+        fill="#4C7AD2"
+      />
+      <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M453.481 815.149L389.845 728.155L403.615 575.036L453.481 815.149"
+        fill="#183368"
+      />
+      <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M453.262 815.151L701.003 748.361L529.903 903.57L453.262 815.151Z"
+        fill="#183368"
+      />
+      <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M730.22 483.303L591.444 414.422L632.676 489.867L730.22 483.303Z"
+        fill="white"
+      />
+      <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M820.987 497.769L767.55 485.808V396.675L820.987 497.769Z"
+        fill="#00122F"
+      />
+      <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M432.072 61.2238L173.815 355.734L374.504 301.106L410.242 293.471L432.072 61.2238Z"
+        fill="#00122F"
+      />
+    </g>
+  </svg>
+);
+
 export const KeyIcon = () => (
   <svg
     aria-hidden="true"

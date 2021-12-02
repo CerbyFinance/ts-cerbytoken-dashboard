@@ -2064,8 +2064,7 @@ const addToMetamask = async (provider: any) => {
 };
 
 export const Top1 = () => {
-  const { account, activate, chainId, library, connector, error } =
-    useWeb3React();
+  const { library } = useWeb3React();
 
   return (
     <HoveredElement
@@ -2109,7 +2108,7 @@ export const Top1 = () => {
               style={{
                 boxShadow: binder.hovered
                   ? "0px 0px 0px 2px #25a3e2"
-                  : "0px 0px 0px 2px #888888",
+                  : "0px 0px 0px 2px #d2d2d2",
 
                 ...(binder.hovered
                   ? {

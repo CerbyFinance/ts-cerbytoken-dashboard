@@ -1,5 +1,7 @@
 import { useWeb3React } from "@web3-react/core";
+import { Box } from "grommet";
 import { useContext } from "react";
+import { SmLogo } from "../icons";
 import BSCIcon from "../icons/BSCIcon";
 import BurgerMenuIcon from "../icons/BurgerMenuIcon";
 import ETHIcon from "../icons/ETHIcon";
@@ -8,7 +10,59 @@ import WalletIcon from "../icons/WalletIcon";
 import { HoveredElement } from "../shared/hooks";
 import { ModalsContext } from "../shared/modals";
 import { NavContext } from "../shared/nav";
+import { addToMetamask } from "../shared/utils";
 import { chainCodeName } from "../utility";
+
+const AddToMetamask = () => {
+  const { library } = useWeb3React();
+
+  return (
+    <HoveredElement
+      render={binder => (
+        <Box
+          // height="45px"
+          height="32px"
+          alignSelf="end"
+          margin={{
+            top: "-10px",
+          }}
+          direction="row"
+          pad="0px 16px"
+        >
+          <Box
+            margin={{
+              left: "auto",
+            }}
+          ></Box>
+
+          <Box
+            {...binder.bind}
+            height="26px"
+            width="26px"
+            background="white"
+            round="50%"
+            onClick={() => addToMetamask(library.provider)}
+            style={{
+              boxShadow: binder.hovered
+                ? "0px 0px 0px 2px #5294ff"
+                : "0px 0px 0px 2px white",
+
+              ...(binder.hovered
+                ? {
+                    transform: "scale(1.1)",
+                  }
+                : {}),
+              transition: "0.1s",
+              cursor: "pointer",
+            }}
+          >
+            <SmLogo />
+          </Box>
+        </Box>
+      )}
+    />
+  );
+};
 
 function Header() {
   const { setMobileNav } = useContext(NavContext);
@@ -25,6 +79,7 @@ function Header() {
         <BurgerMenuIcon className="h-4" />
       </div>
       <div className="flex">
+        <AddToMetamask />
         {chainId && (
           <div className="flex items-center justify-center px-4 py-2 mr-2 space-x-2 font-medium truncate transition-all duration-200 bg-white border rounded-md pointer-events-none text-icons dark:border-gray-500 dark:bg-black dark:text-activetext md:text-sm w-28 lg:w-56 md:w-32">
             {(chainId === 97 || chainId === 56) && (
@@ -45,25 +100,19 @@ function Header() {
         )}
 
         {active ? (
-          <HoveredElement
-            render={binder => (
-              <div
-                {...binder.bind}
-                onClick={() => {
-                  // activate(injected);
-                  showConnectWalletModal();
-                }}
-                className="flex items-center space-x-2 text-xs font-medium bg-gray-200 border-2 border-gray-400 rounded-md text-icons dark:border-gray-500 dark:bg-black dark:text-iconsdark md:text-sm hover-blue"
-              >
-                <div className="flex items-center h-full px-5 border-gray-400 dark:border-gray-500">
-                  <p>
-                    {account &&
-                      `${account?.slice(0, 8)}...${account?.slice(-4)}`}
-                  </p>
-                </div>
-              </div>
-            )}
-          />
+          <div
+            onClick={() => {
+              // activate(injected);
+              showConnectWalletModal();
+            }}
+            className="flex items-center space-x-2 text-xs font-medium bg-gray-200 border-2 border-gray-400 rounded-md text-icons dark:border-gray-500 dark:bg-black dark:text-iconsdark md:text-sm hover-blue"
+          >
+            <div className="flex items-center h-full px-5 border-gray-400 dark:border-gray-500">
+              <p>
+                {account && `${account?.slice(0, 8)}...${account?.slice(-4)}`}
+              </p>
+            </div>
+          </div>
         ) : (
           <button
             type="button"
