@@ -15,7 +15,7 @@ export const stakesQuery = gql`
       orderBy: startedAt
       orderDirection: desc
       where: { owner: $address }
-      first: 555
+      first: 950
     ) {
       id
       startedAt
