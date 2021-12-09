@@ -549,7 +549,7 @@ export const StakeList = ({
               {...binder.bind}
             >
               <Text size="14px" weight={500} color="white">
-                Create Regular stake
+                Stake Cerby
               </Text>
             </Box>
           )}
