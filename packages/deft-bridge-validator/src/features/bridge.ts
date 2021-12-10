@@ -37,15 +37,15 @@ const nodeUrlByChain = {
 };
 
 const contractByChain = {
-  ethereum: "0xa5df69790ba509c511e2a0a31ceeffecc4d156c7",
-  binance: "0xa5df69790ba509c511e2a0a31ceeffecc4d156c7",
-  polygon: "0xa5df69790ba509c511e2a0a31ceeffecc4d156c7",
-  avalanche: "0xa5df69790ba509c511e2a0a31ceeffecc4d156c7",
-  fantom: "0xa5df69790ba509c511e2a0a31ceeffecc4d156c7",
+  ethereum: "0xB24Aa2E03E66cfe46121BF852aa08045a124dd6D",
+  binance: "0xB24Aa2E03E66cfe46121BF852aa08045a124dd6D",
+  polygon: "0xB24Aa2E03E66cfe46121BF852aa08045a124dd6D",
+  avalanche: "0xB24Aa2E03E66cfe46121BF852aa08045a124dd6D",
+  fantom: "0xB24Aa2E03E66cfe46121BF852aa08045a124dd6D",
   //
-  ropsten: "0xa5df69790ba509c511e2a0a31ceeffecc4d156c7",
-  kovan: "0xa5df69790ba509c511e2a0a31ceeffecc4d156c7",
-  ["binance-test"]: "0xa5df69790ba509c511e2a0a31ceeffecc4d156c7",
+  ropsten: "0xB24Aa2E03E66cfe46121BF852aa08045a124dd6D",
+  kovan: "0xB24Aa2E03E66cfe46121BF852aa08045a124dd6D",
+  ["binance-test"]: "0xB24Aa2E03E66cfe46121BF852aa08045a124dd6D",
 };
 
 const chainToId = {
