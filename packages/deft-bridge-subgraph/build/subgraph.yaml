@@ -4,11 +4,11 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: SourceChain
-    network: fantom
+    network: polygon
     source:
-      address: "0xa5df69790ba509c511e2a0a31ceeffecc4d156c7"
+      address: "0xB24Aa2E03E66cfe46121BF852aa08045a124dd6D"
       abi: CrossChainBridge
-      startBlock: 23076700
+      startBlock: 22347000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4

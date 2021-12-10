@@ -6,9 +6,9 @@ dataSources:
     name: SourceChain
     network: mainnet
     source:
-      address: "0xa5df69790ba509c511e2a0a31ceeffecc4d156c7"
+      address: "0xB24Aa2E03E66cfe46121BF852aa08045a124dd6D"
       abi: CrossChainBridge
-      startBlock: 13339331
+      startBlock: 13776000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
