@@ -35,7 +35,7 @@ const getOrUpdateSupplies = async () => {
   const totalDilutedSupply = totalSupplies.reduce((acc, val) => acc + val, 0);
 
   const stakedSupplies = await Promise.all(
-    (["polygon", "bsc", "avalanche", "fantom"] as NamedChains[]).map(
+    (["polygon", "bsc", "avalanche", "fantom", "eth"] as NamedChains[]).map(
       async item => {
         const web3 = web3Map[item];
         const contract = defiFactoryTokenContract(web3);
