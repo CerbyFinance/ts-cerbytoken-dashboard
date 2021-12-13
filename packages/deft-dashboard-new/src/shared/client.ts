@@ -8,11 +8,11 @@ export const noopApollo = new ApolloClient({
   cache: new InMemoryCache({}),
 });
 
-const cerbies = ["avalanche", "fantom"];
+const cerbies = ["avalanche", "fantom", "ethereum"];
 
 export const clientByChain = Object.fromEntries(
   // ["kovan", "binance-test"].map(chain => {
-  ["binance", "polygon", "avalanche", "fantom"].map(chain => {
+  ["binance", "polygon", "avalanche", "fantom", "ethereum"].map(chain => {
     const client = new ApolloClient({
       link: new HttpLink({
         uri: `/subgraphs/name/${

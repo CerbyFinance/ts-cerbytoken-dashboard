@@ -67,6 +67,8 @@ const InjectApolloClient = ({ children }: { children: JSX.Element }) => {
     stakingClient = clientByChain["fantom"];
   } else if (chainId === 43114) {
     stakingClient = clientByChain["avalanche"];
+  } else if (chainId === 1) {
+    stakingClient = clientByChain["ethereum"];
   }
 
   return <ApolloProvider client={stakingClient}>{children} </ApolloProvider>;

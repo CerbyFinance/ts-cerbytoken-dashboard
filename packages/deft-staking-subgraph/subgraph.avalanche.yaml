@@ -26,7 +26,7 @@ dataSources:
         - event: StakeEnded(uint256,uint256,uint256,uint256)
           handler: handleStakeEnded
         - event: StakeOwnerChanged(uint256,address)
-          handler: handleStakeOwnerSchanged
+          handler: handleStakeOwnerChanged
         - event: StakeStarted(uint256,address,uint256,uint256,uint256,uint256)
           handler: handleStakeStarted
         - event: StakeUpdated(uint256,uint256,uint256)

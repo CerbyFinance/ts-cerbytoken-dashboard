@@ -12,7 +12,7 @@ export const injected = new InjectedConnector({
 });
 
 const rpcs = {
-  // 1: '...'
+  1: 'https://mainnet.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161',
   56: "https://bsc-dataseed.binance.org",
   137: "https://polygon-rpc.com",
   250: "https://rpc.ftm.tools",

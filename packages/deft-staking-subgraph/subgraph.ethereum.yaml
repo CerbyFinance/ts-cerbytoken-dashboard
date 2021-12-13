@@ -4,11 +4,11 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: Staking
-    network: binance
+    network: mainnet
     source:
       address: "0xdef1fafc79cd01cf6797b9d7f51411bef486262a"
       abi: Staking
-      startBlock: 12195100
+      startBlock: 13795300
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4

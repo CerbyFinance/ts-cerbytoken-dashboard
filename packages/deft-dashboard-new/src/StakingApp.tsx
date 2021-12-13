@@ -533,7 +533,8 @@ export const StakeList = ({
                 ...(chainId === 56 ||
                 chainId === 137 ||
                 chainId === 250 ||
-                chainId === 43114
+                chainId === 43114 ||
+                chainId === 1
                   ? {}
                   : {
                       pointerEvents: "none",
