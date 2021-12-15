@@ -3,6 +3,7 @@ import { useWeb3React } from "@web3-react/core";
 import { serializeError } from "eth-rpc-errors";
 import { ContractTransaction } from "ethers";
 import { Box, Text } from "grommet";
+import Tooltip from "rc-tooltip";
 import React, { useContext, useState } from "react";
 import Loader from "react-loader-spinner";
 import { toast } from "react-toastify";
@@ -35,6 +36,147 @@ const ChevronDown = ({ color }: { color: string }) => (
   </svg>
 );
 
+const ArrowUp = ({ color }: { color: string }) => (
+  <svg
+    width="33"
+    height="21"
+    viewBox="0 0 33 21"
+    fill={color}
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path d="M16.5 0L32.5215 20.25H0.478531L16.5 0Z" />
+  </svg>
+);
+
+const TooltipEndStake = ({
+  isDark,
+  renderWith,
+  children,
+  visible,
+  onVisibleChange,
+}: {
+  isDark: boolean;
+  renderWith: JSX.Element;
+  children: JSX.Element;
+  visible: boolean;
+  onVisibleChange: (state: boolean) => void;
+}) => {
+  // const [visible, onVisibleChange] = useState(false);
+
+  return (
+    <Tooltip
+      visible={visible}
+      onVisibleChange={v => {
+        onVisibleChange(v);
+      }}
+      placement="top"
+      trigger={["click"]}
+      align={{
+        offset: [0, -20],
+      }}
+      overlay={
+        <Box
+          style={{
+            position: "relative",
+            boxShadow: "0px 0px 15px rgba(0, 0, 0, 0.07)",
+          }}
+          align="center"
+        >
+          <Box
+            background={isDark ? "black" : "white"}
+            style={
+              isDark
+                ? {
+                    border: "1px solid #707070",
+                  }
+                : {}
+            }
+            // width="190px"
+            // width="580px"
+            pad="20px 20px 23px"
+            round="5px"
+            // alignSelf="start"
+            align="start"
+            direction="row"
+          >
+            <Box>{renderWith}</Box>
+          </Box>
+          <Box
+            style={{
+              position: "absolute",
+              bottom: "-13px",
+              transform: "rotate(180deg)",
+            }}
+          >
+            <ArrowUp color={isDark ? "black" : "white"} />
+          </Box>
+        </Box>
+      }
+      // overlay={<Overlay>{overlayContent} </Overlay>}
+    >
+      <div>{children}</div>
+    </Tooltip>
+  );
+};
+
+const SuperButton = ({
+  text,
+  onClick,
+  loader,
+  color,
+  width,
+}: {
+  color: "green" | "red";
+  text: string;
+  width?: string;
+  loader: boolean;
+  onClick: (e: any) => void;
+}) => {
+  const getBg = (hovered: boolean) => {
+    if (color === "green") {
+      return hovered
+        ? "linear-gradient(96.34deg, #219653 0%, #08D660 100%)"
+        : "#219653";
+    }
+    // else
+
+    return hovered
+      ? "linear-gradient(96.34deg, #EB5757 0%, #BA2C2C 100%)"
+      : "#EB5757";
+  };
+
+  return (
+    <HoveredElement
+      render={binder => (
+        <Box
+          pad="9px 0px 8px"
+          width={width ? width : "108px"}
+          background={getBg(binder.hovered)}
+          round="5px"
+          style={{
+            cursor: "pointer",
+          }}
+          align="center"
+          onClick={onClick}
+          {...binder.bind}
+        >
+          {loader && <Loader type="ThreeDots" color="#fff" height={12} />}
+
+          {!loader && (
+            <Text
+              size="14px"
+              weight={500}
+              color={binder.hovered ? "white" : "white"}
+            >
+              {text}
+            </Text>
+          )}
+        </Box>
+      )}
+    ></HoveredElement>
+  );
+};
+
 const Item = ({
   status,
   isDark,
@@ -58,6 +200,8 @@ const Item = ({
 }) => {
   const isCompleted = status === "completed";
   const color = isCompleted ? "#219653" : "#F2994A";
+  const [visible, onVisibleChange] = useState(false);
+
   return (
     <Box
       round="10px"
@@ -229,43 +373,15 @@ const Item = ({
               </Box>
               {/*  */}
               <Box width="9px"></Box>
-              <HoveredElement
-                render={binder => (
-                  <Box
-                    pad="9px 0px 8px"
-                    width={"108px"}
-                    background={
-                      binder.hovered
-                        ? "linear-gradient(96.34deg, #219653 0%, #08D660 100%)"
-                        : "#219653"
-                    }
-                    round="5px"
-                    style={{
-                      cursor: "pointer",
-                    }}
-                    align="center"
-                    onClick={e => {
-                      e.stopPropagation();
-                      action();
-                    }}
-                    {...binder.bind}
-                  >
-                    {loader && (
-                      <Loader type="ThreeDots" color="#fff" height={12} />
-                    )}
-
-                    {!loader && (
-                      <Text
-                        size="14px"
-                        weight={500}
-                        color={binder.hovered ? "white" : "white"}
-                      >
-                        {isCompleted ? "End Stakes" : "Scrape Stakes"}
-                      </Text>
-                    )}
-                  </Box>
-                )}
-              ></HoveredElement>
+              <SuperButton
+                color={"green"}
+                loader={loader}
+                text={isCompleted ? "End Stakes" : "Scrape Stakes"}
+                onClick={e => {
+                  e.stopPropagation();
+                  action();
+                }}
+              />
             </Box>
             {/* --- */}
             {!isCompleted && (
@@ -365,43 +481,75 @@ const Item = ({
 
                   {/*  */}
                   <Box width="9px"></Box>
-                  <HoveredElement
-                    render={binder => (
+                  <TooltipEndStake
+                    visible={visible}
+                    onVisibleChange={onVisibleChange}
+                    isDark={isDark}
+                    renderWith={
                       <Box
-                        pad="9px 0px 8px"
-                        width={"108px"}
-                        background={
-                          binder.hovered
-                            ? "linear-gradient(96.34deg, #EB5757 0%, #BA2C2C 100%)"
-                            : "#EB5757"
-                        }
-                        round="5px"
                         style={{
-                          cursor: "pointer",
+                          maxWidth: "300px",
                         }}
-                        align="center"
                         onClick={e => {
                           e.stopPropagation();
-                          action2!();
                         }}
-                        {...binder.bind}
                       >
-                        {loader2 && (
-                          <Loader type="ThreeDots" color="#fff" height={12} />
-                        )}
-
-                        {!loader2 && (
-                          <Text
-                            size="14px"
-                            weight={500}
-                            color={binder.hovered ? "white" : "white"}
+                        <Text
+                          size="14px"
+                          style={{
+                            lineHeight: "160%",
+                          }}
+                          color="#EB5757"
+                          weight={600}
+                          textAlign="center"
+                        >
+                          Cancelling this stake will result in a loss of{" "}
+                          <span
+                            style={{
+                              color: "white",
+                            }}
                           >
-                            {"End Stakes"}
-                          </Text>
-                        )}
+                            {(-template.penalty).asCurrency(1)} CERBY
+                          </span>
+                          .<br />
+                          Are you willing to proceed?
+                        </Text>
+                        <Box height="10px"></Box>
+                        <Box direction="row" justify="evenly">
+                          <SuperButton
+                            color={"green"}
+                            loader={loader2 || false}
+                            text={"Continue Staking"}
+                            width="140px"
+                            onClick={e => {
+                              e.stopPropagation();
+                              onVisibleChange(false);
+                            }}
+                          />
+                          <SuperButton
+                            color={"red"}
+                            loader={loader2 || false}
+                            text={"Accept Loss"}
+                            onClick={e => {
+                              e.stopPropagation();
+                              onVisibleChange(false);
+                              action2!();
+                            }}
+                          />
+                        </Box>
                       </Box>
-                    )}
-                  ></HoveredElement>
+                    }
+                  >
+                    <SuperButton
+                      color={"red"}
+                      loader={loader2 || false}
+                      text={"End Stakes"}
+                      onClick={e => {
+                        e.stopPropagation();
+                        onVisibleChange(!visible);
+                      }}
+                    />
+                  </TooltipEndStake>
                 </Box>
               </>
             )}

@@ -123,7 +123,7 @@ function App() {
                         <InjectUseReferrer />
                         {/* root route */}
                         <Route exact path="/">
-                          <Redirect to="/presale" />
+                          <Redirect to="/staking" />
                         </Route>
                         <Nav />
                         <main className="flex flex-col h-screen">

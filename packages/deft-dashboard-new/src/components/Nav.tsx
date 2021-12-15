@@ -9,7 +9,6 @@ import DayModeIcon from "../icons/DayModeIcon";
 import DefiFactoryIcon from "../icons/DefiFactoryIcon";
 import DiscordIcon from "../icons/DiscordIcon";
 import GithubIcon from "../icons/GithubIcon";
-import LaunchpadIcon from "../icons/LaunchpadIcon";
 import LeftArrowIcon from "../icons/LeftArrowIcon";
 import MediumIcon from "../icons/MediumIcon";
 import NightModeIcon from "../icons/NightModeIcon";
@@ -17,7 +16,6 @@ import RightArrowIcon from "../icons/RightArrowIcon";
 import StakingIcon from "../icons/StakingIcon";
 import TelegramIcon from "../icons/TelegramIcon";
 import TwitterIcon from "../icons/TwitterIcon";
-import VestingIcon from "../icons/VestingIcon";
 import WhitepaperIcon from "../icons/WhitepaperIcon";
 import YoutubeIcon from "../icons/YoutubeIcon";
 import { NavContext } from "../shared/nav";
@@ -48,16 +46,16 @@ function Nav() {
   const history = useHistory();
 
   const navigation = [
-    {
-      icon: <LaunchpadIcon className="" />,
-      name: "Presale",
-      path: "/presale",
-    },
-    {
-      icon: <VestingIcon className="" />,
-      name: "Vesting",
-      path: "/vesting",
-    },
+    // {
+    //   icon: <LaunchpadIcon className="" />,
+    //   name: "Presale",
+    //   path: "/presale",
+    // },
+    // {
+    //   icon: <VestingIcon className="" />,
+    //   name: "Vesting",
+    //   path: "/vesting",
+    // },
     {
       icon: <StakingIcon />,
       // icon: <VestingIcon className="" />,

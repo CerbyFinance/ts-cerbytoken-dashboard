@@ -3,7 +3,6 @@ import { useContext, useEffect, useState } from "react";
 import CopyIcon from "../icons/CopyIcon";
 import DiscordIcon from "../icons/DiscordIcon";
 import GithubIcon from "../icons/GithubIcon";
-import MediumIcon from "../icons/MediumIcon";
 import TelegramIcon from "../icons/TelegramIcon";
 import TwitterIcon from "../icons/TwitterIcon";
 import YoutubeIcon from "../icons/YoutubeIcon";
@@ -15,12 +14,12 @@ function Footer() {
 
   const social = [
     {
-      link: "https://t.me/DefiFactory",
+      link: "https://t.me/CerbyToken",
       icon: <TelegramIcon className="h-4" />,
       name: "Telegram",
     },
     {
-      link: "https://twitter.com/DefiFactory",
+      link: "https://twitter.com/CerbyToken",
       icon: <TwitterIcon className="h-4" />,
       name: "Twitter",
     },
@@ -30,7 +29,7 @@ function Footer() {
       name: "Discord",
     },
     {
-      link: "https://www.youtube.com/channel/UCWt80BebLmUWkWBPx4d_Q3A",
+      link: "https://www.youtube.com/c/CerbyToken",
       icon: <YoutubeIcon className="h-4" />,
       name: "YouTube",
     },
@@ -38,11 +37,6 @@ function Footer() {
       link: "https://github.com/DefiFactoryToken/DefiFactoryToken",
       icon: <GithubIcon className="h-4" />,
       name: "GitHub",
-    },
-    {
-      link: "https://defi-factory.medium.com/",
-      icon: <MediumIcon className="h-4" />,
-      name: "Medium",
     },
   ];
 
