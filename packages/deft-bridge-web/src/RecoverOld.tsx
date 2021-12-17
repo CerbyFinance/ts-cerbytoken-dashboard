@@ -186,6 +186,8 @@ export const RecoverOld = () => {
         transactionHash,
       };
 
+      console.log({ proof });
+
       setProof(proof);
     };
 
@@ -215,7 +217,7 @@ export const RecoverOld = () => {
         onClick: () => {
           switchToNetwork({
             library,
-            chainId: 42,
+            chainId: destId,
           });
         },
         style: {
@@ -229,7 +231,7 @@ export const RecoverOld = () => {
       onClick: () => {
         switchToNetwork({
           library,
-          chainId: 42,
+          chainId: destId,
         });
       },
       style: {
