@@ -26,7 +26,7 @@ const chains = ["binance", "ethereum", "polygon", "avalanche", "fantom"];
 
 const nodeUrlByChain = {
   ethereum: "https://secret:X4gDeGtfQy2M@eth-node.cerby.fi", // 1
-  binance: "https://bscrpc.com", // 56
+  binance: "https://secret:X4gDeGtfQy2M@bsc-node.cerby.fi", // 56
   polygon: "https://secret:X4gDeGtfQy2M@polygon-node.cerby.fi", // 137
   avalanche: "https://secret:X4gDeGtfQy2M@avalanche-node.cerby.fi", // 43114
   fantom: "https://secret:X4gDeGtfQy2M@fantom-node.cerby.fi", // 250
