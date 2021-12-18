@@ -2,15 +2,16 @@ import { Web3Provider } from "@ethersproject/providers";
 import { useWeb3React } from "@web3-react/core";
 import { serializeError } from "eth-rpc-errors";
 import { Box, Text } from "grommet";
-import React, { CSSProperties, useEffect, useState } from "react";
+import React, { CSSProperties, useContext, useEffect, useState } from "react";
 import AutosizeInput from "react-input-autosize";
 import { useHistory } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.min.css";
 import styled from "styled-components";
 import { Chains, switchToNetwork } from "./chains";
+import { BridgeContext } from "./Shared";
 import { noopApollo } from "./shared/client";
 import { injected } from "./shared/connectors";
-import { HoveredElement } from "./shared/hooks";
+import { HoveredElement, useLocalStorage } from "./shared/hooks";
 import { BURN_TOPIC, useBridgeContractOld } from "./shared/useContract";
 import { chunkSubstr } from "./shared/utils";
 import { txnToast } from "./toaster";
@@ -77,6 +78,8 @@ export const RecoverOld = () => {
   const { account, activate, chainId, library, connector, error } =
     useWeb3React();
 
+  const { refetchBalance } = useContext(BridgeContext);
+
   const [tx, setTx] = useState("");
 
   const changeHandler = (evt: any) => {
@@ -95,7 +98,10 @@ export const RecoverOld = () => {
   const bridgeContract = useBridgeContractOld();
 
   const unsupportedNetwork = error?.message.includes("Unsupported chain id");
-  const [proof, setProof] = useState(null as Proof | null);
+  const { value: proof, setValue: setProof } = useLocalStorage(
+    "proof",
+    null as Proof | null,
+  );
 
   const srcId = (Number(proof?.src) || 0) as Chains;
   const destId = (Number(proof?.dest) || 0) as Chains;
@@ -119,6 +125,8 @@ export const RecoverOld = () => {
       });
 
       const result2 = await result.wait();
+
+      await refetchBalance(account!);
 
       if (result2.status === 1) {
         txnToast(
@@ -185,8 +193,6 @@ export const RecoverOld = () => {
         dest,
         transactionHash,
       };
-
-      console.log({ proof });
 
       setProof(proof);
     };
@@ -372,6 +378,24 @@ export const RecoverOld = () => {
             );
           }}
         />
+      )}
+      {proof && (
+        <>
+          <Box height="15px" />
+          <Text
+            textAlign="center"
+            weight={600}
+            size="14px"
+            color="#414141"
+            style={{
+              lineHeight: "150%",
+              cursor: "pointer",
+            }}
+            onClick={() => setProof(null)}
+          >
+            Reset
+          </Text>
+        </>
       )}
     </Box>
   );

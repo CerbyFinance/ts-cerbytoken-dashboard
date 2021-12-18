@@ -13,6 +13,28 @@ export const useHover = () => {
   };
 };
 
+function getStorageValue<T>(key: string, defaultValue: T): T | null {
+  const saved = localStorage.getItem(key);
+  // @ts-ignore
+  const initial = JSON.parse(saved);
+  return initial || defaultValue;
+}
+
+export function useLocalStorage<T>(key: string, defaultValue: T) {
+  const [value, setValue] = useState(() => {
+    return getStorageValue(key, defaultValue);
+  });
+
+  useEffect(() => {
+    localStorage.setItem(key, JSON.stringify(value));
+  }, [key, value]);
+
+  return {
+    value,
+    setValue,
+  };
+}
+
 export const HoveredElement = (props: {
   render: (binder: {
     hovered: boolean;
