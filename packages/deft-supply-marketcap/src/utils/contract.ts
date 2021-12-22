@@ -45,6 +45,12 @@ export const web3Map = Object.fromEntries(
   ]),
 );
 
+export const BUFFER_FUND_CONTRACT =
+  "0x72aCC602f185692b80d66f933Bb679b04aD4583d";
+
+export const STABLE_COIN_FUND_CONTRACT =
+  "0x8149C0a6f5b5417d30F70e00a05d8D15CF471853";
+
 export const STAKING_CONTRACT = "0xdef1fafc79cd01cf6797b9d7f51411bef486262a";
 
 export const DEFI_FACTORY_TOKEN_CONTRACT =

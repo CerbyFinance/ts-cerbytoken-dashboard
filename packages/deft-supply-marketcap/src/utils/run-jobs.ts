@@ -2,11 +2,12 @@ import { Response } from "got";
 import Web3 from "web3";
 import { request } from "../features/request";
 import {
+  BUFFER_FUND_CONTRACT,
   defiFactoryTokenContract,
   NamedChains,
   namedChains,
+  STABLE_COIN_FUND_CONTRACT,
   STAKING_CONTRACT,
-  TEAM_VESTING_CONTRACT,
   web3Map,
 } from "./contract";
 import { globalRedis } from "./redis";
@@ -51,20 +52,20 @@ const getOrUpdateSupplies = async () => {
 
   const stakedSupply = stakedSupplies.reduce((acc, val) => acc + val, 0);
 
-  const vestedSupply = await defiFactoryTokenContract(web3Map["eth"])
-    .methods.balanceOf(TEAM_VESTING_CONTRACT)
-    .call()
-    .then(some => Number(Web3.utils.fromWei(Web3.utils.toBN(some))));
+  // const vestedSupply = await defiFactoryTokenContract(web3Map["eth"])
+  //   .methods.balanceOf(TEAM_VESTING_CONTRACT)
+  //   .call()
+  //   .then(some => Number(Web3.utils.fromWei(Web3.utils.toBN(some))));
 
-  const circulatingSupply = totalDilutedSupply - stakedSupply - vestedSupply;
+  // const circulatingSupply = totalDilutedSupply - stakedSupply ;
 
   const result = await globalRedis.set(
     "supplies",
     JSON.stringify({
       totalDilutedSupply,
       stakedSupply,
-      vestedSupply,
-      circulatingSupply,
+      // vestedSupply,
+      // circulatingSupply,
     }),
   );
 
@@ -130,6 +131,42 @@ const getOrUpdatePrices = async () => {
   });
 
   const result2 = await globalRedis.set("prices", JSON.stringify(prices));
+
+  return result2 === "OK";
+};
+
+const getOrUpdateFundBalances = async () => {
+  const addresses = await Promise.all(
+    [BUFFER_FUND_CONTRACT, STABLE_COIN_FUND_CONTRACT].map(item =>
+      Promise.all(
+        namedChains
+          .map(async (item2, i) => {
+            const web3 = web3Map[item2];
+
+            const contract = defiFactoryTokenContract(web3);
+            const amount = await contract.methods
+              .balanceOf(item)
+              .call()
+              .then(some => Number(Web3.utils.fromWei(some)));
+
+            return amount;
+          })
+          .map(item => item.catch(e => 0)),
+      ),
+    ),
+  );
+
+  const [bufferFund, stableCoinFund] = addresses.map(item =>
+    item.reduce((acc, val) => acc + val, 0),
+  );
+
+  const result2 = await globalRedis.set(
+    "fundBalances",
+    JSON.stringify({
+      bufferFund,
+      stableCoinFund,
+    }),
+  );
 
   return result2 === "OK";
 };
@@ -270,8 +307,20 @@ const fire3 = async () => {
   }
 };
 
+const fire4 = async () => {
+  while (true) {
+    try {
+      await getOrUpdateFundBalances();
+    } catch (error) {
+      console.log("error:");
+      console.log(error);
+    }
+    await new Promise(r => setTimeout(r, 1 * 1000));
+  }
+};
+
 const fireAll = async () => {
-  await Promise.all([fire0(), fire1(), fire2(), fire3()]);
+  await Promise.all([fire0(), fire1(), fire2(), fire3(), fire4()]);
 };
 
 export const triggerRunJobs = () => {

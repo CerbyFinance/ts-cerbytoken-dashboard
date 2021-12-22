@@ -15,6 +15,11 @@ type Combo = {
   profit: number;
 };
 
+type Funds = {
+  bufferFund: number;
+  stableCoinFund: number;
+};
+
 type Supplies = {
   // totalSupply: number;
   // lockedSupply: number;
@@ -22,7 +27,7 @@ type Supplies = {
 
   totalDilutedSupply: number;
   stakedSupply: number;
-  vestedSupply: number;
+  // vestedSupply: number;
   circulatingSupply: number;
 };
 
@@ -72,13 +77,15 @@ const supplyAndMarketCap = async () => {
   const suppliesStr = await globalRedis.get("supplies");
   const pricesStr = await globalRedis.get("prices");
   const pairBalances = await globalRedis.get("pairBalances");
-  if (!suppliesStr || !pricesStr || !pairBalances) {
+  const fundBalancesStr = await globalRedis.get("fundBalances");
+  if (!suppliesStr || !pricesStr || !pairBalances || !fundBalancesStr) {
     return zero;
   }
 
   const supplies = JSON.parse(suppliesStr) as Supplies;
   const prices = JSON.parse(pricesStr) as number[];
   const balances = JSON.parse(pairBalances) as number[];
+  const fundBalances = JSON.parse(fundBalancesStr) as Funds;
 
   const numerator = prices
     .map((price, i) => price * balances[i])
@@ -89,11 +96,17 @@ const supplyAndMarketCap = async () => {
   const totalDilutedMarketCap =
     supplies.totalDilutedSupply * currentWeightedPrice;
 
-  const circulatingMarketCap =
-    supplies.circulatingSupply * currentWeightedPrice;
+  const circulatingSupply =
+    supplies.totalDilutedSupply -
+    supplies.stakedSupply -
+    fundBalances.bufferFund -
+    fundBalances.stableCoinFund;
+
+  const circulatingMarketCap = circulatingSupply * currentWeightedPrice;
 
   return {
     ...supplies,
+    ...fundBalances,
     priceOnEth: prices[0],
     priceOnBsc: prices[1],
     priceOnPolygon: prices[2],
@@ -101,6 +114,7 @@ const supplyAndMarketCap = async () => {
     priceOnFantom: prices[4],
 
     currentWeightedPrice,
+    circulatingSupply,
     circulatingMarketCap,
 
     totalDilutedMarketCap,
