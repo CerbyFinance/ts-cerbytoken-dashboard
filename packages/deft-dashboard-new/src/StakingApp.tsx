@@ -329,6 +329,10 @@ export const StakeList = ({
     0,
   );
 
+  const rewards = items
+    .filter(item => item.endDay === 0)
+    .reduce((acc, item) => acc + item.interest, 0);
+
   const [completed, inProgress] = activeItems.reduce(
     ([completed, inProgress], item) => {
       const isCompleted = getCurrentDay() >= item.startDay + item.lockDays;
@@ -631,6 +635,19 @@ export const StakeList = ({
           <Box height="3px"></Box>
           <Text alignSelf="end" size="14px">
             {deftShortCurrency(stakedAmount || 0, "Cerby")}
+          </Text>
+        </Box>
+        <Box
+          margin={{
+            right: "20px",
+          }}
+        >
+          <Text size="14px" alignSelf="end" color="#A9A9A9">
+            Rewards:
+          </Text>
+          <Box height="3px"></Box>
+          <Text alignSelf="end" size="14px">
+            {deftShortCurrency(rewards || 0, "Cerby")}
           </Text>
         </Box>
         {/* <Text> {stakedAmount ? stakedAmount?.asCurrency(2) : "..."}</Text> */}
