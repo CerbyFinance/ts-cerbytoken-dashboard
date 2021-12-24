@@ -27,6 +27,28 @@ export const HoveredElement = (props: {
   return props.render(binder);
 };
 
+function getStorageValue<T>(key: string, defaultValue: T): T | null {
+  const saved = localStorage.getItem(key);
+  // @ts-ignore
+  const initial = JSON.parse(saved);
+  return initial || defaultValue;
+}
+
+export function useLocalStorage<T>(key: string, defaultValue: T) {
+  const [value, setValue] = useState(() => {
+    return getStorageValue(key, defaultValue);
+  });
+
+  useEffect(() => {
+    localStorage.setItem(key, JSON.stringify(value));
+  }, [key, value]);
+
+  return {
+    value,
+    setValue,
+  };
+}
+
 export function useEagerConnect() {
   const { activate, active } = useWeb3React();
 

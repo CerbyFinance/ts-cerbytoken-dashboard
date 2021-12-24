@@ -25,7 +25,7 @@ import {
   SelectedStakesTablet,
 } from "./SelectedStakes";
 // import { stakingClient } from "./shared/client";
-import { HoveredElement } from "./shared/hooks";
+import { HoveredElement, useLocalStorage } from "./shared/hooks";
 import { ModalsContext } from "./shared/modals";
 import { makePages } from "./shared/shared";
 import { SnapshotsInterest } from "./shared/snaphots-interest";
@@ -232,7 +232,7 @@ const activeTemplate = {
 };
 
 export const StakeList = ({
-  items,
+  items: _items,
   stakedAmount,
 }: // inflations,
 {
@@ -282,6 +282,13 @@ export const StakeList = ({
     createStakeModal,
     showScrapeOrEndStakesModal,
   } = useContext(ModalsContext);
+
+  const { value: hideClosed, setValue: setHideClosed } = useLocalStorage(
+    "hideClosedStakes",
+    null as boolean | null,
+  );
+
+  const items = hideClosed ? _items.filter(item => item.endDay === 0) : _items;
 
   const allAllowedIds = items
     .filter(item => item.endDay === 0)
@@ -699,7 +706,35 @@ export const StakeList = ({
       ) : (
         <></>
       )}
-      <Box height="20px"></Box>
+      <Box height={"20px"}></Box>
+      <Box direction="row" align="center">
+        <Box
+          margin={{
+            left: "auto",
+          }}
+        ></Box>
+        <Box
+          direction="row"
+          align="center"
+          onClick={() => setHideClosed(!hideClosed)}
+        >
+          <CheckBox onClick={() => {}} checked={hideClosed || false} />
+          <Box width={"10px"}></Box>
+          <Text
+            size="16px"
+            weight={500}
+            style={{
+              cursor: "pointer",
+              userSelect: "none",
+            }}
+          >
+            hide closed stakes
+          </Text>
+        </Box>
+
+        <Box width={"20px"}></Box>
+      </Box>
+      <Box height="10px"></Box>
       <Box
         round="5px"
         className="bg-white dark:bg-transparent"
