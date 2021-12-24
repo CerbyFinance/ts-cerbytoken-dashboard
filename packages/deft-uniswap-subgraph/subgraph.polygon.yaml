@@ -1,14 +1,14 @@
 specVersion: 0.0.2
 schema:
-  file: ./schema-polygon.graphql
+  file: ./schema-native.graphql
 dataSources:
   - kind: ethereum/contract
-    name: PancakeswapDeft
+    name: CerbyPOLY
     network: polygon
     source:
-      address: "0xf92b726b10956ff95ebabdd6fd92d180d1e920da"
-      abi: QuickswapPair
-      startBlock: 20270000
+      address: "0x2cb1a360467b16152585e4652dff0d13653bfbec"
+      abi: UniswapPair
+      startBlock: 22908300
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -17,21 +17,21 @@ dataSources:
         - Token
         - Swap
       abis:
-        - name: QuickswapPair
-          file: ./abis/QuickswapPair.json
+        - name: UniswapPair
+          file: ./abis/UniswapPair.json
       eventHandlers:
         - event: Sync(uint112,uint112)
           handler: handleSync
         - event: Swap(indexed address,uint256,uint256,uint256,uint256,indexed address)
           handler: handleSwap
-      file: ./src/mapping-quickswapDeft.ts
+      file: ./src/mapping-sushi.ts
   - kind: ethereum/contract
     name: PancakeswapUsdt
     network: polygon
     source:
       address: "0xf7bc741b2086ca344e78225d06224ffdcd86d110"
       abi: QuickswapPair
-      startBlock: 20270000
+      startBlock: 22908300
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4

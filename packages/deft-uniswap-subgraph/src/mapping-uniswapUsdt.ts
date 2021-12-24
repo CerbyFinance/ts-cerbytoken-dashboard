@@ -3,35 +3,35 @@ import { Sync } from "../generated/UniswapUsdt/UniswapPair";
 import { BI_18, BI_6, convertTokenToDecimal, ZERO_BD } from "./helpers";
 
 export function handleSync(event: Sync): void {
-  let usdInEth = Token.load("usdInEth");
-  let ethInUsd = Token.load("ethInUsd");
-  if (usdInEth === null) {
-    usdInEth = new Token("usdInEth");
+  let usdInNative = Token.load("usdInNative");
+  let nativeInUsd = Token.load("nativeInUsd");
+  if (usdInNative === null) {
+    usdInNative = new Token("usdInNative");
   }
-  if (ethInUsd === null) {
-    ethInUsd = new Token("ethInUsd");
+  if (nativeInUsd === null) {
+    nativeInUsd = new Token("nativeInUsd");
   }
 
-  let wethReserve = ZERO_BD;
+  let wnativeReserve = ZERO_BD;
   let usdtReserve = ZERO_BD;
 
-  wethReserve = convertTokenToDecimal(event.params.reserve0, BI_18);
+  wnativeReserve = convertTokenToDecimal(event.params.reserve0, BI_18);
   usdtReserve = convertTokenToDecimal(event.params.reserve1, BI_6);
 
-  // usd in eth
+  // usd in native
   if (usdtReserve > ZERO_BD) {
-    usdInEth.price = wethReserve.div(usdtReserve);
+    usdInNative.price = wnativeReserve.div(usdtReserve);
   } else {
-    usdInEth.price = ZERO_BD;
+    usdInNative.price = ZERO_BD;
   }
 
-  // weth in usd
-  if (wethReserve > ZERO_BD) {
-    ethInUsd.price = usdtReserve.div(wethReserve);
+  // wnative in usd
+  if (wnativeReserve > ZERO_BD) {
+    nativeInUsd.price = usdtReserve.div(wnativeReserve);
   } else {
-    ethInUsd.price = ZERO_BD;
+    nativeInUsd.price = ZERO_BD;
   }
 
-  ethInUsd.save();
-  usdInEth.save();
+  nativeInUsd.save();
+  usdInNative.save();
 }

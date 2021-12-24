@@ -3,35 +3,35 @@ import { Token } from "../generated/schema";
 import { BI_18, convertTokenToDecimal, ZERO_BD } from "./helpers";
 
 export function handleSync(event: Sync): void {
-  let usdInBnb = Token.load("usdInBnb");
-  let bnbInUsd = Token.load("bnbInUsd");
-  if (usdInBnb === null) {
-    usdInBnb = new Token("usdInBnb");
+  let usdInNative = Token.load("usdInNative");
+  let nativeInUsd = Token.load("nativeInUsd");
+  if (usdInNative === null) {
+    usdInNative = new Token("usdInNative");
   }
-  if (bnbInUsd === null) {
-    bnbInUsd = new Token("bnbInUsd");
+  if (nativeInUsd === null) {
+    nativeInUsd = new Token("nativeInUsd");
   }
 
-  let wbnbReserve = ZERO_BD;
+  let wnativeReserve = ZERO_BD;
   let usdtReserve = ZERO_BD;
 
-  wbnbReserve = convertTokenToDecimal(event.params.reserve0, BI_18);
+  wnativeReserve = convertTokenToDecimal(event.params.reserve0, BI_18);
   usdtReserve = convertTokenToDecimal(event.params.reserve1, BI_18);
 
-  // usd in bnb
+  // usd in native
   if (usdtReserve > ZERO_BD) {
-    usdInBnb.price = wbnbReserve.div(usdtReserve);
+    usdInNative.price = wnativeReserve.div(usdtReserve);
   } else {
-    usdInBnb.price = ZERO_BD;
+    usdInNative.price = ZERO_BD;
   }
 
-  // wbnb in usd
-  if (wbnbReserve > ZERO_BD) {
-    bnbInUsd.price = usdtReserve.div(wbnbReserve);
+  // wnative in usd
+  if (wnativeReserve > ZERO_BD) {
+    nativeInUsd.price = usdtReserve.div(wnativeReserve);
   } else {
-    bnbInUsd.price = ZERO_BD;
+    nativeInUsd.price = ZERO_BD;
   }
 
-  bnbInUsd.save();
-  usdInBnb.save();
+  nativeInUsd.save();
+  usdInNative.save();
 }
