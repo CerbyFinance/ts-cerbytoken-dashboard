@@ -2273,7 +2273,11 @@ function App() {
                   <Route exact path="/bridge" component={BridgeWidget} />
                   <Route exact path="/arbitrage" component={Arbitrage} />
                   {/* <Route exact path="/wrap" component={WrapWidget} /> */}
-                  <Route exact path="/recover-old" component={RecoverOld} />
+                  <Route
+                    exact
+                    path="/recover-old/:contract?"
+                    component={RecoverOld}
+                  />
                   <Route
                     exact
                     path="/bridge/p/:src/:dest/:id"

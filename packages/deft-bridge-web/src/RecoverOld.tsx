@@ -4,7 +4,7 @@ import { serializeError } from "eth-rpc-errors";
 import { Box, Text } from "grommet";
 import React, { CSSProperties, useContext, useEffect, useState } from "react";
 import AutosizeInput from "react-input-autosize";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.min.css";
 import styled from "styled-components";
 import { Chains, switchToNetwork } from "./chains";
@@ -74,9 +74,14 @@ type Proof = {
 
 const TX_REGEX = /^0x([A-Fa-f0-9]{64})$/;
 
+const BRIDGE_CONTRACT_OLD = "0xB24Aa2E03E66cfe46121BF852aa08045a124dd6D";
+// const BRIDGE_CONTRACT_OLD_2 = "0xa5df69790ba509c511e2a0a31ceeffecc4d156c7";
+
 export const RecoverOld = () => {
   const { account, activate, chainId, library, connector, error } =
     useWeb3React();
+
+  const { contract: _contract } = useParams<{ contract: string }>();
 
   const { refetchBalance } = useContext(BridgeContext);
 
@@ -95,7 +100,11 @@ export const RecoverOld = () => {
 
   const connected = account ? true : false;
 
-  const bridgeContract = useBridgeContractOld();
+  const contract = (_contract || "").startsWith("0x")
+    ? _contract
+    : BRIDGE_CONTRACT_OLD;
+
+  const bridgeContract = useBridgeContractOld(contract);
 
   const unsupportedNetwork = error?.message.includes("Unsupported chain id");
   const { value: proof, setValue: setProof } = useLocalStorage(

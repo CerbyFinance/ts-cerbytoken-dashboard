@@ -20,19 +20,15 @@ export function getProviderOrSigner(
   return account ? getSigner(library, account) : library;
 }
 
-const BRIDGE_CONTRACT = "0xB24Aa2E03E66cfe46121BF852aa08045a124dd6D";
-const BRIDGE_CONTRACT_OLD = "0xa5df69790ba509c511e2a0a31ceeffecc4d156c7";
+const BRIDGE_CONTRACT = "0xEf038429e3BAaF784e1DE93075070df2A43D4278";
 // const TOKEN_CONTRACT = "0xdef1fac7Bf08f173D286BbBDcBeeADe695129840";
 
-export function useBridgeContractOld() {
+export function useBridgeContractOld(contract: string) {
   const { account, library, connector } = useWeb3React();
 
   const providerOrSigner = getProviderOrSigner(library, account);
 
-  const res = CrossChainBridge__factory.connect(
-    BRIDGE_CONTRACT_OLD,
-    providerOrSigner,
-  );
+  const res = CrossChainBridge__factory.connect(contract, providerOrSigner);
 
   return res;
 }
