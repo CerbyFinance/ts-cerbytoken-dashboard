@@ -6,9 +6,9 @@ dataSources:
     name: Staking
     network: avalanche
     source:
-      address: "0xdef1fafc79cd01cf6797b9d7f51411bef486262a"
+      address: "0x8888888AC6aa2482265e5346832CDd963c70A0D1"
       abi: Staking
-      startBlock: 7409000
+      startBlock: 8698100
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
