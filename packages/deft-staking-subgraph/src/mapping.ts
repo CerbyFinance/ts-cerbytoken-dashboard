@@ -32,6 +32,12 @@ export function handleStakeStarted(event: StakeStarted): void {
   let stakedAmount = convertTokenToDecimal(event.params.stakedAmount, BI_18);
 
   let stakeId = event.params.stakeId.toString();
+
+  let isPresent = Stake.load(stakeId);
+  if (isPresent) {
+    return;
+  }
+
   let stake = new Stake(stakeId);
   stake.owner = ownerId;
   stake.stakedAmount = stakedAmount;
@@ -58,6 +64,12 @@ export function handleStakeStarted(event: StakeStarted): void {
 }
 
 export function handleStakeEnded(event: StakeEnded): void {
+  let stakeId = event.params.stakeId.toString();
+  let isPresent = Stake.load(stakeId);
+  if (!isPresent) {
+    return;
+  }
+
   let stake = Stake.load(event.params.stakeId.toString());
   let ownerId = stake.owner;
   let stakedAmount = stake.stakedAmount;
