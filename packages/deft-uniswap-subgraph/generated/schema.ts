@@ -96,13 +96,13 @@ export class Swap extends Entity {
     this.set("to", Value.fromBytes(value));
   }
 
-  get cerbyInNative(): BigDecimal {
-    let value = this.get("cerbyInNative");
+  get cerbyInFtm(): BigDecimal {
+    let value = this.get("cerbyInFtm");
     return value.toBigDecimal();
   }
 
-  set cerbyInNative(value: BigDecimal) {
-    this.set("cerbyInNative", Value.fromBigDecimal(value));
+  set cerbyInFtm(value: BigDecimal) {
+    this.set("cerbyInFtm", Value.fromBigDecimal(value));
   }
 
   get cerbyInUsd(): BigDecimal {
@@ -123,13 +123,13 @@ export class Swap extends Entity {
     this.set("amountCerby", Value.fromBigDecimal(value));
   }
 
-  get amountCerbyInNative(): BigDecimal {
-    let value = this.get("amountCerbyInNative");
+  get amountCerbyInFtm(): BigDecimal {
+    let value = this.get("amountCerbyInFtm");
     return value.toBigDecimal();
   }
 
-  set amountCerbyInNative(value: BigDecimal) {
-    this.set("amountCerbyInNative", Value.fromBigDecimal(value));
+  set amountCerbyInFtm(value: BigDecimal) {
+    this.set("amountCerbyInFtm", Value.fromBigDecimal(value));
   }
 
   get amountCerbyInUsd(): BigDecimal {
@@ -141,13 +141,13 @@ export class Swap extends Entity {
     this.set("amountCerbyInUsd", Value.fromBigDecimal(value));
   }
 
-  get transactionFeeInNative(): BigDecimal {
-    let value = this.get("transactionFeeInNative");
+  get transactionFeeInFtm(): BigDecimal {
+    let value = this.get("transactionFeeInFtm");
     return value.toBigDecimal();
   }
 
-  set transactionFeeInNative(value: BigDecimal) {
-    this.set("transactionFeeInNative", Value.fromBigDecimal(value));
+  set transactionFeeInFtm(value: BigDecimal) {
+    this.set("transactionFeeInFtm", Value.fromBigDecimal(value));
   }
 
   get transactionFeeInUsd(): BigDecimal {

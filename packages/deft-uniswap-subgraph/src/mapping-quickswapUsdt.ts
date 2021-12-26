@@ -3,35 +3,35 @@ import { Token } from "../generated/schema";
 import { BI_18, BI_6, convertTokenToDecimal, ZERO_BD } from "./helpers";
 
 export function handleSync(event: Sync): void {
-  let usdInNative = Token.load("usdInNative");
-  let nativeInUsd = Token.load("nativeInUsd");
-  if (usdInNative === null) {
-    usdInNative = new Token("usdInNative");
+  let usdInMatic = Token.load("usdInMatic");
+  let maticInUsd = Token.load("maticInUsd");
+  if (usdInMatic === null) {
+    usdInMatic = new Token("usdInMatic");
   }
-  if (nativeInUsd === null) {
-    nativeInUsd = new Token("nativeInUsd");
+  if (maticInUsd === null) {
+    maticInUsd = new Token("maticInUsd");
   }
 
-  let wnativeReserve = ZERO_BD;
+  let wmaticReserve = ZERO_BD;
   let usdtReserve = ZERO_BD;
 
-  wnativeReserve = convertTokenToDecimal(event.params.reserve0, BI_18);
+  wmaticReserve = convertTokenToDecimal(event.params.reserve0, BI_18);
   usdtReserve = convertTokenToDecimal(event.params.reserve1, BI_6);
 
-  // usd in native
+  // usd in matic
   if (usdtReserve > ZERO_BD) {
-    usdInNative.price = wnativeReserve.div(usdtReserve);
+    usdInMatic.price = wmaticReserve.div(usdtReserve);
   } else {
-    usdInNative.price = ZERO_BD;
+    usdInMatic.price = ZERO_BD;
   }
 
-  // wnative in usd
-  if (wnativeReserve > ZERO_BD) {
-    nativeInUsd.price = usdtReserve.div(wnativeReserve);
+  // wmatic in usd
+  if (wmaticReserve > ZERO_BD) {
+    maticInUsd.price = usdtReserve.div(wmaticReserve);
   } else {
-    nativeInUsd.price = ZERO_BD;
+    maticInUsd.price = ZERO_BD;
   }
 
-  nativeInUsd.save();
-  usdInNative.save();
+  maticInUsd.save();
+  usdInMatic.save();
 }

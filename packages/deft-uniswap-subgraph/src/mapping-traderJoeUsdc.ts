@@ -3,35 +3,35 @@ import { Token } from "../generated/schema";
 import { BI_18, BI_6, convertTokenToDecimal, ZERO_BD } from "./helpers";
 
 export function handleSync(event: Sync): void {
-  let usdInNative = Token.load("usdInNative");
-  let nativeInUsd = Token.load("nativeInUsd");
-  if (usdInNative === null) {
-    usdInNative = new Token("usdInNative");
+  let usdInAvax = Token.load("usdInAvax");
+  let avaxInUsd = Token.load("avaxInUsd");
+  if (usdInAvax === null) {
+    usdInAvax = new Token("usdInAvax");
   }
-  if (nativeInUsd === null) {
-    nativeInUsd = new Token("nativeInUsd");
+  if (avaxInUsd === null) {
+    avaxInUsd = new Token("avaxInUsd");
   }
 
-  let wnativeReserve = ZERO_BD;
+  let wavaxReserve = ZERO_BD;
   let usdcReserve = ZERO_BD;
 
   usdcReserve = convertTokenToDecimal(event.params.reserve0, BI_6);
-  wnativeReserve = convertTokenToDecimal(event.params.reserve1, BI_18);
+  wavaxReserve = convertTokenToDecimal(event.params.reserve1, BI_18);
 
-  // usd in native
+  // usd in avax
   if (usdcReserve > ZERO_BD) {
-    usdInNative.price = wnativeReserve.div(usdcReserve);
+    usdInAvax.price = wavaxReserve.div(usdcReserve);
   } else {
-    usdInNative.price = ZERO_BD;
+    usdInAvax.price = ZERO_BD;
   }
 
-  // wnative in usd
-  if (wnativeReserve > ZERO_BD) {
-    nativeInUsd.price = usdcReserve.div(wnativeReserve);
+  // wavax in usd
+  if (wavaxReserve > ZERO_BD) {
+    avaxInUsd.price = usdcReserve.div(wavaxReserve);
   } else {
-    nativeInUsd.price = ZERO_BD;
+    avaxInUsd.price = ZERO_BD;
   }
 
-  nativeInUsd.save();
-  usdInNative.save();
+  avaxInUsd.save();
+  usdInAvax.save();
 }
