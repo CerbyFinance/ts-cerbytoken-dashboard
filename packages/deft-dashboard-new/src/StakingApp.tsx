@@ -178,29 +178,45 @@ function getRelativeDate(e: number, a: number) {
 
 const WithOrder = ({
   title,
+  subTitle,
   active,
   direction,
   onClick,
 }: {
   title: string;
+  subTitle?: string;
   active: boolean;
   direction: "asc" | "desc";
   onClick: () => void;
 }) => {
   return (
     <Box direction="row" onClick={onClick}>
-      <Text
-        color={active ? "#5294FF" : undefined}
-        size="16px"
-        weight={500}
-        style={{
-          cursor: "pointer",
-          userSelect: "none",
-        }}
-        alignSelf="start"
-      >
-        {title}
-      </Text>
+      <Box>
+        <Text
+          color={active ? "#5294FF" : undefined}
+          size="16px"
+          weight={500}
+          style={{
+            cursor: "pointer",
+            userSelect: "none",
+          }}
+          alignSelf="start"
+        >
+          {title}
+        </Text>
+        <Text
+          color={active ? "#5294FF" : undefined}
+          size="13px"
+          weight={400}
+          style={{
+            cursor: "pointer",
+            userSelect: "none",
+          }}
+          alignSelf="start"
+        >
+          {subTitle}
+        </Text>
+      </Box>
       <Box width="5px"></Box>
       {active && (
         <Box
@@ -231,12 +247,14 @@ const activeTemplate = {
   ids: [],
 };
 
+type StakeItem = StakesQuery["stakes"][0] & { maxInterest: number };
+
 export const StakeList = ({
   items: _items,
   stakedAmount,
 }: // inflations,
 {
-  items: StakesQuery["stakes"];
+  items: StakeItem[];
   stakedAmount: number | undefined;
   // inflations: number[];
 }) => {
@@ -650,7 +668,7 @@ export const StakeList = ({
           }}
         >
           <Text size="14px" alignSelf="end" color="#A9A9A9">
-            Rewards:
+            Reward To-Date:
           </Text>
           <Box height="3px"></Box>
           <Text alignSelf="end" size="14px">
@@ -799,6 +817,7 @@ export const StakeList = ({
               active={order.orderBy === "reward"}
               direction={order.direction}
               title="Reward / APR"
+              subTitle="To-Date"
               onClick={() => {
                 handleSetOrder("reward");
               }}
@@ -809,6 +828,7 @@ export const StakeList = ({
               active={order.orderBy === "staked"}
               direction={order.direction}
               title="Staked Amount"
+              subTitle="At Maturity / APR"
               onClick={() => {
                 handleSetOrder("staked");
               }}
@@ -840,8 +860,19 @@ export const StakeList = ({
 
           // const endsIn = "";
           const interestComputed = item.interest;
+
           const interest = deftShortCurrency(interestComputed);
+          const maxInterest = deftShortCurrency(item.maxInterest);
           const stakedAmount = deftShortCurrency(item.stakedAmount);
+
+          const numDaysPassed = Math.min(
+            getCurrentDay() - item.startDay,
+            item.lockDays,
+          );
+
+          const aprAtMaturityApprox =
+            ((item.maxInterest * 365) / (item.stakedAmount * numDaysPassed)) *
+              100 || 0;
 
           const sharesCount = deftShortCurrency(item.sharesCount, "Shares");
 
@@ -954,11 +985,26 @@ export const StakeList = ({
                   {apy.asCurrency(2)}% APR
                 </Text>
               </Box>
-              <Box width="144px">
+              <Box
+                width="144px"
+                margin={{
+                  top: "-10px",
+                  bottom: "-10px",
+                }}
+                // pad={{
+                //   right: "30px",
+                // }}
+                justify="center"
+                // align="end"
+              >
                 <Text size="16px">{stakedAmount}</Text>
                 <Box height="6px"></Box>
                 <Text color="#A9A9A9" size="14px">
-                  {sharesCount}
+                  +{maxInterest}
+                </Text>
+                <Box height="6px"></Box>
+                <Text color="#A9A9A9" size="12px">
+                  {aprAtMaturityApprox.toFixed(2)}% APR
                 </Text>
               </Box>
             </BoxBorderBottom>
@@ -1170,7 +1216,29 @@ export const RootStaking = () => {
           getCurrentDay(),
         );
 
-    return { ...item, interest };
+    const stakeSharesCountMax = getSharesCountByStake(
+      dailySnapshots,
+      {
+        lockedForXDays: item.lockDays,
+        stakedAmount: item.stakedAmount,
+        startDay: item.startDay,
+      },
+      0,
+    );
+
+    const maxInterest = getInterestByStake(
+      dailySnapshots,
+      cachedInterestPerShare,
+      {
+        lockedForXDays: item.lockDays,
+        stakedAmount: item.stakedAmount,
+        startDay: item.startDay,
+      },
+      getCurrentDay(),
+      stakeSharesCountMax,
+    );
+
+    return { ...item, interest, maxInterest };
   });
 
   return (

@@ -541,6 +541,9 @@ export const CreateStakeModal = () => {
 
   const stakeShare = effectiveCerby / sharePrice;
 
+  const minRewardsAtMaturity =
+    (Number(stakeAmount) * (minApy / 100) * stakeDays) / 365 || 0;
+
   const now = new Date();
   const date = dateFns.addDays(now, stakeDays);
 
@@ -685,6 +688,7 @@ export const CreateStakeModal = () => {
       <Box background={isDark ? "#101E33" : "#E5E7EB"} round="10px" pad="20px">
         <Text size="16px">Stake Bonuses</Text>
         <Box height="23px"></Box>
+        {/*
         <Box
           direction="row"
           justify="between"
@@ -708,8 +712,8 @@ export const CreateStakeModal = () => {
           <Text size="14px" weight={500}>
             +{smallerPaysBetter.asCurrency(2)} Cerby
           </Text>
-        </Box>
-        <Box
+        </Box> */}
+        {/* <Box
           direction="row"
           justify="between"
           margin={{
@@ -720,8 +724,8 @@ export const CreateStakeModal = () => {
           <Text size="14px" weight={500}>
             {effectiveCerby.asCurrency(2)} Cerby
           </Text>
-        </Box>
-        <Box
+        </Box> */}
+        {/* <Box
           direction="row"
           justify="between"
           margin={{
@@ -732,8 +736,8 @@ export const CreateStakeModal = () => {
           <Text size="14px" weight={500}>
             {sharePrice.asCurrency(2)} Cerby / Share
           </Text>
-        </Box>
-        <Box
+        </Box> */}
+        {/* <Box
           direction="row"
           justify="between"
           margin={{
@@ -744,6 +748,18 @@ export const CreateStakeModal = () => {
           <Text size="14px" weight={500}>
             {deftShortCurrency(stakeShare, "Shares")}
           </Text>
+        </Box> */}
+        <Box
+          direction="row"
+          justify="between"
+          margin={{
+            bottom: "13px",
+          }}
+        >
+          <Text size="14px">Min. APR At Maturity:</Text>
+          <Text size="14px" weight={500}>
+            {(minApy || 0).toFixed(2)} %
+          </Text>
         </Box>
         <Box
           direction="row"
@@ -752,11 +768,12 @@ export const CreateStakeModal = () => {
             bottom: "13px",
           }}
         >
-          <Text size="14px">Min APR:</Text>
+          <Text size="14px">Min. Rewards At Maturity:</Text>
           <Text size="14px" weight={500}>
-            {(minApy || 0).toFixed(2)} %
+            {deftShortCurrency(minRewardsAtMaturity, "Cerby")}
           </Text>
         </Box>
+
         <Box
           direction="row"
           justify="between"

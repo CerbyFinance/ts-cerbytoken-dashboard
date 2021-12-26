@@ -138,6 +138,7 @@ export function getInterestByStake(
     stakedAmount: number;
   },
   givenDay: number,
+  stakeSharesCountMax?: number,
 ) {
   if (givenDay <= stake.startDay) return 0;
 
@@ -146,7 +147,9 @@ export function getInterestByStake(
   let endDay = Math.min(givenDay, stake.startDay + stake.lockedForXDays);
   endDay = Math.min(endDay, dailySnapshots.length);
 
-  let sharesCount = getSharesCountByStake(dailySnapshots, stake, endDay);
+  let sharesCount = stakeSharesCountMax
+    ? stakeSharesCountMax
+    : getSharesCountByStake(dailySnapshots, stake, endDay);
 
   let startCachedDay = Math.floor(stake.startDay / CACHED_DAYS_INTEREST + 1);
   let endBeforeFirstCachedDay = Math.min(
