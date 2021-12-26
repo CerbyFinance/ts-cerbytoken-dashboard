@@ -415,10 +415,12 @@ export const CreateStakeModal = () => {
     try {
       setLoader(true);
 
-      const result = await stakingContract.startStake({
-        lockedForXDays: stakeDays,
-        stakedAmount: ethers.utils.parseEther(stakeAmount),
-      });
+      const result = await stakingContract.bulkStartStake([
+        {
+          lockedForXDays: stakeDays,
+          stakedAmount: ethers.utils.parseEther(stakeAmount),
+        },
+      ]);
 
       const result2 = await result.wait();
 
