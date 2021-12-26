@@ -535,7 +535,7 @@ export const StakeList = ({
           render={binder => (
             <Box
               height="36px"
-              width="200px"
+              width="120px"
               align="center"
               justify="center"
               round="5px"
@@ -778,7 +778,7 @@ export const StakeList = ({
             <WithOrder
               active={order.orderBy === "stakeEnd"}
               direction={order.direction}
-              title="Stake Ends"
+              title="End Date"
               onClick={() => {
                 handleSetOrder("stakeEnd");
               }}
@@ -808,7 +808,7 @@ export const StakeList = ({
             <WithOrder
               active={order.orderBy === "staked"}
               direction={order.direction}
-              title="Staked amount"
+              title="Staked Amount"
               onClick={() => {
                 handleSetOrder("staked");
               }}

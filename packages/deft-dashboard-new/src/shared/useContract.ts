@@ -33,7 +33,7 @@ export function usePresaleContract(contractAddress: string) {
   return res;
 }
 
-const STAKING_CONTRACT = "0xdef1fafc79cd01cf6797b9d7f51411bef486262a";
+const STAKING_CONTRACT = "0x8888888AC6aa2482265e5346832CDd963c70A0D1";
 
 export function useStakingContract() {
   const { account, library, connector } = useWeb3React();
