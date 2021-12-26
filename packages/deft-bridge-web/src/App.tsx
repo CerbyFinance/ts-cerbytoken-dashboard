@@ -74,7 +74,6 @@ import { BURN_TOPIC, useBridgeContract } from "./shared/useContract";
 import { chunkSubstr, dynamicTemplate, formatNum } from "./shared/utils";
 import Web3ReactManager from "./shared/Web3Manager";
 import { txnToast } from "./toaster";
-import { WrapWidget } from "./Wrap";
 
 const Input = styled(AutosizeInput)`
   input {
@@ -1944,7 +1943,7 @@ const Navi = () => {
   const history = useHistory();
 
   const isBridge = IsActivePath("/bridge");
-  const isWrap = IsActivePath("/wrap");
+  // const isWrap = IsActivePath("/wrap");
 
   return (
     <Box direction="row">
@@ -1969,8 +1968,8 @@ const Navi = () => {
             Bridge
           </Text>
         </Box>
-        <Box width="10px"></Box>
-        <Box
+        {/* <Box width="10px"></Box> */}
+        {/* <Box
           background={isWrap ? "#5d5d5d" : "white"}
           pad="3px 10px 3px 10px"
           round="6px"
@@ -1981,16 +1980,6 @@ const Navi = () => {
         >
           <Text size="15px" color={isWrap ? "white" : "#414141"} weight={600}>
             Wrap
-          </Text>
-        </Box>
-        {/* <Box
-          background="white"
-          pad="3px 8px"
-          round="6px"
-          margin={{ left: "10px" }}
-        >
-          <Text size="14px" weight={600} color="#414141">
-            123213123
           </Text>
         </Box> */}
       </Box>
@@ -2283,7 +2272,7 @@ function App() {
                   </Route>
                   <Route exact path="/bridge" component={BridgeWidget} />
                   <Route exact path="/arbitrage" component={Arbitrage} />
-                  <Route exact path="/wrap" component={WrapWidget} />
+                  {/* <Route exact path="/wrap" component={WrapWidget} /> */}
                   <Route exact path="/recover-old" component={RecoverOld} />
                   <Route
                     exact
