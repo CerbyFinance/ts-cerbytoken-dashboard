@@ -46,13 +46,13 @@ export const deftShortCurrency = (amount: number, label: string = "Cerby") => {
   let shortAmount = "";
   let absAmount = Math.abs(amount);
   if (absAmount > 1e9) {
-    shortAmount = (amount / 1e9).asCurrency(3) + " B-" + label;
+    shortAmount = (amount / 1e9).asCurrency(1) + " B-" + label;
   } else if (absAmount > 1e6) {
-    shortAmount = (amount / 1e6).asCurrency(3) + " M-" + label;
+    shortAmount = (amount / 1e6).asCurrency(1) + " M-" + label;
   } else if (absAmount > 1e3) {
-    shortAmount = (amount / 1e3).asCurrency(3) + " K-" + label;
+    shortAmount = (amount / 1e3).asCurrency(1) + " K-" + label;
   } else {
-    shortAmount = amount.asCurrency(3) + " " + label;
+    shortAmount = amount.asCurrency(1) + " " + label;
   }
 
   return shortAmount;

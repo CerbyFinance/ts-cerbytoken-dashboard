@@ -861,14 +861,19 @@ export const StakeList = ({
           // const endsIn = "";
           const interestComputed = item.interest;
 
-          const interest = deftShortCurrency(interestComputed);
-          const maxInterest = deftShortCurrency(item.maxInterest);
-          const stakedAmount = deftShortCurrency(item.stakedAmount);
-
           const numDaysPassed = Math.min(
             getCurrentDay() - item.startDay,
             item.lockDays,
           );
+
+          const _rewardsAtMaturityApprox =
+            (item.maxInterest * item.lockDays) / numDaysPassed || 0;
+
+          const interest = deftShortCurrency(interestComputed);
+          const rewardsAtMaturityApprox = deftShortCurrency(
+            _rewardsAtMaturityApprox,
+          );
+          const stakedAmount = deftShortCurrency(item.stakedAmount);
 
           const aprAtMaturityApprox =
             ((item.maxInterest * 365) / (item.stakedAmount * numDaysPassed)) *
@@ -982,7 +987,7 @@ export const StakeList = ({
                 <Text size="16px">+ {interest}</Text>
                 <Box height="6px"></Box>
                 <Text color="#A9A9A9" size="14px">
-                  {apy.asCurrency(2)}% APR
+                  {apy.asCurrency(1)}% APR
                 </Text>
               </Box>
               <Box
@@ -1000,11 +1005,11 @@ export const StakeList = ({
                 <Text size="16px">{stakedAmount}</Text>
                 <Box height="6px"></Box>
                 <Text color="#A9A9A9" size="14px">
-                  +{maxInterest}
+                  +{rewardsAtMaturityApprox}
                 </Text>
                 <Box height="6px"></Box>
                 <Text color="#A9A9A9" size="12px">
-                  {aprAtMaturityApprox.toFixed(2)}% APR
+                  {aprAtMaturityApprox.asCurrency(1)}% APR
                 </Text>
               </Box>
             </BoxBorderBottom>

@@ -758,7 +758,7 @@ export const CreateStakeModal = () => {
         >
           <Text size="14px">Min. APR At Maturity:</Text>
           <Text size="14px" weight={500}>
-            {(minApy || 0).toFixed(2)} %
+            {(minApy || 0).toFixed(1)} %
           </Text>
         </Box>
         <Box
