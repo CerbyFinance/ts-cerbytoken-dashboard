@@ -71,6 +71,12 @@ export function handleStakeEnded(event: StakeEnded): void {
   }
 
   let stake = Stake.load(event.params.stakeId.toString());
+
+  // reentrance v2
+  if (stake.endTx) {
+    return;
+  }
+
   let ownerId = stake.owner;
   let stakedAmount = stake.stakedAmount;
 
@@ -94,7 +100,9 @@ export function handleStakeOwnerChanged(event: StakeOwnerChanged): void {
   let newOwnerId = event.params.newOwner.toHexString();
   let newOwner = getOrCreateUser(newOwnerId);
 
-  let stake = Stake.load(event.params.stakeId.toString());
+  let stakeId = event.params.stakeId.toString();
+  let stake = Stake.load(stakeId);
+
   let oldOwnerId = stake.owner;
   let stakedAmount = stake.stakedAmount;
   stake.owner = newOwnerId;
