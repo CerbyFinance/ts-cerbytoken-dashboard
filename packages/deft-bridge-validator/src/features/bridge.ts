@@ -134,7 +134,7 @@ const sdkAndWeb3ByChain = Object.fromEntries(
 
 const chainIdToMaxGwei = {
   1: 200000000000,
-  137: 500000000000,
+  137: 1500000000000,
   56: 100000000000,
   43114: 200000000000,
   250: 500000000000,
