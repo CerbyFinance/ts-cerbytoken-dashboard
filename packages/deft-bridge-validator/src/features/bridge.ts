@@ -137,7 +137,7 @@ const chainIdToMaxGwei = {
   137: 1500000000000,
   56: 100000000000,
   43114: 200000000000,
-  250: 500000000000,
+  250: 1000000000000,
 } as {
   [key: number]: number;
 };
@@ -163,11 +163,13 @@ const approveOne = async (
     >,
   ]);
 
+  const maxFee = chainId === 137 ? 250000000000 : 2000000000;
+
   const fees = block.baseFeePerGas
     ? {
         maxFeePerGas: Math.max(
           Math.floor(Number(block.baseFeePerGas!) * BASEFEE_MULT),
-          2000000000,
+          maxFee,
         ),
         maxPriorityFeePerGas: 2000000000,
       }
