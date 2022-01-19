@@ -503,10 +503,11 @@ const Item = ({
                           weight={600}
                           textAlign="center"
                         >
-                          Cancelling this stake will result in a loss of{" "}
+                          Cancelling this stake will result in a loss of
+                          principal of{" "}
                           <span
                             style={{
-                              color: "white",
+                              color: isDark ? "white" : "black",
                             }}
                           >
                             {(-template.penalty).asCurrency(1)} CERBY
