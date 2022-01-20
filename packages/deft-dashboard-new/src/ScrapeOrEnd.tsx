@@ -126,7 +126,7 @@ const SuperButton = ({
   color,
   width,
 }: {
-  color: "green" | "red";
+  color: "green" | "red" | "blue";
   text: string;
   width?: string;
   loader: boolean;
@@ -137,6 +137,10 @@ const SuperButton = ({
       return hovered
         ? "linear-gradient(96.34deg, #219653 0%, #08D660 100%)"
         : "#219653";
+    } else if (color === "blue") {
+      return hovered
+        ? "linear-gradient(91.86deg, #71A7FF 0%, #1F67DB 100%)"
+        : "#5294FF";
     }
     // else
 
@@ -187,6 +191,7 @@ const Item = ({
   loader2,
   action,
   action2,
+  isTooEarly,
 }: {
   status: string;
   isDark: boolean;
@@ -194,6 +199,7 @@ const Item = ({
   template: ActiveTemplate;
   loader: boolean;
   loader2?: boolean;
+  isTooEarly?: boolean;
   action: () => {};
   action2?: () => {};
   setOpen: () => void;
@@ -494,27 +500,45 @@ const Item = ({
                           e.stopPropagation();
                         }}
                       >
-                        <Text
-                          size="14px"
-                          style={{
-                            lineHeight: "160%",
-                          }}
-                          color="#EB5757"
-                          weight={600}
-                          textAlign="center"
-                        >
-                          Cancelling this stake will result in a loss of
-                          principal of{" "}
-                          <span
-                            style={{
-                              color: isDark ? "white" : "black",
-                            }}
-                          >
-                            {(-template.penalty).asCurrency(1)} CERBY
-                          </span>
-                          .<br />
-                          Are you willing to proceed?
-                        </Text>
+                        {isTooEarly ? (
+                          <>
+                            <Text
+                              size="14px"
+                              style={{
+                                lineHeight: "160%",
+                              }}
+                              color="#EB5757"
+                              weight={600}
+                              textAlign="center"
+                            >
+                              Cannot unstake, please read staking guide:
+                            </Text>
+                          </>
+                        ) : (
+                          <>
+                            <Text
+                              size="14px"
+                              style={{
+                                lineHeight: "160%",
+                              }}
+                              color="#EB5757"
+                              weight={600}
+                              textAlign="center"
+                            >
+                              Cancelling this stake will result in a loss of
+                              principal of{" "}
+                              <span
+                                style={{
+                                  color: isDark ? "white" : "black",
+                                }}
+                              >
+                                {(-template.penalty).asCurrency(1)} CERBY
+                              </span>
+                              .<br />
+                              Are you willing to proceed?
+                            </Text>
+                          </>
+                        )}
                         <Box height="10px"></Box>
                         <Box direction="row" justify="evenly">
                           <SuperButton
@@ -527,16 +551,31 @@ const Item = ({
                               onVisibleChange(false);
                             }}
                           />
-                          <SuperButton
-                            color={"red"}
-                            loader={loader2 || false}
-                            text={"Accept Loss"}
-                            onClick={e => {
-                              e.stopPropagation();
-                              onVisibleChange(false);
-                              action2!();
-                            }}
-                          />
+                          {isTooEarly ? (
+                            <SuperButton
+                              color={"blue"}
+                              loader={loader2 || false}
+                              text={"Read Guide"}
+                              onClick={e => {
+                                e.stopPropagation();
+                                onVisibleChange(false);
+                                window.open(
+                                  "https://docs.cerby.fi/our-products/cerbystaking/staking-bonuses-and-penalties",
+                                );
+                              }}
+                            />
+                          ) : (
+                            <SuperButton
+                              color={"red"}
+                              loader={loader2 || false}
+                              text={"Accept Loss"}
+                              onClick={e => {
+                                e.stopPropagation();
+                                onVisibleChange(false);
+                                action2!();
+                              }}
+                            />
+                          )}
                         </Box>
                       </Box>
                     }
@@ -568,6 +607,11 @@ export const ScrapeOrEndModal = ({
   inProgress,
   successCb,
 }: ScrapeOrEndStakesModalPayload) => {
+  const riskPercent =
+    (inProgress.penalty / (inProgress.staked + inProgress.interest)) * 100;
+
+  const isTooEarly = riskPercent > 90.01;
+
   const { account, chainId } = useWeb3React();
 
   const { theme } = useContext(ThemeContext);
@@ -681,6 +725,7 @@ export const ScrapeOrEndModal = ({
           template={inProgress}
           isDark={isDark}
           open={open2}
+          isTooEarly={isTooEarly}
           setOpen={() => setOpen2(!open2)}
           status="in-progress"
           loader={loader === "scrapeInProgress"}
