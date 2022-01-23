@@ -178,7 +178,7 @@ const approveOne = async (
           ),
           maxGwei,
         ),
-        maxPriorityFeePerGas: 2000000000 * iterationMult,
+        maxPriorityFeePerGas: Math.min(2000000000 * iterationMult, maxGwei),
       }
     : {
         gasPrice: Math.min(
@@ -413,6 +413,7 @@ const approver = async ([srcChain, destChain]: [string, string]) => {
     } catch (error: any) {
       if (error.message.includes("Already approved") && maxLatest) {
         await globalRedis.set(path + "-" + "latest_block_number", maxLatest);
+        maxLatest = 0
         log("skipping already approved");
       } else if (
         error.message.includes("replacement transaction underpriced")
