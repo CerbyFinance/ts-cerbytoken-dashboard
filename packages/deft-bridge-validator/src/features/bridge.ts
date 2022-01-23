@@ -149,6 +149,7 @@ const approveOne = async (
   proofHash: string,
   // isMain: boolean,
   chainId: number,
+  iterationMult: number,
 ) => {
   const preparedMethod = contract.methods.markTransactionAsApproved(proofHash);
 
@@ -163,31 +164,28 @@ const approveOne = async (
     >,
   ]);
 
-  const maxFee = chainId === 137 ? 250000000000 : 2000000000;
-
-  const fees = block.baseFeePerGas
-    ? {
-        maxFeePerGas: Math.max(
-          Math.floor(Number(block.baseFeePerGas!) * BASEFEE_MULT),
-          maxFee,
-        ),
-        maxPriorityFeePerGas: 2000000000,
-      }
-    : {
-        gasPrice: Number(gasPrice) * BASEFEE_MULT,
-      };
-
-  const whichGas = block.baseFeePerGas ? fees.maxFeePerGas : fees.gasPrice;
-
   const maxGwei = chainIdToMaxGwei[chainId];
 
   if (!maxGwei) {
     return new Error("gwei not found");
   }
 
-  if (Number(whichGas) > maxGwei) {
-    return new Error("too high gwei");
-  }
+  const fees = block.baseFeePerGas
+    ? {
+        maxFeePerGas: Math.min(
+          Math.floor(
+            Number(block.baseFeePerGas!) * BASEFEE_MULT * iterationMult,
+          ),
+          maxGwei,
+        ),
+        maxPriorityFeePerGas: 2000000000 * iterationMult,
+      }
+    : {
+        gasPrice: Math.min(
+          Number(gasPrice) * BASEFEE_MULT * iterationMult,
+          maxGwei,
+        ),
+      };
 
   const callGas = Math.floor(estimatedGas * ESTIMATE_MULT);
 
@@ -320,6 +318,7 @@ const approver = async ([srcChain, destChain]: [string, string]) => {
     once = true;
 
     let maxLatest = 0;
+    let iteration = 0;
     try {
       const latestBlockNumber = await globalRedis
         .get(path + "-" + "latest_block_number")
@@ -352,8 +351,10 @@ const approver = async ([srcChain, destChain]: [string, string]) => {
       const minProofsBlock = Math.min(...proofsBlocks);
       const maxProofsBlock = Math.max(...proofsBlocks);
 
-      // in case of Already Approved
+      // in case of Already Approved error
       maxLatest = maxProofsBlock;
+
+      const iterationMult = 1 * 1.1 ** Math.min(iteration, 10);
 
       const proofsHashes = proofs.map(item => item.id);
       const approveRes = await approveOne(
@@ -362,6 +363,7 @@ const approver = async ([srcChain, destChain]: [string, string]) => {
         from,
         proofsHashes[0],
         destChainId,
+        iterationMult,
         // destChain === "ethereum",
       );
 
@@ -386,7 +388,7 @@ const approver = async ([srcChain, destChain]: [string, string]) => {
         transactionHash,
       ].join("-");
 
-      log("processing tx: " + transactionHash);
+      log(`(attempt: ${iteration} processing tx: ${transactionHash}`);
       await globalRedis.sadd("pending", detailedTransation);
       let txResult: TransactionReceipt;
       try {
@@ -405,10 +407,18 @@ const approver = async ([srcChain, destChain]: [string, string]) => {
       log("approved successfully");
 
       await globalRedis.set(path + "-" + "latest_block_number", maxProofsBlock);
+
+      // nulling iteration to prevent usage of iteration mult
+      iteration = 0;
     } catch (error: any) {
       if (error.message.includes("Already approved") && maxLatest) {
         await globalRedis.set(path + "-" + "latest_block_number", maxLatest);
         log("skipping already approved");
+      } else if (
+        error.message.includes("replacement transaction underpriced")
+      ) {
+        log("increasing iteration");
+        iteration++;
       } else {
         log("things happen");
         console.log(error);
