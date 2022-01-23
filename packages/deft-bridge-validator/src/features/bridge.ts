@@ -413,8 +413,8 @@ const approver = async ([srcChain, destChain]: [string, string]) => {
     } catch (error: any) {
       if (error.message.includes("Already approved") && maxLatest) {
         await globalRedis.set(path + "-" + "latest_block_number", maxLatest);
-        maxLatest = 0
-        log("skipping already approved");
+        maxLatest = 0;
+        log("skipping already approved, block: " + maxLatest);
       } else if (
         error.message.includes("replacement transaction underpriced")
       ) {
