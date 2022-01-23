@@ -174,7 +174,7 @@ const approveOne = async (
         maxPriorityFeePerGas: 2000000000,
       }
     : {
-        gasPrice: Number(gasPrice) + 1,
+        gasPrice: Number(gasPrice) * BASEFEE_MULT,
       };
 
   const whichGas = block.baseFeePerGas ? fees.maxFeePerGas : fees.gasPrice;
@@ -319,6 +319,7 @@ const approver = async ([srcChain, destChain]: [string, string]) => {
     await new Promise(r => setTimeout(r, once ? 3000 : 0));
     once = true;
 
+    let maxLatest = 0;
     try {
       const latestBlockNumber = await globalRedis
         .get(path + "-" + "latest_block_number")
@@ -350,6 +351,9 @@ const approver = async ([srcChain, destChain]: [string, string]) => {
 
       const minProofsBlock = Math.min(...proofsBlocks);
       const maxProofsBlock = Math.max(...proofsBlocks);
+
+      // in case of Already Approved
+      maxLatest = maxProofsBlock;
 
       const proofsHashes = proofs.map(item => item.id);
       const approveRes = await approveOne(
@@ -401,9 +405,14 @@ const approver = async ([srcChain, destChain]: [string, string]) => {
       log("approved successfully");
 
       await globalRedis.set(path + "-" + "latest_block_number", maxProofsBlock);
-    } catch (error) {
-      log("things happen");
-      console.log(error);
+    } catch (error: any) {
+      if (error.message.includes("Already approved") && maxLatest) {
+        await globalRedis.set(path + "-" + "latest_block_number", maxLatest);
+        log("skipping already approved");
+      } else {
+        log("things happen");
+        console.log(error);
+      }
     }
   }
 };
