@@ -499,7 +499,7 @@ const approver = async ([srcChain, destChain]: [string, string]) => {
 
 const getFirstArg = () => {
   const args = process.argv.slice(2);
-  return Number(args[0]); // seconds arg
+  return Number(args[0]) || 0; // seconds arg
 };
 
 const fireReverters = async () => {
