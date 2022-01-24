@@ -323,12 +323,13 @@ const approver = async ([srcChain, destChain]: [string, string]) => {
   };
 
   let once = false;
+  let iteration = 0;
+  let maxLatest = 0;
+
   while (true) {
     await new Promise(r => setTimeout(r, once ? 3000 : 0));
     once = true;
 
-    let maxLatest = 0;
-    let iteration = 0;
     try {
       const latestBlockNumber = await globalRedis
         .get(path + "-" + "latest_block_number")
