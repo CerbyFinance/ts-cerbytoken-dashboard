@@ -178,11 +178,14 @@ const approveOne = async (
           ),
           maxGwei,
         ),
-        maxPriorityFeePerGas: Math.min(2000000000 * iterationMult, maxGwei),
+        maxPriorityFeePerGas: Math.min(
+          Math.floor(2000000000 * iterationMult),
+          maxGwei,
+        ),
       }
     : {
         gasPrice: Math.min(
-          Number(gasPrice) * BASEFEE_MULT * iterationMult,
+          Math.floor(Number(gasPrice) * BASEFEE_MULT * iterationMult),
           maxGwei,
         ),
       };
