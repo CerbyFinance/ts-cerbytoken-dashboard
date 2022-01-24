@@ -428,8 +428,8 @@ const approver = async ([srcChain, destChain]: [string, string]) => {
       } else if (
         error.message.includes("replacement transaction underpriced")
       ) {
-        log("increasing iteration");
         iteration++;
+        log("underpriced: increasing iteration " + iteration);
       } else {
         log("things happen");
         console.log(error);
