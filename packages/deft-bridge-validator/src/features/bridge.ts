@@ -357,11 +357,7 @@ const revertBlocks = async (
   if (newBlockNumber > 0) {
     log("revert old/new: " + latestBlockNumber + "/" + newBlockNumber);
 
-    // TOOD: uncomment on prod
-    // await globalRedis.set(
-    //   path + "-" + "latest_block_number",
-    //   latestBlockNumber,
-    // );
+    await globalRedis.set(path + "-" + "latest_block_number", newBlockNumber);
   }
 };
 
