@@ -195,9 +195,19 @@ const approveOne = async (
     ...fees,
   });
 
-  const transactionHash = await new Promise<string>(resolve => {
+  const someErrorP = new Promise<Error>(resolve => {
+    result.once("error", e => resolve(e));
+  });
+
+  const transactionHashP = new Promise<string>(resolve => {
     result.once("transactionHash", hash => resolve(hash));
   });
+
+  const transactionHash = await Promise.race([someErrorP, transactionHashP]);
+
+  if (transactionHash instanceof Error) {
+    throw transactionHash;
+  }
 
   return {
     transactionHash,
