@@ -4,11 +4,11 @@ WORKDIR /usr/src/app
 
 COPY package*.json ./
 
-RUN yarn global add pm2
 RUN yarn install --prod
 
 COPY . .
 
 EXPOSE 3001
 
-CMD ["yarn", "prod:start-server"]
+ENTRYPOINT ["yarn", "prod:start-server"]
+CMD []
