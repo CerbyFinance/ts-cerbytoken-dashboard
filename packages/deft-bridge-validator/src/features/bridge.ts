@@ -314,9 +314,9 @@ const blockNumberOfLatestApprovedProof = async (sdk: SDK) => {
   return proof?.blockNumber ? Number(proof.blockNumber) : 0;
 };
 
-const printWithNames = (o: object) => {
+const printWithNames = (o: object, f: (a: any) => any) => {
   return Object.entries(o)
-    .map(([key, value]) => `${key}: ${value}`)
+    .map(([key, value]) => `${key}: ${f(value)}`)
     .join(", ");
 };
 
@@ -376,7 +376,7 @@ const approver = async ([srcChain, destChain]: [string, string]) => {
       // in case of Already Approved error
       maxLatest = maxProofsBlock;
 
-      const iterationMult = 1 * 1.1 ** Math.min(iteration, 10);
+      const iterationMult = 1 * 1.1 ** Math.min(iteration, 20);
 
       const proofsHashes = proofs.map(item => item.id);
       const approveRes = await approveOne(
@@ -411,7 +411,7 @@ const approver = async ([srcChain, destChain]: [string, string]) => {
       ].join("-");
 
       log("callGas: " + callGas);
-      log("fees: " + printWithNames(fees));
+      log("fees: " + printWithNames(fees, v => v / 1e9));
       log(`attempt: ${iteration} processing tx: ${transactionHash}`);
       await globalRedis.sadd("pending", detailedTransation);
       let txResult: TransactionReceipt;
