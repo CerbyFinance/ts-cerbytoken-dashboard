@@ -132,6 +132,21 @@ const sdkAndWeb3ByChain = Object.fromEntries(
   }),
 );
 
+const chainIdToBlockIn24Hours = {
+  1: 5500,
+  56: 30000,
+  137: 40000,
+  43114: 43000,
+  250: 90000,
+} as {
+  [key: number]: number;
+};
+
+const countBlocksDiffToSeconds = (chainId: number, seconds: number) => {
+  const nBlocks = chainIdToBlockIn24Hours[chainId];
+  return Math.floor((nBlocks / 86400) * seconds);
+};
+
 const chainIdToMaxGwei = {
   1: 350000000000,
   137: 30000000000000,
@@ -320,6 +335,36 @@ const printWithNames = (o: object, f: (a: any) => any) => {
     .join(", ");
 };
 
+const revertBlocks = async (
+  seconds: number,
+  [srcChain, destChain]: [string, string],
+) => {
+  const path = srcChain.replace("-", "_") + "-" + destChain.replace("-", "_");
+
+  const log = (input: string) => {
+    console.log(`(${path}) `, new Date().toLocaleString(), " ", input);
+  };
+
+  const srcChainId = chainToId[srcChain] as number;
+
+  const latestBlockNumber = await globalRedis
+    .get(path + "-" + "latest_block_number")
+    .then(some => (some ? Number(some) : 0));
+
+  const newBlockNumber =
+    latestBlockNumber - countBlocksDiffToSeconds(srcChainId, seconds);
+
+  if (newBlockNumber > 0) {
+    log("revert old/new: " + latestBlockNumber + "/" + newBlockNumber);
+
+    // TOOD: uncomment on prod
+    // await globalRedis.set(
+    //   path + "-" + "latest_block_number",
+    //   latestBlockNumber,
+    // );
+  }
+};
+
 const approver = async ([srcChain, destChain]: [string, string]) => {
   const source = sdkAndWeb3ByChain[srcChain];
   const dest = sdkAndWeb3ByChain[destChain];
@@ -376,7 +421,7 @@ const approver = async ([srcChain, destChain]: [string, string]) => {
       // in case of Already Approved error
       maxLatest = maxProofsBlock;
 
-      const iterationMult = 1 * 1.1 ** Math.min(iteration, 20);
+      const iterationMult = 1 * 1.1 ** Math.min(iteration, 500);
 
       const proofsHashes = proofs.map(item => item.id);
       const approveRes = await approveOne(
@@ -452,14 +497,26 @@ const approver = async ([srcChain, destChain]: [string, string]) => {
   }
 };
 
-const fireAll = async () => {
-  const chainsApprovers = allowedPaths.map(path => {
-    return approver(path);
-  });
-
-  await Promise.all(chainsApprovers);
+const getFirstArg = () => {
+  const args = process.argv.slice(2);
+  return Number(args[0]); // seconds arg
 };
 
-export const triggerRunJobs = () => {
-  fireAll();
+const fireReverters = async () => {
+  const seconds = getFirstArg();
+  if (seconds <= 0) {
+    return;
+  }
+
+  console.log({ seconds });
+  await Promise.all(allowedPaths.map(path => revertBlocks(seconds, path)));
+};
+
+const fireApprovers = async () => {
+  await Promise.all(allowedPaths.map(path => approver(path)));
+};
+
+export const triggerRunJobs = async () => {
+  await fireReverters();
+  await fireApprovers();
 };
