@@ -215,6 +215,8 @@ const approveOne = async (
   return {
     transactionHash,
     pendingTx: result,
+    fees,
+    callGas,
   };
 };
 
@@ -312,6 +314,12 @@ const blockNumberOfLatestApprovedProof = async (sdk: SDK) => {
   return proof?.blockNumber ? Number(proof.blockNumber) : 0;
 };
 
+const printWithNames = (o: object) => {
+  return Object.entries(o)
+    .map(([key, value]) => `${key}: ${value}`)
+    .join(", ");
+};
+
 const approver = async ([srcChain, destChain]: [string, string]) => {
   const source = sdkAndWeb3ByChain[srcChain];
   const dest = sdkAndWeb3ByChain[destChain];
@@ -386,7 +394,7 @@ const approver = async ([srcChain, destChain]: [string, string]) => {
         continue;
       }
 
-      const { pendingTx, transactionHash } = approveRes;
+      const { pendingTx, transactionHash, callGas, fees } = approveRes;
 
       // const { pendingTx, transactionHash } = await approveMany(
       //   dest.contract,
@@ -402,7 +410,9 @@ const approver = async ([srcChain, destChain]: [string, string]) => {
         transactionHash,
       ].join("-");
 
-      log(`(attempt: ${iteration} processing tx: ${transactionHash}`);
+      log("callGas: " + callGas);
+      log("fees: " + printWithNames(fees));
+      log(`attempt: ${iteration} processing tx: ${transactionHash}`);
       await globalRedis.sadd("pending", detailedTransation);
       let txResult: TransactionReceipt;
       try {
