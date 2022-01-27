@@ -185,17 +185,19 @@ const approveOne = async (
     return new Error("gwei not found");
   }
 
+  const maxFeePerGas = block.baseFeePerGas
+    ? Math.min(
+        Math.floor(Number(block.baseFeePerGas!) * BASEFEE_MULT * iterationMult),
+        maxGwei,
+      )
+    : 0;
+
   const fees = block.baseFeePerGas
     ? {
-        maxFeePerGas: Math.min(
-          Math.floor(
-            Number(block.baseFeePerGas!) * BASEFEE_MULT * iterationMult,
-          ),
-          maxGwei,
-        ),
+        maxFeePerGas,
         maxPriorityFeePerGas: Math.min(
           Math.floor(2000000000 * iterationMult),
-          maxGwei,
+          maxFeePerGas,
         ),
       }
     : {
