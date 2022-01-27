@@ -8,6 +8,7 @@ import { CrossChainBridge } from "../../types/web3-v1-contracts/CrossChainBridge
 import crossChainBridgeAbi from "../contracts/CrossChainBridge.json";
 import { getSdk, ProofType } from "../graphql/types";
 import { globalRedis } from "../utils/redis";
+import { request } from "./request";
 
 const MIN_PROOFS_TO_APPROVE = 1;
 const ESTIMATE_MULT = 1.2;
@@ -109,6 +110,7 @@ const sdkAndWeb3ByChain = Object.fromEntries(
     const nodeUrl = nodeUrlByChain[chain];
 
     const web3 = new Web3(new Web3.providers.HttpProvider(nodeUrl));
+
     web3.eth.transactionPollingTimeout = 86400;
 
     applyMnemonicToWeb3(web3);
@@ -157,6 +159,30 @@ const chainIdToMaxGwei = {
   [key: number]: number;
 };
 
+const getMaxPriorityFeePerGas = async (node: string) => {
+  const headers = {
+    "Content-Type": "application/json",
+  };
+
+  const response = await request<{ result: string }>({
+    method: "POST",
+    url: node,
+    headers: headers,
+    json: {
+      jsonrpc: "2.0",
+      method: "eth_maxPriorityFeePerGas",
+      params: [],
+      id: 1,
+    },
+  });
+
+  if (response instanceof Error) {
+    throw response;
+  }
+
+  return Number(response.body.result);
+};
+
 const approveOne = async (
   contract: CrossChainBridge,
   web3: Web3,
@@ -185,27 +211,31 @@ const approveOne = async (
     return new Error("gwei not found");
   }
 
-  const maxFeePerGas = block.baseFeePerGas
-    ? Math.min(
-        Math.floor(Number(block.baseFeePerGas!) * BASEFEE_MULT * iterationMult),
-        maxGwei,
-      )
-    : 0;
+  let fees = {};
+  if (block.baseFeePerGas) {
+    const host = (web3.eth.currentProvider as any).host as string;
 
-  const fees = block.baseFeePerGas
-    ? {
-        maxFeePerGas,
-        maxPriorityFeePerGas: Math.min(
-          Math.floor(2000000000 * iterationMult),
-          maxFeePerGas,
-        ),
-      }
-    : {
-        gasPrice: Math.min(
-          Math.floor(Number(gasPrice) * BASEFEE_MULT * iterationMult),
-          maxGwei,
-        ),
-      };
+    const maxPriorityFeePerGas = await getMaxPriorityFeePerGas(host).then(
+      some => Math.floor(some * BASEFEE_MULT * iterationMult),
+    );
+
+    const maxFeePerGas = Math.min(
+      block.baseFeePerGas + maxPriorityFeePerGas,
+      maxGwei,
+    );
+
+    fees = {
+      maxFeePerGas,
+      maxPriorityFeePerGas,
+    };
+  } else {
+    fees = {
+      gasPrice: Math.min(
+        Math.floor(Number(gasPrice) * BASEFEE_MULT * iterationMult),
+        maxGwei,
+      ),
+    };
+  }
 
   const callGas = Math.floor(estimatedGas * ESTIMATE_MULT);
 
