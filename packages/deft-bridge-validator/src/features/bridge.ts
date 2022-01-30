@@ -438,7 +438,7 @@ const approver = async ([srcChain, destChain]: [string, string]) => {
 
       const from = latestBlockNumber + 1;
       // preventing chain reorg
-      const to = Math.min(from + waitN - 1, onChainBlock - waitN);
+      const to = Math.max(from + waitN - 1, onChainBlock - waitN);
 
       const { proofs } = await source.sdk.Proofs({
         // @ts-ignore
