@@ -3,13 +3,19 @@ import gql from "graphql-tag";
 export const proofsQuery = gql`
   query Proofs(
     $first: Int!
-    $blockNumber: BigInt!
+    $blockNumberGt: BigInt!
+    $blockNumberLte: BigInt!
     $proofType: ProofType
     $dest: BigInt!
   ) {
     proofs(
       first: $first
-      where: { blockNumber_gt: $blockNumber, type: $proofType, dest: $dest }
+      where: {
+        blockNumber_gt: $blockNumberGt
+        blockNumber_lte: $blockNumberLte
+        type: $proofType
+        dest: $dest
+      }
       orderBy: blockNumber
       orderDirection: asc
     ) {

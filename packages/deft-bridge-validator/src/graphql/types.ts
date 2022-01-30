@@ -25,6 +25,7 @@ export type Scalars = {
 export type Block_Height = {
   hash?: Maybe<Scalars['Bytes']>;
   number?: Maybe<Scalars['Int']>;
+  number_gte?: Maybe<Scalars['Int']>;
 };
 
 export type BridgeTransfer = {
@@ -44,6 +45,8 @@ export type BridgeTransfer_Filter = {
   id_not_in?: Maybe<Array<Scalars['ID']>>;
   status?: Maybe<TransferStatus>;
   status_not?: Maybe<TransferStatus>;
+  status_in?: Maybe<Array<TransferStatus>>;
+  status_not_in?: Maybe<Array<TransferStatus>>;
 };
 
 export enum BridgeTransfer_OrderBy {
@@ -163,7 +166,6 @@ export type Proof = {
   token: Scalars['String'];
   sender: Scalars['Bytes'];
   amount: Scalars['BigDecimal'];
-  amountAsFee: Scalars['BigDecimal'];
   fee: Scalars['BigDecimal'];
   txFee: Scalars['BigDecimal'];
   txHash: Scalars['Bytes'];
@@ -188,6 +190,8 @@ export type Proof_Filter = {
   id_not_in?: Maybe<Array<Scalars['ID']>>;
   type?: Maybe<ProofType>;
   type_not?: Maybe<ProofType>;
+  type_in?: Maybe<Array<ProofType>>;
+  type_not_in?: Maybe<Array<ProofType>>;
   nonce?: Maybe<Scalars['BigInt']>;
   nonce_not?: Maybe<Scalars['BigInt']>;
   nonce_gt?: Maybe<Scalars['BigInt']>;
@@ -240,14 +244,6 @@ export type Proof_Filter = {
   amount_lte?: Maybe<Scalars['BigDecimal']>;
   amount_in?: Maybe<Array<Scalars['BigDecimal']>>;
   amount_not_in?: Maybe<Array<Scalars['BigDecimal']>>;
-  amountAsFee?: Maybe<Scalars['BigDecimal']>;
-  amountAsFee_not?: Maybe<Scalars['BigDecimal']>;
-  amountAsFee_gt?: Maybe<Scalars['BigDecimal']>;
-  amountAsFee_lt?: Maybe<Scalars['BigDecimal']>;
-  amountAsFee_gte?: Maybe<Scalars['BigDecimal']>;
-  amountAsFee_lte?: Maybe<Scalars['BigDecimal']>;
-  amountAsFee_in?: Maybe<Array<Scalars['BigDecimal']>>;
-  amountAsFee_not_in?: Maybe<Array<Scalars['BigDecimal']>>;
   fee?: Maybe<Scalars['BigDecimal']>;
   fee_not?: Maybe<Scalars['BigDecimal']>;
   fee_gt?: Maybe<Scalars['BigDecimal']>;
@@ -305,7 +301,6 @@ export enum Proof_OrderBy {
   Token = 'token',
   Sender = 'sender',
   Amount = 'amount',
-  AmountAsFee = 'amountAsFee',
   Fee = 'fee',
   TxFee = 'txFee',
   TxHash = 'txHash',
@@ -330,6 +325,7 @@ export type Query = {
 export type QueryProofArgs = {
   id: Scalars['ID'];
   block?: Maybe<Block_Height>;
+  subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
@@ -340,12 +336,14 @@ export type QueryProofsArgs = {
   orderDirection?: Maybe<OrderDirection>;
   where?: Maybe<Proof_Filter>;
   block?: Maybe<Block_Height>;
+  subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
 export type QueryBridgeTransferArgs = {
   id: Scalars['ID'];
   block?: Maybe<Block_Height>;
+  subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
@@ -356,12 +354,14 @@ export type QueryBridgeTransfersArgs = {
   orderDirection?: Maybe<OrderDirection>;
   where?: Maybe<BridgeTransfer_Filter>;
   block?: Maybe<Block_Height>;
+  subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
 export type QueryGlobalArgs = {
   id: Scalars['ID'];
   block?: Maybe<Block_Height>;
+  subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
@@ -372,6 +372,7 @@ export type QueryGlobalsArgs = {
   orderDirection?: Maybe<OrderDirection>;
   where?: Maybe<Global_Filter>;
   block?: Maybe<Block_Height>;
+  subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
@@ -395,6 +396,7 @@ export type Subscription = {
 export type SubscriptionProofArgs = {
   id: Scalars['ID'];
   block?: Maybe<Block_Height>;
+  subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
@@ -405,12 +407,14 @@ export type SubscriptionProofsArgs = {
   orderDirection?: Maybe<OrderDirection>;
   where?: Maybe<Proof_Filter>;
   block?: Maybe<Block_Height>;
+  subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
 export type SubscriptionBridgeTransferArgs = {
   id: Scalars['ID'];
   block?: Maybe<Block_Height>;
+  subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
@@ -421,12 +425,14 @@ export type SubscriptionBridgeTransfersArgs = {
   orderDirection?: Maybe<OrderDirection>;
   where?: Maybe<BridgeTransfer_Filter>;
   block?: Maybe<Block_Height>;
+  subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
 export type SubscriptionGlobalArgs = {
   id: Scalars['ID'];
   block?: Maybe<Block_Height>;
+  subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
@@ -437,6 +443,7 @@ export type SubscriptionGlobalsArgs = {
   orderDirection?: Maybe<OrderDirection>;
   where?: Maybe<Global_Filter>;
   block?: Maybe<Block_Height>;
+  subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
@@ -484,7 +491,8 @@ export enum _SubgraphErrorPolicy_ {
 
 export type ProofsQueryVariables = Exact<{
   first: Scalars['Int'];
-  blockNumber: Scalars['BigInt'];
+  blockNumberGt: Scalars['BigInt'];
+  blockNumberLte: Scalars['BigInt'];
   proofType?: Maybe<ProofType>;
   dest: Scalars['BigInt'];
 }>;
@@ -524,10 +532,10 @@ export type GlobalRecentProofQuery = (
 
 
 export const ProofsDocument = gql`
-    query Proofs($first: Int!, $blockNumber: BigInt!, $proofType: ProofType, $dest: BigInt!) {
+    query Proofs($first: Int!, $blockNumberGt: BigInt!, $blockNumberLte: BigInt!, $proofType: ProofType, $dest: BigInt!) {
   proofs(
     first: $first
-    where: {blockNumber_gt: $blockNumber, type: $proofType, dest: $dest}
+    where: {blockNumber_gt: $blockNumberGt, blockNumber_lte: $blockNumberLte, type: $proofType, dest: $dest}
     orderBy: blockNumber
     orderDirection: asc
   ) {

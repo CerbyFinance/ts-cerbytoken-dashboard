@@ -134,6 +134,14 @@ const sdkAndWeb3ByChain = Object.fromEntries(
   }),
 );
 
+const waitNBlocksBeforeHead = {
+  1: 12,
+  56: 15,
+  137: 128,
+  43114: 12,
+  250: 5,
+};
+
 const chainIdToBlockIn24Hours = {
   1: 5500,
   56: 30000,
@@ -397,7 +405,8 @@ const approver = async ([srcChain, destChain]: [string, string]) => {
   const source = sdkAndWeb3ByChain[srcChain];
   const dest = sdkAndWeb3ByChain[destChain];
 
-  const from = source.web3.eth.accounts.wallet[0].address;
+  const fromAddress = source.web3.eth.accounts.wallet[0].address;
+
   const destChainId = chainToId[destChain] as number;
 
   const path = srcChain.replace("-", "_") + "-" + destChain.replace("-", "_");
@@ -424,9 +433,18 @@ const approver = async ([srcChain, destChain]: [string, string]) => {
         continue;
       }
 
+      const onChainBlock = await source.web3.eth.getBlockNumber();
+      const waitN = waitNBlocksBeforeHead[destChainId];
+
+      const from = latestBlockNumber + 1;
+      // preventing chain reorg
+      const to = Math.min(from + waitN - 1, onChainBlock - waitN);
+
       const { proofs } = await source.sdk.Proofs({
         // @ts-ignore
-        blockNumber: latestBlockNumber + 1, // not including latest
+        blockNumberGt: from, // not including latest
+        // @ts-ignore
+        blockNumberLte: to,
         first: MIN_PROOFS_TO_APPROVE,
         proofType: ProofType.Burn,
         // @ts-ignore
@@ -434,6 +452,8 @@ const approver = async ([srcChain, destChain]: [string, string]) => {
       });
 
       log("latest block number: " + latestBlockNumber);
+      log("query block number (from, to): " + from + ", " + to);
+      log("on chain block number: " + onChainBlock);
 
       if (proofs.length < MIN_PROOFS_TO_APPROVE) {
         // prettier-ignore
@@ -455,7 +475,7 @@ const approver = async ([srcChain, destChain]: [string, string]) => {
       const approveRes = await approveOne(
         dest.contract,
         dest.web3,
-        from,
+        fromAddress,
         proofsHashes[0],
         destChainId,
         iterationMult,
