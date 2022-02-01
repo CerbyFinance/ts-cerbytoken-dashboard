@@ -10,57 +10,21 @@ import {
   BigInt
 } from "@graphprotocol/graph-ts";
 
-export class ApprovedTransaction extends ethereum.Event {
-  get params(): ApprovedTransaction__Params {
-    return new ApprovedTransaction__Params(this);
+export class ApprovedBurnProof extends ethereum.Event {
+  get params(): ApprovedBurnProof__Params {
+    return new ApprovedBurnProof__Params(this);
   }
 }
 
-export class ApprovedTransaction__Params {
-  _event: ApprovedTransaction;
+export class ApprovedBurnProof__Params {
+  _event: ApprovedBurnProof;
 
-  constructor(event: ApprovedTransaction) {
+  constructor(event: ApprovedBurnProof) {
     this._event = event;
   }
 
-  get transactionHash(): Bytes {
+  get burnProofHash(): Bytes {
     return this._event.parameters[0].value.toBytes();
-  }
-}
-
-export class BulkApprovedTransactions extends ethereum.Event {
-  get params(): BulkApprovedTransactions__Params {
-    return new BulkApprovedTransactions__Params(this);
-  }
-}
-
-export class BulkApprovedTransactions__Params {
-  _event: BulkApprovedTransactions;
-
-  constructor(event: BulkApprovedTransactions) {
-    this._event = event;
-  }
-
-  get transactionHashes(): Array<Bytes> {
-    return this._event.parameters[0].value.toBytesArray();
-  }
-}
-
-export class FeeUpdated extends ethereum.Event {
-  get params(): FeeUpdated__Params {
-    return new FeeUpdated__Params(this);
-  }
-}
-
-export class FeeUpdated__Params {
-  _event: FeeUpdated;
-
-  constructor(event: FeeUpdated) {
-    this._event = event;
-  }
-
-  get newFeePercent(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
   }
 }
 
@@ -77,36 +41,48 @@ export class ProofOfBurn__Params {
     this._event = event;
   }
 
-  get addr(): Address {
-    return this._event.parameters[0].value.toAddress();
+  get mintToken(): Bytes {
+    return this._event.parameters[0].value.toBytes();
   }
 
-  get token(): Address {
-    return this._event.parameters[1].value.toAddress();
+  get burnToken(): Bytes {
+    return this._event.parameters[1].value.toBytes();
   }
 
-  get amount(): BigInt {
-    return this._event.parameters[2].value.toBigInt();
+  get mintCaller(): Bytes {
+    return this._event.parameters[2].value.toBytes();
   }
 
-  get amountAsFee(): BigInt {
-    return this._event.parameters[3].value.toBigInt();
+  get burnCaller(): Bytes {
+    return this._event.parameters[3].value.toBytes();
   }
 
-  get currentNonce(): BigInt {
+  get burnAmount(): BigInt {
     return this._event.parameters[4].value.toBigInt();
   }
 
-  get sourceChain(): BigInt {
+  get burnNonce(): BigInt {
     return this._event.parameters[5].value.toBigInt();
   }
 
-  get destinationChain(): BigInt {
-    return this._event.parameters[6].value.toBigInt();
+  get mintChainType(): i32 {
+    return this._event.parameters[6].value.toI32();
   }
 
-  get transactionHash(): Bytes {
-    return this._event.parameters[7].value.toBytes();
+  get mintChainId(): BigInt {
+    return this._event.parameters[7].value.toBigInt();
+  }
+
+  get burnChainType(): i32 {
+    return this._event.parameters[8].value.toI32();
+  }
+
+  get burnChainId(): BigInt {
+    return this._event.parameters[9].value.toBigInt();
+  }
+
+  get burnProofHash(): Bytes {
+    return this._event.parameters[10].value.toBytes();
   }
 }
 
@@ -123,24 +99,44 @@ export class ProofOfMint__Params {
     this._event = event;
   }
 
-  get addr(): Address {
-    return this._event.parameters[0].value.toAddress();
+  get mintToken(): Bytes {
+    return this._event.parameters[0].value.toBytes();
   }
 
-  get token(): Address {
-    return this._event.parameters[1].value.toAddress();
+  get burnToken(): Bytes {
+    return this._event.parameters[1].value.toBytes();
   }
 
-  get amountAsFee(): BigInt {
-    return this._event.parameters[2].value.toBigInt();
+  get mintCaller(): Bytes {
+    return this._event.parameters[2].value.toBytes();
   }
 
-  get finalAmount(): BigInt {
-    return this._event.parameters[3].value.toBigInt();
+  get burnCaller(): Bytes {
+    return this._event.parameters[3].value.toBytes();
   }
 
-  get transactionHash(): Bytes {
-    return this._event.parameters[4].value.toBytes();
+  get burnAmount(): BigInt {
+    return this._event.parameters[4].value.toBigInt();
+  }
+
+  get mintChainType(): i32 {
+    return this._event.parameters[5].value.toI32();
+  }
+
+  get mintChainId(): BigInt {
+    return this._event.parameters[6].value.toBigInt();
+  }
+
+  get burnChainType(): i32 {
+    return this._event.parameters[7].value.toI32();
+  }
+
+  get burnChainId(): BigInt {
+    return this._event.parameters[8].value.toBigInt();
+  }
+
+  get burnProofHash(): Bytes {
+    return this._event.parameters[9].value.toBytes();
   }
 }
 
@@ -242,102 +238,46 @@ export class CrossChainBridge extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBytes());
   }
 
-  ROLE_APPROVER(): Bytes {
-    let result = super.call("ROLE_APPROVER", "ROLE_APPROVER():(bytes32)", []);
-
-    return result[0].toBytes();
-  }
-
-  try_ROLE_APPROVER(): ethereum.CallResult<Bytes> {
-    let result = super.tryCall(
-      "ROLE_APPROVER",
-      "ROLE_APPROVER():(bytes32)",
-      []
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBytes());
-  }
-
-  beneficiaryAddress(): Address {
-    let result = super.call(
-      "beneficiaryAddress",
-      "beneficiaryAddress():(address)",
-      []
-    );
-
-    return result[0].toAddress();
-  }
-
-  try_beneficiaryAddress(): ethereum.CallResult<Address> {
-    let result = super.tryCall(
-      "beneficiaryAddress",
-      "beneficiaryAddress():(address)",
-      []
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddress());
-  }
-
-  currentNonce(param0: Address): BigInt {
-    let result = super.call("currentNonce", "currentNonce(address):(uint256)", [
-      ethereum.Value.fromAddress(param0)
+  allowances(param0: Bytes): i32 {
+    let result = super.call("allowances", "allowances(bytes32):(uint8)", [
+      ethereum.Value.fromFixedBytes(param0)
     ]);
 
-    return result[0].toBigInt();
+    return result[0].toI32();
   }
 
-  try_currentNonce(param0: Address): ethereum.CallResult<BigInt> {
-    let result = super.tryCall(
-      "currentNonce",
-      "currentNonce(address):(uint256)",
-      [ethereum.Value.fromAddress(param0)]
-    );
+  try_allowances(param0: Bytes): ethereum.CallResult<i32> {
+    let result = super.tryCall("allowances", "allowances(bytes32):(uint8)", [
+      ethereum.Value.fromFixedBytes(param0)
+    ]);
     if (result.reverted) {
       return new ethereum.CallResult();
     }
     let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBigInt());
+    return ethereum.CallResult.fromValue(value[0].toI32());
   }
 
-  getFeeDependingOnDestinationChainId(
-    tokenAddr: Address,
-    destinationChainId: BigInt
-  ): BigInt {
+  burnProofStorage(param0: Bytes): i32 {
     let result = super.call(
-      "getFeeDependingOnDestinationChainId",
-      "getFeeDependingOnDestinationChainId(address,uint256):(uint256)",
-      [
-        ethereum.Value.fromAddress(tokenAddr),
-        ethereum.Value.fromUnsignedBigInt(destinationChainId)
-      ]
+      "burnProofStorage",
+      "burnProofStorage(bytes32):(uint8)",
+      [ethereum.Value.fromFixedBytes(param0)]
     );
 
-    return result[0].toBigInt();
+    return result[0].toI32();
   }
 
-  try_getFeeDependingOnDestinationChainId(
-    tokenAddr: Address,
-    destinationChainId: BigInt
-  ): ethereum.CallResult<BigInt> {
+  try_burnProofStorage(param0: Bytes): ethereum.CallResult<i32> {
     let result = super.tryCall(
-      "getFeeDependingOnDestinationChainId",
-      "getFeeDependingOnDestinationChainId(address,uint256):(uint256)",
-      [
-        ethereum.Value.fromAddress(tokenAddr),
-        ethereum.Value.fromUnsignedBigInt(destinationChainId)
-      ]
+      "burnProofStorage",
+      "burnProofStorage(bytes32):(uint8)",
+      [ethereum.Value.fromFixedBytes(param0)]
     );
     if (result.reverted) {
       return new ethereum.CallResult();
     }
     let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBigInt());
+    return ethereum.CallResult.fromValue(value[0].toI32());
   }
 
   getRoleAdmin(role: Bytes): Bytes {
@@ -434,6 +374,27 @@ export class CrossChainBridge extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBoolean());
   }
 
+  nonceByToken(param0: Address): BigInt {
+    let result = super.call("nonceByToken", "nonceByToken(address):(uint32)", [
+      ethereum.Value.fromAddress(param0)
+    ]);
+
+    return result[0].toBigInt();
+  }
+
+  try_nonceByToken(param0: Address): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "nonceByToken",
+      "nonceByToken(address):(uint32)",
+      [ethereum.Value.fromAddress(param0)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
   supportsInterface(interfaceId: Bytes): boolean {
     let result = super.call(
       "supportsInterface",
@@ -455,29 +416,6 @@ export class CrossChainBridge extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toBoolean());
-  }
-
-  transactionStorage(param0: Bytes): i32 {
-    let result = super.call(
-      "transactionStorage",
-      "transactionStorage(bytes32):(uint8)",
-      [ethereum.Value.fromFixedBytes(param0)]
-    );
-
-    return result[0].toI32();
-  }
-
-  try_transactionStorage(param0: Bytes): ethereum.CallResult<i32> {
-    let result = super.tryCall(
-      "transactionStorage",
-      "transactionStorage(bytes32):(uint8)",
-      [ethereum.Value.fromFixedBytes(param0)]
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toI32());
   }
 }
 
@@ -507,32 +445,32 @@ export class ConstructorCall__Outputs {
   }
 }
 
-export class BulkMarkTransactionsAsApprovedCall extends ethereum.Call {
-  get inputs(): BulkMarkTransactionsAsApprovedCall__Inputs {
-    return new BulkMarkTransactionsAsApprovedCall__Inputs(this);
+export class ApproveBurnProofCall extends ethereum.Call {
+  get inputs(): ApproveBurnProofCall__Inputs {
+    return new ApproveBurnProofCall__Inputs(this);
   }
 
-  get outputs(): BulkMarkTransactionsAsApprovedCall__Outputs {
-    return new BulkMarkTransactionsAsApprovedCall__Outputs(this);
+  get outputs(): ApproveBurnProofCall__Outputs {
+    return new ApproveBurnProofCall__Outputs(this);
   }
 }
 
-export class BulkMarkTransactionsAsApprovedCall__Inputs {
-  _call: BulkMarkTransactionsAsApprovedCall;
+export class ApproveBurnProofCall__Inputs {
+  _call: ApproveBurnProofCall;
 
-  constructor(call: BulkMarkTransactionsAsApprovedCall) {
+  constructor(call: ApproveBurnProofCall) {
     this._call = call;
   }
 
-  get transactionHashes(): Array<Bytes> {
-    return this._call.inputValues[0].value.toBytesArray();
+  get proofHash(): Bytes {
+    return this._call.inputValues[0].value.toBytes();
   }
 }
 
-export class BulkMarkTransactionsAsApprovedCall__Outputs {
-  _call: BulkMarkTransactionsAsApprovedCall;
+export class ApproveBurnProofCall__Outputs {
+  _call: ApproveBurnProofCall;
 
-  constructor(call: BulkMarkTransactionsAsApprovedCall) {
+  constructor(call: ApproveBurnProofCall) {
     this._call = call;
   }
 }
@@ -554,16 +492,28 @@ export class BurnAndCreateProofCall__Inputs {
     this._call = call;
   }
 
-  get token(): Address {
+  get burnToken(): Address {
     return this._call.inputValues[0].value.toAddress();
   }
 
-  get amount(): BigInt {
-    return this._call.inputValues[1].value.toBigInt();
+  get mintGenericToken(): Bytes {
+    return this._call.inputValues[1].value.toBytes();
   }
 
-  get destinationChainId(): BigInt {
-    return this._call.inputValues[2].value.toBigInt();
+  get mintGenericCaller(): Bytes {
+    return this._call.inputValues[2].value.toBytes();
+  }
+
+  get burnAmount(): BigInt {
+    return this._call.inputValues[3].value.toBigInt();
+  }
+
+  get mintChainType(): i32 {
+    return this._call.inputValues[4].value.toI32();
+  }
+
+  get mintChainId(): BigInt {
+    return this._call.inputValues[5].value.toBigInt();
   }
 }
 
@@ -651,36 +601,6 @@ export class GrantRolesBulkCallRolesStruct extends ethereum.Tuple {
   }
 }
 
-export class MarkTransactionAsApprovedCall extends ethereum.Call {
-  get inputs(): MarkTransactionAsApprovedCall__Inputs {
-    return new MarkTransactionAsApprovedCall__Inputs(this);
-  }
-
-  get outputs(): MarkTransactionAsApprovedCall__Outputs {
-    return new MarkTransactionAsApprovedCall__Outputs(this);
-  }
-}
-
-export class MarkTransactionAsApprovedCall__Inputs {
-  _call: MarkTransactionAsApprovedCall;
-
-  constructor(call: MarkTransactionAsApprovedCall) {
-    this._call = call;
-  }
-
-  get transactionHash(): Bytes {
-    return this._call.inputValues[0].value.toBytes();
-  }
-}
-
-export class MarkTransactionAsApprovedCall__Outputs {
-  _call: MarkTransactionAsApprovedCall;
-
-  constructor(call: MarkTransactionAsApprovedCall) {
-    this._call = call;
-  }
-}
-
 export class MintWithBurnProofCall extends ethereum.Call {
   get inputs(): MintWithBurnProofCall__Inputs {
     return new MintWithBurnProofCall__Inputs(this);
@@ -698,8 +618,36 @@ export class MintWithBurnProofCall__Inputs {
     this._call = call;
   }
 
-  get sourceProofOfBurn(): MintWithBurnProofCallSourceProofOfBurnStruct {
-    return this._call.inputValues[0].value.toTuple() as MintWithBurnProofCallSourceProofOfBurnStruct;
+  get mintToken(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+
+  get burnGenericToken(): Bytes {
+    return this._call.inputValues[1].value.toBytes();
+  }
+
+  get burnGenericCaller(): Bytes {
+    return this._call.inputValues[2].value.toBytes();
+  }
+
+  get burnChainType(): i32 {
+    return this._call.inputValues[3].value.toI32();
+  }
+
+  get burnChainId(): BigInt {
+    return this._call.inputValues[4].value.toBigInt();
+  }
+
+  get burnAmount(): BigInt {
+    return this._call.inputValues[5].value.toBigInt();
+  }
+
+  get burnNonce(): BigInt {
+    return this._call.inputValues[6].value.toBigInt();
+  }
+
+  get burnProofHash(): Bytes {
+    return this._call.inputValues[7].value.toBytes();
   }
 }
 
@@ -708,32 +656,6 @@ export class MintWithBurnProofCall__Outputs {
 
   constructor(call: MintWithBurnProofCall) {
     this._call = call;
-  }
-}
-
-export class MintWithBurnProofCallSourceProofOfBurnStruct extends ethereum.Tuple {
-  get amountToBridge(): BigInt {
-    return this[0].toBigInt();
-  }
-
-  get amountAsFee(): BigInt {
-    return this[1].toBigInt();
-  }
-
-  get sourceChainId(): BigInt {
-    return this[2].toBigInt();
-  }
-
-  get sourceNonce(): BigInt {
-    return this[3].toBigInt();
-  }
-
-  get sourceTokenAddr(): Address {
-    return this[4].toAddress();
-  }
-
-  get transactionHash(): Bytes {
-    return this[5].toBytes();
   }
 }
 
@@ -805,70 +727,52 @@ export class RevokeRoleCall__Outputs {
   }
 }
 
-export class UpdateBeneficiaryAddressCall extends ethereum.Call {
-  get inputs(): UpdateBeneficiaryAddressCall__Inputs {
-    return new UpdateBeneficiaryAddressCall__Inputs(this);
+export class SetAllowanceCall extends ethereum.Call {
+  get inputs(): SetAllowanceCall__Inputs {
+    return new SetAllowanceCall__Inputs(this);
   }
 
-  get outputs(): UpdateBeneficiaryAddressCall__Outputs {
-    return new UpdateBeneficiaryAddressCall__Outputs(this);
+  get outputs(): SetAllowanceCall__Outputs {
+    return new SetAllowanceCall__Outputs(this);
   }
 }
 
-export class UpdateBeneficiaryAddressCall__Inputs {
-  _call: UpdateBeneficiaryAddressCall;
+export class SetAllowanceCall__Inputs {
+  _call: SetAllowanceCall;
 
-  constructor(call: UpdateBeneficiaryAddressCall) {
+  constructor(call: SetAllowanceCall) {
     this._call = call;
   }
 
-  get newBeneficiaryAddr(): Address {
-    return this._call.inputValues[0].value.toAddress();
+  get mintGenericToken(): Bytes {
+    return this._call.inputValues[0].value.toBytes();
+  }
+
+  get burnGenericToken(): Bytes {
+    return this._call.inputValues[1].value.toBytes();
+  }
+
+  get mintChainType(): i32 {
+    return this._call.inputValues[2].value.toI32();
+  }
+
+  get mintChainId(): BigInt {
+    return this._call.inputValues[3].value.toBigInt();
+  }
+
+  get burnChainType(): i32 {
+    return this._call.inputValues[4].value.toI32();
+  }
+
+  get burnChainId(): BigInt {
+    return this._call.inputValues[5].value.toBigInt();
   }
 }
 
-export class UpdateBeneficiaryAddressCall__Outputs {
-  _call: UpdateBeneficiaryAddressCall;
+export class SetAllowanceCall__Outputs {
+  _call: SetAllowanceCall;
 
-  constructor(call: UpdateBeneficiaryAddressCall) {
-    this._call = call;
-  }
-}
-
-export class UpdateFeeDependingOnDestinationChainIdCall extends ethereum.Call {
-  get inputs(): UpdateFeeDependingOnDestinationChainIdCall__Inputs {
-    return new UpdateFeeDependingOnDestinationChainIdCall__Inputs(this);
-  }
-
-  get outputs(): UpdateFeeDependingOnDestinationChainIdCall__Outputs {
-    return new UpdateFeeDependingOnDestinationChainIdCall__Outputs(this);
-  }
-}
-
-export class UpdateFeeDependingOnDestinationChainIdCall__Inputs {
-  _call: UpdateFeeDependingOnDestinationChainIdCall;
-
-  constructor(call: UpdateFeeDependingOnDestinationChainIdCall) {
-    this._call = call;
-  }
-
-  get token(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-
-  get chainId(): BigInt {
-    return this._call.inputValues[1].value.toBigInt();
-  }
-
-  get amountAsFee(): BigInt {
-    return this._call.inputValues[2].value.toBigInt();
-  }
-}
-
-export class UpdateFeeDependingOnDestinationChainIdCall__Outputs {
-  _call: UpdateFeeDependingOnDestinationChainIdCall;
-
-  constructor(call: UpdateFeeDependingOnDestinationChainIdCall) {
+  constructor(call: SetAllowanceCall) {
     this._call = call;
   }
 }

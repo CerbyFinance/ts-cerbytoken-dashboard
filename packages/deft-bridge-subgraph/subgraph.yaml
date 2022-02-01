@@ -4,11 +4,11 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: SourceChain
-    network: ropsten
+    network: ganache
     source:
-      address: "0xa60cDF00Ad674D792F9840cAAC5dea0D6e852C02"
+      address: "0x10DddF9F399abEafEaa6fe96DC837D6eC8Bc6764"
       abi: CrossChainBridge
-      startBlock: 10351801
+      startBlock: 1
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -20,12 +20,10 @@ dataSources:
         - name: CrossChainBridge
           file: ./abis/CrossChainBridge.json
       eventHandlers:
-        - event: ProofOfBurn(address,address,uint256,uint256,uint256,uint256,uint256,bytes32)
+        - event: ProofOfBurn(bytes,bytes,bytes,bytes,uint256,uint256,uint8,uint32,uint8,uint32,bytes32)
           handler: handleProofOfBurn
-        - event: ProofOfMint(address,address,uint256,uint256,bytes32)
+        - event: ProofOfMint(bytes,bytes,bytes,bytes,uint256,uint8,uint32,uint8,uint32,bytes32)
           handler: handleProofOfMint
-        - event: ApprovedTransaction(bytes32)
-          handler: handleApprovedTransaction
-        - event: BulkApprovedTransactions(bytes32[])
-          handler: handleBulkApprovedTransaction
-      file: ./src/mapping-source-chain.ts
+        - event: ApprovedBurnProof(bytes32)
+          handler: handleApprovedBurnProof
+      file: ./src/mapping-source-chain-2.ts

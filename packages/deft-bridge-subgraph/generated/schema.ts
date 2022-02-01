@@ -68,56 +68,76 @@ export class Proof extends Entity {
     }
   }
 
-  get src(): BigInt | null {
+  get src(): i32 {
     let value = this.get("src");
-    if (value === null || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toBigInt();
-    }
+    return value.toI32();
   }
 
-  set src(value: BigInt | null) {
-    if (value === null) {
-      this.unset("src");
-    } else {
-      this.set("src", Value.fromBigInt(value as BigInt));
-    }
+  set src(value: i32) {
+    this.set("src", Value.fromI32(value));
   }
 
-  get dest(): BigInt | null {
+  get srcType(): i32 {
+    let value = this.get("srcType");
+    return value.toI32();
+  }
+
+  set srcType(value: i32) {
+    this.set("srcType", Value.fromI32(value));
+  }
+
+  get dest(): i32 {
     let value = this.get("dest");
-    if (value === null || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toBigInt();
-    }
+    return value.toI32();
   }
 
-  set dest(value: BigInt | null) {
-    if (value === null) {
-      this.unset("dest");
-    } else {
-      this.set("dest", Value.fromBigInt(value as BigInt));
-    }
+  set dest(value: i32) {
+    this.set("dest", Value.fromI32(value));
   }
 
-  get token(): string {
-    let value = this.get("token");
+  get destType(): i32 {
+    let value = this.get("destType");
+    return value.toI32();
+  }
+
+  set destType(value: i32) {
+    this.set("destType", Value.fromI32(value));
+  }
+
+  get srcToken(): string {
+    let value = this.get("srcToken");
     return value.toString();
   }
 
-  set token(value: string) {
-    this.set("token", Value.fromString(value));
+  set srcToken(value: string) {
+    this.set("srcToken", Value.fromString(value));
   }
 
-  get sender(): Bytes {
-    let value = this.get("sender");
-    return value.toBytes();
+  get destToken(): string {
+    let value = this.get("destToken");
+    return value.toString();
   }
 
-  set sender(value: Bytes) {
-    this.set("sender", Value.fromBytes(value));
+  set destToken(value: string) {
+    this.set("destToken", Value.fromString(value));
+  }
+
+  get srcCaller(): string {
+    let value = this.get("srcCaller");
+    return value.toString();
+  }
+
+  set srcCaller(value: string) {
+    this.set("srcCaller", Value.fromString(value));
+  }
+
+  get destCaller(): string {
+    let value = this.get("destCaller");
+    return value.toString();
+  }
+
+  set destCaller(value: string) {
+    this.set("destCaller", Value.fromString(value));
   }
 
   get amount(): BigDecimal {
@@ -129,24 +149,6 @@ export class Proof extends Entity {
     this.set("amount", Value.fromBigDecimal(value));
   }
 
-  get fee(): BigDecimal {
-    let value = this.get("fee");
-    return value.toBigDecimal();
-  }
-
-  set fee(value: BigDecimal) {
-    this.set("fee", Value.fromBigDecimal(value));
-  }
-
-  get txFee(): BigDecimal {
-    let value = this.get("txFee");
-    return value.toBigDecimal();
-  }
-
-  set txFee(value: BigDecimal) {
-    this.set("txFee", Value.fromBigDecimal(value));
-  }
-
   get txHash(): Bytes {
     let value = this.get("txHash");
     return value.toBytes();
@@ -154,15 +156,6 @@ export class Proof extends Entity {
 
   set txHash(value: Bytes) {
     this.set("txHash", Value.fromBytes(value));
-  }
-
-  get logIndex(): BigInt {
-    let value = this.get("logIndex");
-    return value.toBigInt();
-  }
-
-  set logIndex(value: BigInt) {
-    this.set("logIndex", Value.fromBigInt(value));
   }
 
   get blockNumber(): BigInt {
@@ -221,99 +214,5 @@ export class BridgeTransfer extends Entity {
 
   set status(value: string) {
     this.set("status", Value.fromString(value));
-  }
-}
-
-export class Global extends Entity {
-  constructor(id: string) {
-    super();
-    this.set("id", Value.fromString(id));
-  }
-
-  save(): void {
-    let id = this.get("id");
-    assert(id !== null, "Cannot save Global entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save Global entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("Global", id.toString(), this);
-  }
-
-  static load(id: string): Global | null {
-    return store.get("Global", id) as Global | null;
-  }
-
-  get id(): string {
-    let value = this.get("id");
-    return value.toString();
-  }
-
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
-  }
-
-  get approvedCount(): BigInt {
-    let value = this.get("approvedCount");
-    return value.toBigInt();
-  }
-
-  set approvedCount(value: BigInt) {
-    this.set("approvedCount", Value.fromBigInt(value));
-  }
-
-  get mintedCount(): BigInt {
-    let value = this.get("mintedCount");
-    return value.toBigInt();
-  }
-
-  set mintedCount(value: BigInt) {
-    this.set("mintedCount", Value.fromBigInt(value));
-  }
-
-  get mintedAmount(): BigDecimal {
-    let value = this.get("mintedAmount");
-    return value.toBigDecimal();
-  }
-
-  set mintedAmount(value: BigDecimal) {
-    this.set("mintedAmount", Value.fromBigDecimal(value));
-  }
-
-  get burnedCount(): BigInt {
-    let value = this.get("burnedCount");
-    return value.toBigInt();
-  }
-
-  set burnedCount(value: BigInt) {
-    this.set("burnedCount", Value.fromBigInt(value));
-  }
-
-  get burnedAmount(): BigDecimal {
-    let value = this.get("burnedAmount");
-    return value.toBigDecimal();
-  }
-
-  set burnedAmount(value: BigDecimal) {
-    this.set("burnedAmount", Value.fromBigDecimal(value));
-  }
-
-  get chargedFee(): BigDecimal {
-    let value = this.get("chargedFee");
-    return value.toBigDecimal();
-  }
-
-  set chargedFee(value: BigDecimal) {
-    this.set("chargedFee", Value.fromBigDecimal(value));
-  }
-
-  get recentApprovedProof(): string {
-    let value = this.get("recentApprovedProof");
-    return value.toString();
-  }
-
-  set recentApprovedProof(value: string) {
-    this.set("recentApprovedProof", Value.fromString(value));
   }
 }

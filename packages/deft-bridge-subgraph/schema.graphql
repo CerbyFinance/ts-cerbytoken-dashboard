@@ -20,20 +20,23 @@ type Proof @entity {
   type: ProofType!
   nonce: BigInt
 
-  src: BigInt
-  dest: BigInt
+  src: Int
+  srcType: Int # ChainType
+  dest: Int
+  destType: Int # ChainType
+  srcToken: String!
+  destToken: String!
 
-  token: String!
-
-  sender: Bytes!
+  srcCaller: String!
+  destCaller: String!
 
   amount: BigDecimal!
-  fee: BigDecimal!
+  # fee: BigDecimal!
 
-  txFee: BigDecimal!
+  # txFee: BigDecimal!
   txHash: Bytes!
 
-  logIndex: BigInt!
+  # logIndex: BigInt!
   blockNumber: BigInt!
   timestamp: BigInt!
 }
@@ -41,41 +44,4 @@ type Proof @entity {
 type BridgeTransfer @entity {
   id: ID!
   status: TransferStatus!
-}
-
-# type BridgeTransfer @entity {
-#   id: ID!
-
-#   status: TransferStatus!
-
-#   sender: Bytes!
-#   txBurnHash: Bytes!
-#   txMintHash: Bytes!
-
-#   amountBurn: BigDecimal!
-#   amountMint: BigDecimal!
-
-#   mintFee: BigDecimal!
-
-#   transactionFee: BigDecimal!
-
-#   logIndex: BigInt!
-#   blockNumber: BigInt!
-#   timestamp: BigInt!
-# }
-
-type Global @entity {
-  id: ID!
-  # currentFee: BigDecimal!
-  approvedCount: BigInt!
-
-  mintedCount: BigInt!
-  mintedAmount: BigDecimal!
-
-  burnedCount: BigInt!
-  burnedAmount: BigDecimal!
-
-  chargedFee: BigDecimal!
-
-  recentApprovedProof: String!
 }

@@ -10,11 +10,11 @@
       {
         "indexed": false,
         "internalType": "bytes32",
-        "name": "transactionHash",
+        "name": "burnProofHash",
         "type": "bytes32"
       }
     ],
-    "name": "ApprovedTransaction",
+    "name": "ApprovedBurnProof",
     "type": "event"
   },
   {
@@ -22,76 +22,68 @@
     "inputs": [
       {
         "indexed": false,
-        "internalType": "bytes32[]",
-        "name": "transactionHashes",
-        "type": "bytes32[]"
-      }
-    ],
-    "name": "BulkApprovedTransactions",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "newFeePercent",
-        "type": "uint256"
-      }
-    ],
-    "name": "FeeUpdated",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "addr",
-        "type": "address"
+        "internalType": "bytes",
+        "name": "mintToken",
+        "type": "bytes"
       },
       {
         "indexed": false,
-        "internalType": "address",
-        "name": "token",
-        "type": "address"
+        "internalType": "bytes",
+        "name": "burnToken",
+        "type": "bytes"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes",
+        "name": "mintCaller",
+        "type": "bytes"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes",
+        "name": "burnCaller",
+        "type": "bytes"
       },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "amount",
+        "name": "burnAmount",
         "type": "uint256"
       },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "amountAsFee",
+        "name": "burnNonce",
         "type": "uint256"
       },
       {
         "indexed": false,
-        "internalType": "uint256",
-        "name": "currentNonce",
-        "type": "uint256"
+        "internalType": "enum CrossChainBridgeV2_Test.ChainType",
+        "name": "mintChainType",
+        "type": "uint8"
       },
       {
         "indexed": false,
-        "internalType": "uint256",
-        "name": "sourceChain",
-        "type": "uint256"
+        "internalType": "uint32",
+        "name": "mintChainId",
+        "type": "uint32"
       },
       {
         "indexed": false,
-        "internalType": "uint256",
-        "name": "destinationChain",
-        "type": "uint256"
+        "internalType": "enum CrossChainBridgeV2_Test.ChainType",
+        "name": "burnChainType",
+        "type": "uint8"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint32",
+        "name": "burnChainId",
+        "type": "uint32"
       },
       {
         "indexed": false,
         "internalType": "bytes32",
-        "name": "transactionHash",
+        "name": "burnProofHash",
         "type": "bytes32"
       }
     ],
@@ -103,32 +95,62 @@
     "inputs": [
       {
         "indexed": false,
-        "internalType": "address",
-        "name": "addr",
-        "type": "address"
+        "internalType": "bytes",
+        "name": "mintToken",
+        "type": "bytes"
       },
       {
         "indexed": false,
-        "internalType": "address",
-        "name": "token",
-        "type": "address"
+        "internalType": "bytes",
+        "name": "burnToken",
+        "type": "bytes"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes",
+        "name": "mintCaller",
+        "type": "bytes"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes",
+        "name": "burnCaller",
+        "type": "bytes"
       },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "amountAsFee",
+        "name": "burnAmount",
         "type": "uint256"
       },
       {
         "indexed": false,
-        "internalType": "uint256",
-        "name": "finalAmount",
-        "type": "uint256"
+        "internalType": "enum CrossChainBridgeV2_Test.ChainType",
+        "name": "mintChainType",
+        "type": "uint8"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint32",
+        "name": "mintChainId",
+        "type": "uint32"
+      },
+      {
+        "indexed": false,
+        "internalType": "enum CrossChainBridgeV2_Test.ChainType",
+        "name": "burnChainType",
+        "type": "uint8"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint32",
+        "name": "burnChainId",
+        "type": "uint32"
       },
       {
         "indexed": false,
         "internalType": "bytes32",
-        "name": "transactionHash",
+        "name": "burnProofHash",
         "type": "bytes32"
       }
     ],
@@ -224,26 +246,19 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "ROLE_APPROVER",
-    "outputs": [
+    "inputs": [
       {
         "internalType": "bytes32",
         "name": "",
         "type": "bytes32"
       }
     ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "beneficiaryAddress",
+    "name": "allowances",
     "outputs": [
       {
-        "internalType": "address",
+        "internalType": "enum CrossChainBridgeV2_Test.Allowance",
         "name": "",
-        "type": "address"
+        "type": "uint8"
       }
     ],
     "stateMutability": "view",
@@ -252,12 +267,12 @@
   {
     "inputs": [
       {
-        "internalType": "bytes32[]",
-        "name": "transactionHashes",
-        "type": "bytes32[]"
+        "internalType": "bytes32",
+        "name": "proofHash",
+        "type": "bytes32"
       }
     ],
-    "name": "bulkMarkTransactionsAsApproved",
+    "name": "approveBurnProof",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -266,18 +281,33 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "token",
+        "name": "burnToken",
         "type": "address"
       },
       {
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
+        "internalType": "bytes",
+        "name": "mintGenericToken",
+        "type": "bytes"
+      },
+      {
+        "internalType": "bytes",
+        "name": "mintGenericCaller",
+        "type": "bytes"
       },
       {
         "internalType": "uint256",
-        "name": "destinationChainId",
+        "name": "burnAmount",
         "type": "uint256"
+      },
+      {
+        "internalType": "uint8",
+        "name": "mintChainType",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint32",
+        "name": "mintChainId",
+        "type": "uint32"
       }
     ],
     "name": "burnAndCreateProof",
@@ -288,41 +318,17 @@
   {
     "inputs": [
       {
-        "internalType": "address",
+        "internalType": "bytes32",
         "name": "",
-        "type": "address"
+        "type": "bytes32"
       }
     ],
-    "name": "currentNonce",
+    "name": "burnProofStorage",
     "outputs": [
       {
-        "internalType": "uint256",
+        "internalType": "enum CrossChainBridgeV2_Test.States",
         "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "tokenAddr",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "destinationChainId",
-        "type": "uint256"
-      }
-    ],
-    "name": "getFeeDependingOnDestinationChainId",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
+        "type": "uint8"
       }
     ],
     "stateMutability": "view",
@@ -460,12 +466,47 @@
   {
     "inputs": [
       {
+        "internalType": "address",
+        "name": "mintToken",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes",
+        "name": "burnGenericToken",
+        "type": "bytes"
+      },
+      {
+        "internalType": "bytes",
+        "name": "burnGenericCaller",
+        "type": "bytes"
+      },
+      {
+        "internalType": "uint8",
+        "name": "burnChainType",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint32",
+        "name": "burnChainId",
+        "type": "uint32"
+      },
+      {
+        "internalType": "uint256",
+        "name": "burnAmount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "burnNonce",
+        "type": "uint256"
+      },
+      {
         "internalType": "bytes32",
-        "name": "transactionHash",
+        "name": "burnProofHash",
         "type": "bytes32"
       }
     ],
-    "name": "markTransactionAsApproved",
+    "name": "mintWithBurnProof",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -473,46 +514,20 @@
   {
     "inputs": [
       {
-        "components": [
-          {
-            "internalType": "uint256",
-            "name": "amountToBridge",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amountAsFee",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "sourceChainId",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "sourceNonce",
-            "type": "uint256"
-          },
-          {
-            "internalType": "address",
-            "name": "sourceTokenAddr",
-            "type": "address"
-          },
-          {
-            "internalType": "bytes32",
-            "name": "transactionHash",
-            "type": "bytes32"
-          }
-        ],
-        "internalType": "struct CrossChainBridge.SourceProofOfBurn",
-        "name": "sourceProofOfBurn",
-        "type": "tuple"
+        "internalType": "address",
+        "name": "",
+        "type": "address"
       }
     ],
-    "name": "mintWithBurnProof",
-    "outputs": [],
-    "stateMutability": "nonpayable",
+    "name": "nonceByToken",
+    "outputs": [
+      {
+        "internalType": "uint32",
+        "name": "",
+        "type": "uint32"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -554,6 +569,44 @@
   {
     "inputs": [
       {
+        "internalType": "bytes",
+        "name": "mintGenericToken",
+        "type": "bytes"
+      },
+      {
+        "internalType": "bytes",
+        "name": "burnGenericToken",
+        "type": "bytes"
+      },
+      {
+        "internalType": "enum CrossChainBridgeV2_Test.ChainType",
+        "name": "mintChainType",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint32",
+        "name": "mintChainId",
+        "type": "uint32"
+      },
+      {
+        "internalType": "enum CrossChainBridgeV2_Test.ChainType",
+        "name": "burnChainType",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint32",
+        "name": "burnChainId",
+        "type": "uint32"
+      }
+    ],
+    "name": "setAllowance",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "bytes4",
         "name": "interfaceId",
         "type": "bytes4"
@@ -568,61 +621,6 @@
       }
     ],
     "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bytes32",
-        "name": "",
-        "type": "bytes32"
-      }
-    ],
-    "name": "transactionStorage",
-    "outputs": [
-      {
-        "internalType": "enum CrossChainBridge.States",
-        "name": "",
-        "type": "uint8"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "newBeneficiaryAddr",
-        "type": "address"
-      }
-    ],
-    "name": "updateBeneficiaryAddress",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "token",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "chainId",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "amountAsFee",
-        "type": "uint256"
-      }
-    ],
-    "name": "updateFeeDependingOnDestinationChainId",
-    "outputs": [],
-    "stateMutability": "nonpayable",
     "type": "function"
   }
 ]
