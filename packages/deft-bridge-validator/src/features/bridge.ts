@@ -38,15 +38,15 @@ const nodeUrlByChain = {
 };
 
 const contractByChain = {
-  ethereum: "0xEf038429e3BAaF784e1DE93075070df2A43D4278",
-  binance: "0xEf038429e3BAaF784e1DE93075070df2A43D4278",
-  polygon: "0xEf038429e3BAaF784e1DE93075070df2A43D4278",
-  avalanche: "0xEf038429e3BAaF784e1DE93075070df2A43D4278",
-  fantom: "0xEf038429e3BAaF784e1DE93075070df2A43D4278",
+  ethereum: "0x6dd9bCaeeBB515cc6a921E1004450cdc7277dA4A",
+  binance: "0x6dd9bCaeeBB515cc6a921E1004450cdc7277dA4A",
+  polygon: "0x6dd9bCaeeBB515cc6a921E1004450cdc7277dA4A",
+  avalanche: "0x6dd9bCaeeBB515cc6a921E1004450cdc7277dA4A",
+  fantom: "0x6dd9bCaeeBB515cc6a921E1004450cdc7277dA4A",
   //
-  ropsten: "0xEf038429e3BAaF784e1DE93075070df2A43D4278",
-  kovan: "0xEf038429e3BAaF784e1DE93075070df2A43D4278",
-  ["binance-test"]: "0xEf038429e3BAaF784e1DE93075070df2A43D4278",
+  ropsten: "0x6dd9bCaeeBB515cc6a921E1004450cdc7277dA4A",
+  kovan: "0x6dd9bCaeeBB515cc6a921E1004450cdc7277dA4A",
+  ["binance-test"]: "0x6dd9bCaeeBB515cc6a921E1004450cdc7277dA4A",
 };
 
 const chainToId = {
