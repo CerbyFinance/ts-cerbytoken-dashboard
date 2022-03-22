@@ -6,9 +6,9 @@ dataSources:
     name: SourceChain
     network: avalanche
     source:
-      address: "0xEf038429e3BAaF784e1DE93075070df2A43D4278"
+      address: "0x6dd9bCaeeBB515cc6a921E1004450cdc7277dA4A"
       abi: CrossChainBridge
-      startBlock: 8698100
+      startBlock: 12418308
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4

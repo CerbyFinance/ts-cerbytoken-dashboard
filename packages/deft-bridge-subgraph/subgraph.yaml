@@ -20,10 +20,12 @@ dataSources:
         - name: CrossChainBridge
           file: ./abis/CrossChainBridge.json
       eventHandlers:
-        - event: ProofOfBurn(bytes,bytes,bytes,bytes,uint256,uint256,uint8,uint32,uint8,uint32,bytes32)
+        - event: ProofOfBurn(address,address,uint256,uint256,uint256,uint256,uint256,bytes32)
           handler: handleProofOfBurn
-        - event: ProofOfMint(bytes,bytes,bytes,bytes,uint256,uint8,uint32,uint8,uint32,bytes32)
+        - event: ProofOfMint(address,address,uint256,uint256,bytes32)
           handler: handleProofOfMint
-        - event: ApprovedBurnProof(bytes32)
-          handler: handleApprovedBurnProof
+        - event: ApprovedTransaction(bytes32)
+          handler: handleApprovedTransaction
+        - event: BulkApprovedTransactions(bytes32[])
+          handler: handleBulkApprovedTransaction
       file: ./src/mapping-source-chain-2.ts
