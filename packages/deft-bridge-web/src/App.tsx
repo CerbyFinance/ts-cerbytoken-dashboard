@@ -1119,7 +1119,12 @@ export const BridgeWidget = () => {
   const amountEntered = Number(transferAmount) > 0;
   const sufficientBalance = Number(transferAmount) <= Number(balance);
 
-  const areInSync = Math.abs(graphBlockNumber - blockNumber) <= 250;
+  let areInSync;
+  if(chainIdToShort[path[0]] == 'BSC' || chainIdToShort[path[1]] == 'BSC') {
+    areInSync = Math.abs(graphBlockNumber - blockNumber) <= 500;
+  } else {
+    areInSync = Math.abs(graphBlockNumber - blockNumber) <= 250;
+  }
 
   const src = chainIdToShort[path[0]] || "...";
   const dest = chainIdToShort[path[1]] || "...";
