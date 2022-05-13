@@ -1121,7 +1121,7 @@ export const BridgeWidget = () => {
 
   let areInSync;
   if(chainIdToShort[path[0]] == 'BSC' || chainIdToShort[path[1]] == 'BSC') {
-    areInSync = Math.abs(graphBlockNumber - blockNumber) <= 500;
+    areInSync = Math.abs(graphBlockNumber - blockNumber) <= 1000;
   } else {
     areInSync = Math.abs(graphBlockNumber - blockNumber) <= 250;
   }
